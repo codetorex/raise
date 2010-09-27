@@ -2,7 +2,7 @@
 //
 
 #include "stdafx.h"
-#include "tbitarray.h"
+#include "tbitset.h"
 #include "tmemory.h"
 #include "tprofiler.h"
 #include "tstring.h"
@@ -87,8 +87,18 @@ public:
 
 		testString2 = *testString;
 		testString2.ToLower();
-
 		printf(testString2);
+
+		string formatted = string::Format(L"Selam ben %i numarali vatandas %f yasindayim\n",4096, 12.555f);
+		wprintf(formatted);
+
+		string padding = L"12.5";
+		padding.PadLeft(10);
+		wprintf(padding);
+
+		TString8 padding2 = "Kamil";
+		padding2.PadLeft(10);
+		printf(padding2);
 	}
 };
 

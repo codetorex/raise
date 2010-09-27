@@ -11,19 +11,29 @@ typedef char	ch8;
 class StringDriver
 {
 public:
-	inline static void Format(ch16* dest,ch16* format,...)
+	inline static void Format(ch16* dest,int destsize,ch16* format, va_list ap)
+	{
+		_vsnwprintf(dest,destsize,format,ap);
+	}
+
+	inline static void Format(ch8* dest,int destsize,ch8* format, va_list ap)
+	{
+		vsprintf_s(dest,destsize,format,ap);
+	}
+
+	inline static void Format(ch16* dest,int destsize,ch16* format,...)
 	{
 		va_list ap;
 		va_start(ap,format);
-		_vsnwprintf(dest,1024,format,ap);
+		Format(dest,destsize,format,ap);
 		va_end(ap);
 	}
 
-	inline static void Format(ch8* dest,ch8* format,...)
+	inline static void Format(ch8* dest,int destsize,ch8* format,...)
 	{
 		va_list ap;
 		va_start(ap,format);
-		vsprintf(dest,format,ap);
+		Format(dest,destsize,format,ap);
 		va_end(ap);
 	}
 
@@ -85,12 +95,12 @@ public:
 
 	inline static ch8* Set(ch8* dst,ch8 chr,int count)
 	{
-		return (ch8*)memset(dst,chr,count);
+		return (ch8*)strnset(dst,chr,count);
 	}
 
 	inline static ch16* Set(ch16* dst,ch16 chr,int count)
 	{
-		return (ch16*)memset(dst,chr,count<<1);
+		return wcsnset(dst,chr,count);
 	}
 
 	inline static int Compare(ch8* v1,ch8* v2)
@@ -131,6 +141,7 @@ public:
 	2. Length is current string length.
 	3. Capacity will hold the maximum string capacity without the leading zero.
 	   So data allocations should always capacity+1 for leading zero.
+	4. For every memory allocations, should use AllocateMemory function.
 */
 
 
@@ -349,7 +360,7 @@ public:
 
 		if (trimChars == 0)
 		{
-			trimChars = L"\x20\x09\x0A\x0D\0x0B";
+			trimChars = GetWhitespaces();
 		}
 
 		bool contn;
@@ -403,7 +414,7 @@ public:
 
 		if (trimChars == 0)
 		{
-			trimChars = L"\x20\x09\x0A\x0D\0x0B";
+			trimChars = GetWhitespaces();
 		}
 
 		bool contn;
@@ -453,32 +464,65 @@ public:
 		}
 	}
 
-
-	void PadLeft(int width)
+	inline void PadLeft(int width)
 	{
-		PadLeft(width,' ');
+		PadLeft(width,' '); // ' ' is equal in wchar and char
 	}
 
 	void PadLeft(int width,T padChar)
 	{
 		if (width < Length) return;
-		
+		int padlength = width - Length;
+
 		if (Capacity <= width)
 		{
 			T* NewChars = new T [width+1];
-
+			StringDriver::Set(NewChars,padChar,width);
+			StringDriver::MemoryCopy(NewChars+padlength,Chars,Length);
+			Use(NewChars,width,width);
+			return;
 		}
 
+		StringDriver::Set(Chars,padChar,width);
+		StringDriver::MemoryCopy(Chars+padlength,Chars,Length);
 	}
 
-	void PadRight(int width)
+	inline void PadRight(int width)
 	{
 		PadRight(width,' ');
 	}
 
 	void PadRight(int width,T padChar)
 	{
+		if (width < Length) return; // actually an exception should occur
+		int padlength = width - Length;
 
+		if (Capacity <= width)
+		{
+			T* NewChars = new T [width+1];
+			StringDriver::Set(NewChars,padChar,width);
+			StringDriver::MemoryCopy(NewChars,Chars,Length);
+			Use(NewChars,width,width);
+			return;
+		}
+
+		StringDriver::Set(Chars,padChar,width);
+		StringDriver::MemoryCopy(Chars+padlength,Chars,Length);
+	}
+
+	static TString<T>& Format(T* format,...)
+	{
+		T Temp[4096];
+
+		va_list ap;
+		va_start(ap,format);
+		StringDriver::Format(Temp,4096,format,ap);
+		va_end(ap);
+
+		TString<T>* nstring = new TString<T>;
+		*nstring = Temp;
+		
+		return *nstring;
 	}
 
 
@@ -487,16 +531,16 @@ public:
 		return Chars;
 	}
 
-	/*
-	void Trim(T* trimChars = 0);
-	void TrimStart(T* trimChars = 0);
-	void TrimEnd(T* trimChars = 0);
-
-	TString<char>& Format(T* fmt,...);
-*/
+private:
+	inline static T* GetWhitespaces();
 
 protected:
 	// Memory Operations
+	inline T* AllocateMemory(int cap)
+	{
+		return new T [cap+1];
+	}
+
 	inline void Allocate(int newcapacity)
 	{
 		if (newcapacity < Capacity) // yeni istenen su ankinden kucukse
@@ -582,9 +626,28 @@ protected:
 
 };
 
-typedef TString<char>		TString8;
-typedef TString<wchar_t>	TString16;
-typedef TString16			string;
+inline ch16* TString<ch16>::GetWhitespaces()
+{
+	return L"\x20\x09\x0A\x0D\0x0B";
+}
+
+inline ch8* TString<ch8>::GetWhitespaces()
+{
+	return "\x20\x09\x0A\x0D\0x0B";
+}
+
+typedef TString<ch8>		TString8;	// long bit wise string type
+typedef TString<ch16>		TString16;	// long bit wise string type
+typedef TString16			string;		// generic string type
+
+typedef TString8			str8;		// short bit wise string type
+typedef TString16			str16;		// short bit wise string type
+
+typedef TString8			str1;		// short byte wise string type
+typedef TString16			str2;		// short byte wise string type
+
+
+
 
 extern TString16 CrLf16;
 extern TString8 CrLf8;
