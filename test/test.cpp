@@ -73,32 +73,38 @@ public:
 
 	void Test()
 	{
-		string kamil = L"Kamil";
-		kamil += L" Solak\n";
-		wprintf(kamil);
+		string teststr = L"this is test string";
+		wprintf(L"%s %i %i\n", teststr, teststr.Length, teststr.Capacity);
+		teststr.ToUpper();
+		wprintf(L"Upper: %s\n",teststr);
+		teststr.ToLower();
+		wprintf(L"Lower: %s\n",teststr);
+
+		string pok = teststr.Substring(0,4);
+		wprintf(L"%s %i %i\n", pok, pok.Length, pok.Capacity);
 
 
-		string* testString = new string(L"Hello");
-		*testString += L" ,world!\n";
-		testString->ToUpper();
-		wprintf(*testString);
+		string test2 = L"Concentration test: ";
+		test2 += L"Concentration string";
+		wprintf(L"\"%s\" %i %i\n", test2, test2.Length, test2.Capacity);
+		test2 += pok + pok;
+		wprintf(L"\"%s\" %i %i\n", test2, test2.Length, test2.Capacity);
+		test2 += L" ";
+		wprintf(L"\"%s\" %i %i\n", test2, test2.Length, test2.Capacity);
+		str8 eight = " 8bit string ";
+		test2 += eight;
+		wprintf(L"\"%s\" %i %i\n", test2, test2.Length, test2.Capacity);
+		test2 += 8;
+		wprintf(L"\"%s\" %i %i\n", test2, test2.Length, test2.Capacity);
+		test2 += L" -> ";
+		wprintf(L"\"%s\" %i %i\n", test2, test2.Length, test2.Capacity);
+		test2 += 6.0f;
+		wprintf(L"\"%s\" %i %i\n", test2, test2.Length, test2.Capacity);
 
-		TString8 testString2;
-
-		testString2 = *testString;
-		testString2.ToLower();
-		printf(testString2);
-
-		string formatted = string::Format(L"Selam ben %i numarali vatandas %f yasindayim\n",4096, 12.555f);
-		wprintf(formatted);
-
-		string padding = L"12.5";
-		padding.PadLeft(10);
-		wprintf(padding);
-
-		TString8 padding2 = "Kamil";
-		padding2.PadLeft(10);
-		printf(padding2);
+		if (test2 == L"Concentration test: Concentration stringthisthis  8bit string 8 -> 6.00")
+		{
+			wprintf(L"IT WORKSSSS\n");
+		}
 	}
 };
 

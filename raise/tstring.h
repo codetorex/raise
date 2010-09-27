@@ -11,6 +11,36 @@ typedef char	ch8;
 class StringDriver
 {
 public:
+	inline static void ConvertValue(ch16* dest,int destsize,int value)
+	{
+		Format(dest,destsize,L"%i",value);
+	}
+
+	inline static void ConvertValue(ch8* dest,int destsize,int value)
+	{
+		Format(dest,destsize,"%i",value);
+	}
+
+	inline static void ConvertValue(ch16* dest,int destsize,float value)
+	{
+		Format(dest,destsize,L"%0.2f",value);
+	}
+
+	inline static void ConvertValue(ch8* dest,int destsize,float value)
+	{
+		Format(dest,destsize,"%0.2f",value);
+	}
+
+	inline static void ConvertValue(ch16* dest,int destsize,unsigned long value)
+	{
+		Format(dest,destsize,L"%u",value);
+	}
+
+	inline static void ConvertValue(ch8* dest,int destsize,unsigned long value)
+	{
+		Format(dest,destsize,"%u",value);
+	}
+
 	inline static void Format(ch16* dest,int destsize,ch16* format, va_list ap)
 	{
 		_vsnwprintf(dest,destsize,format,ap);
@@ -173,7 +203,7 @@ public:
 		Length = 0;
 		Capacity = 0;
 		Chars = 0;
-		Allocate(ncapacity);
+		Allocate(capacity);
 		Clear();
 	}
 
@@ -221,8 +251,14 @@ public:
 
 	TString<T>& Substring (int startIndex, int lengt)
 	{
-		TString<T>* nstring = new TString<T>;
-		nstring->Allocate(lengt+1);
+		if (startIndex + lengt > Length)
+		{
+			lengt = Length - startIndex;
+		}
+		// TODO: If lengt is 0 do something else
+
+		TString<T>* nstring = new TString<T>(lengt);
+		nstring->Allocate(lengt);
 		StringDriver::MemoryCopy(nstring->Chars,Chars+startIndex,lengt);
 		nstring->Chars[lengt] = 0;
 		nstring->Length = lengt;
@@ -242,7 +278,7 @@ public:
 
 	TString<T>& operator = (TString<T>& value)
 	{
-		Allocate(value.Length+1);
+		Allocate(value.Length);
 		StringDriver::MemoryCopy(Chars,value.Chars,value.Length+1);
 		Length = value.Length;
 		return *this;
@@ -251,7 +287,7 @@ public:
 	template <class K>
 	TString<T>& operator = (TString<K>& value)
 	{
-		Allocate(value.Length+1);
+		Allocate(value.Length);
 		StringDriver::ConvertCopy(Chars,value.Chars,value.Length+1);
 		Length = value.Length;
 		return *this;
@@ -260,7 +296,7 @@ public:
 	TString<T>& operator + (T* value)
 	{
 		int alen = StringDriver::Length(value);
-		TString<T>* nstring = new TString<T>(alen+Length+1);
+		TString<T>* nstring = new TString<T>(alen+Length);
 		nstring->Append(Chars,Length);
 		nstring->Append(value,alen);
 		return *nstring;
@@ -268,7 +304,7 @@ public:
 
 	TString<T>& operator + (TString<T>& value)
 	{
-		TString<T>* nstring = new TString<T>(value.Length+Length+1);
+		TString<T>* nstring = new TString<T>(value.Length+Length);
 		nstring->Append(Chars,Length);
 		nstring->Append(value.Chars,value.Length);
 		return *nstring;
@@ -277,9 +313,9 @@ public:
 	template <class K>
 	TString<T>& operator + (TString<K>& value)
 	{
-		TString<T>* nstring = new TString<T>(value.Length+Length+1);
+		TString<T>* nstring = new TString<T>(value.Length+Length);
 		nstring->Append(Chars,Length);
-		StringDriver::ConvertCopy(Chars+Length,value.Chars,value.Length);
+		StringDriver::ConvertCopy(Chars+Length,value.Chars,value.Length+1);
 		return *nstring;
 	}
 	
@@ -299,17 +335,16 @@ public:
 	template <class K>
 	TString<T>& operator += (TString<K>& value)
 	{
-		TString<T>* nstring = new TString<T>(value.Length+Length+1);
-		nstring->Append(Chars,Length);
-		StringDriver::ConvertCopy(Chars+Length,value.Chars,value.Length);
-		return *nstring;
+		EnsureCapacity(Length+value.Length);
+		StringDriver::ConvertCopy(Chars+Length,value.Chars,value.Length+1);
+		Length += value.Length;
+		return *this;
 	}
-
 
 	TString<T>& operator += (int value)
 	{
 		T temp[32];
-		StringDriver::Format(temp,"%i",value);
+		StringDriver::ConvertValue(temp,32,value);
 		*this += temp;
 		return *this;
 	}
@@ -317,7 +352,7 @@ public:
 	TString<T>& operator += (unsigned long value)
 	{
 		T temp[32];
-		StringDriver::Format(temp,"%u",value);
+		StringDriver::ConvertValue(temp,32,value);
 		*this += temp;
 		return *this;
 	}
@@ -325,7 +360,7 @@ public:
 	TString<T>& operator += (float value)
 	{
 		T temp[32];
-		StringDriver::Format(temp,"%0.2f",value);
+		StringDriver::ConvertValue(temp,32,value);
 		*this += temp;
 		return *this;
 	}
@@ -395,12 +430,12 @@ public:
 			Length -= clen;
 			if (Length == 0)
 			{
-				Allocate(1);
+				Allocate(0);
 				Chars[0] = 0; // capacity will remain same
 			}
 			else
 			{
-				T* NewChars = new T [Length+1];
+				T* NewChars = AllocateMemory(Length);
 				StringDriver::MemoryCopy(NewChars,Chars+clen,Length+1);
 				Use(NewChars,Length);
 			}
@@ -442,7 +477,7 @@ public:
 
 		if (clen == -1)
 		{
-			Allocate(1);
+			Allocate(0);
 			Chars[0] = 0; // capacity will remain same
 		}
 		else
@@ -456,7 +491,7 @@ public:
 			}
 			else
 			{
-				T* NewChars = new T [Length+1];
+				T* NewChars = AllocateMemory(Length);
 				StringDriver::MemoryCopy(NewChars,Chars,Length);
 				Use(NewChars,Length);
 				NewChars[Length] = 0;
@@ -476,7 +511,7 @@ public:
 
 		if (Capacity <= width)
 		{
-			T* NewChars = new T [width+1];
+			T* NewChars = AllocateMemory(width);
 			StringDriver::Set(NewChars,padChar,width);
 			StringDriver::MemoryCopy(NewChars+padlength,Chars,Length);
 			Use(NewChars,width,width);
@@ -499,7 +534,7 @@ public:
 
 		if (Capacity <= width)
 		{
-			T* NewChars = new T [width+1];
+			T* NewChars = AllocateMemory(width);
 			StringDriver::Set(NewChars,padChar,width);
 			StringDriver::MemoryCopy(NewChars,Chars,Length);
 			Use(NewChars,width,width);
@@ -564,8 +599,8 @@ protected:
 			return;
 		}
 
-		Capacity = newcapacity-1;
-		Chars = new T [newcapacity];
+		Capacity = newcapacity;
+		Chars = AllocateMemory(newcapacity);
 		Chars[Capacity] = 0;
 	}
 
@@ -602,25 +637,28 @@ protected:
 	inline void Copy (T* value)
 	{
 		Length = StringDriver::Length(value); //wcslen(value);
-		Allocate(Length+1);
+		Allocate(Length);
 		StringDriver::Copy(Chars,value);
 		Chars[Length] = 0;
 	}
 
+	inline void EnsureCapacity(int cap)
+	{
+		if (Capacity >= cap)
+		{
+			return;
+		}
+
+		T* NewChars = AllocateMemory(cap);
+		StringDriver::MemoryCopy(NewChars,Chars,Length);
+		Use(NewChars,cap,Length);
+	}
+
 	inline void Append(T* value,int bufferlength)
 	{
-		if (Capacity >= (Length + bufferlength)) // if have enough capacity
-		{
-			StringDriver::MemoryCopy(Chars+Length,value,bufferlength);
-			Length += bufferlength;	//NOTE: while writing for unicode this may need to add half of it?
-		}
-		else
-		{
-			T* NewChars = new T [Length+bufferlength+1];
-			StringDriver::MemoryCopy(NewChars,Chars,Length);
-			StringDriver::MemoryCopy(NewChars+Length,value,bufferlength);
-			Use(NewChars,Length+bufferlength);
-		}
+		EnsureCapacity(Length+bufferlength);
+		StringDriver::MemoryCopy(Chars+Length,value,bufferlength);
+		Length += bufferlength;
 		Chars[Length] = 0;
 	}
 
