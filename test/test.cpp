@@ -6,6 +6,10 @@
 #include "tmemory.h"
 #include "tprofiler.h"
 #include "tstring.h"
+#include "mvector.h"
+#include "mquaternion.h"
+#include "mray.h"
+#include "mfixed.h"
 
 class TBitArrayTest
 {
@@ -115,6 +119,21 @@ public:
 	}
 };
 
+class TestVector
+{
+public:
+
+	void Test()
+	{
+		wprintf(L"size of a vector: %i\n", sizeof(vec3));
+
+		vec3 testvector(3.0f,2.0f,1.0f);
+		wprintf(L"%f %f %f\n",testvector.v[0],testvector.v[1],testvector.v[2]);
+		wprintf(L"%f %f %f\n",testvector.x,testvector.y,testvector.z);
+
+	}
+};
+
 #ifdef WIN32
 int _tmain(int argc, wchar_t* argv[])
 #else
@@ -127,7 +146,10 @@ int main(int argc,char** argv)
 	/*TMemoryTest m;
 	m.Test();*/
 
-	TStringTest s;
+	/*TStringTest s;
+	s.Test();*/
+
+	TestVector s;
 	s.Test();
 
 

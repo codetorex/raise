@@ -8,6 +8,7 @@
 #include <string>
 
 #ifdef LINUX
+// with -fshort-wchar compiler option wchar_t will use 16 bits
 #include <wchar.h>
 #include <stdarg.h>
 #include <wctype.h>

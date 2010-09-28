@@ -23,8 +23,8 @@ qword RDTSCCount()
 	_asm
 	{
 		rdtsc
-			mov res.low,eax
-			mov res.high,edx
+		mov res.low,eax
+		mov res.high,edx
 	}
 	return res;
 }
