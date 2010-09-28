@@ -4,6 +4,25 @@
 
 #include "raisetypes.h"
 #include <memory>
+#include <string.h>
+#include <string>
+
+#ifdef LINUX
+#include <wchar.h>
+#include <stdarg.h>
+#include <wctype.h>
+#define _vsnwprintf		vswprintf
+#define vsprintf_s		vsnprintf
+#define strnset			memset
+#define wcsnset			wmemset
+inline char* strlwr(char* str) { char* it = str; while (*it != 0) { *it = tolower(*it); ++it; } return str; }
+inline char* strupr(char* str) { char* it = str; while (*it != 0) { *it = toupper(*it); ++it; } return str; }
+inline wchar_t* wcslwr(wchar_t* str) { wchar_t* it = str; while (*it != 0) { *it = towlower(*it); ++it; } return str; }
+inline wchar_t* wcsupr(wchar_t* str) { wchar_t* it = str; while (*it != 0) { *it = towupper(*it); ++it; } return str; }
+#define COPYTIP << 2
+#else
+#define COPYTIP << 1
+#endif
 
 typedef wchar_t ch16;
 typedef char	ch8;
@@ -11,6 +30,17 @@ typedef char	ch8;
 class StringDriver
 {
 public:
+
+	inline const ch16* GetWhitespaces(ch16* k = 0)
+	{
+		return L"\x20\x09\x0A\x0D\0x0B";
+	}
+
+	inline const ch8* GetWhitespaces(ch8* k = 0)
+	{
+		return "\x20\x09\x0A\x0D\0x0B";
+	}
+
 	inline static void ConvertValue(ch16* dest,int destsize,int value)
 	{
 		Format(dest,destsize,L"%i",value);
@@ -115,12 +145,12 @@ public:
 
 	inline static ch8* MemoryCopy(ch8* dst,ch8* src,int count)
 	{
-		return (ch8*)memcpy(dst,src,count);
+		return (ch8*)strncpy(dst,src,count);
 	}
 
 	inline static ch16* MemoryCopy(ch16* dst,ch16* src,int count)
 	{
-		return (ch16*)memcpy(dst,src,count<<1);
+		return (ch16*)wcsncpy(dst,src,count);
 	}
 
 	inline static ch8* Set(ch8* dst,ch8 chr,int count)
@@ -145,23 +175,25 @@ public:
 
 	inline static ch8* Lower(ch8* value)
 	{
-		return _strlwr(value);
-	}
-
-	inline static ch16* Lower(ch16* value)
-	{
-		return _wcslwr(value);
+		return strlwr(value);
 	}
 
 	inline static ch8* Upper(ch8* value)
 	{
-		return _strupr(value);
+		return strupr(value);
 	}
+
+	inline static ch16* Lower(ch16* value)
+	{
+		return wcslwr(value);
+	}
+
 
 	inline static ch16* Upper(ch16* value)
 	{
-		return _wcsupr(value);
+		return wcsupr(value);
 	}
+
 };
 
 /*
@@ -395,7 +427,7 @@ public:
 
 		if (trimChars == 0)
 		{
-			trimChars = GetWhitespaces();
+			trimChars = StringDriver::GetWhitespaces(Chars);
 		}
 
 		bool contn;
@@ -449,7 +481,7 @@ public:
 
 		if (trimChars == 0)
 		{
-			trimChars = GetWhitespaces();
+			trimChars = StringDriver::GetWhitespaces(Chars);
 		}
 
 		bool contn;
@@ -566,9 +598,6 @@ public:
 		return Chars;
 	}
 
-private:
-	inline static T* GetWhitespaces();
-
 protected:
 	// Memory Operations
 	inline T* AllocateMemory(int cap)
@@ -663,16 +692,6 @@ protected:
 	}
 
 };
-
-inline ch16* TString<ch16>::GetWhitespaces()
-{
-	return L"\x20\x09\x0A\x0D\0x0B";
-}
-
-inline ch8* TString<ch8>::GetWhitespaces()
-{
-	return "\x20\x09\x0A\x0D\0x0B";
-}
 
 typedef TString<ch8>		TString8;	// long bit wise string type
 typedef TString<ch16>		TString16;	// long bit wise string type

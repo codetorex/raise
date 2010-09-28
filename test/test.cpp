@@ -54,7 +54,7 @@ public:
 			pok = mp->Allocator->Allocate(124);
 		}
 		tp.EndProfiling();
-		printf("Our func: %i allocations of 124 bytes in %i msecs\n", tp.callCount, tp.tickDelta);
+		printf("Our func: %u allocations of 124 bytes in %u msecs\n", tp.callCount, tp.tickDelta);
 
 		tp.BeginProfiling(131072);
 		for (int i=0;i<131072;i++)
@@ -62,7 +62,7 @@ public:
 			pok = (byte*) new byte[128];
 		}
 		tp.EndProfiling();
-		printf("Ms func: %i allocations of 124 bytes in %i msecs\n", tp.callCount,tp.tickDelta);
+		printf("Ms func: %u allocations of 124 bytes in %u msecs\n", tp.callCount,tp.tickDelta);
 
 	}
 };
@@ -71,35 +71,42 @@ class TStringTest
 {
 public:
 
+	void PrintString(string& k)
+	{
+		wprintf(k.Chars);
+		wprintf(L" %i %i\n", k.Length, k.Capacity);
+	}
+
 	void Test()
 	{
 		string teststr = L"this is test string";
-		wprintf(L"%s %i %i\n", teststr, teststr.Length, teststr.Capacity);
+		PrintString(teststr);
 		teststr.ToUpper();
-		wprintf(L"Upper: %s\n",teststr);
+		PrintString(teststr);
 		teststr.ToLower();
-		wprintf(L"Lower: %s\n",teststr);
+		PrintString(teststr);
 
 		string pok = teststr.Substring(0,4);
-		wprintf(L"%s %i %i\n", pok, pok.Length, pok.Capacity);
+		PrintString(pok);
 
 
 		string test2 = L"Concentration test: ";
+		PrintString(test2);
 		test2 += L"Concentration string";
-		wprintf(L"\"%s\" %i %i\n", test2, test2.Length, test2.Capacity);
+		PrintString(test2);
 		test2 += pok + pok;
-		wprintf(L"\"%s\" %i %i\n", test2, test2.Length, test2.Capacity);
+		PrintString(test2);
 		test2 += L" ";
-		wprintf(L"\"%s\" %i %i\n", test2, test2.Length, test2.Capacity);
+		PrintString(test2);
 		str8 eight = " 8bit string ";
 		test2 += eight;
-		wprintf(L"\"%s\" %i %i\n", test2, test2.Length, test2.Capacity);
+		PrintString(test2);
 		test2 += 8;
-		wprintf(L"\"%s\" %i %i\n", test2, test2.Length, test2.Capacity);
+		PrintString(test2);
 		test2 += L" -> ";
-		wprintf(L"\"%s\" %i %i\n", test2, test2.Length, test2.Capacity);
+		PrintString(test2);
 		test2 += 6.0f;
-		wprintf(L"\"%s\" %i %i\n", test2, test2.Length, test2.Capacity);
+		PrintString(test2);
 
 		if (test2 == L"Concentration test: Concentration stringthisthis  8bit string 8 -> 6.00")
 		{
