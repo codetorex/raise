@@ -3,15 +3,17 @@
 #define TSTRING_H
 
 #include "raisetypes.h"
-#include <memory>
+
 #include <string.h>
-#include <string>
 
 #ifdef LINUX
 // with -fshort-wchar compiler option wchar_t will use 16 bits
+#include <string>
 #include <wchar.h>
 #include <stdarg.h>
 #include <wctype.h>
+#include <memory>
+
 #define _vsnwprintf		vswprintf
 #define vsprintf_s		vsnprintf
 #define strnset			memset
@@ -20,9 +22,6 @@ inline char* strlwr(char* str) { char* it = str; while (*it != 0) { *it = tolowe
 inline char* strupr(char* str) { char* it = str; while (*it != 0) { *it = toupper(*it); ++it; } return str; }
 inline wchar_t* wcslwr(wchar_t* str) { wchar_t* it = str; while (*it != 0) { *it = towlower(*it); ++it; } return str; }
 inline wchar_t* wcsupr(wchar_t* str) { wchar_t* it = str; while (*it != 0) { *it = towupper(*it); ++it; } return str; }
-#define COPYTIP << 2
-#else
-#define COPYTIP << 1
 #endif
 
 typedef wchar_t ch16;

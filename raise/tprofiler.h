@@ -4,8 +4,6 @@
 #include "m64bit.h"
 #include "ttiming.h"
 
-
-
 class TProfiler
 {
 private:
@@ -15,22 +13,36 @@ public:
 	dword callCount;
 	dword tickDelta;
 
-	void BeginProfiling()
+	inline void BeginProfiling()
 	{
 		tickStart = TickCount();
 	}
 
-	void EndProfiling()
+	inline void EndProfiling()
 	{
 		tickDelta = TickCount() - tickStart;
 	}
 
-	void BeginProfiling(dword callCount)
+	inline void BeginProfiling(dword callCount)
 	{
 		this->callCount = callCount;
 		BeginProfiling();
 	}
+
+
+	/**
+	* Returns per operation time as nanosecond.
+	*/
+	inline double PerOperationTime()
+	{
+		double ns = (double)tickDelta / (double)callCount;
+		ns *= (double)1000000.0f; // millisecond, microsecond, nanosecond 1million for micro and nano
+		return ns;
+	}
 };
+
+
+
 
 
 #endif

@@ -3,11 +3,6 @@
 
 #include "raisetypes.h"
 
-#define MUL32(x)	( x << 5 )
-#define MXDWORD		0xFFFFFFFF
-#define MOD32(x)	( x & 0x1F )
-#define DIV32(x)	( x >> 5 )
-
 class TMemoryPool;
 
 class TBitset

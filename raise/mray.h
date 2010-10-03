@@ -4,7 +4,7 @@
 #include "raisetypes.h"
 #include "mvector.h"
 
-class ray3
+class MRay
 {
 public:
 	vec3 p; // point

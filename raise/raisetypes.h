@@ -2,11 +2,14 @@
 #ifndef RAISETYPES_H
 #define RAISETYPES_H
 
+//////////////////////////////////////////////////////////////////////////
+/* Dont forget to Define LINUX for linux build, and M64 for 64 bit */
+
 // Custom Types And Generic Macros Comes Here
 
 typedef unsigned char	byte;
 typedef unsigned short	word;
-typedef unsigned long	dword;
+typedef unsigned int	dword; // It was unsigned long before but in linux longs have 8 bytes. (64 bit stuff?)
 
 // FILE PERMISSION DEFINITIONS BIT BY BIT
 #define P_READABLE			1
@@ -44,5 +47,21 @@ typedef unsigned long	dword;
 #define WHEEL_DELTA			120
 #endif
 
+
+#define MXDWORD		0xFFFFFFFF
+
+#define DIV2(x)				( x >> 1 )
+#define DIV4(x)				( x >> 2 )
+#define DIV8(x)				( x >> 3 )
+#define DIV16(x)			( x >> 4 )
+#define DIV32(x)			( x >> 5 )
+
+#define MUL2(x)				( x << 1 )
+#define MUL4(x)				( x << 2 )
+#define MUL8(x)				( x << 3 )
+#define MUL16(x)			( x << 4 )
+#define MUL32(x)			( x << 5 )
+
+#define MOD32(x)			( x & 0x1F )
 
 #endif

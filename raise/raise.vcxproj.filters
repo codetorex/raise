@@ -33,6 +33,15 @@
       <UniqueIdentifier>{93995380-89BD-4b04-88EB-625FBE52EBFB}</UniqueIdentifier>
       <Extensions>h;hpp;hxx;hm;inl;inc;xsd</Extensions>
     </Filter>
+    <Filter Include="Source Files\UI\Base Objects">
+      <UniqueIdentifier>{7c466050-e3a5-444d-964e-2790b0195eb5}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\UI\Components">
+      <UniqueIdentifier>{fa40a39c-f923-4417-9e1a-6fa0c7981010}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Graphics">
+      <UniqueIdentifier>{a16a1769-9084-4b22-bf2d-8fb0f7d0fc2a}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="raisetypes.h">
@@ -83,6 +92,21 @@
     <ClInclude Include="tbitset.h">
       <Filter>Source Files\Collection</Filter>
     </ClInclude>
+    <ClInclude Include="tarray.h">
+      <Filter>Source Files\Collection</Filter>
+    </ClInclude>
+    <ClInclude Include="tcolor.h">
+      <Filter>Source Files\Graphics</Filter>
+    </ClInclude>
+    <ClInclude Include="mtools.h">
+      <Filter>Source Files\Mathematics</Filter>
+    </ClInclude>
+    <ClInclude Include="tbitmap.h">
+      <Filter>Source Files\Graphics</Filter>
+    </ClInclude>
+    <ClInclude Include="tbinary.h">
+      <Filter>Source Files\Collection</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">
@@ -96,6 +120,12 @@
     </ClCompile>
     <ClCompile Include="tbitset.cpp">
       <Filter>Source Files\Collection</Filter>
+    </ClCompile>
+    <ClCompile Include="tcolor.cpp">
+      <Filter>Source Files\Graphics</Filter>
+    </ClCompile>
+    <ClCompile Include="tbitmap.cpp">
+      <Filter>Source Files\Graphics</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
