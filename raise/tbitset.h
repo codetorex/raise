@@ -5,6 +5,10 @@
 
 class TMemoryPool;
 
+/**
+* Bitset or so called bitarray. Holds n boolean binary values as memory optimized.
+* TODO: implement binary features. shifting, population log2...
+*/
 class TBitset
 {
 protected:

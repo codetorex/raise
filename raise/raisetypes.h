@@ -2,6 +2,8 @@
 #ifndef RAISETYPES_H
 #define RAISETYPES_H
 
+// NOTE: Maybe needed  -std=c++0x for linux compilations
+
 //////////////////////////////////////////////////////////////////////////
 /* Dont forget to Define LINUX for linux build, and M64 for 64 bit */
 
@@ -50,18 +52,24 @@ typedef unsigned int	dword; // It was unsigned long before but in linux longs ha
 
 #define MXDWORD		0xFFFFFFFF
 
-#define DIV2(x)				( x >> 1 )
-#define DIV4(x)				( x >> 2 )
-#define DIV8(x)				( x >> 3 )
-#define DIV16(x)			( x >> 4 )
-#define DIV32(x)			( x >> 5 )
+#define DIV2(x)				( (x) >> 1 )
+#define DIV4(x)				( (x) >> 2 )
+#define DIV8(x)				( (x) >> 3 )
+#define DIV16(x)			( (x) >> 4 )
+#define DIV32(x)			( (x) >> 5 )
 
-#define MUL2(x)				( x << 1 )
-#define MUL4(x)				( x << 2 )
-#define MUL8(x)				( x << 3 )
-#define MUL16(x)			( x << 4 )
-#define MUL32(x)			( x << 5 )
+#define MUL2(x)				( (x) << 1 )
+#define MUL4(x)				( (x) << 2 )
+#define MUL8(x)				( (x) << 3 )
+#define MUL16(x)			( (x) << 4 )
+#define MUL32(x)			( (x) << 5 )
 
-#define MOD32(x)			( x & 0x1F )
+// and with ( 2^n - 1 )
+#define MOD2(x)				( (x) & 1  )
+#define MOD4(x)				( (x) & 3  )
+#define MOD8(x)				( (x) & 7  )
+#define MOD16(x)			( (x) & 15 )
+#define MOD32(x)			( (x) & 31 ) 
+
 
 #endif

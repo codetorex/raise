@@ -2,13 +2,95 @@
 #define TBINARY_H
 
 #include "raisetypes.h"
+#include "tstring.h"
 
 #define NOTNEEDED
 
+
+enum BitEnum
+{
+	BIT00 = 0x1,
+	BIT01 = 0x2,
+	BIT02 = 0x4,
+	BIT03 = 0x8,
+	BIT04 = 0x10,
+	BIT05 = 0x20,
+	BIT06 = 0x40,
+	BIT07 = 0x80,
+	BIT08 = 0x100,
+	BIT09 = 0x200,
+	BIT10 = 0x400,
+	BIT11 = 0x800,
+	BIT12 = 0x1000,
+	BIT13 = 0x2000,
+	BIT14 = 0x4000,
+	BIT15 = 0x8000,
+	BIT16 = 0x10000,
+	BIT17 = 0x20000,
+	BIT18 = 0x40000,
+	BIT19 = 0x80000,
+	BIT20 = 0x100000,
+	BIT21 = 0x200000,
+	BIT22 = 0x400000,
+	BIT23 = 0x800000,
+	BIT24 = 0x1000000,
+	BIT25 = 0x2000000,
+	BIT26 = 0x4000000,
+	BIT27 = 0x8000000,
+	BIT28 = 0x10000000,
+	BIT29 = 0x20000000,
+	BIT30 = 0x40000000,
+	BIT31 = 0x80000000
+};
+
+static const dword bits[] = 
+{ 
+	0x00000001, 0x00000002, 0x00000004, 0x00000008,
+	0x00000010, 0x00000020, 0x00000040, 0x00000080,
+	0x00000100, 0x00000200, 0x00000400, 0x00000800,
+	0x00001000, 0x00002000, 0x00004000, 0x00008000,
+	0x00010000, 0x00020000, 0x00040000, 0x00080000,
+	0x00100000, 0x00200000, 0x00400000, 0x00800000,
+	0x01000000, 0x02000000, 0x04000000, 0x08000000,
+	0x10000000, 0x20000000, 0x40000000, 0x80000000,
+};
+
+static const dword bitmasks[] =
+{
+	0x00000001, 0x00000003, 0x00000007, 0x0000000f,
+	0x0000001f, 0x0000003f, 0x0000007f, 0x000000ff,
+	0x000001ff, 0x000003ff, 0x000007ff, 0x00000fff,
+	0x00001fff, 0x00003fff, 0x00007fff, 0x0000ffff,
+	0x0001ffff, 0x0003ffff, 0x0007ffff, 0x000fffff,
+	0x001fffff, 0x003fffff, 0x007fffff, 0x00ffffff,
+	0x01ffffff, 0x03ffffff, 0x07ffffff, 0x0fffffff,
+	0x1fffffff, 0x3fffffff, 0x7fffffff, 0xffffffff,
+};
+
+static const dword invbitmasks[] = 
+{
+	0xfffffffe, 0xfffffffc, 0xfffffff8, 0xfffffff0,
+	0xffffffe0, 0xffffffc0, 0xffffff80, 0xffffff00,
+	0xfffffe00, 0xfffffc00, 0xfffff800, 0xfffff000,
+	0xffffe000, 0xffffc000, 0xffff8000, 0xffff0000,
+	0xfffe0000, 0xfffc0000, 0xfff80000, 0xfff00000,
+	0xffe00000, 0xffc00000, 0xff800000, 0xff000000,
+	0xfe000000, 0xfc000000, 0xf8000000, 0xf0000000,
+	0xe0000000, 0xc0000000, 0x80000000, 0x00000000,
+};
+
+/**
+* 32bit binary value manipulation tools.
+*/
 class RDLL TBinary
 {
 public:
 	dword value;
+
+	TBinary()
+	{
+		value = 0;
+	}
 
 	TBinary(dword _value)
 	{
@@ -76,6 +158,35 @@ public:
 		dword c = ((v + (v >> 4) & 0xF0F0F0F) * 0x1010101) >> 24; // count
 		return c;
 	}
+
+	/**
+	* Returns string representation of binary.
+	*/
+	inline str8& tostring()
+	{
+		return tostring(value);
+	}
+
+	static inline str8& tostring(dword binvalue)
+	{
+		register dword v = binvalue;
+		str8* str = new str8(32,'0');
+		for (int i=0;i<32;i++)
+		{
+			str->Chars[i] += v & 1;
+			v >>= 1;
+		}
+		return *str;
+	}
+
+	/**
+	* Set value.
+	*/
+	/*inline TBinary& operator =  (dword _value)
+	{
+		value = _value;
+		return *this;
+	}*/
 
 
 #ifndef NOTNEEDED
@@ -167,5 +278,7 @@ public:
 #endif
 
 };
+
+typedef TBinary bindw; // binary dword short hand definition
 
 #endif

@@ -107,6 +107,12 @@
     <ClInclude Include="tbinary.h">
       <Filter>Source Files\Collection</Filter>
     </ClInclude>
+    <ClInclude Include="tbitfield.h">
+      <Filter>Source Files\Collection</Filter>
+    </ClInclude>
+    <ClInclude Include="tbitstack.h">
+      <Filter>Source Files\Collection</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">

@@ -71,17 +71,17 @@ public:
 		Format(dest,destsize,"%u",value);
 	}
 
-	inline static void Format(ch16* dest,int destsize,ch16* format, va_list ap)
+	inline static void Format(ch16* dest,int destsize,const ch16* format, va_list ap)
 	{
 		_vsnwprintf(dest,destsize,format,ap);
 	}
 
-	inline static void Format(ch8* dest,int destsize,ch8* format, va_list ap)
+	inline static void Format(ch8* dest,int destsize,const ch8* format, va_list ap)
 	{
 		vsprintf_s(dest,destsize,format,ap);
 	}
 
-	inline static void Format(ch16* dest,int destsize,ch16* format,...)
+	inline static void Format(ch16* dest,int destsize,const ch16* format,...)
 	{
 		va_list ap;
 		va_start(ap,format);
@@ -89,7 +89,7 @@ public:
 		va_end(ap);
 	}
 
-	inline static void Format(ch8* dest,int destsize,ch8* format,...)
+	inline static void Format(ch8* dest,int destsize,const ch8* format,...)
 	{
 		va_list ap;
 		va_start(ap,format);
@@ -230,13 +230,22 @@ public:
 		Copy(value);
 	}
 
-	TString(int capacity)
+	TString(int _capacity)
 	{
-		Length = 0;
 		Capacity = 0;
 		Chars = 0;
-		Allocate(capacity);
+		Length = 0;
+		Allocate(_capacity);
 		Clear();
+	}
+
+	TString(int _capacity, T chr)
+	{
+		Capacity = 0;
+		Chars = 0;
+		Length = _capacity;
+		Allocate(_capacity);
+		StringDriver::Set(Chars,chr,_capacity);
 	}
 
 	~TString()

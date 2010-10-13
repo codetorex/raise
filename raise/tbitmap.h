@@ -52,31 +52,91 @@ inline void PixelCopy(void* _dst,void* _src,int _size)
 
 /**
 * Definitions for format
-* 8 bits are for channels available
-* 4 bits are for per channel data type
-* 4 bits are for optimization flags
-* 16 bits used and 16 bits are avilable for future usage
 */
 
-#define CRED			1
-#define CGREEN			2
-#define CBLUE			4
-#define CRGB			(CRED | CGREEN | CBLUE)
-#define CALPHA			8
-#define CRGBA			(CRGB | CALPHA)
-#define CLUM			16
-#define CDEPTH			32
-#define CSTENCIL		64
-#define CDEPTHSTENCIL	(CDEPTH | CSTENCIL)
+struct TBitmapChannels
+{
+	enum echannels
+	{
+		red,
+		green,
+		blue,
+		alpha,
+		luminance,
+		depth,
+		stencil
+	};
+};
 
-#define C8BIT			(1 << 8)	// 8 bit per channel
-#define C16BIT			(2 << 8)	// 16 bit per channel
-#define CFLOAT			(3 << 8)	// float per channel
+struct TBitmapChannelTypes
+{
+	enum echanneltypes
+	{
+		t8bit,
+		t16bit,
+		tfloat,
+	};
+};
 
-// optimization flags
-#define O2NWIDTH		(1 << 12)	// Image is 2nwidth
-#define O4BYTE			(2 << 12)	// Image uses 4 bytes per pixel
+struct TBitmapChannelOrdering
+{
+	enum echannelordering
+	{
+		rgba,
+		bgra,
+		abgr,
+		argb,
+	};
+};
 
+
+typedef TBitmapChannels			bchn;
+typedef TBitmapChannelTypes		btyp;
+typedef TBitmapChannelOrdering	bord;
+
+/**
+* Definitions for format
+* 8 bits are for channels available
+* 4 bits are for per channel data type
+* 4 bits are for channel ordering
+* 4 bits are for optimization flags
+* 20 bits used and 12 bits are avilable for future usage
+*/
+
+#define MAXCHANNELS		8
+
+#define FRED			1
+#define FGREEN			2
+#define FBLUE			4
+#define FRGB			(FRED | FGREEN | FBLUE)
+#define FALPHA			8
+#define FRGBA			(FRGB | FALPHA)
+#define FLUM			16
+#define FDEPTH			32
+#define FSTENCIL		64
+#define FDEPTHSTENCIL	(FDEPTH | FSTENCIL)
+
+// maximum 16 different types are supported (4-bit)
+#define F8BIT			(1 << 8)	// 8 bit per channel
+#define F16BIT			(2 << 8)	// 16 bit per channel NOT IMPLEMENTED MAYBE NEVER WILL BE?
+#define FFLOAT			(3 << 8)	// float per channel
+
+// channel ordering
+// so user not confused with (CRGB | CBGR),
+// he will just use CBGR and channel bits will set // 0 is RGBA
+#define FBGR			((1 << 12) | FRGB)		// actually not a new ordering
+#define FBGRA			((1 << 12) | FRGBA)
+#define FABGR			((2 << 12) | FRGBA)
+#define FARGB			((3 << 12) | FRGBA)
+
+// optimization flags 4 bits, 2 reserved
+#define O2NWIDTH		(1 << 16)	// Image is 2nwidth
+#define O32BITALIGN		(2 << 16)	// Image uses 4 bytes per pixel
+
+/* When needed in future
+#define FCMYK			(1 << 20)
+#define FHSV			(2 << 20)
+*/
 
 /**
 * Initial bitmap class.
@@ -92,11 +152,11 @@ public:
 	int pixels;
 	int bits;	// bits per pixel
 	int bytes;	// bytes per pixel
-	int format;
 	int log2width; // log base 2 of width
+	dword format;
 
 	TBitmap();
-	TBitmap(int _width,int _height, int _format);
+	TBitmap(int _width,int _height, dword _format);
 
 
 	/**
@@ -105,7 +165,15 @@ public:
 	* @param _height height of bitmap
 	* @param _bpp bits per pixel ( for RGB use 24, for RGBA 32 )
 	*/
-	void create(int _width,int _height,int _bpp, int _format);
+	void create(int _width,int _height, dword _format);
+	
+	/**
+	* Convert current bitmap format to another.
+	* @param _format new bitmap format
+	*/
+	void convert(dword _format);
+
+	//TODO: you can implement, copy convert, new convert, and copy funcs.
 
 	void release();
 
@@ -245,9 +313,16 @@ public:
 	// Load Save functions
 
 
-
-	void loadbmp(Stream* bmpstream,bool closestream = true);
+	/**
+	* Loading bitmap files from stream.
+	* @param bmpstream stream to read files
+	* @param toRGB bmp files are stored in BGR format, if set true automatically converted to RGB
+	* @param closestream closes the stream after reading done
+	*/
+	void loadbmp(Stream* bmpstream,bool toRGB,bool closestream = true);
 	void savebmp(Stream* bmpstream,bool closestream = true);
 };
+
+
 
 #endif
