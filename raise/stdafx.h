@@ -15,13 +15,3 @@
 #include <stdlib.h>
 #include <stdio.h>
 #include <stdarg.h>
-
-#ifndef WIN32
-
-#define _vsnprintf vsnprintf
-#define _strlwr strlwr
-#define _strupr strupr
-#include <string.h>
-#include <ctype.h>
-
-#endif

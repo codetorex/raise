@@ -23,21 +23,12 @@
     <Filter Include="Source Files\IO">
       <UniqueIdentifier>{ab33cd95-ea23-4668-b850-ecdf7a3d402b}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Source Files\UI">
-      <UniqueIdentifier>{6d87be63-c6c8-49b1-9775-e05243769bd6}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Source Files\System">
       <UniqueIdentifier>{3cd79502-524a-4e23-b869-dad231dbb34a}</UniqueIdentifier>
     </Filter>
     <Filter Include="Header Files">
       <UniqueIdentifier>{93995380-89BD-4b04-88EB-625FBE52EBFB}</UniqueIdentifier>
       <Extensions>h;hpp;hxx;hm;inl;inc;xsd</Extensions>
-    </Filter>
-    <Filter Include="Source Files\UI\Base Objects">
-      <UniqueIdentifier>{7c466050-e3a5-444d-964e-2790b0195eb5}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Source Files\UI\Components">
-      <UniqueIdentifier>{fa40a39c-f923-4417-9e1a-6fa0c7981010}</UniqueIdentifier>
     </Filter>
     <Filter Include="Source Files\Graphics">
       <UniqueIdentifier>{a16a1769-9084-4b22-bf2d-8fb0f7d0fc2a}</UniqueIdentifier>
@@ -55,9 +46,6 @@
     </ClInclude>
     <ClInclude Include="tmemory.h">
       <Filter>Source Files\System</Filter>
-    </ClInclude>
-    <ClInclude Include="stdafx.h">
-      <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="tprofiler.h">
       <Filter>Source Files\System</Filter>
@@ -112,6 +100,18 @@
     </ClInclude>
     <ClInclude Include="tbitstack.h">
       <Filter>Source Files\Collection</Filter>
+    </ClInclude>
+    <ClInclude Include="thashmap.h">
+      <Filter>Source Files\Collection</Filter>
+    </ClInclude>
+    <ClInclude Include="tdictionary.h">
+      <Filter>Source Files\Collection</Filter>
+    </ClInclude>
+    <ClInclude Include="tfilestream.h">
+      <Filter>Source Files\IO</Filter>
+    </ClInclude>
+    <ClInclude Include="stdafx.h">
+      <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

@@ -4,7 +4,59 @@
 
 #include "raisetypes.h"
 
-#include <vector>
+#define TARRAYDEFSIZE	4
+
+
+template<class T,int Sz>
+class TStaticArray
+{
+public:
+	T	Item[Sz];
+	int Count;
+
+	TStaticArray()
+	{
+		Count = 0;
+	}
+
+	inline int LastIndexOf(T value)
+	{
+		int c = Sz;
+		while(c--)
+		{
+			if (Item[c] == value)
+			{
+				return c;
+			}
+		}
+		return -1;
+	}
+
+	inline void RemoveAt(int index)
+	{
+		if (index == (Sz -1))
+		{
+			Count--;
+			return;
+		}
+		Item[index] = Item[--Count];
+	}
+
+	inline void Remove(T value)
+	{
+		int i = LastIndexOf(value);
+		if (i != -1)
+		{
+			RemoveAt(i);
+		}
+	}
+
+	inline void	Add(T value)
+	{
+		Item[Count++] = value;
+	}
+};
+
 
 /**
 * Order not preserved in this implementation.
@@ -16,12 +68,14 @@ class TArray
 public:
 	TArray()
 	{
-		Allocate(8);
+		Item = 0;
+		Allocate(TARRAYDEFSIZE);
 		Count = 0;
 	}
 
 	TArray(int size)
 	{
+		Item = 0;
 		Allocate(size);
 		Count = 0;
 	}
@@ -32,13 +86,48 @@ public:
 
 	void	Insert(T value,int index);
 	
-	void	Remove(T value)
+
+	inline int IndexOf(T value)
 	{
-		
+		for (int i=0;i<Count;i++)
+		{
+			if (Item[i] == value)
+			{
+				return i;
+			}
+		}
+		return -1;
 	}
 
-	void	RemoveAt(int index)
+	inline int LastIndexOf(T value)
 	{
+		int c = Count;
+		while(c--)
+		{
+			if (Item[c] == value)
+			{
+				return c;
+			}
+		}
+		return -1;
+	}
+
+	inline void Remove(T value)
+	{
+		int i = LastIndexOf(value);
+		if (i != -1)
+		{
+			RemoveAt(i);
+		}
+	}
+
+	inline void RemoveAt(int index)
+	{
+		if (index == Count -1)
+		{
+			Count--;
+			return;
+		}
 		Item[index] = Item[--Count];
 	}
 
@@ -61,9 +150,18 @@ public:
 		Item[Count++] = value;
 	}
 
-	int		IndexOf(T value);
-	int		LastIndexOf(T value);
-	bool	Contains(T value);
+
+
+
+	bool Contains(T value)
+	{
+		int i = LastIndexOf(value);
+		if (i != -1)
+		{
+			return true;
+		}
+		return false;
+	}
 
 	void	Reverse();
 	void	Sort();

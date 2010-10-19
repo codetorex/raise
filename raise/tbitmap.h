@@ -7,6 +7,8 @@
 #include "raisetypes.h"
 #include "tstream.h"
 #include "mtools.h"
+#include "tbinary.h"
+#include "tbitstack.h"
 
 
 #ifndef LINUX
@@ -323,6 +325,195 @@ public:
 	void savebmp(Stream* bmpstream,bool closestream = true);
 };
 
+class TBitmapFormat
+{
+public:
+	bindw chn; // channel bits like FRED FGREEN FRGB
+	int channelCount;
+	int bitsperchannel;
+	int bytesperchannel;
+	int bits;
+	int bytes;
+	int typ; // flag that knows is 8bit per channel or 16 or float
 
+	int ordering; // ordering from TBitmapChannelOrdering or bord
+
+	int loc[MAXCHANNELS]; // channel locations
+	int chns[MAXCHANNELS]; // channels by location. index is location, value is channel
+
+	int log2chn;
+
+	TBitmapFormat(dword format)
+	{
+		loadformat(format);
+		for(int i=0;i<MAXCHANNELS;i++) loc[i] = -1;
+	}
+
+	static void TransposeIntArray(int* dst,int* src,int length)
+	{
+		for (int i=0;i<length;i++)
+		{
+			for (int k=0;k<length;k++)
+			{
+				if (src[k] == i)
+				{
+					dst[i] = k;
+					break;
+				}
+			}
+		}
+	}
+
+	void getlocations()
+	{
+		TransposeIntArray(chns,loc,MAXCHANNELS);
+	}
+
+	void loadformat(dword format)
+	{
+		TBitstack bmpbs = format;
+		// I converted this from bitfield to bitstack
+		chn = bmpbs.pop(8);
+		typ = bmpbs.pop(4);
+		ordering = bmpbs.pop(4);
+
+		channelCount = chn.popcount();
+
+		switch(typ)
+		{
+		case 0: // not set so 8 bit
+		case 1: // 8 bit
+			bitsperchannel = 8;
+			break;
+
+		case 2: // 16 bit
+			bitsperchannel = 16;
+			break;
+
+		case 3: // float
+			bitsperchannel = 32;
+			break;
+		}
+
+		bits = channelCount * bitsperchannel;
+		bytes = DIV8(bits);
+		bytesperchannel = DIV8(bitsperchannel);
+		
+		bindw spc = bitsperchannel;
+		log2chn = spc.log2k();
+
+		if ( (format & FRGB) > 0 )
+		{
+			switch(ordering)
+			{
+			case bord::bgra:
+				loc[bchn::blue] = 0;
+				loc[bchn::green] = 1;
+				loc[bchn::red] = 2;
+				loc[bchn::alpha] = 3;
+				break;
+
+			case bord::rgba:
+				loc[bchn::red] = 0;
+				loc[bchn::green] = 1;
+				loc[bchn::blue] = 2;
+				loc[bchn::alpha] = 3;
+				break;
+
+			case bord::abgr:
+				loc[bchn::alpha] = 0;
+				loc[bchn::blue] = 1;
+				loc[bchn::green] = 2;
+				loc[bchn::red] = 3;
+				break;
+
+			case bord::argb:
+				loc[bchn::alpha] = 0;
+				loc[bchn::red] = 1;
+				loc[bchn::green] = 2;
+				loc[bchn::blue] = 3;
+				break;
+			}
+
+			if ( (format & FRED) == 0 ) loc[bchn::red] = -1;
+			if ( (format & FGREEN) == 0 ) loc[bchn::green] = -1;
+			if ( (format & FBLUE) == 0 ) loc[bchn::blue] = -1;
+			if ( (format & FALPHA) == 0 ) loc[bchn::alpha] = -1;
+		}
+		else if( format & FDEPTH)
+		{
+			loc[bchn::depth] = 0;
+		}
+		else if(format & FSTENCIL)
+		{
+			loc[bchn::stencil] = 0;
+		}
+		else if( (format & FDEPTHSTENCIL) == FDEPTHSTENCIL)
+		{
+			loc[bchn::depth] = 0;
+			loc[bchn::stencil] = 1;
+		}
+		else if(format & FLUM)
+		{
+			loc[bchn::luminance] = 0;
+		}
+	}
+
+	/**
+	* Flexible function for that translates pixel from this format to another format.
+	* @param dst destination pixel which going to be format of this class
+	* @param src source pixel which should be in format of fsrc
+	* @param fsrc source pixel format
+	*/
+	inline void translatepixel(byte* dst,byte* src,const TBitmapFormat& fsrc)
+	{
+		int c=fsrc.channelCount;
+		while (c--) // for every source channel
+		{
+			int myIndex = loc[ fsrc.chns[c] ] << log2chn;
+			PixelCopy(dst + myIndex, src, bytesperchannel);
+			src += bytesperchannel;
+		}
+	}
+
+	/**
+	* Translates pixel from this format to another format. Where both of them 8 bits per channel.
+	* @param dst destination pixel which going to be format of this class
+	* @param src source pixel which should be in format of fsrc
+	* @param fsrc source pixel format
+	*/
+	inline void translatepixel8(byte* dst,byte* src,const TBitmapFormat& fsrc)
+	{
+		int c=fsrc.channelCount;
+		while (c--) // for every source channel
+		{
+			int myIndex = loc[ fsrc.chns[c] ];
+			dst[myIndex] = *src;
+			src++;
+		}
+	}
+
+	/**
+	* Translates pixel from this format to another format. Where both of them 32 bits per channel.
+	* @param dst destination pixel which going to be format of this class
+	* @param src source pixel which should be in format of fsrc
+	* @param fsrc source pixel format
+	*/
+	inline void translatepixel32(dword* dst,dword* src,const TBitmapFormat& fsrc)
+	{
+		int c=fsrc.channelCount;
+		while (c--) // for every source channel
+		{
+			int myIndex = loc[ fsrc.chns[c] ];
+			dst[myIndex] = *src;
+			src++;
+		}
+	}
+
+	inline void translatepixel32(byte* dst,byte* src,const TBitmapFormat& fsrc)
+	{
+		translatepixel32((dword*)dst,(dword*)src,fsrc);
+	}
+};
 
 #endif

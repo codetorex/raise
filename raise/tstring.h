@@ -6,6 +6,14 @@
 
 #include <string.h>
 
+#ifdef WIN32
+#define _vsnprintf vsnprintf
+#define _strlwr strlwr
+#define _strupr strupr
+#include <string.h>
+#include <ctype.h>
+#endif
+
 #ifdef LINUX
 // with -fshort-wchar compiler option wchar_t will use 16 bits
 #include <string>
@@ -26,6 +34,13 @@ inline wchar_t* wcsupr(wchar_t* str) { wchar_t* it = str; while (*it != 0) { *it
 
 typedef wchar_t ch16;
 typedef char	ch8;
+
+static const char en_chars[62] = // 0,1,2,3 ...a...z....A...Z
+{
+	48 ,49 ,50 ,51 ,52 ,53 ,54 ,55 ,56 ,57,
+	65 ,66 ,67 ,68 ,69 ,70 ,71 ,72 ,73 ,74 ,75 ,76 ,77 ,78 ,79 ,80 ,81 ,82 ,83 ,84 ,85 ,86 ,87 ,88 ,89 ,90,
+	97 ,98 ,99 ,100,101,102,103,104,105,106,107,108,109,110,111,112,113,114,115,116,117,118,119,120,121,122	
+};
 
 class StringDriver
 {
@@ -97,7 +112,7 @@ public:
 		va_end(ap);
 	}
 
-	inline static void ConvertCopy(ch16* dst,ch8* src,int count)
+	inline static void ConvertCopy(ch16* dst,const ch8* src,int count)
 	{
 		while(count--)
 		{
@@ -105,7 +120,7 @@ public:
 		}
 	}
 
-	inline static void ConvertCopy(ch8* dst,ch16* src,int count)
+	inline static void ConvertCopy(ch8* dst,const ch16* src,int count)
 	{
 		while(count--)
 		{
@@ -143,12 +158,12 @@ public:
 		return wcscpy(dst,src);
 	}
 
-	inline static ch8* MemoryCopy(ch8* dst,ch8* src,int count)
+	inline static ch8* MemoryCopy(ch8* dst, const ch8* src,int count)
 	{
 		return (ch8*)strncpy(dst,src,count);
 	}
 
-	inline static ch16* MemoryCopy(ch16* dst,ch16* src,int count)
+	inline static ch16* MemoryCopy(ch16* dst,const ch16* src,int count)
 	{
 		return (ch16*)wcsncpy(dst,src,count);
 	}
@@ -163,12 +178,12 @@ public:
 		return wcsnset(dst,chr,count);
 	}
 
-	inline static int Compare(ch8* v1,ch8* v2)
+	inline static int Compare(const ch8* v1,const ch8* v2)
 	{
 		return strcmp(v1,v2);
 	}
 
-	inline static int Compare(ch16* v1,ch16* v2)
+	inline static int Compare(const ch16* v1,const ch16* v2)
 	{
 		return wcscmp(v1,v2);
 	}
@@ -221,6 +236,16 @@ public:
 		Length = 0;
 		Capacity = 0;
 	}
+	
+	TString(const T* value)
+	{
+		Chars = (T*)value;
+		Length = StringDriver::Length(Chars);
+		Capacity = 0; 
+		// Capacity is 0, this means if size changing operations occur, 
+		// value will be copied to new buffer so no problems left.
+		// this makes me use the "value" char* strings without worried to break anything.
+	}
 
 	TString(T* value)
 	{
@@ -246,6 +271,14 @@ public:
 		Length = _capacity;
 		Allocate(_capacity);
 		StringDriver::Set(Chars,chr,_capacity);
+	}
+
+	TString( const TString<T>& othr) // copy constructor.
+	{
+		Chars = 0;
+		Capacity = 0;
+		Length = 0;
+		*this = othr;
 	}
 
 	~TString()
@@ -317,7 +350,7 @@ public:
 		return *this;
 	}
 
-	TString<T>& operator = (TString<T>& value)
+	TString<T>& operator = (const TString<T>& value)
 	{
 		Allocate(value.Length);
 		StringDriver::MemoryCopy(Chars,value.Chars,value.Length+1);
@@ -326,7 +359,7 @@ public:
 	}
 
 	template <class K>
-	TString<T>& operator = (TString<K>& value)
+	TString<T>& operator = (const TString<K>& value)
 	{
 		Allocate(value.Length);
 		StringDriver::ConvertCopy(Chars,value.Chars,value.Length+1);
@@ -406,12 +439,12 @@ public:
 		return *this;
 	}
 
-	bool operator == (TString<T>& value)
+	bool operator == (const TString<T>& value) const
 	{
 		return (StringDriver::Compare(Chars,value.Chars) == 0);
 	}
 
-	bool operator == (T* value)
+	bool operator == (const T* value)
 	{
 		return (StringDriver::Compare(Chars,value) == 0);
 	}
@@ -607,6 +640,43 @@ public:
 		return Chars;
 	}
 
+	static inline dword GetHash(const TString<ch8>& value)
+	{
+		register dword hash = 0;
+		int i = value.Length;
+		while(i--)
+		{
+			hash += value.Chars[i];
+			hash += (hash << 10);
+			hash ^= (hash >> 6);
+		}
+		hash += (hash << 3);
+		hash ^= (hash >> 11);
+		hash += (hash << 15);
+		return hash;
+	}
+
+	static inline TString<ch8>& Random(int rndLength)
+	{
+		TString<ch8> rnd(rndLength);
+		Random(rnd);
+		return rnd;
+	}
+
+	static inline void Random(char* chrs,int leng)
+	{
+		int i = leng;
+		while(i--)
+		{
+			chrs[i] = en_chars[rand() % 62];
+		}
+	}
+
+	static inline void Random(TString<ch8>& rnd) // randomize str
+	{
+		Random(rnd.Chars,rnd.Length);
+	}
+
 protected:
 	// Memory Operations
 	inline T* AllocateMemory(int cap)
@@ -644,7 +714,7 @@ protected:
 
 	inline void Free()
 	{
-		if (Chars)
+		if (Chars && Capacity > 0)
 		{
 			delete [] Chars;
 		}
@@ -655,7 +725,7 @@ protected:
 
 	inline void Use(T* newbuffer,int newcapacity,int newlength = -1)
 	{
-		if (Chars)
+		if (Chars) // so we will not accidentally try to free CONST * s
 		{
 			Free();
 		}
@@ -711,8 +781,6 @@ typedef TString16			str16;		// short bit wise string type
 
 typedef TString8			str1;		// short byte wise string type
 typedef TString16			str2;		// short byte wise string type
-
-
 
 
 extern TString16 CrLf16;
