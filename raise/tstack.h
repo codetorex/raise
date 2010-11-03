@@ -26,6 +26,14 @@ public:
 		Allocate(initialCapacity);
 	}
 
+	~TStack()
+	{
+		delete [] Item;
+		Item = 0;
+		Count = 0;
+		Capacity = 0;
+	}
+
 	inline void Push(T value)
 	{
 		if (Count == Capacity)

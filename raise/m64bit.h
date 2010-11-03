@@ -21,9 +21,9 @@ class qword
 {
 public:
 	dword low;
-	long high;
+	int high;
 
-	const qword operator - (const qword other) const
+	inline qword& operator - (const qword other) const
 	{
 		qword diff;
 
@@ -36,7 +36,7 @@ public:
 		return diff;
 	}
 
-	const qword operator + (const qword other) const
+	inline qword& operator + (const qword other) const
 	{
 		qword sum;
 

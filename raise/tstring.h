@@ -3,7 +3,7 @@
 #define TSTRING_H
 
 #include "raisetypes.h"
-
+#include "tarray.h"
 #include <string.h>
 
 #ifdef WIN32
@@ -209,6 +209,39 @@ public:
 		return wcsupr(value);
 	}
 
+	inline bool IsWhitespace(ch8 chr)
+	{
+		switch(chr)
+		{
+			case 32:
+			case 160:
+				return true;
+		}
+		return false;
+	}
+
+	inline bool IsWhitespace(ch16 chr)
+	{
+		if (chr >= 8192 || chr <= 8205)
+		{
+			return true;
+		}
+		switch(chr)
+		{
+			case 32:
+			case 160:
+			case 5760:
+			case 6158:
+			case 8239:
+			case 8287:
+			case 8288:
+			case 12288:
+			case 65279:
+				return true;
+		}
+
+		return false;
+	}
 };
 
 /*
@@ -226,6 +259,8 @@ template <class T>
 class RDLL TString
 {
 public:
+	typedef TString<T> strType;
+
 	T*		Chars;
 	int		Length;
 	int		Capacity;
@@ -237,7 +272,7 @@ public:
 		Capacity = 0;
 	}
 	
-	TString(const T* value)
+	inline TString(const T* value)
 	{
 		Chars = (T*)value;
 		Length = StringDriver::Length(Chars);
@@ -273,17 +308,26 @@ public:
 		StringDriver::Set(Chars,chr,_capacity);
 	}
 
-	TString( const TString<T>& othr) // copy constructor.
+	TString( const strType& othr) // copy constructor
 	{
 		Chars = 0;
 		Capacity = 0;
 		Length = 0;
-		*this = othr;
+		*this = othr; // operator = copies the data for us.
 	}
 
 	~TString()
 	{
 		Free();
+	}
+
+	/**
+	* Truncates string without changing capacity.
+	*/
+	void Truncate(int newLength)
+	{
+		Length = newLength;
+		Chars[Length] = 0;
 	}
 
 	void ToLower()
@@ -323,15 +367,19 @@ public:
 		return k;
 	}
 
-	TString<T>& Substring (int startIndex, int lengt)
+	strType& Substring (int startIndex, int lengt) const 
 	{
 		if (startIndex + lengt > Length)
 		{
 			lengt = Length - startIndex;
 		}
-		// TODO: If lengt is 0 do something else
 
-		TString<T>* nstring = new TString<T>(lengt);
+		if (lengt == 0)
+		{
+			return Empty;
+		}
+
+		strType* nstring = new strType(lengt);
 		nstring->Allocate(lengt);
 		StringDriver::MemoryCopy(nstring->Chars,Chars+startIndex,lengt);
 		nstring->Chars[lengt] = 0;
@@ -339,18 +387,69 @@ public:
 		return *nstring;
 	}
 
-	TString<T>& Substring ( int startIndex )
+	inline T GetFirst()
+	{
+		return Chars[0];
+	}
+
+	inline T GetLast()
+	{
+		if (Length == 0) return 0;
+		return Chars[Length-1];
+	}
+
+	TArray<strType*>& Split(T* seprator,bool removeEmpty = false)
+	{
+		TArray<strType*> result; //= new TArray<strType*>();
+
+		int sepLength = StringDriver::Length(seprator);
+		if (sepLength == 0)
+		{
+			return result;
+		}
+
+		int lastSeprationStart = 0;
+		for (int i=0;i<Length;i++)
+		{
+			T curChar = Chars[i];
+
+			int k=sepLength;
+			while(k--)
+			{
+				if (curChar == seprator[k])
+				{
+					int seprationLength = i - lastSeprationStart;
+					if (removeEmpty && seprationLength == 0 )
+					{
+						break;
+					}
+					strType* str = new strType();
+					*str = Substring(lastSeprationStart,seprationLength);
+					result.Add(str);
+					lastSeprationStart = i + 1;
+				}
+			}
+		}
+		return result;
+	}
+
+	TArray<strType>* Split(TArray<strType>* seprator, bool removeEmpty = false)
+	{
+
+	}
+
+	strType& Substring ( int startIndex ) const
 	{
 		return Substring(startIndex,Length - startIndex);
 	}
 
-	TString<T>& operator = (T* value)
+	strType& operator = (T* value)
 	{
 		Copy(value);
 		return *this;
 	}
 
-	TString<T>& operator = (const TString<T>& value)
+	strType& operator = (const strType& value)
 	{
 		Allocate(value.Length);
 		StringDriver::MemoryCopy(Chars,value.Chars,value.Length+1);
@@ -359,7 +458,7 @@ public:
 	}
 
 	template <class K>
-	TString<T>& operator = (const TString<K>& value)
+	strType& operator = (const TString<K>& value)
 	{
 		Allocate(value.Length);
 		StringDriver::ConvertCopy(Chars,value.Chars,value.Length+1);
@@ -367,47 +466,53 @@ public:
 		return *this;
 	}
 
-	TString<T>& operator + (T* value)
+	strType& operator + (T* value)
 	{
 		int alen = StringDriver::Length(value);
-		TString<T>* nstring = new TString<T>(alen+Length);
+		strType* nstring = new strType(alen+Length);
 		nstring->Append(Chars,Length);
 		nstring->Append(value,alen);
 		return *nstring;
 	}
 
-	TString<T>& operator + (TString<T>& value)
+	strType& operator + (strType& value)
 	{
-		TString<T>* nstring = new TString<T>(value.Length+Length);
+		strType* nstring = new strType(value.Length+Length);
 		nstring->Append(Chars,Length);
 		nstring->Append(value.Chars,value.Length);
 		return *nstring;
 	}
 	
 	template <class K>
-	TString<T>& operator + (TString<K>& value)
+	strType& operator + (TString<K>& value)
 	{
-		TString<T>* nstring = new TString<T>(value.Length+Length);
+		strType* nstring = new strType(value.Length+Length);
 		nstring->Append(Chars,Length);
 		StringDriver::ConvertCopy(Chars+Length,value.Chars,value.Length+1);
 		return *nstring;
 	}
+
+	strType& operator += (T value)
+	{
+		Append(&value,1);
+		return *this;
+	}
 	
-	TString<T>& operator += (T* value)
+	strType& operator += (T* value)
 	{
 		int alen = StringDriver::Length(value);
 		Append(value,alen);
 		return *this;
 	}
 
-	TString<T>& operator += (TString<T>& value)
+	strType& operator += (strType& value)
 	{
 		Append(value.Chars,value.Length);
 		return *this;
 	}
 
 	template <class K>
-	TString<T>& operator += (TString<K>& value)
+	strType& operator += (TString<K>& value)
 	{
 		EnsureCapacity(Length+value.Length);
 		StringDriver::ConvertCopy(Chars+Length,value.Chars,value.Length+1);
@@ -415,7 +520,7 @@ public:
 		return *this;
 	}
 
-	TString<T>& operator += (int value)
+	strType& operator += (int value)
 	{
 		T temp[32];
 		StringDriver::ConvertValue(temp,32,value);
@@ -423,7 +528,7 @@ public:
 		return *this;
 	}
 
-	TString<T>& operator += (unsigned long value)
+	strType& operator += (unsigned long value)
 	{
 		T temp[32];
 		StringDriver::ConvertValue(temp,32,value);
@@ -431,7 +536,7 @@ public:
 		return *this;
 	}
 
-	TString<T>& operator += (float value)
+	strType& operator += (float value)
 	{
 		T temp[32];
 		StringDriver::ConvertValue(temp,32,value);
@@ -439,7 +544,7 @@ public:
 		return *this;
 	}
 
-	bool operator == (const TString<T>& value) const
+	bool operator == (const strType& value) const
 	{
 		return (StringDriver::Compare(Chars,value.Chars) == 0);
 	}
@@ -619,7 +724,7 @@ public:
 		StringDriver::MemoryCopy(Chars+padlength,Chars,Length);
 	}
 
-	static TString<T>& Format(T* format,...)
+	static strType& Format(T* format,...)
 	{
 		T Temp[4096];
 
@@ -628,7 +733,7 @@ public:
 		StringDriver::Format(Temp,4096,format,ap);
 		va_end(ap);
 
-		TString<T>* nstring = new TString<T>;
+		strType* nstring = new strType;
 		*nstring = Temp;
 		
 		return *nstring;
@@ -639,6 +744,8 @@ public:
 	{
 		return Chars;
 	}
+
+	static strType Empty;
 
 	static inline dword GetHash(const TString<ch8>& value)
 	{
@@ -677,24 +784,20 @@ public:
 		Random(rnd.Chars,rnd.Length);
 	}
 
-protected:
-	// Memory Operations
-	inline T* AllocateMemory(int cap)
-	{
-		return new T [cap+1];
-	}
 
-	inline void Allocate(int newcapacity)
+	void Allocate(int newcapacity)
 	{
 		if (newcapacity < Capacity) // yeni istenen su ankinden kucukse
 		{
-			if (Capacity < newcapacity + 128) // su anki, istenenin 128 fazlasindan kucukse onu kullan
+			StringDriver::Set(Chars,0,Capacity);
+			return;
+			/*if (Capacity < newcapacity + 128) // su anki, istenenin 128 fazlasindan kucukse onu kullan
 			{
 				//memset(Chars,0,Capacity * sizeof(T)); //TODO: you can change this duude
 				StringDriver::Set(Chars,0,Capacity);
 				//Length = 0; // yeah
 				return; // Dont allocate new space if current one is not very big
-			}
+			}*/
 		}
 
 		if (Chars)
@@ -710,6 +813,13 @@ protected:
 		Capacity = newcapacity;
 		Chars = AllocateMemory(newcapacity);
 		Chars[Capacity] = 0;
+	}
+
+protected:
+	// Memory Operations
+	inline T* AllocateMemory(int cap)
+	{
+		return new T [cap+1];
 	}
 
 	inline void Free()

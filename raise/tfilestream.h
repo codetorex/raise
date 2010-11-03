@@ -14,6 +14,7 @@ enum FileMode
 	fm_WriteRead,
 	fm_Append,
 	fm_AppendRead,
+	fm_NotOpened,
 };
 
 static const char* FileModeConversion[] = { "rb", "r+b", "wb", "w+b", "ab", "a+b" };
@@ -29,15 +30,19 @@ public:
 	TFileStream()
 	{
 		FileHandle = 0;
+		CurrentMode = fm_NotOpened;
 	}
 
-	TFileStream(const char* path, FileMode mode )
+	TFileStream(const str8& path, FileMode mode )
 	{
-		FileHandle = fopen(path,FileModeConversion[mode]);
+		FileHandle = fopen(path.Chars,FileModeConversion[mode]);
 		if (FileHandle == NULL)
 		{
 			// throw?
-			throw "File open failed";
+			//throw "File open failed";
+
+			CurrentMode = fm_NotOpened;
+			return;
 		}
 		FilePath = path;
 		CurrentMode = mode;
@@ -87,6 +92,10 @@ public:
 
 	inline bool CanRead()
 	{
+		if (FileHandle == NULL || CurrentMode == fm_NotOpened)
+		{
+			return false;
+		}
 		if (CurrentMode == fm_Write ||CurrentMode == fm_Append)
 		{
 			return false;
@@ -96,6 +105,10 @@ public:
 
 	inline bool CanWrite()
 	{
+		if (FileHandle == NULL || CurrentMode == fm_NotOpened)
+		{
+			return false;
+		}
 		if (CurrentMode == fm_Read)
 		{
 			return false;
@@ -105,6 +118,10 @@ public:
 
 	inline bool CanSeek()
 	{
+		if (FileHandle == NULL || CurrentMode == fm_NotOpened )
+		{
+			return false;
+		}
 		if (CurrentMode == fm_Append ||CurrentMode == fm_AppendRead)
 		{
 			return false;

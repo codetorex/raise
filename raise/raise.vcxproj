@@ -95,10 +95,16 @@
     <ClInclude Include="tbitfield.h" />
     <ClInclude Include="tbitmap.h" />
     <ClInclude Include="tbitstack.h" />
+    <ClInclude Include="tdatetime.h" />
     <ClInclude Include="tdictionary.h" />
+    <ClInclude Include="tenumerator.h" />
+    <ClInclude Include="tfile.h" />
     <ClInclude Include="tfilestream.h" />
+    <ClInclude Include="tdirectory.h" />
     <ClInclude Include="thashmap.h" />
+    <ClInclude Include="tpath.h" />
     <ClInclude Include="tprofiler.h" />
+    <ClInclude Include="tstack.h" />
     <ClInclude Include="tstream.h" />
     <ClInclude Include="tstring.h" />
     <ClInclude Include="tbitset.h" />
@@ -117,6 +123,7 @@
     <ClCompile Include="tbitset.cpp" />
     <ClCompile Include="tcolor.cpp" />
     <ClCompile Include="tmemory.cpp" />
+    <ClCompile Include="tpath.cpp" />
     <ClCompile Include="tstring.cpp" />
   </ItemGroup>
   <ItemGroup>

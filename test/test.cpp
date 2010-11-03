@@ -4,6 +4,10 @@
 #include "stdafx.h"
 #include "toldtests.h"
 
+
+#include "tdirectory.h"
+
+
 #include "thashmap.h"
 #include <hash_map>
 

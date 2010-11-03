@@ -80,6 +80,14 @@ public:
 		Count = 0;
 	}
 
+	~TArray()
+	{
+		Free();
+		Item = 0;
+		Count = 0;
+		Capacity = 0;
+	}
+
 	T*		Item;
 	dword	Count;
 	dword	Capacity;
@@ -166,10 +174,35 @@ public:
 	void	Reverse();
 	void	Sort();
 
+	inline void Free()
+	{
+		if (Item)
+		{
+			delete [] Item;
+		}
+	}
+
 	inline T& operator [] (int index)
 	{
 		return Item[index];
 	}
+
+	/**
+	* Assigning of arrays will destroy other.
+	*/
+	inline T& operator = (TArray<T>& other)
+	{
+		Free();
+		Item = other.Item;
+		Count = other.Count;
+		Capacity = other.Capacity;
+		other.Item = 0;
+		other.Count = 0;
+		other.Capacity = 0;
+		return *this;
+	}
+
+
 
 protected:
 	void Allocate(int newsize)
