@@ -23,7 +23,7 @@ public:
 	dword low;
 	int high;
 
-	inline qword& operator - (const qword other) const
+	inline qword operator - (const qword other) const
 	{
 		qword diff;
 
@@ -36,7 +36,7 @@ public:
 		return diff;
 	}
 
-	inline qword& operator + (const qword other) const
+	inline qword operator + (const qword other) const
 	{
 		qword sum;
 

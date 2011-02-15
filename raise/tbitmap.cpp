@@ -30,6 +30,7 @@ struct BITMAPINFOHEADER
 #endif
 
 
+
 /*static int fieldstart[] =
 {
 	0,
@@ -67,19 +68,18 @@ TBitmap::TBitmap()
 	log2width = 0;
 }
 
-TBitmap::TBitmap(int _width,int _height, dword _format)
+TBitmap::TBitmap(int _width,int _height, TBufferFormat* _format)
 {
 	create(_width,_height,_format);
 }
 
-void TBitmap::create(int _width,int _height, dword _format)
+void TBitmap::create(int _width,int _height, TBufferFormat* _format)
 {
-	TBitmapFormat tbf(_format);
 
-	if (tbf.bitsperchannel == 8) _format |= F8BIT;
-
-	bits = tbf.bits;
-	bytes = tbf.bytes;
+	format = _format;
+	flags = 0;
+	bits = format->BitsPerItem;
+	bytes = format->BytesPerItem;
 
 	pixels = _width * _height;
 	length = pixels * bytes;
@@ -90,12 +90,12 @@ void TBitmap::create(int _width,int _height, dword _format)
 	format = _format;
 
 	if (bytes == 4)
-		format |= O32BITALIGN;
+		flags |= O32BITALIGN;
 
 	TBinary wbinary(width);
 	if (wbinary.is2n())
 	{
-		format |= O2NWIDTH;
+		flags |= O2NWIDTH;
 		log2width = wbinary.log2k();
 	}
 }
@@ -107,7 +107,8 @@ void TBitmap::release()
 		delete [] data;
 	}
 	data = 0;
-	length = width = height = pixels = bits = bytes = format = log2width = 0;
+	format = 0;
+	length = width = height = pixels = bits = bytes = log2width = 0;
 }
 
 void TBitmap::loadbmp(Stream* bmpstream, bool convertRGB, bool closestream /* = true */)
@@ -127,10 +128,10 @@ void TBitmap::loadbmp(Stream* bmpstream, bool convertRGB, bool closestream /* = 
 		return;
 	}
 
-	dword frm = FBGR;
+	format = &TBitmapFormats::fBGR;
 	if(infoHeader.biBitCount == 32)
 	{
-		frm |= FALPHA;
+		format = &TBitmapFormats::fRGBA;
 	}
 
 	bool bottomUp = true;
@@ -141,7 +142,7 @@ void TBitmap::loadbmp(Stream* bmpstream, bool convertRGB, bool closestream /* = 
 	}
 
 	release();
-	create(infoHeader.biWidth,infoHeader.biHeight,frm);
+	create(infoHeader.biWidth,infoHeader.biHeight,format);
 
 	int rowWidth = infoHeader.biWidth * bytes; // row width for file, has padding
 	int realRowWidth = rowWidth; // row width for bitmap, doesnt has padding
@@ -169,9 +170,9 @@ void TBitmap::loadbmp(Stream* bmpstream, bool convertRGB, bool closestream /* = 
 		}
 	}
 
-	if (convertRGB)
+	if (convertRGB && format == &TBitmapFormats::fBGR)
 	{
-		convert(FRGB);
+		convert(&TBitmapFormats::fRGB);
 	}
 
 	if (closestream)
@@ -182,18 +183,39 @@ void TBitmap::loadbmp(Stream* bmpstream, bool convertRGB, bool closestream /* = 
 
 
 
-void TBitmap::convert(dword _format)
+void TBitmap::convert(TBufferFormat* _newformat)
 {
-	if (format == _format)
+	if (format == _newformat)
 		return;
 
-	TBitmapFormat fsrc(format);
+	if (format == &TBitmapFormats::fBGR)
+	{
+		if (_newformat == &TBitmapFormats::fRGB)
+		{
+			byte* src = data;
+			int curpixel = pixels;
+			byte tmp;
+			while(curpixel--)
+			{
+				tmp = *src;
+				src[0] = src[2];
+				src[2] = tmp;
+				src += 3;
+			}
+			format = _newformat; // conversion done.
+			return;
+		}
+	}
+
+	// TODO: implement a virtual machine compiler for converting formats between
+
+	/*TBitmapFormat fsrc(format);
 	TBitmapFormat fdst(_format);
 
 	bool sameChannels = (fsrc.chn.value == fdst.chn.value);
 	bool sameType = (fsrc.typ == fdst.typ);
 
-	byte* src = data;
+	
 
 	if (sameChannels && sameType && ( 
 		(fsrc.ordering == bord::rgba && fdst.ordering == bord::bgra) || 
@@ -210,7 +232,7 @@ void TBitmap::convert(dword _format)
 		}
 		format = _format; // conversion done.
 		return;
-	}
+	}*/
 
 	/*byte srcpxl[32];
 	

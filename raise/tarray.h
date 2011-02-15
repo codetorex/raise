@@ -61,7 +61,6 @@ public:
 /**
 * Order not preserved in this implementation.
 */
-
 template <class T>
 class TArray
 {
@@ -94,6 +93,34 @@ public:
 
 	void	Insert(T value,int index);
 	
+	/**
+	* When no changes needed anymore, you can use this to create static array with length of count. (without additional capacity)
+	*/
+	inline T* ExtractItems()
+	{
+		T* nItems = new T [Count];
+		memcpy(nItems,Item,sizeof(T));
+		return nItems;
+	}
+
+	/**
+	* Generic counter for zero ending array.
+	*/
+	static inline int CountOfZeroEnding(T* _array)
+	{
+		for (int i = 0; true ; i++)
+		{
+			if (_array[i] == NULL)
+			{
+				return i;
+				break;
+			}
+			if (i == 1024)
+			{
+				throw "Impossible"; // TODO: if it will be possible someday change this.
+			}
+		}
+	}
 
 	inline int IndexOf(T value)
 	{
@@ -139,7 +166,11 @@ public:
 		Item[index] = Item[--Count];
 	}
 
-	void	Clear();
+	void Clear()
+	{
+		memset(Item,NULL, sizeof(T) * Count);
+		Count = 0;
+	}
 	
 	inline void	Add(T value)
 	{
@@ -182,9 +213,18 @@ public:
 		}
 	}
 
-	inline T& operator [] (int index)
+	inline T operator [] (int index)
 	{
 		return Item[index];
+	}
+
+	inline T GetLast()
+	{
+		if (Count > 0)
+		{
+			return Item[Count-1];
+		}
+		return NULL;
 	}
 
 	/**

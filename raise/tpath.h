@@ -3,6 +3,7 @@
 
 #include "tstring.h"
 #include "tstack.h"
+#include "texception.h"
 
 #ifdef WIN32
 
@@ -19,6 +20,18 @@ public:
 	{
 		GetTempPathA(buffer.Capacity,buffer.Chars);
 	}
+
+	static void CreateFolder(str8& path)
+	{
+		if ( CreateDirectoryA(path.Chars,NULL) == FALSE )
+		{
+			dword errorId = GetLastError();
+			if (errorId != ERROR_ALREADY_EXISTS)
+			{
+				throw Exception(str8::Format("Creating directory failed. Error: 0x%X",errorId));
+			}
+		}
+	}
 };
 
 #else
@@ -34,6 +47,14 @@ public:
 	static void TempDirectory(str8& buffer)
 	{
 		buffer = "/tmp/";
+	}
+
+	static void CreateFolder(str8& path)
+	{
+		if ( mkdir(path.Chars,NULL) == 0 )
+		{
+			throw Exception("Creating directory failed");
+		}
 	}
 };
 
@@ -63,8 +84,8 @@ private:
 
 
 
-	inline static bool IsRelativePathWin32(str8& path)
-	{
+	inline static bool IsRelativePathWin32(const str8& path)
+	{	// TODO: function may fail if path.length < 3
 		if (path.Chars[0] == '.')
 		{
 			return true;
@@ -76,7 +97,7 @@ private:
 		return true;			
 	}
 
-	inline static bool IsRelativePathLinux(str8& path)
+	inline static bool IsRelativePathLinux(const str8& path)
 	{
 		if (path.Chars[0] == '.')
 		{
@@ -100,14 +121,34 @@ public:
 	static str8 TempFolder;
 	static str8 CurrentFolder;
 
-	static str8& ChangeExtension(str8& path, str8& extension)
+	static void CorrectSeprators(str8& path)
 	{
+		for (int i=0;i< path.Length;i++)
+		{
+			if (path.Chars[i] == AltDirectorySeprator)
+			{
+				path.Chars[i] = DirectorySeprator;
+			}
+		}
+	}
+
+	static bool IsDirectory(const str8& path)
+	{
+		if (IsDirectorySeprator(path.GetLast()))
+		{
+			return true;
+		}
+		return false;
+	}
+
+	static str8 ChangeExtension(const str8& path, str8& extension)
+	{
+		str8 tempStr(path.Length + extension.Length + 8);
 		int i = path.Length;
 		while(i--)
 		{
 			if (path.Chars[i] == '.')
 			{
-				str8 tempStr(path.Length + extension.Length + 8);
 				tempStr = path;
 				tempStr.Truncate(i);
 				tempStr += extension;
@@ -115,13 +156,13 @@ public:
 			}
 			else if (IsDirectorySeprator(path.Chars[i]))
 			{
-				return path;
+				tempStr = path;
 			}
 		}
-		return path;
+		return tempStr;
 	}
 
-	static str8& GetExtension(str8& path)
+	static str8 GetExtension(str8& path)
 	{
 		int i = path.Length;
 		while(i--)
@@ -139,7 +180,21 @@ public:
 		return str8::Empty;
 	}
 
-	static str8& GetDirectoryName(str8& path)
+	static void StripFilename(str8& path)
+	{
+		int i = path.Length;
+		while(i--)
+		{
+			if (IsDirectorySeprator(path.Chars[i]))
+			{
+				path.Chars[i+1] = 0;
+				path.Length = i+1;
+				break;
+			}
+		}
+	}
+
+	static str8 GetDirectoryName(str8& path)
 	{
 		int f = path.Length;
 		int i = path.Length;
@@ -160,7 +215,7 @@ public:
 		return path.Substring(i,f-i);
 	}
 
-	static str8& GetFileName(str8& path)
+	static str8 GetFileName(str8& path)
 	{
 		int i = path.Length;
 		while(i--)
@@ -173,7 +228,7 @@ public:
 		return path; // path is already filename?
 	}
 
-	static str8& GetFileNameWithoutExtension(const str8& path) // correct usage is const
+	static str8 GetFileNameWithoutExtension(const str8& path) // correct usage is const
 	{
 		if (path == str8::Empty)
 		{
@@ -205,7 +260,7 @@ public:
 	/**
 	* If path starts or ends with separator, this function will remove them.
 	*/
-	static str8& GetPathCleared(str8& path)
+	static str8 GetPathCleared(str8& path)
 	{
 		int start = 0;
 		int end = path.Length;
@@ -219,7 +274,7 @@ public:
 		return path.Substring(start,end-start);
 	}
 
-	static str8& EliminateParents(str8& path)
+	static str8 EliminateParents(str8& path)
 	{
 		ch8 seprators[3] = {DirectorySeprator,AltDirectorySeprator,0};
 		str8 cleared = GetPathCleared(path);
@@ -228,7 +283,7 @@ public:
 		TStack<str8*> stk;
 
 
-		for (int i=0;i<psplit.Count;i++)
+		for (dword i=0;i<psplit.Count;i++)
 		{
 			if (*psplit[i] != "..")
 			{
@@ -270,7 +325,7 @@ public:
 		path += DirectorySeprator;
 	}
 
-	static str8& GetFullPath(str8& path)
+	static str8 GetFullPath(const str8& path)
 	{	
 		// TODO: resolve relativity.
 		if (CurrentFolder.Length == 0)
@@ -281,11 +336,11 @@ public:
 		str8 tmpPath(CurrentFolder.Length + path.Length + 16);
 		tmpPath += CurrentFolder;
 		tmpPath += path;
-		if (IsRelativePath(path))
+		if (!IsRelativePath(path))
 		{
-			return tmpPath;
+			tmpPath = path;
 		}
-		return path;
+		return tmpPath;
 	}
 
 	static str8& GetTempFileName()

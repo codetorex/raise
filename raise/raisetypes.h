@@ -2,6 +2,8 @@
 #ifndef RAISETYPES_H
 #define RAISETYPES_H
 
+#include <assert.h>
+
 // NOTE: Maybe needed  -std=c++0x for linux compilations
 
 //////////////////////////////////////////////////////////////////////////
@@ -12,10 +14,6 @@
 typedef unsigned char	byte;
 typedef unsigned short	word;
 typedef unsigned int	dword; // It was unsigned long before but in linux longs have 8 bytes. (64 bit stuff?)
-
-// FILE PERMISSION DEFINITIONS BIT BY BIT
-#define P_READABLE			1
-#define P_WRITABLE			2
 
 #define PI			3.1415926535897f
 #define HALFPI		1.5707963267948f

@@ -125,13 +125,11 @@ int _tmain(int argc, wchar_t* argv[])
 int main(int argc,char** argv)
 #endif
 {
-	THashMapTest s;
-	s.Test2();
+	/*THashMapTest s;
+	s.Test2();*/
 
 	/*TBitmapStackTest s;
 	s.Test();*/
-
-	
 
 	/*int k = 1;
 	for (int i=0;i<32;i++)
@@ -141,11 +139,9 @@ int main(int argc,char** argv)
 		printf("%12i, ",k);
 		if ( (i+1) % 4 == 0)
 		{
-			printf("\n");	
+		printf("\n");	
 		}
 	}*/
-
-
 
 	getchar();
 	return 0;

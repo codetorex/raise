@@ -3,7 +3,7 @@
 #define TSTREAM_H
 
 #include "raisetypes.h"
-//#include <tstring.h>
+#include "texception.h"
 
 #define FILESTREAM_CLASSID		0
 
@@ -23,6 +23,12 @@ public:
 	//dword	Length;
 
 	virtual dword	Position() = 0;
+	
+	virtual dword	Length()
+	{
+		throw new Exception("Not Supported");
+	}
+	
 	virtual void	Close() = 0;
 	virtual void	Flush() = 0;
 	virtual int		Read(void* buffer,int size,int count) = 0;

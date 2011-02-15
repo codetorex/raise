@@ -33,6 +33,9 @@
     <Filter Include="Source Files\Graphics">
       <UniqueIdentifier>{a16a1769-9084-4b22-bf2d-8fb0f7d0fc2a}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Source Files\Hacking">
+      <UniqueIdentifier>{d848e625-12bb-48a1-a63e-505cfb61153b}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="raisetypes.h">
@@ -131,6 +134,51 @@
     <ClInclude Include="tpath.h">
       <Filter>Source Files\IO</Filter>
     </ClInclude>
+    <ClInclude Include="tflexiblebuffer.h">
+      <Filter>Source Files\IO</Filter>
+    </ClInclude>
+    <ClInclude Include="tevent.h">
+      <Filter>Source Files\System</Filter>
+    </ClInclude>
+    <ClInclude Include="texception.h">
+      <Filter>Source Files\System</Filter>
+    </ClInclude>
+    <ClInclude Include="tsystem.h">
+      <Filter>Source Files\System</Filter>
+    </ClInclude>
+    <ClInclude Include="tstringdriver.h">
+      <Filter>Source Files\String</Filter>
+    </ClInclude>
+    <ClInclude Include="tmemorydriver.h">
+      <Filter>Source Files\System</Filter>
+    </ClInclude>
+    <ClInclude Include="tthread.h">
+      <Filter>Source Files\System</Filter>
+    </ClInclude>
+    <ClInclude Include="tbufferedstream.h">
+      <Filter>Source Files\IO</Filter>
+    </ClInclude>
+    <ClInclude Include="ttextreader.h">
+      <Filter>Source Files\IO</Filter>
+    </ClInclude>
+    <ClInclude Include="tstreamreader.h">
+      <Filter>Source Files\IO</Filter>
+    </ClInclude>
+    <ClInclude Include="tmemorystream.h">
+      <Filter>Source Files\IO</Filter>
+    </ClInclude>
+    <ClInclude Include="tbuffer.h">
+      <Filter>Source Files\IO</Filter>
+    </ClInclude>
+    <ClInclude Include="tprocess.h">
+      <Filter>Source Files\Hacking</Filter>
+    </ClInclude>
+    <ClInclude Include="tprocessdebug.h">
+      <Filter>Source Files\Hacking</Filter>
+    </ClInclude>
+    <ClInclude Include="tprocessmodule.h">
+      <Filter>Source Files\Hacking</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">
@@ -153,6 +201,24 @@
     </ClCompile>
     <ClCompile Include="tpath.cpp">
       <Filter>Source Files\IO</Filter>
+    </ClCompile>
+    <ClCompile Include="tbitmapformats.cpp">
+      <Filter>Source Files\Graphics</Filter>
+    </ClCompile>
+    <ClCompile Include="tthread.cpp">
+      <Filter>Source Files\System</Filter>
+    </ClCompile>
+    <ClCompile Include="tbufferedstream.cpp">
+      <Filter>Source Files\IO</Filter>
+    </ClCompile>
+    <ClCompile Include="tprocess.cpp">
+      <Filter>Source Files\Hacking</Filter>
+    </ClCompile>
+    <ClCompile Include="tprocessdebug.cpp">
+      <Filter>Source Files\Hacking</Filter>
+    </ClCompile>
+    <ClCompile Include="tprocessmodule.cpp">
+      <Filter>Source Files\Hacking</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

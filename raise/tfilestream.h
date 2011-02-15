@@ -33,16 +33,31 @@ public:
 		CurrentMode = fm_NotOpened;
 	}
 
+	static TFileStream* Open(const str8& path, FileMode mode)
+	{
+		FILE* FileHandle = fopen(path.Chars,FileModeConversion[mode]);
+		if (FileHandle == NULL)
+		{
+			throw Exception("Can't open file");
+		}
+		return new TFileStream(FileHandle,path,mode);
+	}
+
+	TFileStream(FILE* fHandle,const str8& path,FileMode mode)
+	{
+		FileHandle = fHandle;
+		FilePath = path;
+		CurrentMode = mode;
+	}
+
 	TFileStream(const str8& path, FileMode mode )
 	{
 		FileHandle = fopen(path.Chars,FileModeConversion[mode]);
 		if (FileHandle == NULL)
 		{
-			// throw?
-			//throw "File open failed";
-
-			CurrentMode = fm_NotOpened;
-			return;
+			throw Exception("Can't open file");
+			/*CurrentMode = fm_NotOpened;
+			return;*/
 		}
 		FilePath = path;
 		CurrentMode = mode;

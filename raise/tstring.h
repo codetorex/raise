@@ -2,38 +2,9 @@
 #ifndef TSTRING_H
 #define TSTRING_H
 
-#include "raisetypes.h"
+
 #include "tarray.h"
-#include <string.h>
-
-#ifdef WIN32
-#define _vsnprintf vsnprintf
-#define _strlwr strlwr
-#define _strupr strupr
-#include <string.h>
-#include <ctype.h>
-#endif
-
-#ifdef LINUX
-// with -fshort-wchar compiler option wchar_t will use 16 bits
-#include <string>
-#include <wchar.h>
-#include <stdarg.h>
-#include <wctype.h>
-#include <memory>
-
-#define _vsnwprintf		vswprintf
-#define vsprintf_s		vsnprintf
-#define strnset			memset
-#define wcsnset			wmemset
-inline char* strlwr(char* str) { char* it = str; while (*it != 0) { *it = tolower(*it); ++it; } return str; }
-inline char* strupr(char* str) { char* it = str; while (*it != 0) { *it = toupper(*it); ++it; } return str; }
-inline wchar_t* wcslwr(wchar_t* str) { wchar_t* it = str; while (*it != 0) { *it = towlower(*it); ++it; } return str; }
-inline wchar_t* wcsupr(wchar_t* str) { wchar_t* it = str; while (*it != 0) { *it = towupper(*it); ++it; } return str; }
-#endif
-
-typedef wchar_t ch16;
-typedef char	ch8;
+#include "tstringdriver.h"
 
 static const char en_chars[62] = // 0,1,2,3 ...a...z....A...Z
 {
@@ -42,207 +13,6 @@ static const char en_chars[62] = // 0,1,2,3 ...a...z....A...Z
 	97 ,98 ,99 ,100,101,102,103,104,105,106,107,108,109,110,111,112,113,114,115,116,117,118,119,120,121,122	
 };
 
-class StringDriver
-{
-public:
-
-	inline const ch16* GetWhitespaces(ch16* k = 0)
-	{
-		return L"\x20\x09\x0A\x0D\0x0B";
-	}
-
-	inline const ch8* GetWhitespaces(ch8* k = 0)
-	{
-		return "\x20\x09\x0A\x0D\0x0B";
-	}
-
-	inline static void ConvertValue(ch16* dest,int destsize,int value)
-	{
-		Format(dest,destsize,L"%i",value);
-	}
-
-	inline static void ConvertValue(ch8* dest,int destsize,int value)
-	{
-		Format(dest,destsize,"%i",value);
-	}
-
-	inline static void ConvertValue(ch16* dest,int destsize,float value)
-	{
-		Format(dest,destsize,L"%0.2f",value);
-	}
-
-	inline static void ConvertValue(ch8* dest,int destsize,float value)
-	{
-		Format(dest,destsize,"%0.2f",value);
-	}
-
-	inline static void ConvertValue(ch16* dest,int destsize,unsigned long value)
-	{
-		Format(dest,destsize,L"%u",value);
-	}
-
-	inline static void ConvertValue(ch8* dest,int destsize,unsigned long value)
-	{
-		Format(dest,destsize,"%u",value);
-	}
-
-	inline static void Format(ch16* dest,int destsize,const ch16* format, va_list ap)
-	{
-		_vsnwprintf(dest,destsize,format,ap);
-	}
-
-	inline static void Format(ch8* dest,int destsize,const ch8* format, va_list ap)
-	{
-		vsprintf_s(dest,destsize,format,ap);
-	}
-
-	inline static void Format(ch16* dest,int destsize,const ch16* format,...)
-	{
-		va_list ap;
-		va_start(ap,format);
-		Format(dest,destsize,format,ap);
-		va_end(ap);
-	}
-
-	inline static void Format(ch8* dest,int destsize,const ch8* format,...)
-	{
-		va_list ap;
-		va_start(ap,format);
-		Format(dest,destsize,format,ap);
-		va_end(ap);
-	}
-
-	inline static void ConvertCopy(ch16* dst,const ch8* src,int count)
-	{
-		while(count--)
-		{
-			*(dst++) = (ch16)(*(src++));
-		}
-	}
-
-	inline static void ConvertCopy(ch8* dst,const ch16* src,int count)
-	{
-		while(count--)
-		{
-			*(dst++) = (ch8)( (*(src++)) & 0xFF );
-		}
-	}
-
-	inline static ch8* Find(ch8* v1,ch8* v2)
-	{
-		return strstr(v1,v2);
-	}
-
-	inline static ch16* Find(ch16* v1,ch16* v2)
-	{
-		return wcsstr(v1,v2);
-	}
-
-	inline static int Length(ch8* value)
-	{
-		return strlen(value);
-	}
-
-	inline static int Length(ch16* value)
-	{
-		return wcslen(value);
-	}
-
-	inline static ch8* Copy(ch8* dst,ch8* src)
-	{
-		return strcpy(dst,src);
-	}
-
-	inline static ch16* Copy(ch16* dst,ch16* src)
-	{
-		return wcscpy(dst,src);
-	}
-
-	inline static ch8* MemoryCopy(ch8* dst, const ch8* src,int count)
-	{
-		return (ch8*)strncpy(dst,src,count);
-	}
-
-	inline static ch16* MemoryCopy(ch16* dst,const ch16* src,int count)
-	{
-		return (ch16*)wcsncpy(dst,src,count);
-	}
-
-	inline static ch8* Set(ch8* dst,ch8 chr,int count)
-	{
-		return (ch8*)strnset(dst,chr,count);
-	}
-
-	inline static ch16* Set(ch16* dst,ch16 chr,int count)
-	{
-		return wcsnset(dst,chr,count);
-	}
-
-	inline static int Compare(const ch8* v1,const ch8* v2)
-	{
-		return strcmp(v1,v2);
-	}
-
-	inline static int Compare(const ch16* v1,const ch16* v2)
-	{
-		return wcscmp(v1,v2);
-	}
-
-	inline static ch8* Lower(ch8* value)
-	{
-		return strlwr(value);
-	}
-
-	inline static ch8* Upper(ch8* value)
-	{
-		return strupr(value);
-	}
-
-	inline static ch16* Lower(ch16* value)
-	{
-		return wcslwr(value);
-	}
-
-
-	inline static ch16* Upper(ch16* value)
-	{
-		return wcsupr(value);
-	}
-
-	inline bool IsWhitespace(ch8 chr)
-	{
-		switch(chr)
-		{
-			case 32:
-			case 160:
-				return true;
-		}
-		return false;
-	}
-
-	inline bool IsWhitespace(ch16 chr)
-	{
-		if (chr >= 8192 || chr <= 8205)
-		{
-			return true;
-		}
-		switch(chr)
-		{
-			case 32:
-			case 160:
-			case 5760:
-			case 6158:
-			case 8239:
-			case 8287:
-			case 8288:
-			case 12288:
-			case 65279:
-				return true;
-		}
-
-		return false;
-	}
-};
 
 /*
 	Rules for string class:
@@ -288,6 +58,16 @@ public:
 		Length = 0;
 		Capacity = 0;
 		Copy(value);
+	}
+
+	/**
+	* Constructor for already created buffer.
+	*/
+	TString(T* buffer,int bufferSize)
+	{
+		Chars = buffer;
+		Capacity = bufferSize;
+		Length = 0;
 	}
 
 	TString(int _capacity)
@@ -367,7 +147,12 @@ public:
 		return k;
 	}
 
-	strType& Substring (int startIndex, int lengt) const 
+	bool StartsWith(const strType& value, int startIndex = 0) const
+	{
+		return ( StringDriver::Compare(Chars+startIndex,value.Chars,value.Length) == 0 );
+	}
+
+	strType Substring (int startIndex, int lengt) const 
 	{
 		if (startIndex + lengt > Length)
 		{
@@ -379,26 +164,26 @@ public:
 			return Empty;
 		}
 
-		strType* nstring = new strType(lengt);
-		nstring->Allocate(lengt);
-		StringDriver::MemoryCopy(nstring->Chars,Chars+startIndex,lengt);
-		nstring->Chars[lengt] = 0;
-		nstring->Length = lengt;
-		return *nstring;
+		strType nstring(lengt);
+		nstring.Allocate(lengt);
+		StringDriver::MemoryCopy(nstring.Chars,Chars+startIndex,lengt);
+		nstring.Chars[lengt] = 0;
+		nstring.Length = lengt;
+		return nstring;
 	}
 
-	inline T GetFirst()
+	inline T GetFirst() const
 	{
 		return Chars[0];
 	}
 
-	inline T GetLast()
+	inline T GetLast() const
 	{
 		if (Length == 0) return 0;
 		return Chars[Length-1];
 	}
 
-	TArray<strType*>& Split(T* seprator,bool removeEmpty = false)
+	TArray<strType*> Split(T* seprator,bool removeEmpty = false)
 	{
 		TArray<strType*> result; //= new TArray<strType*>();
 
@@ -435,15 +220,15 @@ public:
 
 	TArray<strType>* Split(TArray<strType>* seprator, bool removeEmpty = false)
 	{
-
+		throw "Not Implemented";
 	}
 
-	strType& Substring ( int startIndex ) const
+	inline strType Substring ( int startIndex ) const
 	{
 		return Substring(startIndex,Length - startIndex);
 	}
 
-	strType& operator = (T* value)
+	inline strType& operator = (T* value)
 	{
 		Copy(value);
 		return *this;
@@ -451,6 +236,13 @@ public:
 
 	strType& operator = (const strType& value)
 	{
+		if (value.Length == 0)
+		{
+			Chars = Empty.Chars;
+			Length = 0;
+			Capacity = 0;
+			return *this;
+		}
 		Allocate(value.Length);
 		StringDriver::MemoryCopy(Chars,value.Chars,value.Length+1);
 		Length = value.Length;
@@ -460,6 +252,13 @@ public:
 	template <class K>
 	strType& operator = (const TString<K>& value)
 	{
+		if (value.Length == 0)
+		{
+			Chars = Empty.Chars;
+			Length = 0;
+			Capacity = 0;
+			return *this;
+		}
 		Allocate(value.Length);
 		StringDriver::ConvertCopy(Chars,value.Chars,value.Length+1);
 		Length = value.Length;
@@ -505,15 +304,16 @@ public:
 		return *this;
 	}
 
-	strType& operator += (strType& value)
+	strType& operator += (const strType& value)
 	{
 		Append(value.Chars,value.Length);
 		return *this;
 	}
 
 	template <class K>
-	strType& operator += (TString<K>& value)
+	strType& operator += (const TString<K>& value)
 	{
+		if (value.Length == 0) return *this;
 		EnsureCapacity(Length+value.Length);
 		StringDriver::ConvertCopy(Chars+Length,value.Chars,value.Length+1);
 		Length += value.Length;
@@ -549,7 +349,7 @@ public:
 		return (StringDriver::Compare(Chars,value.Chars) == 0);
 	}
 
-	bool operator == (const T* value)
+	bool operator == (const T* value) const
 	{
 		return (StringDriver::Compare(Chars,value) == 0);
 	}
@@ -724,7 +524,7 @@ public:
 		StringDriver::MemoryCopy(Chars+padlength,Chars,Length);
 	}
 
-	static strType& Format(T* format,...)
+	static strType Format(T* format,...)
 	{
 		T Temp[4096];
 
@@ -733,10 +533,10 @@ public:
 		StringDriver::Format(Temp,4096,format,ap);
 		va_end(ap);
 
-		strType* nstring = new strType;
-		*nstring = Temp;
+		strType nstring;
+		nstring = Temp;
 		
-		return *nstring;
+		return nstring;
 	}
 
 
@@ -763,13 +563,6 @@ public:
 		return hash;
 	}
 
-	static inline TString<ch8>& Random(int rndLength)
-	{
-		TString<ch8> rnd(rndLength);
-		Random(rnd);
-		return rnd;
-	}
-
 	static inline void Random(char* chrs,int leng)
 	{
 		int i = leng;
@@ -784,10 +577,17 @@ public:
 		Random(rnd.Chars,rnd.Length);
 	}
 
+	static inline TString<ch8> Random(int rndLength)
+	{
+		TString<ch8> rnd(rndLength);
+		rnd.Length = rndLength;
+		Random(rnd);
+		return rnd;
+	}
 
 	void Allocate(int newcapacity)
 	{
-		if (newcapacity < Capacity) // yeni istenen su ankinden kucukse
+		if (newcapacity <= Capacity) // yeni istenen su ankinden kucukse
 		{
 			StringDriver::Set(Chars,0,Capacity);
 			return;
@@ -807,6 +607,8 @@ public:
 
 		if (!newcapacity)
 		{
+			Capacity = 0;
+			Chars = Empty.Chars;
 			return;
 		}
 
@@ -856,6 +658,7 @@ protected:
 	{
 		Length = StringDriver::Length(value); //wcslen(value);
 		Allocate(Length);
+		if (Length == 0) return;
 		StringDriver::Copy(Chars,value);
 		Chars[Length] = 0;
 	}
@@ -872,8 +675,9 @@ protected:
 		Use(NewChars,cap,Length);
 	}
 
-	inline void Append(T* value,int bufferlength)
+	inline void Append(const T* value,int bufferlength)
 	{
+		if (bufferlength == 0) return;
 		EnsureCapacity(Length+bufferlength);
 		StringDriver::MemoryCopy(Chars+Length,value,bufferlength);
 		Length += bufferlength;

@@ -33,7 +33,7 @@ class IFileSystemNode
 {
 public:
 	virtual str8&				GetFullName() = 0;
-	virtual str8&				GetName() = 0;
+	virtual str8				GetName() = 0;
 
 	virtual bool				Exists() = 0;
 
@@ -51,7 +51,7 @@ public:
 class IFile: public IFileSystemNode
 {
 public:
-	virtual str8&				GetExtension() = 0;
+	virtual str8				GetExtension() = 0;
 
 	virtual	IDirectory*			GetParent() = 0;
 
@@ -72,7 +72,7 @@ public:
 	str8 OriginalPath;
 	str8 FullPath;
 
-	TFile(str8& path)
+	TFile(const str8& path)
 	{
 		OriginalPath = path;
 		FullPath = TPath::GetFullPath(OriginalPath);
@@ -83,7 +83,7 @@ public:
 		return FullPath;
 	}
 
-	str8& GetExtension()
+	inline str8 GetExtension()
 	{
 		return TPath::GetExtension(FullPath);
 	}
@@ -98,12 +98,16 @@ public:
 		throw "Not Implemented";
 	}
 
+	IDirectory*	GetParent()
+	{
+		throw "Not Implemented";
+	}
+
 	TStream* Open(FileMode mode)
 	{
-		TFileStream* tf = new TFileStream(FullPath,mode);
-		if (tf->CurrentMode == FileMode::fm_NotOpened)
+		TFileStream* tf = TFileStream::Open(FullPath,mode);
+		if (tf == NULL)
 		{
-			delete tf;
 			return NULL;
 		}
 		return tf;
@@ -111,16 +115,15 @@ public:
 
 	TStream* Create()
 	{
-		TFileStream* tf = new TFileStream(FullPath,FileMode::fm_WriteRead);
-		if (!tf->CanWrite())
+		TFileStream* tf = TFileStream::Open(FullPath,fm_WriteRead);
+		if (tf == NULL)
 		{
-			delete tf;
 			return NULL;
 		}
 		return tf;
 	}
 
-	str8& GetName()
+	inline str8 GetName()
 	{
 		return TPath::GetFileName(FullPath);
 	}
@@ -149,33 +152,38 @@ public:
 	{
 		throw "Not Implemented";
 	}
-	
-	bool Exists()
+
+	static bool Exists(const str8& path)
 	{
-		FileAttribute fa = GetAttributes();
+		FileAttribute fa = GetFileAttributesA(path.Chars);
 
-		 if (fa == fa_INVALID)
-		 {
-			 dword err = GetLastError();
-			 if (err == ERROR_FILE_NOT_FOUND || err == ERROR_PATH_NOT_FOUND)
-			 {
-				 return false;
-			 }
-		 }
+		if (fa == fa_INVALID)
+		{
+			dword err = GetLastError();
+			if (err == ERROR_FILE_NOT_FOUND || err == ERROR_PATH_NOT_FOUND)
+			{
+				return false;
+			}
+		}
 
-		 if ( (fa & fa_DIRECTORY) != 0) // if its a folder, try to open as file if same named file exists
-		 {
-			 TStream* kf = Open(fm_Read);
-			 if (kf->CanRead())
-			 {
+		if ( (fa & fa_DIRECTORY) != 0) // if its a folder, try to open as file if same named file exists
+		{
+			TStream* kf = TFileStream::Open(path,fm_Read);
+			if (kf!= NULL)
+			{
 				kf->Close();
 				delete kf;
 				return true;
-			 }
-			 return false;
-		 }
-		 
-		 return true;
+			}
+			return false;
+		}
+
+		return true;
+	}
+	
+	inline bool Exists()
+	{
+		return Exists(FullPath);
 	}
 
 };
