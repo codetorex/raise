@@ -113,6 +113,7 @@
     <ClInclude Include="tprocessdebug.h" />
     <ClInclude Include="tprocessmodule.h" />
     <ClInclude Include="tprofiler.h" />
+    <ClInclude Include="tqueue.h" />
     <ClInclude Include="tstack.h" />
     <ClInclude Include="tstream.h" />
     <ClInclude Include="tstreamreader.h" />
@@ -139,6 +140,7 @@
     <ClCompile Include="tbitset.cpp" />
     <ClCompile Include="tbufferedstream.cpp" />
     <ClCompile Include="tcolor.cpp" />
+    <ClCompile Include="tflexiblebuffer.cpp" />
     <ClCompile Include="tmemory.cpp" />
     <ClCompile Include="tpath.cpp" />
     <ClCompile Include="tprocess.cpp" />
@@ -149,6 +151,7 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="design.cd" />
+    <None Include="Rules.txt" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

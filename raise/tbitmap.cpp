@@ -124,14 +124,8 @@ void TBitmap::loadbmp(Stream* bmpstream, bool convertRGB, bool closestream /* = 
 	if (infoHeader.biCompression != 0 || (infoHeader.biBitCount != 24 && infoHeader.biBitCount != 32))
 	{
 		if(closestream) bmpstream->Close();
-		throw "Unsupported BMP format";
+		throw Exception("Unsupported BMP format");
 		return;
-	}
-
-	format = &TBitmapFormats::fBGR;
-	if(infoHeader.biBitCount == 32)
-	{
-		format = &TBitmapFormats::fRGBA;
 	}
 
 	bool bottomUp = true;
@@ -142,6 +136,13 @@ void TBitmap::loadbmp(Stream* bmpstream, bool convertRGB, bool closestream /* = 
 	}
 
 	release();
+	
+	format = TBitmapFormats::fBGR;
+	if(infoHeader.biBitCount == 32)
+	{
+		format = TBitmapFormats::fRGBA;
+	}
+
 	create(infoHeader.biWidth,infoHeader.biHeight,format);
 
 	int rowWidth = infoHeader.biWidth * bytes; // row width for file, has padding
@@ -170,9 +171,9 @@ void TBitmap::loadbmp(Stream* bmpstream, bool convertRGB, bool closestream /* = 
 		}
 	}
 
-	if (convertRGB && format == &TBitmapFormats::fBGR)
+	if (convertRGB && format == TBitmapFormats::fBGR)
 	{
-		convert(&TBitmapFormats::fRGB);
+		convert(TBitmapFormats::fRGB);
 	}
 
 	if (closestream)
@@ -188,9 +189,9 @@ void TBitmap::convert(TBufferFormat* _newformat)
 	if (format == _newformat)
 		return;
 
-	if (format == &TBitmapFormats::fBGR)
+	if (format == TBitmapFormats::fBGR)
 	{
-		if (_newformat == &TBitmapFormats::fRGB)
+		if (_newformat == TBitmapFormats::fRGB)
 		{
 			byte* src = data;
 			int curpixel = pixels;
@@ -317,3 +318,4 @@ void TBitmap::drawline(int x,int y,int x2,int y2,byte* pClr)
 		}
 	}
 }
+

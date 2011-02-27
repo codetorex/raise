@@ -147,9 +147,19 @@ public:
 		return k;
 	}
 
-	bool StartsWith(const strType& value, int startIndex = 0) const
+	inline bool StartsWith(const strType& value, int startIndex = 0) const
 	{
 		return ( StringDriver::Compare(Chars+startIndex,value.Chars,value.Length) == 0 );
+	}
+
+	bool EndsWith(const strType& value) const
+	{
+		if (Length < value.Length)
+		{
+			return false;
+		}
+
+		return (StringDriver::Compare((Chars+Length)-value.Length,value.Chars,value.Length) == 0);
 	}
 
 	strType Substring (int startIndex, int lengt) const 
@@ -215,6 +225,14 @@ public:
 				}
 			}
 		}
+
+		if (lastSeprationStart != Length)
+		{
+			strType* str = new strType();
+			*str = Substring(lastSeprationStart,Length-lastSeprationStart);
+			result.Add(str);
+		}
+
 		return result;
 	}
 

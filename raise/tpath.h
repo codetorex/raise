@@ -2,7 +2,7 @@
 #define TPATH_H
 
 #include "tstring.h"
-#include "tstack.h"
+#include "tqueue.h"
 #include "texception.h"
 
 #ifdef WIN32
@@ -13,7 +13,7 @@ class TPathDriver
 public:
 	static void CurrentDirectory(str8& buffer)
 	{
-		GetCurrentDirectoryA(buffer.Capacity,buffer.Chars);
+		buffer.Length = GetCurrentDirectoryA(buffer.Capacity,buffer.Chars);
 	}
 
 	static void TempDirectory(str8& buffer)
@@ -41,7 +41,7 @@ class TPathDriver
 public:
 	static void CurrentDirectory(str8& buffer)
 	{
-		getcwd(buffer.Chars,buffer.Capacity);
+		getcwd(buffer.Chars,buffer.Capacity); // TODO: Not forget to set string length after loading.
 	}
 
 	static void TempDirectory(str8& buffer)
@@ -274,46 +274,66 @@ public:
 		return path.Substring(start,end-start);
 	}
 
+	static bool HasParents(const str8& path)
+	{
+		int i = path.Length;
+		while(i--)
+		{
+			ch8 curChar = path.Chars[i];
+			if (IsDirectorySeprator(curChar))
+			{
+				if (i > 2)
+				{
+					if (path.Chars[i-1] == '.' && path.Chars[i-2] == '.')
+					{
+						return true;
+					}
+				}
+			}
+		}
+
+		return false;
+	}
+
 	static str8 EliminateParents(str8& path)
 	{
 		ch8 seprators[3] = {DirectorySeprator,AltDirectorySeprator,0};
 		str8 cleared = GetPathCleared(path);
 
 		TArray<str8*> psplit = cleared.Split(seprators);
-		TStack<str8*> stk;
-
+		TArray<str8*> ary;
 
 		for (dword i=0;i<psplit.Count;i++)
 		{
-			if (*psplit[i] != "..")
+			str8* curpart = psplit.Item[i]; 
+			if (*curpart == "..")
 			{
-				stk.Push(psplit[i]);
+				ary.RemoveLast();
 			}
 			else
 			{
-				stk.Pop();
+				ary.Add(psplit.Item[i]);
 			}
 		}
 
 		str8 result(path.Length+16);
-		while(stk.Count > 0)
+
+		for (dword i=0;i<ary.Count;i++)
 		{
+			result += *ary.Item[i];
 			result += DirectorySeprator;
-			result += *stk.Pop();
-			result += result;
-		}
-
-		if (IsDirectorySeprator(path.GetLast()))
-		{
-			result+= DirectorySeprator;
-		}
-
-		if (!IsDirectorySeprator(path.GetFirst()))
-		{
-			result = result.Substring(1);
 		}
 
 		return result;
+	}
+
+	static bool IsEndsWithDirectorySeprator(const str8& path)
+	{
+		if ( IsDirectorySeprator(path.GetLast()) )
+		{
+			return true;
+		}
+		return false;
 	}
 
 	static void AppendDirectorySeprator(str8& path)
@@ -335,11 +355,25 @@ public:
 		}
 		str8 tmpPath(CurrentFolder.Length + path.Length + 16);
 		tmpPath += CurrentFolder;
+		
+		if (!IsEndsWithDirectorySeprator(tmpPath))
+		{
+			tmpPath += DirectorySeprator;
+		}
+
 		tmpPath += path;
 		if (!IsRelativePath(path))
 		{
 			tmpPath = path;
 		}
+
+		CorrectSeprators(tmpPath);
+
+		if (HasParents(tmpPath))
+		{
+			tmpPath = EliminateParents(tmpPath);
+		}
+
 		return tmpPath;
 	}
 

@@ -179,6 +179,9 @@
     <ClInclude Include="tprocessmodule.h">
       <Filter>Source Files\Hacking</Filter>
     </ClInclude>
+    <ClInclude Include="tqueue.h">
+      <Filter>Source Files\Collection</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">
@@ -220,8 +223,12 @@
     <ClCompile Include="tprocessmodule.cpp">
       <Filter>Source Files\Hacking</Filter>
     </ClCompile>
+    <ClCompile Include="tflexiblebuffer.cpp">
+      <Filter>Source Files\IO</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <None Include="design.cd" />
+    <None Include="Rules.txt" />
   </ItemGroup>
 </Project>

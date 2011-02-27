@@ -20,6 +20,7 @@ enum TComponentTypes
 	tc_bit7,
 	tc_bit8,
 	tc_group,
+	tc_float24,
 	tc_notdefined,
 };
 
@@ -62,7 +63,7 @@ public:
 		Elements = _elements;
 		ElementCount = count;
 		BitsPerItem = CalculateBitsPerItem();
-		BytesPerItem = DIV8(BytesPerItem);
+		BytesPerItem = DIV8(BitsPerItem);
 	}
 
 	TFormatElementGroup()
@@ -78,114 +79,29 @@ public:
 		UseElementList(_elements,count);
 	}
 
-	void CreateElementList(TFormatElement** allElements, const str8& elementNames)
-	{
-		ElementCount = 0;
-
-		int count = TArray<TFormatElement*>::CountOfZeroEnding(allElements);
-		int curPos = 0;
-
-		TArray<TFormatElement*> newList;
-		while (curPos != elementNames.Length - 1)
-		{
-			for (int i=0;i<count;i++)
-			{
-				TFormatElement* curElement = allElements[i];
-				if (elementNames.StartsWith(curElement->ShortName,curPos))
-				{
-					newList.Add(curElement);
-					curPos += curElement->ShortName.Length;
-					ElementCount++;
-				}
-			}
-		}
-
-		UseElementList(newList.ExtractItems(),ElementCount);
-	}
+	void CreateElementList(TArray<TFormatElement*>* allElements, const str8& elementNames);
 
 	/**
 	* With this constructor, just give pointer to all elements with zero pointer ending, then use a string that defines this format by short names of elements
 	* Like: TBufferFormat( "BGRA" , ptrToAllElements, 4 , "B8G8R8A8" )
 	* It automatically adds necessary elements by ordering that given.
 	*/
-	TFormatElementGroup(const str8& _Name, const str8& _short,TFormatElement** _elements, const str8& elementNames): TFormatElement(_Name,_short,tc_group)
+	TFormatElementGroup(const str8& _Name, const str8& _short,TArray<TFormatElement*>* _elements, const str8& elementNames): TFormatElement(_Name,_short,tc_group)
 	{
 		CreateElementList(_elements,elementNames);
 	}
 
-	TFormatElementGroup(const str8& _Name,TFormatElement** _elements, const str8& elementNames): TFormatElement(_Name,_Name,tc_group)
+	TFormatElementGroup(const str8& _Name,TArray<TFormatElement*>* _elements, const str8& elementNames): TFormatElement(_Name,_Name,tc_group)
 	{
 		CreateElementList(_elements,elementNames);
 	}
 
-	int CalculateBitsPerItem()
-	{
-		int result = 0;
-		int i = ElementCount;
-		while(i--)
-		{
-			switch(Elements[i]->DataType)
-			{
-			case tc_bit1:
-				result += 1;
-				break;
-
-			case tc_bit2:
-				result += 2;
-				break;
-
-			case tc_bit3:
-				result += 3;
-				break;
-
-			case tc_bit4:
-				result += 4;
-				break;
-
-			case tc_bit5:
-				result += 5;
-				break;
-
-			case tc_bit6:
-				result += 6;
-				break;
-
-			case tc_bit7:
-				result += 7;
-				break;
-
-			case tc_bit8:
-				result += 8;
-				break;
-
-			case tc_byte:
-				result += 8;
-				break;
-
-			case tc_short:
-				result += 16;
-				break;
-
-			case tc_dword:
-			case tc_float:
-				result += 32;
-				break;
-
-			case tc_double:
-				result += 64;
-				break;
-
-			case tc_group:
-				TFormatElementGroup* elemGroup = (TFormatElementGroup*)Elements[i];
-				result += elemGroup->BitsPerItem;
-				break;
-			}
-		}
-		return result;
-	}
+	int CalculateBitsPerItem();
 };
 
 typedef TFormatElementGroup TBufferFormat;
+
+class TFlexibleBuffer;
 
 /**
 * Will be interface of converter providers.
@@ -193,7 +109,7 @@ typedef TFormatElementGroup TBufferFormat;
 class TBufferFormatConverter
 {
 public:
-	
+	void Convert(TFlexibleBuffer* src, TBufferFormat* dst) = 0;
 };
 
 /**
@@ -220,58 +136,11 @@ public:
 		Capacity = Used = 0;
 	}
 
-	void Allocate(int _newCapacity)
-	{
-		if (_newCapacity < Capacity)
-		{
-			Indicator = Buffer;
-			Used = 0;
-			return;
-		}
+	void Allocate(int _newCapacity);
 
-		if (Buffer)
-		{
-			Free();
-		}
-		
-		if (_newCapacity == 0)
-		{
-			return;
-		}
+	void Grow(int _newCapacity);
 
-		Capacity = _newCapacity;
-		Buffer = new byte [_newCapacity];
-		Used = 0;
-	}
-
-	void Grow(int _newCapacity)
-	{
-		if (Capacity > _newCapacity)
-		{
-			Indicator = Buffer;
-			Used = 0;
-			return;
-		}
-		byte* OldBuffer = Buffer;
-		Buffer = new byte [_newCapacity];
-		memcpy(Buffer,OldBuffer,Used);
-		Indicator = Buffer + (Indicator - OldBuffer);
-		Capacity = _newCapacity;
-		delete [] OldBuffer;
-
-	}
-
-	inline void Initialize(TBufferFormat* _format = 0,int _capacity = 0)
-	{
-		Capacity = _capacity;
-		Used = 0;
-		BufferFormat = _format;
-		Buffer = 0;
-		if (Capacity != 0)
-		{
-			Allocate(Capacity);
-		}
-	}
+	void Initialize(TBufferFormat* _format = 0,int _capacity = 0);
 
 
 	TFlexibleBuffer()

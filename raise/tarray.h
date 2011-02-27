@@ -3,6 +3,7 @@
 #define TARRAY_H
 
 #include "raisetypes.h"
+#include "tmemorydriver.h"
 
 #define TARRAYDEFSIZE	4
 
@@ -79,6 +80,15 @@ public:
 		Count = 0;
 	}
 
+	TArray( const TArray<T>& cpy)
+	{
+		Item = 0;
+		Count = 0;
+		Allocate(cpy.Capacity);
+		MemoryDriver::Copy(Item,cpy.Item,sizeof(T) * cpy.Count);
+		Count = cpy.Count;
+	}
+
 	~TArray()
 	{
 		Free();
@@ -99,7 +109,7 @@ public:
 	inline T* ExtractItems()
 	{
 		T* nItems = new T [Count];
-		memcpy(nItems,Item,sizeof(T));
+		memcpy(nItems,Item,sizeof(T) * Count);
 		return nItems;
 	}
 
@@ -164,6 +174,12 @@ public:
 			return;
 		}
 		Item[index] = Item[--Count];
+	}
+
+	inline void RemoveLast()
+	{
+		Count--;
+		return;
 	}
 
 	void Clear()

@@ -130,7 +130,7 @@ public:
 	void Test()
 	{
 		TBitmap bmp;
-		bmp.create(128,128, FRGB ); 
+		bmp.create(128,128, TBitmapFormats::fRGB ); 
 
 		TColor24 clr2(255,128,64);
 		for (int y=0;y<128;y++)

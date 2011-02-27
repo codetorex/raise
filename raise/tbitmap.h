@@ -100,24 +100,44 @@ inline void PixelCopy(void* _dst,void* _src,int _size)
 #define FHSV			(2 << 20)
 */
 
+// Defines default Bitmap Channels
 class TBitmapChannels
 {
 public:
-	static TFormatElement cRed;
-	static TFormatElement cGreen;
-	static TFormatElement cBlue;
-	static TFormatElement cAlpha;
+	void CreateDefaultChannels();
+	
+	virtual void Initialize()
+	{
+		CreateDefaultChannels();
+	}
+
+	static TFormatElement* cRed;
+	static TFormatElement* cGreen;
+	static TFormatElement* cBlue;
+	static TFormatElement* cAlpha;
+
+	static TArray<TFormatElement*>* BitmapChannelRegistry;
 };
 
+// Defines default Bitmap Formats
 class TBitmapFormats
 {
 public:
-	static TBufferFormat fARGB;
-	static TBufferFormat fABGR;
-	static TBufferFormat fRGBA;
-	static TBufferFormat fBGRA;
-	static TBufferFormat fRGB;
-	static TBufferFormat fBGR;
+	static TBufferFormat* fARGB;
+	static TBufferFormat* fABGR;
+	static TBufferFormat* fRGBA;
+	static TBufferFormat* fBGRA;
+	static TBufferFormat* fRGB;
+	static TBufferFormat* fBGR;
+
+	static TArray<TBufferFormat*>* BitmapFormatRegistry;
+
+	void CreateDefaultFormats();
+
+	virtual void Initialize()
+	{
+		CreateDefaultFormats();
+	}
 };
 
 /**
@@ -127,11 +147,11 @@ class RDLL TBitmap
 {
 public:
 	byte* data;
-	dword length;
+	dword length; 
 
 	int width;
 	int height;
-	int pixels;
+	int pixels; // width * height means total pixel count
 	int bits;	// bits per pixel
 	int bytes;	// bytes per pixel
 	int log2width; // log base 2 of width
