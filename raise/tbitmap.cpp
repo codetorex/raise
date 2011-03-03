@@ -55,16 +55,11 @@ static int fieldlength[] =
 
 
 
-TBitmap::TBitmap()
+TBitmap::TBitmap(): TFlexibleBuffer()
 {
-	data = 0;
-	length = 0;
 	width = 0;
 	height = 0;
 	pixels = 0;
-	bits = 0;
-	bytes = 0;
-	format = 0;
 	log2width = 0;
 }
 
@@ -76,20 +71,17 @@ TBitmap::TBitmap(int _width,int _height, TBufferFormat* _format)
 void TBitmap::create(int _width,int _height, TBufferFormat* _format)
 {
 
-	format = _format;
+	BufferFormat = _format;
 	flags = 0;
-	bits = format->BitsPerItem;
-	bytes = format->BytesPerItem;
 
 	pixels = _width * _height;
-	length = pixels * bytes;
-	data = new byte[length];
+
+	Allocate(pixels * BufferFormat->BytesPerItem);
+
 	width = _width;
 	height = _height;
 
-	format = _format;
-
-	if (bytes == 4)
+	if (BufferFormat->BytesPerItem == 4)
 		flags |= O32BITALIGN;
 
 	TBinary wbinary(width);
@@ -102,14 +94,11 @@ void TBitmap::create(int _width,int _height, TBufferFormat* _format)
 
 void TBitmap::release()
 {
-	if (data)
-	{
-		delete [] data;
-	}
-	data = 0;
-	format = 0;
-	length = width = height = pixels = bits = bytes = log2width = 0;
+	Free();
+	width = height = pixels = log2width = 0;
 }
+
+#include "tfilestream.h"
 
 void TBitmap::loadbmp(Stream* bmpstream, bool convertRGB, bool closestream /* = true */)
 {
@@ -137,15 +126,15 @@ void TBitmap::loadbmp(Stream* bmpstream, bool convertRGB, bool closestream /* = 
 
 	release();
 	
-	format = TBitmapFormats::fBGR;
+	BufferFormat = TBitmapFormats::fBGR;
 	if(infoHeader.biBitCount == 32)
 	{
-		format = TBitmapFormats::fRGBA;
+		BufferFormat = TBitmapFormats::fRGBA;
 	}
 
-	create(infoHeader.biWidth,infoHeader.biHeight,format);
+	create(infoHeader.biWidth,infoHeader.biHeight,BufferFormat);
 
-	int rowWidth = infoHeader.biWidth * bytes; // row width for file, has padding
+	int rowWidth = infoHeader.biWidth * BufferFormat->BytesPerItem; // row width for file, has padding
 	int realRowWidth = rowWidth; // row width for bitmap, doesnt has padding
 	rowWidth += MOD4(rowWidth);
 	byte* row = new byte[rowWidth];
@@ -171,9 +160,13 @@ void TBitmap::loadbmp(Stream* bmpstream, bool convertRGB, bool closestream /* = 
 		}
 	}
 
-	if (convertRGB && format == TBitmapFormats::fBGR)
+	TFileStream* fs = new TFileStream("c:\\book.bmp",fm_Write);
+	savebmp(fs,true);
+	delete fs;
+
+	if (convertRGB && BufferFormat == TBitmapFormats::fBGR)
 	{
-		convert(TBitmapFormats::fRGB);
+		Convert(TBitmapFormats::fRGB);
 	}
 
 	if (closestream)
@@ -183,97 +176,55 @@ void TBitmap::loadbmp(Stream* bmpstream, bool convertRGB, bool closestream /* = 
 }
 
 
-
-void TBitmap::convert(TBufferFormat* _newformat)
+void TBitmap::savebmp( Stream* bmpstream,bool closestream /*= true*/ )
 {
-	if (format == _newformat)
-		return;
+	int y;
+	BITMAPFILEHEADER fileHeader;
+	BITMAPINFOHEADER infoHeader;
 
-	if (format == TBitmapFormats::fBGR)
+	infoHeader.biSize = sizeof(BITMAPINFOHEADER);
+	infoHeader.biPlanes = 1;
+	infoHeader.biBitCount = 24;
+	infoHeader.biCompression = 0;
+	infoHeader.biSizeImage = pixels * 3;
+	infoHeader.biXPelsPerMeter = 0;
+	infoHeader.biYPelsPerMeter = 0;
+	infoHeader.biClrUsed = 0;
+	infoHeader.biClrImportant = 0;
+	infoHeader.biWidth = width;
+	infoHeader.biHeight = height;
+
+	fileHeader.bfSize = sizeof(BITMAPFILEHEADER);
+	fileHeader.bfType = 0x4D42;
+	fileHeader.bfReserved1 = 0;
+	fileHeader.bfReserved2 = 0;
+	fileHeader.bfOffBits = sizeof(BITMAPFILEHEADER) + sizeof(BITMAPINFOHEADER);
+
+	bmpstream->Write(&fileHeader,1,sizeof(BITMAPFILEHEADER));
+	bmpstream->Write(&infoHeader,1,sizeof(BITMAPINFOHEADER));
+
+	dword row = width * 3;
+	dword alig = row % 4;
+	dword zero = 0;
+
+	y = height;
+	while(y--)
 	{
-		if (_newformat == TBitmapFormats::fRGB)
+		byte* rowstart = getpixel(0,y);
+		bmpstream->Write(rowstart,1,row);
+		
+		if (alig != 0)
 		{
-			byte* src = data;
-			int curpixel = pixels;
-			byte tmp;
-			while(curpixel--)
-			{
-				tmp = *src;
-				src[0] = src[2];
-				src[2] = tmp;
-				src += 3;
-			}
-			format = _newformat; // conversion done.
-			return;
+			bmpstream->Write(&zero,1,alig);
 		}
 	}
 
-	// TODO: implement a virtual machine compiler for converting formats between
-
-	/*TBitmapFormat fsrc(format);
-	TBitmapFormat fdst(_format);
-
-	bool sameChannels = (fsrc.chn.value == fdst.chn.value);
-	bool sameType = (fsrc.typ == fdst.typ);
-
-	
-
-	if (sameChannels && sameType && ( 
-		(fsrc.ordering == bord::rgba && fdst.ordering == bord::bgra) || 
-		(fsrc.ordering == bord::bgra && fdst.ordering == bord::rgba) )) // do easy exchange.
+	if(closestream)
 	{
-		int curpixel = pixels;
-		byte tmp;
-		while(curpixel--)
-		{
-			tmp = *src;
-			src[0] = src[2];
-			src[2] = tmp;
-			src += fsrc.bytes;
-		}
-		format = _format; // conversion done.
-		return;
-	}*/
-
-	/*byte srcpxl[32];
-	
-	byte* dst = data;
-
-	if (fsrc.bitsperchannel == fdst.bitsperchannel)
-	{
-		src = data;
-		if (fsrc.bitsperchannel == 8)
-		{
-			for (int i=0;i<pixels;i++) // for each pixels
-			{
-				PixelCopy(srcpxl,src,bytes); // read pixel
-				src += bytes;
-				fdst.translatepixel8(dst,src,fsrc);
-				dst = src;
-			}
-		}
-		else if(fsrc.bitsperchannel == 32)
-		{
-			for (int i=0;i<pixels;i++) // for each pixels
-			{
-				PixelCopy(srcpxl,src,bytes); // read pixel
-				src += bytes;
-				fdst.translatepixel32(dst,src,fsrc);
-				dst = src;
-			}
-		}
-		else
-		{
-			for (int i=0;i<pixels;i++) // for each pixels
-			{
-				PixelCopy(srcpxl,src,bytes); // read pixel
-				src += bytes;
-				fdst.translatepixel(dst,src,fsrc);
-				dst = src;
-			}
-		}
-	}*/
+		bmpstream->Close();
+	}
 }
+
 
 void TBitmap::drawline(int x,int y,int x2,int y2,byte* pClr)
 {	
@@ -318,4 +269,3 @@ void TBitmap::drawline(int x,int y,int x2,int y2,byte* pClr)
 		}
 	}
 }
-

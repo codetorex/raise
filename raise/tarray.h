@@ -69,7 +69,7 @@ public:
 	TArray()
 	{
 		Item = 0;
-		Allocate(TARRAYDEFSIZE);
+		Capacity = 0;
 		Count = 0;
 	}
 
@@ -127,7 +127,7 @@ public:
 			}
 			if (i == 1024)
 			{
-				throw "Impossible"; // TODO: if it will be possible someday change this.
+				throw Exception("Impossible"); // TODO: if it will be possible someday change this.
 			}
 		}
 	}
@@ -192,6 +192,7 @@ public:
 	{
 		if (Capacity <= Count)
 		{
+			if (Capacity == 0) Capacity = 2;
 			Allocate(Capacity<<1); // Multiply the cache
 		}
 		Item[Count++] = value;
@@ -263,6 +264,15 @@ public:
 protected:
 	void Allocate(int newsize)
 	{
+		if (newsize == 0)
+		{
+			Capacity = 0;
+			Item = 0;
+			Count = 0;
+			throw Exception("Tried to allocate 0, uncessary");
+			return;
+		}
+
 		T* NItem = new T [newsize];
 		if (Item)
 		{

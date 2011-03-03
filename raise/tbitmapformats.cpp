@@ -48,3 +48,4 @@ void TBitmapFormats::CreateDefaultFormats()
 	BitmapFormatRegistry->Add(fRGB);
 	BitmapFormatRegistry->Add(fBGR);
 }
+

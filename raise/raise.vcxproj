@@ -99,6 +99,7 @@
     <ClInclude Include="tbufferedstream.h" />
     <ClInclude Include="tdatetime.h" />
     <ClInclude Include="tdictionary.h" />
+    <ClInclude Include="tencoding.h" />
     <ClInclude Include="tenumerator.h" />
     <ClInclude Include="tevent.h" />
     <ClInclude Include="texception.h" />
@@ -117,6 +118,7 @@
     <ClInclude Include="tstack.h" />
     <ClInclude Include="tstream.h" />
     <ClInclude Include="tstreamreader.h" />
+    <ClInclude Include="tstreamwriter.h" />
     <ClInclude Include="tstring.h" />
     <ClInclude Include="tbitset.h" />
     <ClInclude Include="tlinkedlist.h" />
@@ -126,6 +128,7 @@
     <ClInclude Include="tstringdriver.h" />
     <ClInclude Include="tsystem.h" />
     <ClInclude Include="ttextreader.h" />
+    <ClInclude Include="ttextwriter.h" />
     <ClInclude Include="tthread.h" />
     <ClInclude Include="ttiming.h" />
     <ClInclude Include="tcolor.h" />
@@ -136,10 +139,12 @@
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Create</PrecompiledHeader>
     </ClCompile>
     <ClCompile Include="tbitmap.cpp" />
+    <ClCompile Include="tbitmapconverters.cpp" />
     <ClCompile Include="tbitmapformats.cpp" />
     <ClCompile Include="tbitset.cpp" />
     <ClCompile Include="tbufferedstream.cpp" />
     <ClCompile Include="tcolor.cpp" />
+    <ClCompile Include="tencoding.cpp" />
     <ClCompile Include="tflexiblebuffer.cpp" />
     <ClCompile Include="tmemory.cpp" />
     <ClCompile Include="tpath.cpp" />

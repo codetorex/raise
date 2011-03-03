@@ -36,6 +36,9 @@
     <Filter Include="Source Files\Hacking">
       <UniqueIdentifier>{d848e625-12bb-48a1-a63e-505cfb61153b}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Source Files\Text">
+      <UniqueIdentifier>{4487af07-604a-4d8f-993d-ff915a4969bd}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="raisetypes.h">
@@ -182,6 +185,15 @@
     <ClInclude Include="tqueue.h">
       <Filter>Source Files\Collection</Filter>
     </ClInclude>
+    <ClInclude Include="ttextwriter.h">
+      <Filter>Source Files\IO</Filter>
+    </ClInclude>
+    <ClInclude Include="tstreamwriter.h">
+      <Filter>Source Files\IO</Filter>
+    </ClInclude>
+    <ClInclude Include="tencoding.h">
+      <Filter>Source Files\Text</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">
@@ -225,6 +237,12 @@
     </ClCompile>
     <ClCompile Include="tflexiblebuffer.cpp">
       <Filter>Source Files\IO</Filter>
+    </ClCompile>
+    <ClCompile Include="tbitmapconverters.cpp">
+      <Filter>Source Files\Graphics</Filter>
+    </ClCompile>
+    <ClCompile Include="tencoding.cpp">
+      <Filter>Source Files\Text</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

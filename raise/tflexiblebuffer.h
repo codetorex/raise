@@ -2,7 +2,7 @@
 #define TFLEXIBLEBUFFER_H
 
 #include "raisetypes.h"
-#include "tstring.h"
+#include "texception.h" // includes string too
 
 enum TComponentTypes
 {
@@ -47,6 +47,8 @@ public:
 	}
 };
 
+class TBufferFormatConverter;
+
 /**
 * Holds multiple element information and unites as a group or format definition.
 */
@@ -57,6 +59,8 @@ public:
 	int ElementCount;
 	int BytesPerItem;
 	int BitsPerItem;
+
+	TArray<TBufferFormatConverter*> Converters;
 
 	void UseElementList(TFormatElement** _elements, int count)
 	{
@@ -109,7 +113,10 @@ class TFlexibleBuffer;
 class TBufferFormatConverter
 {
 public:
-	void Convert(TFlexibleBuffer* src, TBufferFormat* dst) = 0;
+	TBufferFormat* SourceFormat; // TODO: use reference here?
+	TBufferFormat* DestinationFormat;
+
+	virtual void Convert(TFlexibleBuffer* srcBuffer) = 0;
 };
 
 /**
@@ -161,9 +168,43 @@ public:
 		BufferFormat = _format;
 	}
 
-	void Convert(TBufferFormat* newFormat)
+	void ExchangeBuffer(byte* newBuffer, int newCap,int newUsed = 0)
 	{
+		if (Buffer)
+		{
+			delete [] Buffer;
+		}
 
+		Buffer = newBuffer;
+		Indicator = Buffer;
+		Capacity = newCap;
+		Used = newUsed;
+	}
+
+	bool Convert(TBufferFormat* newFormat)
+	{
+		if (BufferFormat == newFormat)
+		{
+			return true;
+		}
+
+		if (BufferFormat->Converters.Count == 0)
+		{
+			throw Exception("Converter not found");
+			//return false;
+		}
+
+		for (dword i=0;i<BufferFormat->Converters.Count;i++)
+		{
+			TBufferFormatConverter* curConv = BufferFormat->Converters.Item[i];
+			if (curConv->DestinationFormat == newFormat)
+			{
+				curConv->Convert(this);
+				return true;
+			}
+		}
+
+		throw Exception("Converter not found");
 		// IMPLEMENT A GENERIC FORMAT EXCHANGING VIRTUAL MACHINE AND X86 COMPILER HERE
 	}
 

@@ -13,7 +13,7 @@ void TFormatElementGroup::CreateElementList( TArray<TFormatElement*>* allElement
 	while (curPos < elementNames.Length)
 	{
 		bool found = false;
-		for (int i=0;i<allElements->Count;i++)
+		for (dword i=0;i<allElements->Count;i++)
 		{
 			TFormatElement* curElement = allElements->Item[i];
 			if (elementNames.StartsWith(curElement->ShortName,curPos))

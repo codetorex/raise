@@ -133,30 +133,27 @@ public:
 	static TArray<TBufferFormat*>* BitmapFormatRegistry;
 
 	void CreateDefaultFormats();
+	void CreateDefaultConverters();
 
 	virtual void Initialize()
 	{
 		CreateDefaultFormats();
+		CreateDefaultConverters();
 	}
 };
 
 /**
 * Initial bitmap class.
 */
-class RDLL TBitmap
+class RDLL TBitmap: public TFlexibleBuffer
 {
 public:
-	byte* data;
-	dword length; 
-
 	int width;
 	int height;
 	int pixels; // width * height means total pixel count
-	int bits;	// bits per pixel
-	int bytes;	// bytes per pixel
 	int log2width; // log base 2 of width
 	dword flags;
-	TBufferFormat* format;
+	//TBufferFormat* format;
 
 	TBitmap();
 	TBitmap(int _width,int _height, TBufferFormat* _format);
@@ -174,7 +171,7 @@ public:
 	* Convert current bitmap format to another.
 	* @param _format new bitmap format
 	*/
-	void convert(TBufferFormat* _format);
+	//void convert(TBufferFormat* _format); THIS FUNCTION WILL BE SUPPLIED BY FLEXIBLEBUFFER
 
 	//TODO: you can implement, copy convert, new convert, and copy funcs.
 
@@ -186,7 +183,7 @@ public:
 	*/
 	inline byte* getpixel(int x,int y)
 	{
-		return (data + (bytes*((y*width) + x)));
+		return (Buffer + (BufferFormat->BytesPerItem*((y*width) + x)));
 	}
 
 	/**
@@ -196,7 +193,7 @@ public:
 	inline void setpixel(int x,int y,byte* clr)
 	{
 		byte* ldata = getpixel(x,y);
-		PixelCopy(ldata,clr,bytes);
+		PixelCopy(ldata,clr,BufferFormat->BytesPerItem);
 	}
 
 	/**
@@ -204,7 +201,7 @@ public:
 	*/
 	inline byte* getpixel2n(int x,int y)
 	{
-		return (data + (bytes*((y<<log2width) + x)));
+		return (Buffer + (BufferFormat->BytesPerItem*((y<<log2width) + x)));
 	}
 
 
@@ -214,7 +211,7 @@ public:
 	inline void setpixel2n(int x,int y,byte* clr)
 	{
 		byte* ldata = getpixel2n(x,y);
-		PixelCopy(ldata,clr,bytes);
+		PixelCopy(ldata,clr,BufferFormat->BytesPerItem);
 	}
 
 		/**
@@ -222,7 +219,7 @@ public:
 	*/
 	inline byte* getpixel32(int x,int y)
 	{
-		return (data + (MUL2((y*width) + x)) );
+		return (Buffer + (MUL2((y*width) + x)) );
 	}
 
 	/**
@@ -239,7 +236,7 @@ public:
 	*/
 	inline void clear32(byte* clr)
 	{
-		dword* tbytes = (dword*)data;// temp byte ptr
+		dword* tbytes = (dword*)Buffer;// temp byte ptr
 		int pc = pixels; // temp pixel count 
 		dword px = *(dword*)clr;
 		while(pc--)
@@ -254,7 +251,7 @@ public:
 	*/
 	inline byte* getpixel2n32(int x,int y)
 	{
-		return (data + (MUL2((y<<log2width) + x)));
+		return (Buffer + (MUL2((y<<log2width) + x)));
 	}
 
 	/**
@@ -271,12 +268,12 @@ public:
 	*/
 	inline virtual void clear(byte* clr)
 	{
-		byte* tbytes = data;// temp byte ptr
+		byte* tbytes = Buffer;// temp byte ptr
 		int pc = pixels; // temp pixel count 
 		while(pc--)
 		{
-			PixelCopy(tbytes,clr,bytes);
-			tbytes += bytes;
+			PixelCopy(tbytes,clr,BufferFormat->BytesPerItem);
+			tbytes += BufferFormat->BytesPerItem;
 		}
 	}
 
