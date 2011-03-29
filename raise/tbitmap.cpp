@@ -1,33 +1,6 @@
 #include "stdafx.h"
 #include "tbitmap.h"
 
-#ifdef LINUX 
-
-struct BITMAPFILEHEADER 
-{
-	word bfType;
-	dword bfSize;
-	word bfReserved1;
-	word bfReserved2;
-	dword bfOffBits;
-} __attribute((packed));
-
-struct BITMAPINFOHEADER
-{
-	dword biSize;
-	int biWidth;
-	int biHeight;
-	word biPlanes;
-	word biBitCount;
-	dword biCompression;
-	dword biSizeImage;
-	dword biXPelsPerMeter;
-	dword biYPelsPerMeter;
-	dword biClrUsed;
-	dword biClrImportant;
-}  __attribute((packed));
-
-#endif
 
 
 
@@ -57,8 +30,8 @@ static int fieldlength[] =
 
 TBitmap::TBitmap(): TFlexibleBuffer()
 {
-	width = 0;
-	height = 0;
+	Width = 0;
+	Height = 0;
 	pixels = 0;
 	log2width = 0;
 }
@@ -76,15 +49,15 @@ void TBitmap::create(int _width,int _height, TBufferFormat* _format)
 
 	pixels = _width * _height;
 
-	Allocate(pixels * BufferFormat->BytesPerItem);
+	Allocate(pixels);
 
-	width = _width;
-	height = _height;
+	Width = _width;
+	Height = _height;
 
 	if (BufferFormat->BytesPerItem == 4)
 		flags |= O32BITALIGN;
 
-	TBinary wbinary(width);
+	TBinary wbinary(Width);
 	if (wbinary.is2n())
 	{
 		flags |= O2NWIDTH;
@@ -95,138 +68,10 @@ void TBitmap::create(int _width,int _height, TBufferFormat* _format)
 void TBitmap::release()
 {
 	Free();
-	width = height = pixels = log2width = 0;
+	Width = Height = pixels = log2width = 0;
 }
 
-#include "tfilestream.h"
-
-void TBitmap::loadbmp(Stream* bmpstream, bool convertRGB, bool closestream /* = true */)
-{
-	int y;
-	BITMAPFILEHEADER fileHeader;
-	BITMAPINFOHEADER infoHeader;
-	
-	bmpstream->Read(&fileHeader,sizeof(BITMAPFILEHEADER),1);
-	bmpstream->Read(&infoHeader,sizeof(BITMAPINFOHEADER),1);
-	
-
-	if (infoHeader.biCompression != 0 || (infoHeader.biBitCount != 24 && infoHeader.biBitCount != 32))
-	{
-		if(closestream) bmpstream->Close();
-		throw Exception("Unsupported BMP format");
-		return;
-	}
-
-	bool bottomUp = true;
-	if (infoHeader.biHeight < 0)
-	{
-		bottomUp = false;
-		infoHeader.biHeight = abs(infoHeader.biHeight);
-	}
-
-	release();
-	
-	BufferFormat = TBitmapFormats::fBGR;
-	if(infoHeader.biBitCount == 32)
-	{
-		BufferFormat = TBitmapFormats::fRGBA;
-	}
-
-	create(infoHeader.biWidth,infoHeader.biHeight,BufferFormat);
-
-	int rowWidth = infoHeader.biWidth * BufferFormat->BytesPerItem; // row width for file, has padding
-	int realRowWidth = rowWidth; // row width for bitmap, doesnt has padding
-	rowWidth += MOD4(rowWidth);
-	byte* row = new byte[rowWidth];
-
-	
-	if (bottomUp)
-	{
-		y = height;
-		while (y--)
-		{
-			byte* rowstart = getpixel(0,y);
-			bmpstream->Read(row,1,rowWidth);
-			memcpy(rowstart,row,realRowWidth);
-		}
-	}
-	else
-	{
-		for (y = 0;y<height;y++)
-		{
-			byte* rowstart = getpixel(0,y);
-			bmpstream->Read(row,1,rowWidth);
-			memcpy(rowstart,row,realRowWidth);
-		}
-	}
-
-	TFileStream* fs = new TFileStream("c:\\book.bmp",fm_Write);
-	savebmp(fs,true);
-	delete fs;
-
-	if (convertRGB && BufferFormat == TBitmapFormats::fBGR)
-	{
-		Convert(TBitmapFormats::fRGB);
-	}
-
-	if (closestream)
-	{
-		bmpstream->Close();
-	}
-}
-
-
-void TBitmap::savebmp( Stream* bmpstream,bool closestream /*= true*/ )
-{
-	int y;
-	BITMAPFILEHEADER fileHeader;
-	BITMAPINFOHEADER infoHeader;
-
-	infoHeader.biSize = sizeof(BITMAPINFOHEADER);
-	infoHeader.biPlanes = 1;
-	infoHeader.biBitCount = 24;
-	infoHeader.biCompression = 0;
-	infoHeader.biSizeImage = pixels * 3;
-	infoHeader.biXPelsPerMeter = 0;
-	infoHeader.biYPelsPerMeter = 0;
-	infoHeader.biClrUsed = 0;
-	infoHeader.biClrImportant = 0;
-	infoHeader.biWidth = width;
-	infoHeader.biHeight = height;
-
-	fileHeader.bfSize = sizeof(BITMAPFILEHEADER);
-	fileHeader.bfType = 0x4D42;
-	fileHeader.bfReserved1 = 0;
-	fileHeader.bfReserved2 = 0;
-	fileHeader.bfOffBits = sizeof(BITMAPFILEHEADER) + sizeof(BITMAPINFOHEADER);
-
-	bmpstream->Write(&fileHeader,1,sizeof(BITMAPFILEHEADER));
-	bmpstream->Write(&infoHeader,1,sizeof(BITMAPINFOHEADER));
-
-	dword row = width * 3;
-	dword alig = row % 4;
-	dword zero = 0;
-
-	y = height;
-	while(y--)
-	{
-		byte* rowstart = getpixel(0,y);
-		bmpstream->Write(rowstart,1,row);
-		
-		if (alig != 0)
-		{
-			bmpstream->Write(&zero,1,alig);
-		}
-	}
-
-	if(closestream)
-	{
-		bmpstream->Close();
-	}
-}
-
-
-void TBitmap::drawline(int x,int y,int x2,int y2,byte* pClr)
+void TBitmap::DrawLine(int x,int y,int x2,int y2,byte* pClr)
 {	
 	int dy = y2 - y;
 	int dx = x2 - x;
@@ -266,6 +111,129 @@ void TBitmap::drawline(int x,int y,int x2,int y2,byte* pClr)
 			y += stepy;
 			fraction += dx;
 			setpixel(x,y,pClr);
+		}
+	}
+}
+
+void TBitmap::FlipHorizontal()
+{
+	// This function should be fixed like flipvertical. which is about only exchange halfs
+	// not continue to exchange after passed half part
+	throw Exception("Call of incomplete function");
+
+	int x1 = Width;
+	int x2 = 0;
+
+	int rowwidth = Width * BufferFormat->BytesPerItem; // dont worry this is correct
+	int pixelSize = BufferFormat->BytesPerItem;
+
+	byte tmp[64];
+
+	while(x1--)
+	{
+		byte* column1 = getpixel(x1,0);
+		byte* column2 = getpixel(x2,0);
+
+		int i = Height;
+		while(i--)
+		{
+			PixelCopy(tmp,column2,pixelSize);
+			PixelCopy(column2,column1,pixelSize);
+			PixelCopy(column1,tmp,pixelSize);
+
+			column1 += rowwidth; // advance memory pointer
+			column2 += rowwidth; // advance memory pointer
+		}
+	}
+}
+
+void TBitmap::FlipVertical()
+{
+	// algorithm is exchanges data between vertical half of image
+	// so if image's height is even then all rows will be exchanged
+	// if its odd then only 1 row will be left to be not exchanged
+
+	int rows = DIV2(Height); // div to 2 makes this. so if first bit is set, which means its odd it will be gone
+	int y1 = Height-1; 
+	int y2 = 0;
+	int rowwidth = Width * BufferFormat->BytesPerItem;
+
+	while(rows--)
+	{
+		byte* row1 = getpixel(0,y1);
+		byte* row2 = getpixel(0,y2);
+
+		MemoryDriver::Exchange(row1,row2,rowwidth);
+		y2++;
+		y1--;
+	}
+}
+
+void TBitmap::ColorKey( const TColor24& clr,byte alpha /*= 0*/ )
+{
+	Convert(TBitmapFormats::fARGB);
+
+	TColor32* pix = (TColor32*)Buffer;
+
+	int i = pixels;
+	while(i--)
+	{
+		if (*(pix++) == clr)
+		{
+			pix->a = alpha;
+		}
+	}
+
+}
+
+void TBitmap::Copy( TBitmap* src,int dstX,int dstY, int srcX /*= 0*/, int srcY /*= 0*/, int _width /*= -1*/,int _height /*= -1*/ )
+{
+	if (_width == -1)
+	{
+		_width = src->Width;
+	}
+
+	if (_height == -1)
+	{
+		_height = src->Height;
+	}
+
+	if (BufferFormat != src->BufferFormat)
+	{
+		throw Exception("Incompatible formats");
+	}
+
+	int dx,dy = dstY;
+
+	for (int y = srcY; y < _height; y++)
+	{
+		dx = dstX;
+		for (int x = srcX; x < _width; x++)
+		{
+			byte* pix = src->getpixel(x,y);
+			setpixel(dx,dy,pix);
+			dx++;
+		}
+		dy++;
+	}
+}
+
+void TBitmap::DrawRectangle( int _x,int _y,int _width,int _height,byte* pClr )
+{
+	if (_x > Width) return;
+	if (_x + _width > Width) _width = Width - _x;
+	if (_y + _height > Height) _height = Height - _y;
+
+	int ibottom = _y + _height;
+	int pixelWidth = BufferFormat->BytesPerItem;
+	for (int y = _y ;y<ibottom;y++)
+	{
+		byte* rowstart = getpixel(_x,y);
+		int rpix = _width;
+		while(rpix--)
+		{
+			PixelCopy(rowstart,pClr,pixelWidth);
+			rowstart += pixelWidth;
 		}
 	}
 }

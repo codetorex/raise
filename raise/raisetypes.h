@@ -11,6 +11,8 @@
 
 // Custom Types And Generic Macros Comes Here
 
+#define NIL			((void*)0)
+
 typedef unsigned char	byte;
 typedef unsigned short	word;
 typedef unsigned int	dword; // It was unsigned long before but in linux longs have 8 bytes. (64 bit stuff?)

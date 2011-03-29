@@ -176,6 +176,7 @@ private:
 	mfunc	mobjfnc;
 };
 
+
 template <class T>
 class event
 {
@@ -209,7 +210,15 @@ public:
 		return *this;
 	}
 
-	void call()
+	void callSeq()
+	{
+		for (int i=0;i<HandlerCount;i++)
+		{
+			Handlers[i]-call();
+		}
+	}
+
+	inline void call()
 	{
 		int i = HandlerCount;
 		while(i--)
@@ -219,7 +228,7 @@ public:
 	}
 
 	template <class AT1>
-	void call(AT1 prm1)
+	inline void call(AT1 prm1)
 	{
 		int i = HandlerCount;
 		while(i--)
@@ -229,7 +238,7 @@ public:
 	}
 
 	template <class AT1,class AT2>
-	void call(AT1 prm1,AT2 prm2)
+	inline void call(AT1 prm1,AT2 prm2)
 	{
 		int i = HandlerCount;
 		while(i--)
@@ -239,7 +248,7 @@ public:
 	}
 
 	template <class AT1,class AT2,class AT3>
-	void call(AT1 prm1,AT2 prm2, AT3 prm3)
+	inline void call(AT1 prm1,AT2 prm2, AT3 prm3)
 	{
 		int i = HandlerCount;
 		while(i--)
@@ -248,6 +257,88 @@ public:
 		}
 	}
 };
+
+/**
+* Only difference from event is keeps functions sequentially and calls them sequentially
+
+template<class T>
+class functionlist
+{
+public:
+	T* Handlers[8];
+	int HandlerCount;
+
+	functionlist()
+	{
+		HandlerCount = 0;
+	}
+
+
+	functionlist& operator += (T* handler)
+	{
+		Handlers[HandlerCount++] = handler;
+		return *this;
+	}
+
+	functionlist& operator -= (T* handler)
+	{
+		int f = 0;
+		for (int i=0;i<HandlerCount;i++)
+		{
+			if (Handlers[i] == handler)
+			{
+				f = i;
+				break;
+			}
+		}
+
+		
+
+		for (int i=f;i<HandlerCount;i++)
+		{
+			Handlers[i] = Handlers[i+1];
+		}
+
+		HandlerCount--;
+
+		
+		return *this;
+	}
+
+	void call()
+	{
+		for (int i=0;i<HandlerCount;i++)
+		{
+			Handlers[i]-call();
+		}
+	}
+	template <class AT1>
+	inline void call(AT1 prm1)
+	{
+		for (int i=0;i<HandlerCount;i++)
+		{
+			Handlers[i]-call(prm1);
+		}
+	}
+
+	template <class AT1,class AT2>
+	inline void call(AT1 prm1,AT2 prm2)
+	{
+		for (int i=0;i<HandlerCount;i++)
+		{
+			Handlers[i]-call(prm1,prm2);
+		}
+	}
+
+	template <class AT1,class AT2,class AT3>
+	inline void call(AT1 prm1,AT2 prm2, AT3 prm3)
+	{
+		for (int i=0;i<HandlerCount;i++)
+		{
+			Handlers[i]-call(prm1,prm2,prm3);
+		}
+	}
+};*/
 
 /*template <class R, R (*FNC)() >
 delegate0<R>* GetHandler( FNC funcaddr )

@@ -5,7 +5,7 @@
 #define MQUATERNION_H
 
 #include "raisetypes.h"
-#include "mvector.h"
+#include "mvector3.h"
 
 // a quaternion class
 // created by mixing http://www.3dkingdoms.com/weekly/quat.h

@@ -1,10 +1,10 @@
-#ifndef MVECTOR_H
-#define MVECTOR_H
+#ifndef MVECTOR3_H
+#define MVECTOR3_H
 
 #include "raisetypes.h"
 #include <math.h>
 
-// Faster one with assembly SSE or MMX can be implemented.
+// TODO: Faster one with assembly SSE or MMX can be implemented.
 
 template <class T>
 class RDLL MVector3
@@ -35,14 +35,14 @@ public:
 		z = z_;
 	}
 
-	void set(T x_, T y_, T z_)
+	inline void set(T x_, T y_, T z_)
 	{
 		x = x_;
 		y = y_;
 		z = z_;
 	}
 
-	void set(T* k)
+	inline void set(T* k)
 	{
 		x = k[0];
 		y = k[1];

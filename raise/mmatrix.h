@@ -2,6 +2,8 @@
 #define	MMATRIX_H
 
 #include "raisetypes.h"
+#include "mvector3.h"
+#include "tmemorydriver.h"
 
 class MMatrix4x4
 {
@@ -30,20 +32,49 @@ public:
 		_11 = _22 = _33 = _44 = 1.0f;
 	}
 
+	/**
+	* Changes translation values of matrix.
+	* May need to Identity() first, if it was dirty.
+	*/
 	inline void Translate(const vec3& value)
 	{
-		Identity();
 		_41 = value.x;
 		_42 = value.y;
 		_43 = value.z;
 	}
 
+
+	/**
+	* Changes translation values of matrix.
+	* May need to Identity() first, if it was dirty.
+	*/
 	inline void Translate(float x,float y,float z)
 	{
-		Identity();
 		_41 = x;
 		_42 = y;
 		_43 = z;
+	}
+
+	/**
+	* Changes scale values of matrix.
+	* May need to Identity() first, if it was dirty.
+	*/
+	inline void Scale(float x, float y, float z)
+	{
+		_11 = x;
+		_22 = y;
+		_33 = z;
+	}
+
+	/**
+	* Changes scale values of matrix.
+	* May need to Identity() first, if it was dirty.
+	*/
+	inline void Scale(const vec3& value)
+	{
+		_11 = value.x;
+		_22 = value.y;
+		_33 = value.z;
 	}
 };
 

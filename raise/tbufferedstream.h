@@ -25,9 +25,16 @@ public:
 		return VBuffer.GetVirtualIndex();
 	}
 
+	/**
+	* Closes the stream and commits suicide.
+	*/
 	void Close();
 	void Flush();
 	int Read(void* buffer,int size,int count);
+
+	/**
+	* Trys to read a byte, throws exception if end of stream.
+	*/
 	int ReadByte();
 	void Seek(dword offset,SeekOrigin origin);
 	void Write(void* buffer,int size,int count);

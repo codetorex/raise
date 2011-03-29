@@ -105,9 +105,21 @@ int TFormatElementGroup::CalculateBitsPerItem()
 	return result;
 }
 
-void TFlexibleBuffer::Allocate( int _newCapacity )
+TBufferFormatConverter* TFormatElementGroup::GetConverter( TBufferFormat* TargetFormat )
 {
-	if (_newCapacity < Capacity)
+	for(dword i=0;i<Converters.Count;i++)
+	{
+		if (Converters.Item[i]->DestinationFormat == TargetFormat)
+		{
+			return Converters.Item[i];
+		}
+	}
+
+	return 0;
+}
+void TFlexibleBuffer::Allocate( int _newItemCapacity )
+{
+	if (_newItemCapacity < Capacity)
 	{
 		Indicator = Buffer;
 		Used = 0;
@@ -119,35 +131,38 @@ void TFlexibleBuffer::Allocate( int _newCapacity )
 		Free();
 	}
 
-	if (_newCapacity == 0)
+	if (_newItemCapacity == 0)
 	{
 		return;
 	}
 
-	Capacity = _newCapacity;
-	Buffer = new byte [_newCapacity];
+	Capacity = _newItemCapacity;
+	CapacityByte = _newItemCapacity * BufferFormat->BytesPerItem;
+	Buffer = new byte [CapacityByte];
 	Used = 0;
 }
 
-void TFlexibleBuffer::Grow( int _newCapacity )
+void TFlexibleBuffer::Grow( int _newItemCapacity )
 {
-	if (Capacity > _newCapacity)
+	if (Capacity > _newItemCapacity)
 	{
 		Indicator = Buffer;
 		Used = 0;
 		return;
 	}
 	byte* OldBuffer = Buffer;
-	Buffer = new byte [_newCapacity];
-	memcpy(Buffer,OldBuffer,Used);
+	CapacityByte = _newItemCapacity * BufferFormat->BytesPerItem;
+	Buffer = new byte [CapacityByte];
+
+	MemoryDriver::Copy(Buffer,OldBuffer,Used * BufferFormat->BytesPerItem);
 	Indicator = Buffer + (Indicator - OldBuffer);
-	Capacity = _newCapacity;
+	Capacity = _newItemCapacity;
 	delete [] OldBuffer;
 }
 
-void TFlexibleBuffer::Initialize( TBufferFormat* _format /*= 0*/,int _capacity /*= 0*/ )
+void TFlexibleBuffer::Initialize( TBufferFormat* _format /*= 0*/,int _itemCapacity /*= 0*/ )
 {
-	Capacity = _capacity;
+	Capacity = _itemCapacity;
 	Used = 0;
 	BufferFormat = _format;
 	Buffer = 0;

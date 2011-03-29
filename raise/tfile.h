@@ -172,7 +172,7 @@ public:
 			if (kf!= NULL)
 			{
 				kf->Close();
-				delete kf;
+				// delete kf; remains of old system. currently close already commits suicide.
 				return true;
 			}
 			return false;

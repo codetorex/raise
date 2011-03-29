@@ -7,4 +7,3 @@ TString8  CrLf8		("\x0d\x0a");
 
 str8 str8::Empty = "";
 str16 str16::Empty = L"";
-

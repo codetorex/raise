@@ -2,7 +2,7 @@
 #define MRAY_H
 
 #include "raisetypes.h"
-#include "mvector.h"
+#include "mvector3.h"
 
 class MRay
 {

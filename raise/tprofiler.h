@@ -2,7 +2,7 @@
 #define TPROFILER_H
 
 #include "m64bit.h"
-#include "ttiming.h"
+#include "ttimedriver.h"
 
 class TProfiler
 {
@@ -15,12 +15,12 @@ public:
 
 	inline void BeginProfiling()
 	{
-		tickStart = TickCount();
+		tickStart = TTimeDriver::TickCount();
 	}
 
 	inline void EndProfiling()
 	{
-		tickDelta = TickCount() - tickStart;
+		tickDelta = TTimeDriver::TickCount() - tickStart;
 	}
 
 	inline void BeginProfiling(dword callCount)

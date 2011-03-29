@@ -1,7 +1,7 @@
 #include "stdafx.h"
 #include "tbitmap.h"
 
-class TBitmapConverterBGRtoRGB: public TBufferFormatConverter
+class TBitmapConverterBGRtoRGB: public TBufferFormatGenericConverter
 {
 public:
 	TBitmapConverterBGRtoRGB()
@@ -10,20 +10,39 @@ public:
 		DestinationFormat = TBitmapFormats::fRGB;
 	}
 
-	void Convert(TFlexibleBuffer* srcBuffer)
+	void DoConversion(byte* src, byte* dst,int itemCount)
 	{
-		TBitmap* bmp = (TBitmap*)srcBuffer;
-		byte* src = srcBuffer->Buffer;
-		int curpixel = bmp->pixels;
-		byte tmp;
-		while(curpixel--)
+		while(itemCount--)
 		{
-			tmp = *src;
-			src[0] = src[2];
-			src[2] = tmp;
+			byte tmp = src[0];
+			dst[0] = src[2];
+			dst[1] = src[1];
+			dst[2] = tmp;
+			dst += 3;
 			src += 3;
 		}
-		srcBuffer->BufferFormat = DestinationFormat;
+	}
+};
+
+class TBitmapConverterARGBtoBGR: public TBufferFormatGenericConverter
+{
+public:
+	TBitmapConverterARGBtoBGR()
+	{
+		SourceFormat = TBitmapFormats::fARGB;
+		DestinationFormat = TBitmapFormats::fBGR;
+	}
+
+	void DoConversion(byte* src, byte* dst,int pixelCount)
+	{
+		while(pixelCount--)
+		{
+			dst[0] = src[0];
+			dst[1] = src[1];
+			dst[2] = src[2];
+			src += 4;
+			dst += 3;
+		}
 	}
 };
 
@@ -31,4 +50,13 @@ void TBitmapFormats::CreateDefaultConverters()
 {
 	TBitmapConverterBGRtoRGB* BGRtoRGB = new TBitmapConverterBGRtoRGB();
 	TBitmapFormats::fBGR->Converters.Add(BGRtoRGB);
+
+	// use same converter for BGR to RGB conversion
+	TBitmapConverterBGRtoRGB* RGBtoBGR = new TBitmapConverterBGRtoRGB(); 
+	RGBtoBGR->SourceFormat = TBitmapFormats::fRGB;
+	RGBtoBGR->SourceFormat = TBitmapFormats::fBGR;
+	TBitmapFormats::fRGB->Converters.Add(RGBtoBGR);
+
+	TBitmapConverterARGBtoBGR* ARGBtoBGR = new TBitmapConverterARGBtoBGR();
+	TBitmapFormats::fARGB->Converters.Add(ARGBtoBGR);
 }

@@ -118,6 +118,39 @@ public:
 };
 
 
+class TColor32ARGB
+{
+public:
+	union
+	{
+		dword color;
+		byte bclr[4];
+
+		struct
+		{
+			byte a;
+			byte r;
+			byte g;
+			byte b;
+		};
+	};
+
+	inline TColor32ARGB()
+	{
+		color = 0x000000FF;
+	}
+
+	inline TColor32ARGB( byte _r, byte _g, byte _b, byte _a)
+	{
+		color = (((byte)(_b)|((word)((byte)(_g))<<8))|(((dword)(byte)(_r))<<16)|(((dword)(byte)(_a))<<24));
+	}
+
+	inline TColor32ARGB(byte _r, byte _g, byte _b)
+	{
+		color = (((byte)(_b)|((word)((byte)(_g))<<8))|(((dword)(byte)(_r))<<16)|(((dword)(byte)(0xFF))<<24));
+	}
+};
+
 /**
 * 32 bit color class.
 */
@@ -165,6 +198,16 @@ public:
 		b = value.b;
 	}
 
+	inline void Set(byte _r, byte _g, byte _b, byte _a)
+	{
+		color = (((byte)(_r)|((word)((byte)(_g))<<8))|(((dword)(byte)(_b))<<16)|(((dword)(byte)(_a))<<24));
+	}
+
+	inline void Set(byte _r, byte _g, byte _b)
+	{
+		color = (((byte)(_r)|((word)((byte)(_g))<<8))|(((dword)(byte)(_b))<<16)|(((dword)(byte)(0xFF))<<24));
+	}
+
 	inline TColor32& operator = (const TColor32& value)
 	{
 		color = value.color;
@@ -194,7 +237,7 @@ public:
 
 	inline bool operator == (const TColor24& value)
 	{
-		if ( value.r== r && value.g == g && value.b == b ) // or diffrent implementation
+		if ( ((value.r - r) + (value.g - g) + (value.b - b)) == 0 ) // or different implementation
 		{
 			return true;
 		}
@@ -229,6 +272,24 @@ public:
 	{
 		TColor32 kp(caddb(value.r,r),caddb(value.g,g),caddb(value.b,b),a);
 		return kp;
+	}
+
+	inline operator dword (void) const
+	{
+		return color;
+	}
+
+	inline operator TColor32ARGB (void) const
+	{
+		TColor32ARGB r;
+		r.color = GetARGB();
+		return r;
+	}
+
+	inline dword GetARGB() const
+	{
+		dword res = (((byte)(b)|((word)((byte)(g))<<8))|(((dword)(byte)(r))<<16)|(((dword)(byte)(a))<<24));
+		return res;
 	}
 
 

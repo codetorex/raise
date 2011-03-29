@@ -93,11 +93,14 @@ public:
 		return result;
 	}
 
+	/**
+	* Closes base stream and commits suicide.
+	*/
 	void Close()
 	{
 		BufSource->Close();
-		delete BufSource;
 		BufSource = 0;
+		delete this;
 	}
 
 	//virtual void DiscardBufferedData() = 0;

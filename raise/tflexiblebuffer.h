@@ -48,6 +48,31 @@ public:
 };
 
 class TBufferFormatConverter;
+class TFormatElementGroup;
+class TFlexibleBuffer;
+
+typedef TFormatElementGroup TBufferFormat;
+
+/**
+* Will be interface of converter providers.
+*/
+class TBufferFormatConverter
+{
+public:
+	TBufferFormat* SourceFormat; // TODO: use reference here?
+	TBufferFormat* DestinationFormat;
+
+	/**
+	* In-place converting virtual function.
+	*/
+	virtual void Convert(TFlexibleBuffer* srcBuffer) = 0;
+
+	/**
+	* Uses new buffer for conversion result.
+	*/
+	virtual void Convert(TFlexibleBuffer* srcBuffer,TFlexibleBuffer* dstBuffer) = 0;
+};
+
 
 /**
 * Holds multiple element information and unites as a group or format definition.
@@ -100,24 +125,41 @@ public:
 		CreateElementList(_elements,elementNames);
 	}
 
+	
+	TBufferFormatConverter* GetConverter(TBufferFormat* TargetFormat);
+
+	inline bool HaveConverter(TBufferFormat* TargetFormat)
+	{
+		TBufferFormatConverter* conv = GetConverter(TargetFormat);
+		if (conv == 0)
+		{
+			return false;
+		}
+		return true;
+	}
+
+
+
 	int CalculateBitsPerItem();
+
+	inline int ByteCapacity(int ItemCount)
+	{
+		return ItemCount * BytesPerItem;
+	}
+
+	inline int ItemCapacity(int Capacity)
+	{
+		return Capacity / BytesPerItem;
+	}
+
+	inline byte* AllocateBuffer(int _itemcapacity)
+	{
+		return new byte [ ByteCapacity(_itemcapacity) ];
+	}
+
+	inline TFlexibleBuffer* CreateBuffer(int _itemCapacity);
 };
 
-typedef TFormatElementGroup TBufferFormat;
-
-class TFlexibleBuffer;
-
-/**
-* Will be interface of converter providers.
-*/
-class TBufferFormatConverter
-{
-public:
-	TBufferFormat* SourceFormat; // TODO: use reference here?
-	TBufferFormat* DestinationFormat;
-
-	virtual void Convert(TFlexibleBuffer* srcBuffer) = 0;
-};
 
 /**
 * Buffer that is flexible in format definition.
@@ -128,8 +170,9 @@ public:
 	byte* Buffer;		// Buffer start pointer
 	byte* Indicator;	// Current write pointer
 
-	int Capacity;		// Buffer capacity in bytes
-	int Used;			// Buffer usage in bytes
+	int Capacity;		// Buffer capacity in item count
+	int CapacityByte;	// Buffer capacity in bytes
+	int Used;			// Buffer usage in item count
 
 	TBufferFormat* BufferFormat;	// Format definition
 
@@ -138,17 +181,22 @@ public:
 		if (Buffer)
 		{
 			delete [] Buffer;
+			Buffer = 0;
 		}
-		Buffer = Indicator = 0;
+		Indicator = 0;
 		Capacity = Used = 0;
 	}
 
-	void Allocate(int _newCapacity);
+	void Allocate(int _newItemCapacity);
 
-	void Grow(int _newCapacity);
+	void Grow(int _newItemCapacity);
 
-	void Initialize(TBufferFormat* _format = 0,int _capacity = 0);
+	void Initialize(TBufferFormat* _format = 0,int _itemCapacity = 0);
 
+	inline byte* GetBufferEnd()
+	{
+		return (Buffer + CapacityByte);
+	}
 
 	TFlexibleBuffer()
 	{
@@ -157,7 +205,7 @@ public:
 
 	TFlexibleBuffer(TBufferFormat* _format,int _itemCapacity)
 	{
-		Initialize(_format,_itemCapacity * _format->BytesPerItem);
+		Initialize(_format,_itemCapacity);
 	}
 
 	TFlexibleBuffer(TBufferFormat* _format,byte* _buffer,int _bufferLength)
@@ -168,17 +216,89 @@ public:
 		BufferFormat = _format;
 	}
 
-	void ExchangeBuffer(byte* newBuffer, int newCap,int newUsed = 0)
+	~TFlexibleBuffer()
 	{
 		if (Buffer)
 		{
 			delete [] Buffer;
+			Buffer = 0;
+		}
+	}
+
+	inline int ItemCapacity()
+	{
+		return BufferFormat->ItemCapacity(Capacity);
+	}
+
+	void Nullify()
+	{
+		Buffer = 0;		// Buffer start pointer
+		Indicator = 0;	// Current write pointer
+
+		Capacity = 0;		// Buffer capacity in item count
+		CapacityByte = 0;	// Buffer capacity in bytes
+		Used = 0;			// Buffer usage in item count
+
+		BufferFormat = 0;	// Format definition
+	}
+
+	void UseBuffer(byte* newBuffer, int newItemCap,int newUsed = 0)
+	{
+		if (Buffer)
+		{
+			delete Buffer;
+			Buffer = 0;
 		}
 
 		Buffer = newBuffer;
 		Indicator = Buffer;
-		Capacity = newCap;
+		Capacity = newItemCap;
 		Used = newUsed;
+	}
+
+	void ExchangeBuffer(TFlexibleBuffer* excBuffer)
+	{
+		byte tmpMemory[512];
+		MemoryDriver::Copy(tmpMemory,excBuffer,sizeof(TFlexibleBuffer));
+		MemoryDriver::Copy(excBuffer,this,sizeof(TFlexibleBuffer));
+		MemoryDriver::Copy(this,tmpMemory,sizeof(TFlexibleBuffer));
+
+		/*TFlexibleBuffer tmp = *excBuffer;
+		*excBuffer = *this;
+		*this = tmp;*/
+	}
+
+	void ConvertCopy(TFlexibleBuffer* otherBuffer)
+	{
+		TBufferFormatConverter* Converter = BufferFormat->GetConverter(otherBuffer->BufferFormat);
+		if (Converter == 0)
+		{
+			throw Exception("No converter");
+		}
+
+		Converter->Convert(this,otherBuffer);
+	}
+
+	/**
+	* Creates a empty flexible buffer and copies self data, then converts it.
+	* @return 0 if no converter available, if available returns newly created buffer.
+	*/
+	TFlexibleBuffer* ConvertCopy(TBufferFormat* newFormat)
+	{
+		if (BufferFormat == newFormat)
+		{
+			throw Exception("No conversion needed. Is this bug?");
+		}
+
+		TBufferFormatConverter* Converter = BufferFormat->GetConverter(newFormat);
+		if (Converter == 0)
+		{
+			return 0;
+		}
+
+		TFlexibleBuffer* newBuffer = newFormat->CreateBuffer(Capacity);
+		Converter->Convert(this,newBuffer);
+		return newBuffer;
 	}
 
 	bool Convert(TBufferFormat* newFormat)
@@ -188,24 +308,16 @@ public:
 			return true;
 		}
 
-		if (BufferFormat->Converters.Count == 0)
+		TBufferFormatConverter* Converter = BufferFormat->GetConverter(newFormat);
+
+		if (Converter == 0)
 		{
 			throw Exception("Converter not found");
-			//return false;
 		}
 
-		for (dword i=0;i<BufferFormat->Converters.Count;i++)
-		{
-			TBufferFormatConverter* curConv = BufferFormat->Converters.Item[i];
-			if (curConv->DestinationFormat == newFormat)
-			{
-				curConv->Convert(this);
-				return true;
-			}
-		}
-
-		throw Exception("Converter not found");
-		// IMPLEMENT A GENERIC FORMAT EXCHANGING VIRTUAL MACHINE AND X86 COMPILER HERE
+		Converter->Convert(this);
+		return true;
+		// TODO: IMPLEMENT A GENERIC FORMAT EXCHANGING VIRTUAL MACHINE AND X86 COMPILER HERE
 	}
 
 	inline void AddFloat(float value)
@@ -239,6 +351,37 @@ public:
 	}
 };
 
+class TBufferFormatGenericConverter: public TBufferFormatConverter
+{
+public:
+
+	virtual void DoConversion(byte* src, byte* dst,int itemCount) = 0;
+
+	void Convert(TFlexibleBuffer* srcBuffer)
+	{
+		int itemCount = srcBuffer->Capacity;
+		TFlexibleBuffer* tmpBuffer = DestinationFormat->CreateBuffer(itemCount);
+
+		DoConversion(srcBuffer->Buffer,tmpBuffer->Buffer,itemCount);
+
+		srcBuffer->ExchangeBuffer(tmpBuffer);
+		delete tmpBuffer;
+	}
+
+	void Convert(TFlexibleBuffer* srcBuffer,TFlexibleBuffer* dstBuffer)
+	{
+		int itemCount = srcBuffer->Capacity;
+		dstBuffer->Initialize(DestinationFormat,itemCount);
+
+		DoConversion(srcBuffer->Buffer,dstBuffer->Buffer,itemCount);
+	}
+};
+
+
+inline TFlexibleBuffer* TFormatElementGroup::CreateBuffer(int _itemCapacity)
+{
+	return new TFlexibleBuffer(this, _itemCapacity );
+}
 
 
 #endif

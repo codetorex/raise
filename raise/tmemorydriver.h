@@ -22,6 +22,54 @@ public:
 		memcpy(dst,src,length);
 	}
 
+	/**
+	* Repeats a data in memory.
+	* @param dst destination memory
+	* @param src source memory
+	* @param length source length
+	* @param count how much times source repeated
+	* @return written bytes
+	*/
+	inline static int Repeat(void* dst, const void* src,int length, int count)
+	{
+		// TODO: maybe asm one can be written?
+		byte* ndst = (byte*)dst;
+		byte* nsrc = (byte*)src;
+		while(count--)
+		{
+			for (int i=0;i<length;i++)
+			{
+				ndst[i] = nsrc[i];
+			}
+			ndst += length;
+		}
+		return (int)(ndst - (byte*)dst);
+	}
+
+	/**
+	* Exchanges data between two buffers.
+	* @param dst destination
+	* @param src source
+	* @param length length of data to be exchanged
+	* @param returns 0 when successful
+	*/
+	inline static int Exchange(void* dst, void* src, int length)
+	{
+		byte tmp;
+		byte* row1 = (byte*)dst;
+		byte* row2 = (byte*)src;
+
+		while(length--)
+		{
+			tmp = *row1;
+			*row1 = *row2;
+			*row2 = tmp;
+			row1++;
+			row2++;
+		}
+		return length;
+	}
+
 	inline static int ComparePattern(const void* src, const void* dst, const void* pattern, int length)
 	{
 		while(length--)

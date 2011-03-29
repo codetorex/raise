@@ -68,9 +68,13 @@ public:
 		return ftell(FileHandle);
 	}
 
+	/**
+	* Closes the stream and commits suicide.
+	*/
 	inline void Close()
 	{
 		fclose(FileHandle);
+		delete this; // NOTE: this guy added later if problems occur when commiting sucide, revert back to old system which is deletes these stream objects by in caller functions.
 	}
 
 	inline void Flush()

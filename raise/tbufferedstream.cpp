@@ -26,7 +26,10 @@ void TBufferedStream::Flush()
 
 int TBufferedStream::Read( void* buffer,int size,int count )
 {
-	dword TotalSize = size * count;
+	return Source->Read(buffer,size,count);
+	// TODO: fix this.
+
+	/*dword TotalSize = size * count;
 
 	if (WriteBuffer) // Its uncommon to switch from writing to reading
 	{
@@ -36,7 +39,7 @@ int TBufferedStream::Read( void* buffer,int size,int count )
 
 	dword RemainingSize = VBuffer.GetAvailable(); // data length in buffer
 
-	if (RemainingSize > 0 && VBuffer.Length > 0)
+	if (RemainingSize > 0 || VBuffer.Length > 0)
 	{
 		if (RemainingSize >= TotalSize) // if our data is bigger than requested
 		{
@@ -74,7 +77,7 @@ int TBufferedStream::Read( void* buffer,int size,int count )
 	}
 
 	VBuffer.GetBytes((byte*)buffer,TotalSize);
-	return TotalSize;
+	return TotalSize;*/
 }
 
 void TBufferedStream::Write( void* buffer,int size,int count )
@@ -105,7 +108,16 @@ void TBufferedStream::Write( void* buffer,int size,int count )
 
 int TBufferedStream::ReadByte()
 {
-	assert( VBuffer.Index <= VBuffer.Capacity );
+	byte r;
+	int sz = Read(&r,1,1);
+	if (sz == 0)
+	{
+		return -1;
+	}
+	return r;
+	// TODO: fix this
+
+	/*assert( VBuffer.Index <= VBuffer.Capacity );
 
 	if (VBuffer.Index == VBuffer.Capacity)
 	{
@@ -122,16 +134,16 @@ int TBufferedStream::ReadByte()
 		}
 		else
 		{
-			return -1;
+			throw Exception("End of stream");
 		}
 	}
 
 	if (VBuffer.Index + VBuffer.VirtualStart == VBuffer.Length)
 	{
-		return -1; // end of stream
+		throw Exception("End of stream");
 	}
 
-	return VBuffer.GetByte();
+	return VBuffer.GetByte();*/
 }
 
 void TBufferedStream::Seek( dword offset,SeekOrigin origin )
@@ -180,14 +192,19 @@ void TBufferedStream::Close()
 	}
 
 	Source->Close();
+	Source = 0;
+	delete this;
 }
 
 int TBufferedStream::Peek()
 {
 	int r = ReadByte();
-	if (r != -1)
+	Source->Seek( Source->Position() -1 , sBegin);
+	// TODO: fix this shit.
+
+	/*if (r != -1)
 	{
-		VBuffer.Advance(-1);
-	}
+	VBuffer.Advance(-1);
+	}*/
 	return r;
 }

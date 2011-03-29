@@ -59,12 +59,6 @@
     <ClInclude Include="m64bit.h">
       <Filter>Source Files\Mathematics</Filter>
     </ClInclude>
-    <ClInclude Include="ttiming.h">
-      <Filter>Source Files\System</Filter>
-    </ClInclude>
-    <ClInclude Include="mvector.h">
-      <Filter>Source Files\Mathematics</Filter>
-    </ClInclude>
     <ClInclude Include="tstream.h">
       <Filter>Source Files\IO</Filter>
     </ClInclude>
@@ -194,6 +188,39 @@
     <ClInclude Include="tencoding.h">
       <Filter>Source Files\Text</Filter>
     </ClInclude>
+    <ClInclude Include="ttimedriver.h">
+      <Filter>Source Files\System</Filter>
+    </ClInclude>
+    <ClInclude Include="tpackedrectangle.h">
+      <Filter>Source Files\Graphics</Filter>
+    </ClInclude>
+    <ClInclude Include="mvector2.h">
+      <Filter>Source Files\Mathematics</Filter>
+    </ClInclude>
+    <ClInclude Include="mvector3.h">
+      <Filter>Source Files\Mathematics</Filter>
+    </ClInclude>
+    <ClInclude Include="tiniparser.h">
+      <Filter>Source Files\IO</Filter>
+    </ClInclude>
+    <ClInclude Include="tbinaryreader.h">
+      <Filter>Source Files\IO</Filter>
+    </ClInclude>
+    <ClInclude Include="mmathdriver.h">
+      <Filter>Source Files\Mathematics</Filter>
+    </ClInclude>
+    <ClInclude Include="tregion.h">
+      <Filter>Source Files\Graphics</Filter>
+    </ClInclude>
+    <ClInclude Include="trange.h">
+      <Filter>Source Files\Graphics</Filter>
+    </ClInclude>
+    <ClInclude Include="tposition.h">
+      <Filter>Source Files\Graphics</Filter>
+    </ClInclude>
+    <ClInclude Include="trectangle.h">
+      <Filter>Source Files\Graphics</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">
@@ -243,6 +270,21 @@
     </ClCompile>
     <ClCompile Include="tencoding.cpp">
       <Filter>Source Files\Text</Filter>
+    </ClCompile>
+    <ClCompile Include="ttimedriver.cpp">
+      <Filter>Source Files\System</Filter>
+    </ClCompile>
+    <ClCompile Include="tpackedrectangle.cpp">
+      <Filter>Source Files\Graphics</Filter>
+    </ClCompile>
+    <ClCompile Include="tiniparser.cpp">
+      <Filter>Source Files\IO</Filter>
+    </ClCompile>
+    <ClCompile Include="tbitmaptga.cpp">
+      <Filter>Source Files\Graphics</Filter>
+    </ClCompile>
+    <ClCompile Include="tbitmapbmp.cpp">
+      <Filter>Source Files\Graphics</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

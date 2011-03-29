@@ -29,8 +29,6 @@ template <class T>
 class RDLL TString
 {
 public:
-	typedef TString<T> strType;
-
 	T*		Chars;
 	int		Length;
 	int		Capacity;
@@ -88,7 +86,7 @@ public:
 		StringDriver::Set(Chars,chr,_capacity);
 	}
 
-	TString( const strType& othr) // copy constructor
+	TString( const TString<T>& othr) // copy constructor
 	{
 		Chars = 0;
 		Capacity = 0;
@@ -120,12 +118,23 @@ public:
 		if (Chars) { StringDriver::Upper(Chars); }
 	}
 	
-	int IndexOf(T* value)
+	/**
+	* Finds a string in string.
+	* @param value string to search.
+	* @return Index of found string. -1 when not found.
+	*/
+	inline int IndexOf(T* value)
 	{
 		return IndexOf(value,0);
 	}
 
-	int IndexOf(T* value, int startIndex)
+	/**
+	* Finds a string in string from starting a startindex.
+	* @param value string to search.
+	* @param startIndex start point.
+	* @return Index of found string. -1 when not found.
+	*/
+	inline int IndexOf(T* value, int startIndex)
 	{
 		T* kp = StringDriver::Find(Chars+startIndex,value);
 		if (kp > 0)
@@ -138,6 +147,13 @@ public:
 		}
 	}
 
+	/**
+	* Finds a string in string from between start index and given count of characters.
+	* @param value string to search.
+	* @param startIndex start point.
+	* @param count search length.
+	* @return Index of found string. -1 when not found.
+	*/
 	int IndexOf(T* value, int startIndex,int count)
 	{
 		T temp = Chars[startIndex+count];
@@ -147,22 +163,21 @@ public:
 		return k;
 	}
 
-	inline bool StartsWith(const strType& value, int startIndex = 0) const
+	inline bool StartsWith(const TString<T>& value, int startIndex = 0) const
 	{
 		return ( StringDriver::Compare(Chars+startIndex,value.Chars,value.Length) == 0 );
 	}
 
-	bool EndsWith(const strType& value) const
+	inline bool EndsWith(const TString<T>& value) const
 	{
 		if (Length < value.Length)
 		{
 			return false;
 		}
-
 		return (StringDriver::Compare((Chars+Length)-value.Length,value.Chars,value.Length) == 0);
 	}
 
-	strType Substring (int startIndex, int lengt) const 
+	TString<T> Substring (int startIndex, int lengt) const
 	{
 		if (startIndex + lengt > Length)
 		{
@@ -174,7 +189,7 @@ public:
 			return Empty;
 		}
 
-		strType nstring(lengt);
+		TString<T> nstring(lengt);
 		nstring.Allocate(lengt);
 		StringDriver::MemoryCopy(nstring.Chars,Chars+startIndex,lengt);
 		nstring.Chars[lengt] = 0;
@@ -193,9 +208,9 @@ public:
 		return Chars[Length-1];
 	}
 
-	TArray<strType*> Split(T* seprator,bool removeEmpty = false)
+	TArray<TString<T>*> Split(T* seprator,bool removeEmpty = false)
 	{
-		TArray<strType*> result; //= new TArray<strType*>();
+		TArray<TString<T>*> result; //= new TArray<TString<T>*>();
 
 		int sepLength = StringDriver::Length(seprator);
 		if (sepLength == 0)
@@ -218,7 +233,7 @@ public:
 					{
 						break;
 					}
-					strType* str = new strType();
+					TString<T>* str = new TString<T>();
 					*str = Substring(lastSeprationStart,seprationLength);
 					result.Add(str);
 					lastSeprationStart = i + 1;
@@ -228,7 +243,7 @@ public:
 
 		if (lastSeprationStart != Length)
 		{
-			strType* str = new strType();
+			TString<T>* str = new TString<T>();
 			*str = Substring(lastSeprationStart,Length-lastSeprationStart);
 			result.Add(str);
 		}
@@ -236,23 +251,23 @@ public:
 		return result;
 	}
 
-	TArray<strType>* Split(TArray<strType>* seprator, bool removeEmpty = false)
+	TArray<TString<T>>* Split(TArray<TString<T>>* seprator, bool removeEmpty = false)
 	{
 		throw "Not Implemented";
 	}
 
-	inline strType Substring ( int startIndex ) const
+	inline TString<T> Substring ( int startIndex ) const
 	{
 		return Substring(startIndex,Length - startIndex);
 	}
 
-	inline strType& operator = (T* value)
+	inline TString<T>& operator = (T* value)
 	{
 		Copy(value);
 		return *this;
 	}
 
-	strType& operator = (const strType& value)
+	TString<T>& operator = (const TString<T>& value)
 	{
 		if (value.Length == 0)
 		{
@@ -268,7 +283,7 @@ public:
 	}
 
 	template <class K>
-	strType& operator = (const TString<K>& value)
+	TString<T>& operator = (const TString<K>& value)
 	{
 		if (value.Length == 0)
 		{
@@ -283,53 +298,53 @@ public:
 		return *this;
 	}
 
-	strType& operator + (T* value)
+	TString<T>& operator + (T* value)
 	{
 		int alen = StringDriver::Length(value);
-		strType* nstring = new strType(alen+Length);
+		TString<T>* nstring = new TString<T>(alen+Length);
 		nstring->Append(Chars,Length);
 		nstring->Append(value,alen);
 		return *nstring;
 	}
 
-	strType& operator + (strType& value)
+	TString<T>& operator + (TString<T>& value)
 	{
-		strType* nstring = new strType(value.Length+Length);
+		TString<T>* nstring = new TString<T>(value.Length+Length);
 		nstring->Append(Chars,Length);
 		nstring->Append(value.Chars,value.Length);
 		return *nstring;
 	}
 	
 	template <class K>
-	strType& operator + (TString<K>& value)
+	TString<T>& operator + (TString<K>& value)
 	{
-		strType* nstring = new strType(value.Length+Length);
+		TString<T>* nstring = new TString<T>(value.Length+Length);
 		nstring->Append(Chars,Length);
 		StringDriver::ConvertCopy(Chars+Length,value.Chars,value.Length+1);
 		return *nstring;
 	}
 
-	strType& operator += (T value)
+	inline TString<T>& operator += (T value)
 	{
 		Append(&value,1);
 		return *this;
 	}
 	
-	strType& operator += (T* value)
+	inline TString<T>& operator += (T* value)
 	{
 		int alen = StringDriver::Length(value);
 		Append(value,alen);
 		return *this;
 	}
 
-	strType& operator += (const strType& value)
+	inline TString<T>& operator += (const TString<T>& value)
 	{
 		Append(value.Chars,value.Length);
 		return *this;
 	}
 
 	template <class K>
-	strType& operator += (const TString<K>& value)
+	TString<T>& operator += (const TString<K>& value)
 	{
 		if (value.Length == 0) return *this;
 		EnsureCapacity(Length+value.Length);
@@ -338,7 +353,7 @@ public:
 		return *this;
 	}
 
-	strType& operator += (int value)
+	TString<T>& operator += (int value)
 	{
 		T temp[32];
 		StringDriver::ConvertValue(temp,32,value);
@@ -346,7 +361,7 @@ public:
 		return *this;
 	}
 
-	strType& operator += (unsigned long value)
+	TString<T>& operator += (unsigned long value)
 	{
 		T temp[32];
 		StringDriver::ConvertValue(temp,32,value);
@@ -354,7 +369,7 @@ public:
 		return *this;
 	}
 
-	strType& operator += (float value)
+	TString<T>& operator += (float value)
 	{
 		T temp[32];
 		StringDriver::ConvertValue(temp,32,value);
@@ -362,7 +377,7 @@ public:
 		return *this;
 	}
 
-	bool operator == (const strType& value) const
+	bool operator == (const TString<T>& value) const
 	{
 		return (StringDriver::Compare(Chars,value.Chars) == 0);
 	}
@@ -372,27 +387,36 @@ public:
 		return (StringDriver::Compare(Chars,value) == 0);
 	}
 
-	void Clear()
+	inline void Clear()
 	{
 		StringDriver::Set(Chars,0,Capacity);
 		Length = 0;
 	}
 
 
-	void Trim(T* trimChars /* = 0 */)
+	inline void Trim(T* trimChars = 0)
 	{
+		if (Length == 0)
+		{
+			return;
+		}
 		TrimStart(trimChars);
 		TrimEnd(trimChars);
 	}
 
 	void TrimStart(T* trimChars = 0)
 	{
+		if (Length == 0)
+		{
+			return;
+		}
+
 		T k;
 		int clen = Length;
 
 		if (trimChars == 0)
 		{
-			trimChars = StringDriver::GetWhitespaces(Chars);
+			trimChars = StringDriver::GetWhitespaces(trimChars);
 		}
 
 		bool contn;
@@ -441,12 +465,17 @@ public:
 
 	void TrimEnd(T* trimChars = 0)
 	{
+		if (Length == 0)
+		{
+			return;
+		}
+
 		T k;
 		int clen = -1;
 
 		if (trimChars == 0)
 		{
-			trimChars = StringDriver::GetWhitespaces(Chars);
+			trimChars = StringDriver::GetWhitespaces(trimChars);
 		}
 
 		bool contn;
@@ -542,7 +571,64 @@ public:
 		StringDriver::MemoryCopy(Chars+padlength,Chars,Length);
 	}
 
-	static strType Format(T* format,...)
+	inline int ParseInt() const
+	{
+		int r;
+		StringDriver::ParseValue(Chars,r);
+		return r;
+	}
+
+	/**
+	* You can parse Ints that have alphanumeric characters inside it
+	* This function will stop when encounters with an alphanumeric character
+	* and returns numericLength via parameter, if not NULL
+	* Good for parsing consecutive numbers...
+	*/
+	int ParseInt(int start,int* numLength = 0, bool skipBegin = true) const
+	{
+		int numl = 0;
+
+		if (skipBegin)
+		{
+			for (int i=start;i<Length;i++)
+			{
+				int r = Chars[i] - 48;
+				if (r >= 0 && r <= 9)
+				{
+					break;
+				}
+				else
+				{
+					start++;
+				}
+			}
+		}
+
+		T tmp[16];
+		for (int i=start;i<Length;i++)
+		{
+			int r = Chars[i] - 48;
+			if (r >= 0 && r <= 9)
+			{
+				tmp[numl++] = Chars[i];
+			}
+			else
+			{
+				break;
+			}
+		}
+		tmp[numl] = 0;
+
+		int result = 0;
+		StringDriver::ParseValue(tmp,result);
+		if (numLength != 0)
+		{
+			*numLength = numl;
+		}
+		return result;
+	}
+
+	static TString<T> Format(T* format,...)
 	{
 		T Temp[4096];
 
@@ -551,7 +637,7 @@ public:
 		StringDriver::Format(Temp,4096,format,ap);
 		va_end(ap);
 
-		strType nstring;
+		TString<T> nstring;
 		nstring = Temp;
 		
 		return nstring;
@@ -563,7 +649,7 @@ public:
 		return Chars;
 	}
 
-	static strType Empty;
+	static TString<T> Empty;
 
 	static inline dword GetHash(const TString<ch8>& value)
 	{
@@ -611,10 +697,10 @@ public:
 			return;
 			/*if (Capacity < newcapacity + 128) // su anki, istenenin 128 fazlasindan kucukse onu kullan
 			{
-				//memset(Chars,0,Capacity * sizeof(T)); //TODO: you can change this duude
-				StringDriver::Set(Chars,0,Capacity);
-				//Length = 0; // yeah
-				return; // Dont allocate new space if current one is not very big
+			//memset(Chars,0,Capacity * sizeof(T)); //TODO: you can change this duude
+			StringDriver::Set(Chars,0,Capacity);
+			//Length = 0; // yeah
+			return; // Dont allocate new space if current one is not very big
 			}*/
 		}
 
@@ -653,7 +739,7 @@ protected:
 		Length = 0;
 	}
 
-	inline void Use(T* newbuffer,int newcapacity,int newlength = -1)
+	void Use(T* newbuffer,int newcapacity,int newlength = -1)
 	{
 		if (Chars) // so we will not accidentally try to free CONST * s
 		{

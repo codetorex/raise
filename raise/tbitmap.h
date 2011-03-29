@@ -10,7 +10,8 @@
 #include "tbinary.h"
 #include "tbitstack.h"
 #include "tflexiblebuffer.h"
-
+#include "tcolor.h"
+#include "tregion.h"
 
 #ifndef LINUX
 #ifndef M64
@@ -145,11 +146,9 @@ public:
 /**
 * Initial bitmap class.
 */
-class RDLL TBitmap: public TFlexibleBuffer
+class RDLL TBitmap: public TFlexibleBuffer, public TRange
 {
 public:
-	int width;
-	int height;
 	int pixels; // width * height means total pixel count
 	int log2width; // log base 2 of width
 	dword flags;
@@ -166,14 +165,6 @@ public:
 	* @param _bpp bits per pixel ( for RGB use 24, for RGBA 32 )
 	*/
 	void create(int _width,int _height, TBufferFormat* _format);
-	
-	/**
-	* Convert current bitmap format to another.
-	* @param _format new bitmap format
-	*/
-	//void convert(TBufferFormat* _format); THIS FUNCTION WILL BE SUPPLIED BY FLEXIBLEBUFFER
-
-	//TODO: you can implement, copy convert, new convert, and copy funcs.
 
 	void release();
 
@@ -183,7 +174,7 @@ public:
 	*/
 	inline byte* getpixel(int x,int y)
 	{
-		return (Buffer + (BufferFormat->BytesPerItem*((y*width) + x)));
+		return (Buffer + (BufferFormat->BytesPerItem*((y*Width) + x)));
 	}
 
 	/**
@@ -219,7 +210,7 @@ public:
 	*/
 	inline byte* getpixel32(int x,int y)
 	{
-		return (Buffer + (MUL2((y*width) + x)) );
+		return (Buffer + (MUL2((y*Width) + x)) );
 	}
 
 	/**
@@ -266,7 +257,7 @@ public:
 	/**
 	* Generic clearing function.
 	*/
-	inline virtual void clear(byte* clr)
+	inline void clear(byte* clr)
 	{
 		byte* tbytes = Buffer;// temp byte ptr
 		int pc = pixels; // temp pixel count 
@@ -279,20 +270,50 @@ public:
 
 
 	// TOOLS Here
-	void drawline			(int x,int y,int x2,int y2,byte* pClr);
+	void DrawLine			(int x,int y,int x2,int y2,byte* pClr);
 	void wideline			(int x,int y,int x2,int y2,byte thick,byte* pClr);
 	void perp				(int x, int y, int x2, int y2, byte thick,byte* pClr);//perpendicular
 	void filltriangle		(int x1,int y1,int x2,int y2,int x3,int y3,byte* pClr);
 	void drawcircle			(int x,int y,int radius,byte* pClr);
 
-	void imagecopy			(TBitmap* src,int fx,int fy,int tx,int ty,int w,int h); // from x,y and to x,y then width,height.
-	void imagetile			(TBitmap* src,int fx,int fy,int fw,int fh,int tx,int ty,int tw,int th);
+	void DrawRectangle		(int x,int y,int _width,int _height,byte* pClr);
+
+	//void copy				(TBitmap* src,int fx,int fy,int tx,int ty,int w,int h); // from x,y and to x,y then width,height.
+	
+	void Copy				(TBitmap* src,int dstX,int dstY, int srcX = 0, int srcY = 0, int _width = -1,int _height = -1);
+	
+	inline void Copy		(TBitmap* src, TPosition* dstPos, TPosition* srcPos, TRange* size)
+	{
+		Copy(src,dstPos->X,dstPos->Y,srcPos->X,srcPos->Y,size->Width,size->Height);
+	}
+
+	void Copy				(TBitmap* src, TPosition* dstPos, TPosition* srcPos)
+	{
+		Copy(src,dstPos->X,dstPos->Y,srcPos->X,srcPos->Y,src->Width,src->Height);
+	}
+
+	void Copy				(TBitmap* src, TPosition* dstPos)
+	{
+		Copy(src,dstPos->X,dstPos->Y,0,0,src->Width,src->Height);
+	}
+
+	void Copy				(TBitmap* src)
+	{
+		Copy(src,0,0,0,0,src->Width,src->Height);
+	}
+	
+	void tile				(TBitmap* src,int fx,int fy,int fw,int fh,int tx,int ty,int tw,int th);
 	void blend				(TBitmap* dest,float tween = 0.5f);
 	void additive			(TBitmap* dest);
 
 	void resize				(int dwidth,int dheight);
-	void colorkey			(byte* clr,byte alpha = 0); // converts clr to alpha
-	void monoalpha			(); // converts monochrome version of image to alpha channel
+
+	/**
+	* Changes a color to alpha that specified.
+	* Warning this function changes internal format to ARGB.
+	*/
+	void ColorKey			(const TColor24& clr,byte alpha = 0); // converts clr to alpha
+	/*void monoalpha			(); // converts monochrome version of image to alpha channel
 
 
 	void matrixmul			(float m[],int mw,int mh,bool mabs = true);	// matrix multiplicion
@@ -308,7 +329,25 @@ public:
 	void cellular			(int pc,long sclr,int style,bool ast);
 	void perlinnoise		(float z,float scal=16.0f);
 
-	byte* getaverage		();
+	byte* getaverage		();*/
+
+	/**
+	* Flips image horizontal.
+	* NOTE: this function is not ready yet.
+	*/
+	void FlipHorizontal		();
+
+	/**
+	* Flips image vertically.
+	*/
+	void FlipVertical		();
+
+	inline TBitmap* ConvertCopyBitmap(TBufferFormat* newFormat)
+	{
+		TBitmap* newBitmap = new TBitmap(Width,Height,newFormat);
+		ConvertCopy(newBitmap);
+		return newBitmap;
+	}
 
 	// Load Save functions
 
@@ -321,6 +360,9 @@ public:
 	*/
 	void loadbmp(Stream* bmpstream,bool toRGB,bool closestream = true);
 	void savebmp(Stream* bmpstream,bool closestream = true);
+
+	void loadtga(Stream* tgastream,bool toRGB,bool closestream = true);
+	void savetga(Stream* tgastream,bool closestream = true);
 };
 
 #endif

@@ -156,6 +156,7 @@ public:
 
 /**
 * An hash map implementation. That can hash 4194304 elements.
+* Type is used for VALUE.
 */
 template <class T>
 class RDLL THashMap
@@ -164,20 +165,32 @@ public:
 	int totalValues;
 	TMapBranch<T> Root;
 
+	inline bool ContainsKey(const str8& key)
+	{
+		dword h = str8::GetHash(key);
+		TKeyValuePair<T>* r = Root.Get(h,key);
+		if (r == NULL)
+		{
+			return false;
+		}
+		return true;
+	}
+
 	inline TKeyValuePair<T>* Get(const str8& key)
 	{
 		dword h = str8::GetHash(key);
-		return Root.Get(h,key);
+		TKeyValuePair<T>* r = Root.Get(h,key);
+		return r;
 	}
 
 	inline T GetValue(const str8& key)
 	{
 		TKeyValuePair<T>* tkp = Get(key);
-		if (tkp!= NULL)
+		if (tkp == NULL)
 		{
-			return tkp->value;
+			throw Exception("Key not found");
 		}
-		return NULL;
+		return tkp->value;
 	}
 
 	inline void Add(str8& key,T value)

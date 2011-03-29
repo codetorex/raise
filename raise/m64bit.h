@@ -4,26 +4,29 @@
 #ifdef SYS64BIT
 
 #ifdef WIN32
-typedef __i64 qword
+typedef __i64 qword;
 #else
-typedef long long qword
+typedef long long qword;
 #endif
 
 
 #else
+
+// I heard it was supported in regual c++ too after c99...
+typedef long long qword;
 
 //TODO: test qword class.
 
 /**
 * Provides 64bit mathematics for 32bit systems.
 */
-class qword
+/*class qword
 {
 public:
 	dword low;
 	int high;
 
-	inline qword operator - (const qword other) const
+	qword operator - (const qword other) const
 	{
 		qword diff;
 
@@ -36,7 +39,7 @@ public:
 		return diff;
 	}
 
-	inline qword operator + (const qword other) const
+	qword operator + (const qword other) const
 	{
 		qword sum;
 
@@ -48,7 +51,12 @@ public:
 		
 		return sum;
 	}
-};
+
+	str8& ToString()
+	{
+
+	}
+};*/
 
 #endif
 

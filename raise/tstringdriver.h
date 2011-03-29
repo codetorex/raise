@@ -40,14 +40,25 @@ class StringDriver
 {
 public:
 
-	inline const ch16* GetWhitespaces(ch16* k = 0)
+	inline static ch16* GetWhitespaces(ch16* k = 0)
 	{
 		return L"\x20\x09\x0A\x0D\0x0B";
 	}
 
-	inline const ch8* GetWhitespaces(ch8* k = 0)
+	inline static ch8* GetWhitespaces(ch8* k = 0)
 	{
 		return "\x20\x09\x0A\x0D\0x0B";
+	}
+
+	inline static void ParseValue(ch8* src,int& value)
+	{
+		//Unformat(src,"%i",&value);
+		value = atoi(src);
+	}
+
+	inline static void ParseValue(ch16* src,int& value)
+	{
+		Unformat(src,L"%i",&value);
 	}
 
 	inline static void ConvertValue(ch16* dest,int destsize,int value)
@@ -70,12 +81,12 @@ public:
 		Format(dest,destsize,"%0.2f",value);
 	}
 
-	inline static void ConvertValue(ch16* dest,int destsize,unsigned long value)
+	inline static void ConvertValue(ch16* dest,int destsize,dword value)
 	{
 		Format(dest,destsize,L"%u",value);
 	}
 
-	inline static void ConvertValue(ch8* dest,int destsize,unsigned long value)
+	inline static void ConvertValue(ch8* dest,int destsize,dword value)
 	{
 		Format(dest,destsize,"%u",value);
 	}
@@ -88,6 +99,36 @@ public:
 	inline static void Format(ch8* dest,int destsize,const ch8* format, va_list ap)
 	{
 		vsprintf_s(dest,destsize,format,ap);
+	}
+
+	inline static void Unformat(const ch16* src, const ch16* format, va_list ap)
+	{
+		throw 0;
+		swscanf_s(src,format,ap);
+	}
+
+	inline static void Unformat(const ch8* src, const ch8* format, va_list ap)
+	{
+		throw 0;
+		sscanf_s(src,format,ap);
+	}
+	
+	inline static void Unformat(const ch16* src, const ch16* format, ...)
+	{
+		throw 0;
+		va_list ap;
+		va_start(ap,format);
+		Unformat(src,format,ap);
+		va_end(ap);
+	}
+
+	inline static void Unformat(const ch8* src, const ch8* format, ...)
+	{
+		throw 0;
+		va_list ap;
+		va_start(ap,format);
+		Unformat(src,format,ap);
+		va_end(ap);
 	}
 
 	inline static void Format(ch16* dest,int destsize,const ch16* format,...)

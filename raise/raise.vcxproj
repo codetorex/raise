@@ -83,15 +83,18 @@
   <ItemGroup>
     <ClInclude Include="m64bit.h" />
     <ClInclude Include="mfixed.h" />
+    <ClInclude Include="mmathdriver.h" />
     <ClInclude Include="mmatrix.h" />
     <ClInclude Include="mquaternion.h" />
     <ClInclude Include="mray.h" />
     <ClInclude Include="mtools.h" />
     <ClInclude Include="mtriangle.h" />
-    <ClInclude Include="mvector.h" />
+    <ClInclude Include="mvector3.h" />
+    <ClInclude Include="mvector2.h" />
     <ClInclude Include="raisetypes.h" />
     <ClInclude Include="tarray.h" />
     <ClInclude Include="tbinary.h" />
+    <ClInclude Include="tbinaryreader.h" />
     <ClInclude Include="tbitfield.h" />
     <ClInclude Include="tbitmap.h" />
     <ClInclude Include="tbitstack.h" />
@@ -107,14 +110,20 @@
     <ClInclude Include="tfilestream.h" />
     <ClInclude Include="tdirectory.h" />
     <ClInclude Include="thashmap.h" />
+    <ClInclude Include="tiniparser.h" />
     <ClInclude Include="tmemorydriver.h" />
     <ClInclude Include="tmemorystream.h" />
+    <ClInclude Include="tpackedrectangle.h" />
     <ClInclude Include="tpath.h" />
+    <ClInclude Include="tposition.h" />
     <ClInclude Include="tprocess.h" />
     <ClInclude Include="tprocessdebug.h" />
     <ClInclude Include="tprocessmodule.h" />
     <ClInclude Include="tprofiler.h" />
     <ClInclude Include="tqueue.h" />
+    <ClInclude Include="trange.h" />
+    <ClInclude Include="trectangle.h" />
+    <ClInclude Include="tregion.h" />
     <ClInclude Include="tstack.h" />
     <ClInclude Include="tstream.h" />
     <ClInclude Include="tstreamreader.h" />
@@ -130,8 +139,8 @@
     <ClInclude Include="ttextreader.h" />
     <ClInclude Include="ttextwriter.h" />
     <ClInclude Include="tthread.h" />
-    <ClInclude Include="ttiming.h" />
     <ClInclude Include="tcolor.h" />
+    <ClInclude Include="ttimedriver.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">
@@ -139,20 +148,25 @@
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Create</PrecompiledHeader>
     </ClCompile>
     <ClCompile Include="tbitmap.cpp" />
+    <ClCompile Include="tbitmapbmp.cpp" />
     <ClCompile Include="tbitmapconverters.cpp" />
     <ClCompile Include="tbitmapformats.cpp" />
+    <ClCompile Include="tbitmaptga.cpp" />
     <ClCompile Include="tbitset.cpp" />
     <ClCompile Include="tbufferedstream.cpp" />
     <ClCompile Include="tcolor.cpp" />
     <ClCompile Include="tencoding.cpp" />
     <ClCompile Include="tflexiblebuffer.cpp" />
+    <ClCompile Include="tiniparser.cpp" />
     <ClCompile Include="tmemory.cpp" />
+    <ClCompile Include="tpackedrectangle.cpp" />
     <ClCompile Include="tpath.cpp" />
     <ClCompile Include="tprocess.cpp" />
     <ClCompile Include="tprocessdebug.cpp" />
     <ClCompile Include="tprocessmodule.cpp" />
     <ClCompile Include="tstring.cpp" />
     <ClCompile Include="tthread.cpp" />
+    <ClCompile Include="ttimedriver.cpp" />
   </ItemGroup>
   <ItemGroup>
     <None Include="design.cd" />
