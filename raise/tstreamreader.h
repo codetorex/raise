@@ -2,44 +2,58 @@
 #define TSTREAMREADER_H
 
 #include "tbufferedstream.h"
+#include "tmemorystream.h"
 #include "ttextreader.h"
-#include "tfilestream.h"
+#include "tfile.h"
 
 
+
+template <class T>
 class TStreamReader: public TTextReader
 {
+private:
+	void LoadStream(TStream* stream,int bufferSize);
+
 public:
+	/// The base stream
 	TStream* BaseStream;
-	TBufferedStream* BufSource; // Buffered Source
 
-	bool EndOfStream;
+	/// The buffer source
+	T* BufSource;
 
+
+	/**
+	 * @brief Constructor with stream.
+	 * @param [in] stream The stream to be readed.
+	 * @param bufferSize Size of the buffer.
+	 */
 	TStreamReader(TStream* stream,int bufferSize = 8192)
 	{
-		BaseStream = stream;
-		BufSource = new TBufferedStream(stream,bufferSize);
-		EndOfStream = false;
+		LoadStream(stream,bufferSize);
 	}
 
+
+	/**
+	 * @brief Constructor with filename.
+	 * @param path Full pathname of the file.
+	 * @param bufferSize Size of the buffer.
+	 */
 	TStreamReader(const str8& path,int bufferSize = 8192) // open file
 	{
-		TStream* srcStream = TFileStream::Open(path,fm_Read);
-		BaseStream = srcStream;
-		BufSource = new TBufferedStream(srcStream,bufferSize);
-		EndOfStream = false;
+		LoadStream(File::OpenRead(path),bufferSize);
 	}
 
-	int Peek()
+	inline ch32 Peek()
 	{
-		return BufSource->Peek(); // TODO: This function should read as char.
+		return BufSource->PeekByte(); // TODO: This function should read as char.
 	}
 
-	int Read()
+	inline ch32 Read()
 	{
 		return BufSource->ReadByte(); // TODO: This function should read as char.
 	}
 
-	int Read(ch16* buffer,int count)
+	inline int Read(ch16* buffer,int count)
 	{
 		throw Exception("Not implemented");
 		return 0;
@@ -63,6 +77,10 @@ public:
 				if (d != 0x0D)
 				{
 					result += ((ch8)d);
+				}
+				else
+				{
+					break;
 				}
 			}
 			else
@@ -93,9 +111,32 @@ public:
 		return result;
 	}
 
+	str8 ReadInterrupted(const str8& interrupChars, const str8& ignoreChars, int& interrupt)
+	{
+		str8 readed(512);
+		int d = BufSource->ReadByte();
+		while(d > 0)
+		{
+			if (interrupChars.HaveChar(d))
+			{
+				interrupt = d;
+				return readed;
+			}
+			if (!ignoreChars.HaveChar(d))
+			{
+				readed += ((ch8)d);
+			}
+			d = BufSource->ReadByte();
+		}
+
+		EndOfStream = true;
+		interrupt = -1;
+		return readed;
+	}
+
 	/**
-	* Closes base stream and commits suicide.
-	*/
+	 * @brief Closes stream and commits suicide.
+	 */
 	void Close()
 	{
 		BufSource->Close();
@@ -106,6 +147,15 @@ public:
 	//virtual void DiscardBufferedData() = 0;
 };
 
+/**
+* Uses buffered stream and reads from real file with some buffer.
+*/
+typedef TStreamReader<TBufferedStream>	StreamReader;
+
+/**
+* Faster version. Which uses memory cached stream as source. Not recommended for big files. But what the hell...
+*/
+typedef TStreamReader<TMemoryStream>	CacheReader;
 
 #endif
 

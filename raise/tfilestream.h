@@ -33,7 +33,7 @@ public:
 		CurrentMode = fm_NotOpened;
 	}
 
-	static TFileStream* Open(const str8& path, FileMode mode)
+/*	static TFileStream* Open(const str8& path, FileMode mode)
 	{
 		FILE* FileHandle = fopen(path.Chars,FileModeConversion[mode]);
 		if (FileHandle == NULL)
@@ -42,6 +42,11 @@ public:
 		}
 		return new TFileStream(FileHandle,path,mode);
 	}
+
+	static TFileStream* OpenRead(const str8& path)
+	{
+
+	}*/
 
 	TFileStream(FILE* fHandle,const str8& path,FileMode mode)
 	{

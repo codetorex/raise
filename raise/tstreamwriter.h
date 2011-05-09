@@ -3,7 +3,7 @@
 
 #include "tbufferedstream.h"
 #include "ttextwriter.h"
-#include "tfilestream.h"
+#include "tfile.h"
 
 class TStreamWriter: public TTextWriter
 {
@@ -16,22 +16,22 @@ public:
 		BaseStream = stream;
 		BufSource = new TBufferedStream(stream,bufferSize);
 		NewLine = &CrLf8;
-		Encoding = TEncoding::ASCII;
+		Encoding = TEncodingInfo::ASCII;
 	}
 
 	TStreamWriter(const str8& path,int bufferSize = 8192) // open file
 	{
-		TStream* srcStream = TFileStream::Open(path,fm_Write);
+		TStream* srcStream = File::OpenWrite(path);
 		BaseStream = srcStream;
 		BufSource = new TBufferedStream(srcStream,bufferSize);
 		NewLine = &CrLf8;
-		Encoding = TEncoding::ASCII;
+		Encoding = TEncodingInfo::ASCII;
 	}
 
 	inline void Write(const str8& value)
 	{
 		// TODO: fix this shit with encoding converter
-		if (Encoding == TEncoding::ASCII || Encoding == TEncoding::UTF8)
+		if (Encoding == TEncodingInfo::ASCII || Encoding == TEncodingInfo::UTF8)
 		{
 			BufSource->Write(value.Chars,1,value.Length);
 		}
@@ -45,7 +45,7 @@ public:
 
 	void Write(const str16& value)
 	{
-		if (Encoding == TEncoding::Unicode)
+		if (Encoding == TEncodingInfo::Unicode)
 		{
 			BufSource->Write(value.Chars,2,value.Length);
 		}

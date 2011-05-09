@@ -7,17 +7,19 @@ TINIParser::TINIParser()
 {
 	BaseStream = 0;
 	TextStream = 0;
+	LowerCaseKeys = false;
 }
 
 TINIParser::TINIParser(TStream* readStream)
 {
+	LowerCaseKeys = false;
 	SetSource(readStream);
 }
 
 void TINIParser::SetSource( TStream* readStream )
 {
 	BaseStream = readStream;
-	TextStream = new TStreamReader(readStream);
+	TextStream = new StreamReader(readStream);
 }
 
 void TINIParser::Parse(bool closeStream)
@@ -35,6 +37,10 @@ void TINIParser::Parse(bool closeStream)
 			int lineEnd = currentLine.IndexOf("]");
 			TINIClass* newClass = new TINIClass( currentLine.Substring(1,lineEnd-1) );
 			CurrentClass = newClass;
+			if (LowerCaseKeys)
+			{
+				CurrentClass->Name.ToLower();
+			}
 			Classes.Add(CurrentClass->Name, CurrentClass);
 			continue;
 		}
@@ -52,6 +58,10 @@ void TINIParser::Parse(bool closeStream)
 		str8* value = new str8(currentLine.Substring(EqualityOperator+1,currentLine.Length-EqualityOperator-1));
 		value->Trim();
 
+		if (LowerCaseKeys)
+		{
+			keyName.ToLower();
+		}
 		CurrentClass->Variables.Add(keyName,value);
 	}
 

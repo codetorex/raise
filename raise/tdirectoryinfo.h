@@ -2,7 +2,7 @@
 #define TFOLDERINFO_H
 
 #include "tarray.h"
-#include "tfile.h"
+#include "tfileinfo.h"
 #include "tmemorydriver.h"
 
 class IDirectory;
@@ -31,13 +31,13 @@ public:
 
 #ifdef WIN32
 
-class TDirectory: public IDirectory
+class TDirectoryInfo: public IDirectory
 {
 public:
 	str8 OriginalPath;
 	str8 FullPath;
 
-	TDirectory(const str8& path)
+	TDirectoryInfo(const str8& path)
 	{
 		OriginalPath = path;
 		FullPath = TPath::GetFullPath(path);
@@ -47,12 +47,12 @@ public:
 	/**
 	* Creates all directories and subdirectories in the specified path.
 	*/
-	static TDirectory CreateDir(const str8& path)
+	static TDirectoryInfo CreateDir(const str8& path)
 	{
 		char tmp[512];
 		str8 tmpstr(tmp);
 		CreateDirSlient(path,tmpstr.Chars);
-		return TDirectory(tmpstr);
+		return TDirectoryInfo(tmpstr);
 	}
 
 	static void CreateDirSlient(const str8& path,char* output = 0)

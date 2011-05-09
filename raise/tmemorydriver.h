@@ -22,6 +22,47 @@ public:
 		memcpy(dst,src,length);
 	}
 
+#ifndef LINUX
+#ifndef M64
+	inline static void ShortCopy(void* _dst,void* _src,int _size)
+	{
+		_asm
+		{
+			mov esi,_src
+			mov edi,_dst
+			mov ecx,_size
+			rep movsb
+		}
+	}
+
+#else
+
+	inline static void ShortCopy(void* _dst,void* _src,int _size)
+	{
+		_asm
+		{
+			mov rsi,_src
+			mov rdi,_dst
+			mov rcx,_size
+			rep movsb
+		}
+	}
+#endif
+
+#else
+	inline static void ShortCopy(void* _dst,void* _src,int _size)
+	{
+		asm
+			(
+			"cld;"
+			"rep\n"
+			"movsb;"
+			:
+		: "S"(_src),"D"(_dst),"c"(_size)
+			);
+	}
+#endif
+
 	/**
 	* Repeats a data in memory.
 	* @param dst destination memory

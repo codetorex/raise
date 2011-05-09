@@ -1,7 +1,8 @@
 #include "stdafx.h"
 #include "tbitmap.h"
 
-
+TArray<TBitmapReader*> TBitmapReader::Readers;
+TArray<TBitmapWriter*> TBitmapWriter::Writers;
 
 
 /*static int fieldstart[] =
@@ -28,47 +29,47 @@ static int fieldlength[] =
 
 
 
-TBitmap::TBitmap(): TFlexibleBuffer()
+TBitmap::TBitmap(): TCompositeBuffer()
 {
 	Width = 0;
 	Height = 0;
-	pixels = 0;
-	log2width = 0;
+	PixelCount = 0;
+	LogWidth = 0;
 }
 
 TBitmap::TBitmap(int _width,int _height, TBufferFormat* _format)
 {
-	create(_width,_height,_format);
+	Create(_width,_height,_format);
 }
 
-void TBitmap::create(int _width,int _height, TBufferFormat* _format)
+void TBitmap::Create(int _width,int _height, TBufferFormat* _format)
 {
 
 	BufferFormat = _format;
-	flags = 0;
+	Flags = 0;
 
-	pixels = _width * _height;
+	PixelCount = _width * _height;
 
-	Allocate(pixels);
+	Allocate(PixelCount);
 
 	Width = _width;
 	Height = _height;
 
 	if (BufferFormat->BytesPerItem == 4)
-		flags |= O32BITALIGN;
+		Flags |= O32BITALIGN;
 
 	TBinary wbinary(Width);
 	if (wbinary.is2n())
 	{
-		flags |= O2NWIDTH;
-		log2width = wbinary.log2k();
+		Flags |= O2NWIDTH;
+		LogWidth = wbinary.log2k();
 	}
 }
 
-void TBitmap::release()
+void TBitmap::Release()
 {
 	Free();
-	Width = Height = pixels = log2width = 0;
+	Width = Height = PixelCount = LogWidth = 0;
 }
 
 void TBitmap::DrawLine(int x,int y,int x2,int y2,byte* pClr)
@@ -82,7 +83,7 @@ void TBitmap::DrawLine(int x,int y,int x2,int y2,byte* pClr)
 	dy <<= 1;                                                  // dy is now 2*dy
 	dx <<= 1;                                                  // dx is now 2*dx
 
-	setpixel(x,y,pClr);
+	SetPixel(x,y,pClr);
 	if (dx > dy) 
 	{
 		int fraction = dy - (dx >> 1);                         // same as 2*dy - dx
@@ -95,7 +96,7 @@ void TBitmap::DrawLine(int x,int y,int x2,int y2,byte* pClr)
 			}
 			x += stepx;
 			fraction += dy;                                    // same as fraction -= 2*dy
-			setpixel(x,y,pClr);
+			SetPixel(x,y,pClr);
 		}
 	} 
 	else
@@ -110,7 +111,7 @@ void TBitmap::DrawLine(int x,int y,int x2,int y2,byte* pClr)
 			}
 			y += stepy;
 			fraction += dx;
-			setpixel(x,y,pClr);
+			SetPixel(x,y,pClr);
 		}
 	}
 }
@@ -131,15 +132,15 @@ void TBitmap::FlipHorizontal()
 
 	while(x1--)
 	{
-		byte* column1 = getpixel(x1,0);
-		byte* column2 = getpixel(x2,0);
+		byte* column1 = GetPixel(x1,0);
+		byte* column2 = GetPixel(x2,0);
 
 		int i = Height;
 		while(i--)
 		{
-			PixelCopy(tmp,column2,pixelSize);
-			PixelCopy(column2,column1,pixelSize);
-			PixelCopy(column1,tmp,pixelSize);
+			MemoryDriver::ShortCopy(tmp,column2,pixelSize);
+			MemoryDriver::ShortCopy(column2,column1,pixelSize);
+			MemoryDriver::ShortCopy(column1,tmp,pixelSize);
 
 			column1 += rowwidth; // advance memory pointer
 			column2 += rowwidth; // advance memory pointer
@@ -160,8 +161,8 @@ void TBitmap::FlipVertical()
 
 	while(rows--)
 	{
-		byte* row1 = getpixel(0,y1);
-		byte* row2 = getpixel(0,y2);
+		byte* row1 = GetPixel(0,y1);
+		byte* row2 = GetPixel(0,y2);
 
 		MemoryDriver::Exchange(row1,row2,rowwidth);
 		y2++;
@@ -173,9 +174,9 @@ void TBitmap::ColorKey( const TColor24& clr,byte alpha /*= 0*/ )
 {
 	Convert(TBitmapFormats::fARGB);
 
-	TColor32* pix = (TColor32*)Buffer;
+	TColor32* pix = (TColor32*)Data;
 
-	int i = pixels;
+	int i = PixelCount;
 	while(i--)
 	{
 		if (*(pix++) == clr)
@@ -210,8 +211,8 @@ void TBitmap::Copy( TBitmap* src,int dstX,int dstY, int srcX /*= 0*/, int srcY /
 		dx = dstX;
 		for (int x = srcX; x < _width; x++)
 		{
-			byte* pix = src->getpixel(x,y);
-			setpixel(dx,dy,pix);
+			byte* pix = src->GetPixel(x,y);
+			SetPixel(dx,dy,pix);
 			dx++;
 		}
 		dy++;
@@ -228,12 +229,26 @@ void TBitmap::DrawRectangle( int _x,int _y,int _width,int _height,byte* pClr )
 	int pixelWidth = BufferFormat->BytesPerItem;
 	for (int y = _y ;y<ibottom;y++)
 	{
-		byte* rowstart = getpixel(_x,y);
+		byte* rowstart = GetPixel(_x,y);
 		int rpix = _width;
 		while(rpix--)
 		{
-			PixelCopy(rowstart,pClr,pixelWidth);
+			MemoryDriver::ShortCopy(rowstart,pClr,pixelWidth);
 			rowstart += pixelWidth;
 		}
 	}
+}
+
+void TBitmap::ReadBMP( Stream* bmpstream,bool closestream /*= true*/ )
+{
+	TBitmapReader* bmpReader = TBitmapReader::GetReader(DWORDSTR(".BMP"));
+	bmpReader->ReadBitmap(this,bmpstream);
+	if (closestream) bmpstream->Close();
+}
+
+void TBitmap::WriteBMP( Stream* bmpstream,bool closestream /*= true*/ )
+{
+	TBitmapWriter* bmpWriter = TBitmapWriter::GetWriter(DWORDSTR(".BMP"));
+	bmpWriter->WriteBitmap(this,bmpstream);
+	if (closestream) bmpstream->Close();
 }

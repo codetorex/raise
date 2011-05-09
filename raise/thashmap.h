@@ -3,23 +3,22 @@
 
 #include "raisetypes.h"
 #include "tstring.h"
+#include "tkeyvalue.h"
+
 
 
 template <class T>
-class RDLL TKeyValuePair
+class RDLL THashKeyValue: public TKeyValue<str8,T>
 {
 public:
+	dword Hash;
 
-	TKeyValuePair(dword h,str8& k, T v)
+	THashKeyValue(dword h,str8& k, T v)
 	{
-		hsh = h;
-		key = k;
-		value = v;
+		Hash = h;
+		Key = k;
+		Value = v;
 	}
-
-	dword hsh;
-	str8 key; // so key will be copied
-	T value;
 };
 
 
@@ -35,8 +34,8 @@ public:
 	int valueCount;
 	bool leaf; // true if its a leaf, false if branch
 
-	inline virtual TKeyValuePair<T>* Get(dword h,const str8& key) = 0;
-	inline virtual void Add(dword h,TKeyValuePair<T>* value) = 0;
+	inline virtual THashKeyValue<T>* Get(dword h,const str8& key) = 0;
+	inline virtual void Add(dword h,THashKeyValue<T>* value) = 0;
 };
 
 
@@ -49,16 +48,16 @@ public:
 		leaf = true;
 	}
 
-	TKeyValuePair<T>* values[4];
+	THashKeyValue<T>* values[4];
 
-	inline TKeyValuePair<T>* Get(dword h,const str8& key)
+	inline THashKeyValue<T>* Get(dword h,const str8& key)
 	{
 		int i=valueCount;
 		while(i--)
 		{
-			if ( values[i]->hsh == h)
+			if ( values[i]->Hash == h)
 			{
-				if (values[i]->key == key) // maybe this step is unnecessary if you trust your hash
+				if (values[i]->Key == key) // maybe this step is unnecessary if you trust your hash
 				{
 					return values[i];
 				}
@@ -68,7 +67,7 @@ public:
 	}
 
 
-	inline void Add(dword h,TKeyValuePair<T>* value)
+	inline void Add(dword h,THashKeyValue<T>* value)
 	{
 		values[valueCount++] = value;
 	}
@@ -115,17 +114,17 @@ public:
 		Map[index] = brnc;
 		int i = oldLeaf->valueCount;
 
-		TKeyValuePair<T>* kvp;
+		THashKeyValue<T>* kvp;
 		while (i--)
 		{
 			kvp = oldLeaf->values[i];
-			brnc->Add(kvp->hsh,kvp);
+			brnc->Add(kvp->Hash,kvp);
 		}
 
 		delete oldLeaf;
 	}
 
-	inline TKeyValuePair<T>* Get(dword h,const str8& key)
+	inline THashKeyValue<T>* Get(dword h,const str8& key)
 	{
 		int i = MOD32(h >> branchShift);
 		//h >>= 8;
@@ -136,7 +135,7 @@ public:
 		return NULL;
 	}
 
-	inline void Add(dword h,TKeyValuePair<T>* value)
+	inline void Add(dword h,THashKeyValue<T>* value)
 	{
 		int i = MOD32(h >> branchShift);
 		if (Map[i] != 0)
@@ -168,7 +167,7 @@ public:
 	inline bool ContainsKey(const str8& key)
 	{
 		dword h = str8::GetHash(key);
-		TKeyValuePair<T>* r = Root.Get(h,key);
+		THashKeyValue<T>* r = Root.Get(h,key);
 		if (r == NULL)
 		{
 			return false;
@@ -176,27 +175,27 @@ public:
 		return true;
 	}
 
-	inline TKeyValuePair<T>* Get(const str8& key)
+	inline THashKeyValue<T>* Get(const str8& key)
 	{
 		dword h = str8::GetHash(key);
-		TKeyValuePair<T>* r = Root.Get(h,key);
+		THashKeyValue<T>* r = Root.Get(h,key);
 		return r;
 	}
 
 	inline T GetValue(const str8& key)
 	{
-		TKeyValuePair<T>* tkp = Get(key);
+		THashKeyValue<T>* tkp = Get(key);
 		if (tkp == NULL)
 		{
 			throw Exception("Key not found");
 		}
-		return tkp->value;
+		return tkp->Value;
 	}
 
 	inline void Add(str8& key,T value)
 	{
 		dword h = str8::GetHash(key);
-		TKeyValuePair<T>* kvp = new TKeyValuePair<T>(h,key,value);
+		THashKeyValue<T>* kvp = new THashKeyValue<T>(h,key,value);
 		Root.Add(h,kvp);
 	}
 };

@@ -1,4 +1,5 @@
 #include "stdafx.h"
+#include "tbitmaptga.h"
 #include "tbitmap.h"
 #include "tstream.h"
 #include "tbinaryreader.h"
@@ -149,13 +150,15 @@ public:
 
 	void LoadUncompressedImage(TBitmap* bmp)
 	{
+		// TODO: seems fucked up
 		if (AlphaBits == 0 && PixelDepth == 24)
 		{
-			tga->Read(bmp->Buffer,1, ImageSize);
+			tga->Read(bmp->Data,1, ImageSize);
 		}
-		else if(AlphaBits == 8 && PixelDepth == 32)
+		else if(AlphaBits == 8 || PixelDepth == 32)
 		{
-			tga->Read(bmp->Buffer,1, ImageSize);
+			// I HOPE THERE IS NO OTHER USAGE OF 32 BIT TGA OTHER THAN ALPHA CHANNEL
+			tga->Read(bmp->Data,1, ImageSize);
 		}
 		else
 		{
@@ -175,7 +178,7 @@ public:
 			if (chunkHeader < 128)
 			{
 				chunkHeader++;
-				int dataSize = tga->Read(bmp->Buffer + currentByte,PixelSize,chunkHeader);
+				int dataSize = tga->Read(bmp->Data + currentByte,PixelSize,chunkHeader);
 
 				if ( dataSize == 0)
 				{
@@ -188,7 +191,7 @@ public:
 			{
 				chunkHeader -= 127;
 				int dataOffset = currentByte;
-				int dataSize = tga->Read(bmp->Buffer + currentByte,PixelSize,1);
+				int dataSize = tga->Read(bmp->Data + currentByte,PixelSize,1);
 
 				if (dataSize == 0 || dataSize != PixelSize)
 				{
@@ -197,7 +200,7 @@ public:
 
 				currentByte += PixelSize;
 
-				currentByte += MemoryDriver::Repeat(bmp->Buffer + currentByte, bmp->Buffer + dataOffset,PixelSize,chunkHeader-1); // -1 because we wrote one just before
+				currentByte += MemoryDriver::Repeat(bmp->Data + currentByte, bmp->Data + dataOffset,PixelSize,chunkHeader-1); // -1 because we wrote one just before
 			}
 		}
 	}
@@ -227,79 +230,78 @@ private:
 
 };
 
-void TBitmap::savetga(Stream* tgastream,bool closestream /* = true */)
-{
 
-}
-
-void TBitmap::loadtga(Stream* tgastream,bool toRGB,bool closestream)
+void TBitmapTGA::ReadBitmap( TBitmap* bmp, Stream* src )
 {
-	TBinaryReader* binaryReader = new TBinaryReader(tgastream);
+	TBinaryReader* binaryReader = new TBinaryReader(src);
 
 	// TODO: try reading header?
 	TGALoader Loader(binaryReader);
 	Loader.ReadHeader();
 
-	release();
+	bmp->Release();
 
-	BufferFormat = TBitmapFormats::fBGR;
+	bmp->BufferFormat = TBitmapFormats::fBGR;
 	if (Loader.IsColorMapped())
 	{
 		if (Loader.ColorMapEntrySize == 4)
 		{
-			BufferFormat = TBitmapFormats::fARGB;
+			bmp->BufferFormat = TBitmapFormats::fARGB;
 		}
 	}
 	else
 	{
-		if (Loader.AlphaBits > 0)
+		if (Loader.AlphaBits > 0 || Loader.PixelDepth == 32) 
 		{
-			BufferFormat = TBitmapFormats::fARGB;
+			// I HOPE THERE IS NO OTHER USAGE OF 32 BIT TGA OTHER THAN ALPHA CHANNEL
+			bmp->BufferFormat = TBitmapFormats::fARGB;
 		}
 	}
 
-	create(Loader.Width,Loader.Height,BufferFormat);
-	
+	bmp->Create(Loader.Width,Loader.Height,bmp->BufferFormat);
+
 	if (Loader.ImageType == 2) // not compressed RGB
 	{
-		Loader.LoadUncompressedImage(this);
+		Loader.LoadUncompressedImage(bmp);
 	}
 	else if (Loader.ImageType == 10)
 	{
-		Loader.LoadCompressedImage(this);
+		Loader.LoadCompressedImage(bmp);
 	}
 	else
 	{
 		throw Exception("Unsupported format");
 	}
-	
-	if (toRGB && BufferFormat == TBitmapFormats::fBGR)
-	{
-		Convert(TBitmapFormats::fRGB);
-	}
 
 	// Fix the origin.
 	switch(Loader.ImageOrigin)
 	{
-		case TO_BottomLeft:
-			FlipVertical();
-			break;
+	case TO_BottomLeft:
+		bmp->FlipVertical();
+		break;
 
-		case TO_BottomRight:
-			FlipVertical();
-			FlipHorizontal();
-			break;
+	case TO_BottomRight:
+		bmp->FlipVertical();
+		bmp->FlipHorizontal();
+		break;
 
-		case TO_TopLeft:
-			break;
+	case TO_TopLeft:
+		break;
 
-		case TO_TopRight:
-			FlipHorizontal();
-			break;
+	case TO_TopRight:
+		bmp->FlipHorizontal();
+		break;
 	}
+}
 
-	if (closestream)
-	{
-		binaryReader->Close();
-	}
+void TBitmapTGA::Install()
+{
+	TBitmapTGA* tga = new TBitmapTGA();
+	Readers.Add(tga);
+	Writers.Add(tga);
+}
+
+void TBitmapTGA::WriteBitmap( TBitmap* bmp, Stream* dst )
+{
+	throw Exception("Not Implemented");
 }

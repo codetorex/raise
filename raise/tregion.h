@@ -82,6 +82,11 @@ public:
 		Bottom = othr->Bottom;
 	}
 
+	inline void SetFrom(TRectangle* othr)
+	{
+		SetSize(othr->X,othr->Y,othr->Width,othr->Height);
+	}
+
 	inline void SetRelative(TRegion* parent,int relativeX,int relativeY)
 	{
 		X = parent->X + relativeX;

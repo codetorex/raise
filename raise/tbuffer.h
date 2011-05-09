@@ -1,19 +1,18 @@
 #ifndef TBUFFER_H
 #define TBUFFER_H
 
+#include "tbytearray.h"
 #include "tmemorydriver.h"
 #include "texception.h"
 
 #define NFOUND	0xFFFFFFFF
 
-class TBuffer
+class TBuffer: public TByteArray
 {
 public:
-	byte* Data;
-	dword Capacity;
 	dword Index; // Index of current position
 
-	TBuffer()
+	inline TBuffer()
 	{
 		Index = 0;
 		Data = 0;
@@ -30,16 +29,21 @@ public:
 		Capacity = 0;
 		Index = 0;
 	}
-
-	TBuffer(int _capacity)
+	
+	inline TBuffer(int _Capacity)
 	{
-		Initialize(_capacity);
+		Allocate(_Capacity);
 	}
 
-	void Initialize(dword _cap)
+	inline void Allocate(dword _Capacity)
 	{
-		Data = new byte[_cap];
-		Capacity = _cap;
+		this->TByteArray::Allocate(_Capacity);
+		Index = 0;
+	}
+
+	inline void Use(byte* _Data, dword _Capacity)
+	{
+		this->TByteArray::Use(_Data,_Capacity);
 		Index = 0;
 	}
 
@@ -48,18 +52,71 @@ public:
 		Index += offset;
 	}
 
-	inline void SetPosition(int newpos)
+	inline void Set(int newpos)
 	{
 		Index = newpos;
 	}
 
-	void AddByte(byte value)
+	inline void IncreaseBufferByteCapacity(int newCapacity)
+	{
+		if ((dword)newCapacity < Capacity) // warning sikned un sikned mismatchhhh
+		{
+			throw Exception("new capacity is lower than old capacity");
+		}
+
+		if (newCapacity == Capacity)
+		{
+			return;
+		}
+
+		byte* newBuffer = new byte[newCapacity];
+		MemoryDriver::Copy(newBuffer,Data,Capacity);
+		
+		delete Data;
+		Data = newBuffer;
+		Capacity = newCapacity;
+	}
+
+	/**
+	* Adds byte to buffer and increases buffer when needed.
+	*/
+	inline void AddByteIncreasing(byte value)
+	{
+		if (Capacity == Index)
+		{
+			IncreaseBufferByteCapacity(Capacity * 2);
+		}
+		Data[Index++] = value;
+	}
+
+	inline void AddByteNoCheck(byte value)
+	{
+		Data[Index++] = value;
+	}
+
+	/**
+	* Adds byte to buffer and throws exception when buffer is full.
+	*/
+	inline void AddByte(byte value)
 	{
 		if (Capacity == Index)
 		{
 			throw Exception("Buffer is full");
 		}
 		Data[Index++] = value;
+	}
+
+	/**
+	* Add bytes to buffer and increases buffer when needed.
+	*/
+	inline void AddBytesIncreasing(byte* values, dword length)
+	{
+		if (Capacity - Index < length)
+		{
+			IncreaseBufferByteCapacity(Capacity * 2);
+		}
+		MemoryDriver::Copy(Data+Index,values,length);
+		Index += length;
 	}
 
 	inline void AddBytes(byte* values,dword length)
@@ -69,7 +126,7 @@ public:
 			throw Exception("Buffer is full");
 		}
 
-		memcpy(Data + Index,values,length);
+		MemoryDriver::Copy(Data+Index,values,length);
 		Index += length;
 	}
 
@@ -80,7 +137,8 @@ public:
 			throw Exception("Buffer is not that big");
 		}
 
-		memcpy(dst,Data + Index,length);
+		MemoryDriver::Copy(dst,Data + Index,length);
+		Index += length;
 	}
 
 	inline int GetAvailable()
@@ -88,23 +146,33 @@ public:
 		return Capacity - Index;
 	}
 
-	byte GetByte()
+	inline int ReadByteNoCheck()
+	{
+		return Data[Index++];
+	}
+
+	inline int ReadByte()
 	{
 		if (Capacity == Index)
 		{
-			throw Exception("Buffer is not that big");
+			return -1;
 		}
 
 		return Data[Index++]; // -1 because index is already adjusted
 	}
 
-	byte PeekByte()
+	inline int PeekByte()
 	{
 		if (Capacity == Index)
 		{
-			throw Exception("Buffer is not that big");
+			return -1;
 		}
 
+		return Data[Index];
+	}
+
+	inline int PeekByteNoCheck()
+	{
 		return Data[Index];
 	}
 
@@ -115,17 +183,17 @@ public:
 
 	inline void Reset()
 	{
-		memset(Data,0,Capacity);
+		MemoryDriver::Set(Data,0,Capacity);
 		Rewind();
 	}
 
-	int Search(const byte* needle,int length)
+	inline int Search(const byte* needle,int length)
 	{
 		if (Index == 0) return NFOUND;
 		return MemoryDriver::Search(Data,Index,needle,length);
 	}
 
-	int SearchPattern(const byte* needle,const byte* pattern,int length)
+	inline int SearchPattern(const byte* needle,const byte* pattern,int length)
 	{
 		if (Index == 0) return NFOUND;
 		return MemoryDriver::SearchPattern(Data,Index,needle,pattern,length);

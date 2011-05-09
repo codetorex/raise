@@ -36,7 +36,7 @@ public:
 	virtual void	Seek(dword offset,SeekOrigin origin) = 0;
 	virtual void	Write(void* buffer,int size,int count) = 0;
 	virtual void	WriteByte(byte value) = 0;
-	
+
 	virtual bool	CanRead() = 0;
 	virtual bool	CanWrite() = 0;
 	virtual bool	CanSeek() = 0;

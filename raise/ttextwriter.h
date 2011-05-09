@@ -11,11 +11,11 @@ class TTextWriter
 private:
 	inline void WriteNewLine()
 	{
-		if (Encoding == TEncoding::ASCII || Encoding == TEncoding::UTF8)
+		if (Encoding == TEncodingInfo::ASCII || Encoding == TEncodingInfo::UTF8)
 		{
 			Write(*NewLine);
 		}
-		else if (Encoding == TEncoding::Unicode)
+		else if (Encoding == TEncodingInfo::Unicode)
 		{
 			Write(*NewLine16);
 		}
@@ -25,7 +25,7 @@ public:
 	str8* NewLine;
 	str16* NewLine16;
 	// TODO: write encoding class and fix this shit
-	TEncoding* Encoding;
+	TEncodingInfo* Encoding;
 
 	virtual void Write(const str8& value) = 0;
 	virtual void Write(const str16& value) = 0;

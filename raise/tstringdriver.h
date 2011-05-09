@@ -1,8 +1,7 @@
 #ifndef TSTRINGDRIVER_H
 #define TSTRINGDRIVER_H
 
-
-#include "raisetypes.h"
+#include "tcharacter.h"
 #include <string.h>
 
 #ifdef WIN32
@@ -33,8 +32,7 @@ inline wchar_t* wcslwr(wchar_t* str) { wchar_t* it = str; while (*it != 0) { *it
 inline wchar_t* wcsupr(wchar_t* str) { wchar_t* it = str; while (*it != 0) { *it = towupper(*it); ++it; } return str; }
 #endif
 
-typedef wchar_t ch16;
-typedef char	ch8;
+
 
 class StringDriver
 {

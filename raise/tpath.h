@@ -28,7 +28,7 @@ public:
 			dword errorId = GetLastError();
 			if (errorId != ERROR_ALREADY_EXISTS)
 			{
-				throw Exception(str8::Format("Creating directory failed. Error: 0x%X",errorId));
+				throw Exception(str8::FormatNew("Creating directory failed. Error: 0x%X",errorId));
 			}
 		}
 	}
@@ -121,6 +121,30 @@ public:
 	static str8 TempFolder;
 	static str8 CurrentFolder;
 
+	static dword GetExtensionAsDword(const str8& path)
+	{
+		ch8 dw[4];
+		for (int i= path.Length-4,k=0;i<path.Length;i++,k++)
+		{
+			ch8 curChr = path.Chars[i];
+			if (curChr >= 'a' && curChr <= 'z' ) curChr -= 32; // lowercase
+			dw[k] = curChr;
+		}
+		return *(dword*)dw;
+
+
+		/*if (path.Length < 5) return 0; 
+		dword val = 0;
+		for (int i= path.Length-4;i<path.Length;i++)
+		{
+			val <<= 8;
+			ch8 curChr = path.Chars[i];
+			if (curChr >= 'a' && curChr <= 'z' ) curChr -= 32; // lowercase
+			val |= curChr;
+		}
+		return val;*/
+	}
+
 	static void CorrectSeprators(str8& path)
 	{
 		for (int i=0;i< path.Length;i++)
@@ -162,7 +186,7 @@ public:
 		return tempStr;
 	}
 
-	static str8 GetExtension(str8& path)
+	static str8 GetExtension(const str8& path)
 	{
 		int i = path.Length;
 		while(i--)

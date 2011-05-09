@@ -13,6 +13,13 @@ static const char en_chars[62] = // 0,1,2,3 ...a...z....A...Z
 	97 ,98 ,99 ,100,101,102,103,104,105,106,107,108,109,110,111,112,113,114,115,116,117,118,119,120,121,122	
 };
 
+// TODO: Implement UTF-8 class its easy, and use it everywhere?
+// SOURCES: 
+// * http://en.wikipedia.org/wiki/Supplementary_Multilingual_Plane#Supplementary_Multilingual_Plane
+// * http://en.wikipedia.org/wiki/UTF-8
+// * http://en.wikipedia.org/wiki/Unicode
+// * http://www.ietf.org/rfc/rfc2279.txt [RTF-2279] {UTF-8}
+
 
 /*
 	Rules for string class:
@@ -97,6 +104,36 @@ public:
 	~TString()
 	{
 		Free();
+	}
+
+	bool HaveChar(T chr) const
+	{
+		for (int i=0;i<Length;i++)
+		{
+			T curchr = Chars[i];
+			if (curchr == chr)
+			{
+				return true;
+			}
+		}
+		return false;
+	}
+
+	bool HaveCharArray(const TString<T>& str) const
+	{
+		for (int i=0;i<Length;i++)
+		{
+			T curchr = Chars[i];
+			for (int k=0;k<str.Length;k++)
+			{
+				T othchr = str.Chars[k];
+				if (curchr == othchr)
+				{
+					return true;
+				}
+			}
+		}
+		return false;
 	}
 
 	/**
@@ -628,7 +665,7 @@ public:
 		return result;
 	}
 
-	static TString<T> Format(T* format,...)
+	static TString<T> FormatNew(T* format,...)
 	{
 		T Temp[4096];
 
@@ -641,6 +678,15 @@ public:
 		nstring = Temp;
 		
 		return nstring;
+	}
+
+	void Format(T* format, ...)
+	{
+		va_list ap;
+		va_start(ap,format);
+		StringDriver::Format(Chars,Capacity,format,ap);
+		va_end(ap);
+		Length = StringDriver::Length(Chars);
 	}
 
 

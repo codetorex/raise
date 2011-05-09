@@ -24,7 +24,7 @@ class TINIParser
 {
 public:
 	TStream* BaseStream;
-	TStreamReader* TextStream;
+	TTextReader* TextStream;
 	THashMap<TINIClass*> Classes;
 
 	TINIClass* CurrentClass;
@@ -32,6 +32,9 @@ public:
 	TINIParser();
 	TINIParser(TStream* readStream);
 	~TINIParser();
+
+	// This parameter will set Class keys and Variable keys to lowercase. For avoiding HashMap's missing values.
+	bool LowerCaseKeys;
 
 	void SetSource(TStream* readStream);
 	void Parse(bool closeStream = true);

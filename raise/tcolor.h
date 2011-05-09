@@ -117,42 +117,8 @@ public:
 	static void ToRGB(const byte* hsl,byte* rgb);
 };
 
-
-class TColor32ARGB
-{
-public:
-	union
-	{
-		dword color;
-		byte bclr[4];
-
-		struct
-		{
-			byte a;
-			byte r;
-			byte g;
-			byte b;
-		};
-	};
-
-	inline TColor32ARGB()
-	{
-		color = 0x000000FF;
-	}
-
-	inline TColor32ARGB( byte _r, byte _g, byte _b, byte _a)
-	{
-		color = (((byte)(_b)|((word)((byte)(_g))<<8))|(((dword)(byte)(_r))<<16)|(((dword)(byte)(_a))<<24));
-	}
-
-	inline TColor32ARGB(byte _r, byte _g, byte _b)
-	{
-		color = (((byte)(_b)|((word)((byte)(_g))<<8))|(((dword)(byte)(_r))<<16)|(((dword)(byte)(0xFF))<<24));
-	}
-};
-
 /**
-* 32 bit color class.
+* 32 bit color class with RGBA ordering.
 */
 class TColor32
 {
@@ -178,7 +144,7 @@ public:
 
 	inline TColor32(dword _color)
 	{
-		color = color;
+		color = _color;
 	}
 
 	inline TColor32( byte _r, byte _g, byte _b, byte _a)
@@ -279,19 +245,11 @@ public:
 		return color;
 	}
 
-	inline operator TColor32ARGB (void) const
-	{
-		TColor32ARGB r;
-		r.color = GetARGB();
-		return r;
-	}
-
 	inline dword GetARGB() const
 	{
 		dword res = (((byte)(b)|((word)((byte)(g))<<8))|(((dword)(byte)(r))<<16)|(((dword)(byte)(a))<<24));
 		return res;
 	}
-
 
 	inline void mono()
 	{
@@ -299,6 +257,57 @@ public:
 		r = (byte)ts;
 		g = r;
 		b = r;
+	}
+};
+
+/**
+* 32 bit color class with ARGB ordering.
+*/
+class TColor32ARGB
+{
+public:
+	union
+	{
+		dword color;
+		byte bclr[4];
+
+		struct
+		{
+			byte a;
+			byte r;
+			byte g;
+			byte b;
+		};
+	};
+
+	inline TColor32ARGB()
+	{
+		color = 0x000000FF;
+	}
+
+	inline TColor32ARGB(dword _color)
+	{
+		color = _color;
+	}
+
+	inline TColor32ARGB( byte _r, byte _g, byte _b, byte _a)
+	{
+		color = (((byte)(_b)|((word)((byte)(_g))<<8))|(((dword)(byte)(_r))<<16)|(((dword)(byte)(_a))<<24));
+	}
+
+	inline TColor32ARGB(byte _r, byte _g, byte _b)
+	{
+		color = (((byte)(_b)|((word)((byte)(_g))<<8))|(((dword)(byte)(_r))<<16)|(((dword)(byte)(0xFF))<<24));
+	}
+
+	inline TColor32ARGB(const TColor32& othr)
+	{
+		color = (othr.color << 8) | (othr.color >> 24);
+	}
+
+	inline operator dword (void) const
+	{
+		return color;
 	}
 };
 

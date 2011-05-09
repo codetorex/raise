@@ -1,7 +1,8 @@
 #include "stdafx.h"
 #include "tbitmap.h"
+#include "tcompositegenericconverter.h"
 
-class TBitmapConverterBGRtoRGB: public TBufferFormatGenericConverter
+class TBitmapConverterBGRtoRGB: public TCompositeGenericConverter
 {
 public:
 	TBitmapConverterBGRtoRGB()
@@ -24,7 +25,7 @@ public:
 	}
 };
 
-class TBitmapConverterARGBtoBGR: public TBufferFormatGenericConverter
+class TBitmapConverterARGBtoBGR: public TCompositeGenericConverter
 {
 public:
 	TBitmapConverterARGBtoBGR()

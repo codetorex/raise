@@ -130,14 +130,14 @@ public:
 	void Test()
 	{
 		TBitmap bmp;
-		bmp.create(128,128, TBitmapFormats::fRGB ); 
+		bmp.Create(128,128, TBitmapFormats::fRGB ); 
 
 		TColor24 clr2(255,128,64);
 		for (int y=0;y<128;y++)
 		{
 			for (int x=0;x<128;x++)
 			{
-				bmp.setpixel(x,y,clr2.bclr);
+				bmp.SetPixel(x,y,clr2.bclr);
 			}
 		}
 

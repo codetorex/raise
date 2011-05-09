@@ -55,6 +55,8 @@
     <CodeAnalysisRules Condition="'$(Configuration)|$(Platform)'=='Template|Win32'" />
     <CodeAnalysisRuleAssemblies Condition="'$(Configuration)|$(Platform)'=='Template|Win32'" />
     <OutDir Condition="'$(Configuration)|$(Platform)'=='Template|Win32'">../bin/</OutDir>
+    <IncludePath Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">C:\Library\Libraries\libpng-1.5.2;C:\Library\Libraries\zlib-1.2.4;$(IncludePath)</IncludePath>
+    <LibraryPath Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">C:\Library\Libraries\libpng-1.5.2\bin;$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>
@@ -66,7 +68,16 @@
       <PrecompiledHeader>Use</PrecompiledHeader>
       <WarningLevel>Level3</WarningLevel>
       <DebugInformationFormat>EditAndContinue</DebugInformationFormat>
+      <AdditionalIncludeDirectories>
+      </AdditionalIncludeDirectories>
+      <GenerateXMLDocumentationFiles>false</GenerateXMLDocumentationFiles>
     </ClCompile>
+    <Lib>
+      <AdditionalLibraryDirectories>
+      </AdditionalLibraryDirectories>
+      <AdditionalDependencies>libpng.lib;zlib.lib</AdditionalDependencies>
+      <LinkTimeCodeGeneration>true</LinkTimeCodeGeneration>
+    </Lib>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <ClCompile>
@@ -78,10 +89,19 @@
       <PrecompiledHeader>Use</PrecompiledHeader>
       <WarningLevel>Level3</WarningLevel>
       <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
+      <AdditionalIncludeDirectories>
+      </AdditionalIncludeDirectories>
+    </ClCompile>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Template|Win32'">
+    <ClCompile>
+      <AdditionalIncludeDirectories>
+      </AdditionalIncludeDirectories>
     </ClCompile>
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClInclude Include="m64bit.h" />
+    <ClInclude Include="mdecibel.h" />
     <ClInclude Include="mfixed.h" />
     <ClInclude Include="mmathdriver.h" />
     <ClInclude Include="mmatrix.h" />
@@ -97,20 +117,38 @@
     <ClInclude Include="tbinaryreader.h" />
     <ClInclude Include="tbitfield.h" />
     <ClInclude Include="tbitmap.h" />
+    <ClInclude Include="tbitmapbmp.h" />
+    <ClInclude Include="tbitmapformats.h" />
+    <ClInclude Include="tbitmappng.h" />
+    <ClInclude Include="tbitmapreader.h" />
+    <ClInclude Include="tbitmaptga.h" />
+    <ClInclude Include="tbitmapwriter.h" />
     <ClInclude Include="tbitstack.h" />
     <ClInclude Include="tbuffer.h" />
     <ClInclude Include="tbufferedstream.h" />
+    <ClInclude Include="tbytearray.h" />
+    <ClInclude Include="tcharacter.h" />
+    <ClInclude Include="tcompositeconverter.h" />
+    <ClInclude Include="tcompositegenericconverter.h" />
+    <ClInclude Include="tcomposition.h" />
+    <ClInclude Include="tcompositionprimitive.h" />
     <ClInclude Include="tdatetime.h" />
+    <ClInclude Include="tdecoder.h" />
     <ClInclude Include="tdictionary.h" />
+    <ClInclude Include="tencoder.h" />
     <ClInclude Include="tencoding.h" />
+    <ClInclude Include="tencodinginfo.h" />
     <ClInclude Include="tenumerator.h" />
     <ClInclude Include="tevent.h" />
     <ClInclude Include="texception.h" />
     <ClInclude Include="tfile.h" />
+    <ClInclude Include="tfileinfo.h" />
     <ClInclude Include="tfilestream.h" />
-    <ClInclude Include="tdirectory.h" />
+    <ClInclude Include="tdirectoryinfo.h" />
     <ClInclude Include="thashmap.h" />
+    <ClInclude Include="tindex.h" />
     <ClInclude Include="tiniparser.h" />
+    <ClInclude Include="tkeyvalue.h" />
     <ClInclude Include="tmemorydriver.h" />
     <ClInclude Include="tmemorystream.h" />
     <ClInclude Include="tpackedrectangle.h" />
@@ -124,6 +162,9 @@
     <ClInclude Include="trange.h" />
     <ClInclude Include="trectangle.h" />
     <ClInclude Include="tregion.h" />
+    <ClInclude Include="trmlreader.h" />
+    <ClInclude Include="trmlwriter.h" />
+    <ClInclude Include="tserializable.h" />
     <ClInclude Include="tstack.h" />
     <ClInclude Include="tstream.h" />
     <ClInclude Include="tstreamreader.h" />
@@ -133,14 +174,16 @@
     <ClInclude Include="tlinkedlist.h" />
     <ClInclude Include="tmemory.h" />
     <ClInclude Include="stdafx.h" />
-    <ClInclude Include="tflexiblebuffer.h" />
+    <ClInclude Include="tcompositebuffer.h" />
     <ClInclude Include="tstringdriver.h" />
+    <ClInclude Include="tstringmb.h" />
     <ClInclude Include="tsystem.h" />
     <ClInclude Include="ttextreader.h" />
     <ClInclude Include="ttextwriter.h" />
     <ClInclude Include="tthread.h" />
     <ClInclude Include="tcolor.h" />
     <ClInclude Include="ttimedriver.h" />
+    <ClInclude Include="ttypeinfo.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">
@@ -151,12 +194,14 @@
     <ClCompile Include="tbitmapbmp.cpp" />
     <ClCompile Include="tbitmapconverters.cpp" />
     <ClCompile Include="tbitmapformats.cpp" />
+    <ClCompile Include="tbitmappng.cpp" />
     <ClCompile Include="tbitmaptga.cpp" />
     <ClCompile Include="tbitset.cpp" />
     <ClCompile Include="tbufferedstream.cpp" />
     <ClCompile Include="tcolor.cpp" />
-    <ClCompile Include="tencoding.cpp" />
-    <ClCompile Include="tflexiblebuffer.cpp" />
+    <ClCompile Include="tcomposition.cpp" />
+    <ClCompile Include="tencodinginfo.cpp" />
+    <ClCompile Include="tcompositebuffer.cpp" />
     <ClCompile Include="tiniparser.cpp" />
     <ClCompile Include="tmemory.cpp" />
     <ClCompile Include="tpackedrectangle.cpp" />
@@ -164,6 +209,9 @@
     <ClCompile Include="tprocess.cpp" />
     <ClCompile Include="tprocessdebug.cpp" />
     <ClCompile Include="tprocessmodule.cpp" />
+    <ClCompile Include="trmlreader.cpp" />
+    <ClCompile Include="trmlwriter.cpp" />
+    <ClCompile Include="tstreamreader.cpp" />
     <ClCompile Include="tstring.cpp" />
     <ClCompile Include="tthread.cpp" />
     <ClCompile Include="ttimedriver.cpp" />

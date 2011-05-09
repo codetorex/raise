@@ -1,21 +1,20 @@
 #include "stdafx.h"
-#include "tflexiblebuffer.h"
+#include "tcompositebuffer.h"
 #include "texception.h"
 
-
-void TFormatElementGroup::CreateElementList( TArray<TFormatElement*>* allElements, const str8& elementNames )
+void TComposition::CreateElementList( TArray<TCompositionPrimitive*>* allElements, const str8& elementNames )
 {
 	ElementCount = 0;
 
 	int curPos = 0;
 
-	TArray<TFormatElement*> newList;
+	TArray<TCompositionPrimitive*> newList;
 	while (curPos < elementNames.Length)
 	{
 		bool found = false;
 		for (dword i=0;i<allElements->Count;i++)
 		{
-			TFormatElement* curElement = allElements->Item[i];
+			TCompositionPrimitive* curElement = allElements->Item[i];
 			if (elementNames.StartsWith(curElement->ShortName,curPos))
 			{
 				newList.Add(curElement);
@@ -35,7 +34,7 @@ void TFormatElementGroup::CreateElementList( TArray<TFormatElement*>* allElement
 	UseElementList(newList.ExtractItems(),ElementCount);
 }
 
-int TFormatElementGroup::CalculateBitsPerItem()
+int TComposition::CalculateBitsPerItem()
 {
 	int result = 0;
 	int i = ElementCount;
@@ -97,7 +96,7 @@ int TFormatElementGroup::CalculateBitsPerItem()
 			break;
 
 		case tc_group:
-			TFormatElementGroup* elemGroup = (TFormatElementGroup*)Elements[i];
+			TComposition* elemGroup = (TComposition*)Elements[i];
 			result += elemGroup->BitsPerItem;
 			break;
 		}
@@ -105,7 +104,7 @@ int TFormatElementGroup::CalculateBitsPerItem()
 	return result;
 }
 
-TBufferFormatConverter* TFormatElementGroup::GetConverter( TBufferFormat* TargetFormat )
+TCompositeConverter* TComposition::GetConverter( TBufferFormat* TargetFormat )
 {
 	for(dword i=0;i<Converters.Count;i++)
 	{
@@ -117,57 +116,8 @@ TBufferFormatConverter* TFormatElementGroup::GetConverter( TBufferFormat* Target
 
 	return 0;
 }
-void TFlexibleBuffer::Allocate( int _newItemCapacity )
+
+TCompositeBuffer* TComposition::CreateBuffer( int _itemCapacity )
 {
-	if (_newItemCapacity < Capacity)
-	{
-		Indicator = Buffer;
-		Used = 0;
-		return;
-	}
-
-	if (Buffer)
-	{
-		Free();
-	}
-
-	if (_newItemCapacity == 0)
-	{
-		return;
-	}
-
-	Capacity = _newItemCapacity;
-	CapacityByte = _newItemCapacity * BufferFormat->BytesPerItem;
-	Buffer = new byte [CapacityByte];
-	Used = 0;
-}
-
-void TFlexibleBuffer::Grow( int _newItemCapacity )
-{
-	if (Capacity > _newItemCapacity)
-	{
-		Indicator = Buffer;
-		Used = 0;
-		return;
-	}
-	byte* OldBuffer = Buffer;
-	CapacityByte = _newItemCapacity * BufferFormat->BytesPerItem;
-	Buffer = new byte [CapacityByte];
-
-	MemoryDriver::Copy(Buffer,OldBuffer,Used * BufferFormat->BytesPerItem);
-	Indicator = Buffer + (Indicator - OldBuffer);
-	Capacity = _newItemCapacity;
-	delete [] OldBuffer;
-}
-
-void TFlexibleBuffer::Initialize( TBufferFormat* _format /*= 0*/,int _itemCapacity /*= 0*/ )
-{
-	Capacity = _itemCapacity;
-	Used = 0;
-	BufferFormat = _format;
-	Buffer = 0;
-	if (Capacity != 0)
-	{
-		Allocate(Capacity);
-	}
+	return new TCompositeBuffer(this, _itemCapacity );
 }

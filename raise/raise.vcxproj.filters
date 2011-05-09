@@ -39,6 +39,36 @@
     <Filter Include="Source Files\Text">
       <UniqueIdentifier>{4487af07-604a-4d8f-993d-ff915a4969bd}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Source Files\Graphics\File Formats">
+      <UniqueIdentifier>{be8702b5-8a32-4c00-8060-f53e46449429}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\IO\Stream">
+      <UniqueIdentifier>{a2b72a82-448d-4265-9843-bc3f89eeaefd}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\IO\Buffer">
+      <UniqueIdentifier>{7ae890dd-48fc-47b6-96aa-87b787c0fe4d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\IO\File System">
+      <UniqueIdentifier>{c4801a2f-fb59-4432-bd3d-514236c84cfa}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\IO\Literacy">
+      <UniqueIdentifier>{fb02e27b-b7ba-4763-9d57-3c8067846614}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\IO\File Formats">
+      <UniqueIdentifier>{d1815025-1ec4-4f07-acea-436bfefa99f1}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\IO\File Formats\INI">
+      <UniqueIdentifier>{9a547ae8-936e-4004-9dd7-84bf2ad41b25}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\IO\File Formats\RML">
+      <UniqueIdentifier>{a55c0f8b-568e-4beb-81b8-ad57aaca3fc7}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\IO\File Formats\Binary">
+      <UniqueIdentifier>{b25ff54c-04e5-4d3d-81cd-2e90d43c3ac2}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\IO\File Formats\XML">
+      <UniqueIdentifier>{9e7428af-3a21-4aae-81de-ab0d6197b7fa}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="raisetypes.h">
@@ -58,9 +88,6 @@
     </ClInclude>
     <ClInclude Include="m64bit.h">
       <Filter>Source Files\Mathematics</Filter>
-    </ClInclude>
-    <ClInclude Include="tstream.h">
-      <Filter>Source Files\IO</Filter>
     </ClInclude>
     <ClInclude Include="mtriangle.h">
       <Filter>Source Files\Mathematics</Filter>
@@ -107,9 +134,6 @@
     <ClInclude Include="tdictionary.h">
       <Filter>Source Files\Collection</Filter>
     </ClInclude>
-    <ClInclude Include="tfilestream.h">
-      <Filter>Source Files\IO</Filter>
-    </ClInclude>
     <ClInclude Include="stdafx.h">
       <Filter>Header Files</Filter>
     </ClInclude>
@@ -121,18 +145,6 @@
     </ClInclude>
     <ClInclude Include="tdatetime.h">
       <Filter>Source Files\System</Filter>
-    </ClInclude>
-    <ClInclude Include="tdirectory.h">
-      <Filter>Source Files\IO</Filter>
-    </ClInclude>
-    <ClInclude Include="tfile.h">
-      <Filter>Source Files\IO</Filter>
-    </ClInclude>
-    <ClInclude Include="tpath.h">
-      <Filter>Source Files\IO</Filter>
-    </ClInclude>
-    <ClInclude Include="tflexiblebuffer.h">
-      <Filter>Source Files\IO</Filter>
     </ClInclude>
     <ClInclude Include="tevent.h">
       <Filter>Source Files\System</Filter>
@@ -152,21 +164,6 @@
     <ClInclude Include="tthread.h">
       <Filter>Source Files\System</Filter>
     </ClInclude>
-    <ClInclude Include="tbufferedstream.h">
-      <Filter>Source Files\IO</Filter>
-    </ClInclude>
-    <ClInclude Include="ttextreader.h">
-      <Filter>Source Files\IO</Filter>
-    </ClInclude>
-    <ClInclude Include="tstreamreader.h">
-      <Filter>Source Files\IO</Filter>
-    </ClInclude>
-    <ClInclude Include="tmemorystream.h">
-      <Filter>Source Files\IO</Filter>
-    </ClInclude>
-    <ClInclude Include="tbuffer.h">
-      <Filter>Source Files\IO</Filter>
-    </ClInclude>
     <ClInclude Include="tprocess.h">
       <Filter>Source Files\Hacking</Filter>
     </ClInclude>
@@ -179,15 +176,6 @@
     <ClInclude Include="tqueue.h">
       <Filter>Source Files\Collection</Filter>
     </ClInclude>
-    <ClInclude Include="ttextwriter.h">
-      <Filter>Source Files\IO</Filter>
-    </ClInclude>
-    <ClInclude Include="tstreamwriter.h">
-      <Filter>Source Files\IO</Filter>
-    </ClInclude>
-    <ClInclude Include="tencoding.h">
-      <Filter>Source Files\Text</Filter>
-    </ClInclude>
     <ClInclude Include="ttimedriver.h">
       <Filter>Source Files\System</Filter>
     </ClInclude>
@@ -199,12 +187,6 @@
     </ClInclude>
     <ClInclude Include="mvector3.h">
       <Filter>Source Files\Mathematics</Filter>
-    </ClInclude>
-    <ClInclude Include="tiniparser.h">
-      <Filter>Source Files\IO</Filter>
-    </ClInclude>
-    <ClInclude Include="tbinaryreader.h">
-      <Filter>Source Files\IO</Filter>
     </ClInclude>
     <ClInclude Include="mmathdriver.h">
       <Filter>Source Files\Mathematics</Filter>
@@ -220,6 +202,126 @@
     </ClInclude>
     <ClInclude Include="trectangle.h">
       <Filter>Source Files\Graphics</Filter>
+    </ClInclude>
+    <ClInclude Include="tindex.h">
+      <Filter>Source Files\Collection</Filter>
+    </ClInclude>
+    <ClInclude Include="tbitmapbmp.h">
+      <Filter>Source Files\Graphics\File Formats</Filter>
+    </ClInclude>
+    <ClInclude Include="tbitmaptga.h">
+      <Filter>Source Files\Graphics\File Formats</Filter>
+    </ClInclude>
+    <ClInclude Include="tbitmappng.h">
+      <Filter>Source Files\Graphics\File Formats</Filter>
+    </ClInclude>
+    <ClInclude Include="tbitmapreader.h">
+      <Filter>Source Files\Graphics</Filter>
+    </ClInclude>
+    <ClInclude Include="tbitmapwriter.h">
+      <Filter>Source Files\Graphics</Filter>
+    </ClInclude>
+    <ClInclude Include="tbitmapformats.h">
+      <Filter>Source Files\Graphics</Filter>
+    </ClInclude>
+    <ClInclude Include="ttypeinfo.h">
+      <Filter>Source Files\System</Filter>
+    </ClInclude>
+    <ClInclude Include="trmlwriter.h">
+      <Filter>Source Files\IO\File Formats\RML</Filter>
+    </ClInclude>
+    <ClInclude Include="trmlreader.h">
+      <Filter>Source Files\IO\File Formats\RML</Filter>
+    </ClInclude>
+    <ClInclude Include="tkeyvalue.h">
+      <Filter>Source Files\Collection</Filter>
+    </ClInclude>
+    <ClInclude Include="mdecibel.h">
+      <Filter>Source Files\Mathematics</Filter>
+    </ClInclude>
+    <ClInclude Include="tencodinginfo.h">
+      <Filter>Source Files\Text</Filter>
+    </ClInclude>
+    <ClInclude Include="tstringmb.h">
+      <Filter>Source Files\String</Filter>
+    </ClInclude>
+    <ClInclude Include="tencoding.h">
+      <Filter>Source Files\Text</Filter>
+    </ClInclude>
+    <ClInclude Include="tencoder.h">
+      <Filter>Source Files\Text</Filter>
+    </ClInclude>
+    <ClInclude Include="tdecoder.h">
+      <Filter>Source Files\Text</Filter>
+    </ClInclude>
+    <ClInclude Include="tcharacter.h">
+      <Filter>Source Files\String</Filter>
+    </ClInclude>
+    <ClInclude Include="tbytearray.h">
+      <Filter>Source Files\System</Filter>
+    </ClInclude>
+    <ClInclude Include="tfilestream.h">
+      <Filter>Source Files\IO\Stream</Filter>
+    </ClInclude>
+    <ClInclude Include="tstream.h">
+      <Filter>Source Files\IO\Stream</Filter>
+    </ClInclude>
+    <ClInclude Include="tmemorystream.h">
+      <Filter>Source Files\IO\Stream</Filter>
+    </ClInclude>
+    <ClInclude Include="tbufferedstream.h">
+      <Filter>Source Files\IO\Stream</Filter>
+    </ClInclude>
+    <ClInclude Include="tbuffer.h">
+      <Filter>Source Files\IO\Buffer</Filter>
+    </ClInclude>
+    <ClInclude Include="tcompositebuffer.h">
+      <Filter>Source Files\IO\Buffer</Filter>
+    </ClInclude>
+    <ClInclude Include="tfile.h">
+      <Filter>Source Files\IO\File System</Filter>
+    </ClInclude>
+    <ClInclude Include="tfileinfo.h">
+      <Filter>Source Files\IO\File System</Filter>
+    </ClInclude>
+    <ClInclude Include="tpath.h">
+      <Filter>Source Files\IO\File System</Filter>
+    </ClInclude>
+    <ClInclude Include="tdirectoryinfo.h">
+      <Filter>Source Files\IO\File System</Filter>
+    </ClInclude>
+    <ClInclude Include="ttextreader.h">
+      <Filter>Source Files\IO\Literacy</Filter>
+    </ClInclude>
+    <ClInclude Include="ttextwriter.h">
+      <Filter>Source Files\IO\Literacy</Filter>
+    </ClInclude>
+    <ClInclude Include="tstreamwriter.h">
+      <Filter>Source Files\IO\Literacy</Filter>
+    </ClInclude>
+    <ClInclude Include="tstreamreader.h">
+      <Filter>Source Files\IO\Literacy</Filter>
+    </ClInclude>
+    <ClInclude Include="tiniparser.h">
+      <Filter>Source Files\IO\File Formats\INI</Filter>
+    </ClInclude>
+    <ClInclude Include="tbinaryreader.h">
+      <Filter>Source Files\IO\File Formats\Binary</Filter>
+    </ClInclude>
+    <ClInclude Include="tserializable.h">
+      <Filter>Source Files\IO\File Formats</Filter>
+    </ClInclude>
+    <ClInclude Include="tcompositionprimitive.h">
+      <Filter>Source Files\IO\Buffer</Filter>
+    </ClInclude>
+    <ClInclude Include="tcomposition.h">
+      <Filter>Source Files\IO\Buffer</Filter>
+    </ClInclude>
+    <ClInclude Include="tcompositeconverter.h">
+      <Filter>Source Files\IO\Buffer</Filter>
+    </ClInclude>
+    <ClInclude Include="tcompositegenericconverter.h">
+      <Filter>Source Files\IO\Buffer</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -241,17 +343,11 @@
     <ClCompile Include="tbitmap.cpp">
       <Filter>Source Files\Graphics</Filter>
     </ClCompile>
-    <ClCompile Include="tpath.cpp">
-      <Filter>Source Files\IO</Filter>
-    </ClCompile>
     <ClCompile Include="tbitmapformats.cpp">
       <Filter>Source Files\Graphics</Filter>
     </ClCompile>
     <ClCompile Include="tthread.cpp">
       <Filter>Source Files\System</Filter>
-    </ClCompile>
-    <ClCompile Include="tbufferedstream.cpp">
-      <Filter>Source Files\IO</Filter>
     </ClCompile>
     <ClCompile Include="tprocess.cpp">
       <Filter>Source Files\Hacking</Filter>
@@ -262,14 +358,8 @@
     <ClCompile Include="tprocessmodule.cpp">
       <Filter>Source Files\Hacking</Filter>
     </ClCompile>
-    <ClCompile Include="tflexiblebuffer.cpp">
-      <Filter>Source Files\IO</Filter>
-    </ClCompile>
     <ClCompile Include="tbitmapconverters.cpp">
       <Filter>Source Files\Graphics</Filter>
-    </ClCompile>
-    <ClCompile Include="tencoding.cpp">
-      <Filter>Source Files\Text</Filter>
     </ClCompile>
     <ClCompile Include="ttimedriver.cpp">
       <Filter>Source Files\System</Filter>
@@ -277,14 +367,41 @@
     <ClCompile Include="tpackedrectangle.cpp">
       <Filter>Source Files\Graphics</Filter>
     </ClCompile>
-    <ClCompile Include="tiniparser.cpp">
-      <Filter>Source Files\IO</Filter>
+    <ClCompile Include="tbitmapbmp.cpp">
+      <Filter>Source Files\Graphics\File Formats</Filter>
     </ClCompile>
     <ClCompile Include="tbitmaptga.cpp">
-      <Filter>Source Files\Graphics</Filter>
+      <Filter>Source Files\Graphics\File Formats</Filter>
     </ClCompile>
-    <ClCompile Include="tbitmapbmp.cpp">
-      <Filter>Source Files\Graphics</Filter>
+    <ClCompile Include="tbitmappng.cpp">
+      <Filter>Source Files\Graphics\File Formats</Filter>
+    </ClCompile>
+    <ClCompile Include="trmlwriter.cpp">
+      <Filter>Source Files\IO\File Formats\RML</Filter>
+    </ClCompile>
+    <ClCompile Include="trmlreader.cpp">
+      <Filter>Source Files\IO\File Formats\RML</Filter>
+    </ClCompile>
+    <ClCompile Include="tencodinginfo.cpp">
+      <Filter>Source Files\Text</Filter>
+    </ClCompile>
+    <ClCompile Include="tbufferedstream.cpp">
+      <Filter>Source Files\IO\Stream</Filter>
+    </ClCompile>
+    <ClCompile Include="tcompositebuffer.cpp">
+      <Filter>Source Files\IO\Buffer</Filter>
+    </ClCompile>
+    <ClCompile Include="tpath.cpp">
+      <Filter>Source Files\IO\File System</Filter>
+    </ClCompile>
+    <ClCompile Include="tstreamreader.cpp">
+      <Filter>Source Files\IO\Literacy</Filter>
+    </ClCompile>
+    <ClCompile Include="tiniparser.cpp">
+      <Filter>Source Files\IO\File Formats\INI</Filter>
+    </ClCompile>
+    <ClCompile Include="tcomposition.cpp">
+      <Filter>Source Files\IO\Buffer</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

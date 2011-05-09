@@ -12,7 +12,7 @@ void TColorHSL::ToHSL(const byte* rgb,byte* hsl)
 	float var_Max = rmax( var_R, var_G, var_B );    //Max. value of RGB
 	float del_Max = var_Max - var_Min;             //Delta RGB value
 
-	float fH,fS;
+	float fH = 0.0f,fS;
 	float fL = ( var_Max + var_Min ) / 2.0f;
 
 	if ( del_Max == 0 )                     //This is a gray, no chroma...

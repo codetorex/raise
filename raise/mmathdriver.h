@@ -11,6 +11,16 @@ public:
 	{
 		return ceil(value);
 	}
+
+	inline static float Log(float value)
+	{
+		return log(value);
+	}
+
+	inline static float Exp(float value)
+	{
+		return exp(value);
+	}
 };
 
 

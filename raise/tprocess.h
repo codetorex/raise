@@ -32,12 +32,12 @@ public:
 	{
 		processID = othr.processID;
 		processHandle = othr.processHandle;
-		Buffer.Initialize(4 * 1024); // 4 KB
+		Buffer.Allocate(4 * 1024); // 4 KB
 	}
 
 	TProcessMemory()
 	{
-		Buffer.Initialize(4 * 1024);
+		Buffer.Allocate(4 * 1024);
 	}
 
 	inline str8 ReadString(dword address)

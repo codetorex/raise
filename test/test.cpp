@@ -5,7 +5,7 @@
 #include "toldtests.h"
 
 
-#include "tdirectory.h"
+#include "tdirectoryinfo.h"
 
 
 #include "thashmap.h"

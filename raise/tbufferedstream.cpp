@@ -4,90 +4,71 @@
 
 void TBufferedStream::Flush()
 {
-	if (WriteBuffer )
+	if (VBuffer.Index > 0)
 	{
-		if (VBuffer.Index > 0)
-		{
-			Source->Write(VBuffer.Data,1, VBuffer.Index);
-			VBuffer.VirtualRewind();
-			Source->Flush();
-		}
-	}
-	else
-	{
-		dword RemainingSize = VBuffer.GetAvailable(); // data length in buffer
-		if (RemainingSize > 0)
-		{
-			Source->Seek(VBuffer.VirtualEnd - RemainingSize,sBegin);
-			VBuffer.VirtualRewind();
-		}
+		Source->Write(VBuffer.Data,1, VBuffer.Index);
+		VBuffer.VirtualRewind();
+		Source->Flush();
 	}
 }
 
-int TBufferedStream::Read( void* buffer,int size,int count )
+int TBufferedStream::ReadNextChunk()
 {
-	return Source->Read(buffer,size,count);
-	// TODO: fix this.
-
-	/*dword TotalSize = size * count;
-
-	if (WriteBuffer) // Its uncommon to switch from writing to reading
+	dword CurRealPos = Source->Position();
+	int ReadSize = Source->Read(VBuffer.Data,1,VBuffer.Capacity);
+	if (ReadSize > 0)
 	{
-		Flush();
+		VBuffer.SetVirtual(CurRealPos,CurRealPos + ReadSize);
 	}
-	WriteBuffer = false;
-
-	dword RemainingSize = VBuffer.GetAvailable(); // data length in buffer
-
-	if (RemainingSize > 0 || VBuffer.Length > 0)
+	else
 	{
-		if (RemainingSize >= TotalSize) // if our data is bigger than requested
-		{
-			VBuffer.GetBytes((byte*)buffer,TotalSize);
-			return TotalSize;
-		}
-		else
+		VBuffer.VirtualRewind();
+	}
+	return ReadSize;
+}
+
+int TBufferedStream::ReadBigData( void* buffer, int total )
+{
+	dword RemainingSize = VBuffer.GetAvailable(); // data length in buffer
+	if (RemainingSize > 0)
+	{
+		VBuffer.GetBytes((byte*)buffer,RemainingSize);
+	}
+	int ReadSize = Source->Read(buffer,1,total - RemainingSize);
+	return ReadSize + RemainingSize;
+}
+
+int TBufferedStream::ReadSmallData( void* buffer,int total )
+{
+	int RemainingSize = VBuffer.GetAvailable(); // data length in buffer
+
+	if (RemainingSize >= total)
+	{
+		VBuffer.GetBytes((byte*)buffer,total);
+		return total;
+	}
+	else
+	{
+		int writtenBytes = 0;
+		if (RemainingSize > 0)
 		{
 			VBuffer.GetBytes((byte*)buffer,RemainingSize);
-			int ReadSize = Source->Read((byte*)buffer+RemainingSize,1,TotalSize - RemainingSize);
-			return ReadSize + RemainingSize;
+			writtenBytes += RemainingSize;
+			buffer = (byte*)buffer + RemainingSize;
+			total -= RemainingSize;
 		}
-	}
 
-	assert(RemainingSize >= 0);
-
-	if (RemainingSize == 0 || VBuffer.Length == 0)
-	{
-		if (TotalSize >= VBuffer.Capacity)
+		if ( ReadNextChunk() != 0 )
 		{
-			int ReadSize = Source->Read((byte*)buffer,1,TotalSize);
-			VBuffer.VirtualRewind();
-			return ReadSize;
+			writtenBytes += ReadSmallData(buffer,total);
 		}
-
-		dword CurRealPos = Source->Position();
-		int ReadSize = Source->Read(VBuffer.Data,1,VBuffer.Capacity);
-		VBuffer.SetVirtual(CurRealPos,CurRealPos + ReadSize);
-		if (ReadSize == 0) return 0;
-
-		if (ReadSize != VBuffer.Capacity) // end of file
-		{
-			return Read(buffer,size,count);
-		}
+		return writtenBytes;
 	}
-
-	VBuffer.GetBytes((byte*)buffer,TotalSize);
-	return TotalSize;*/
 }
 
 void TBufferedStream::Write( void* buffer,int size,int count )
 {
 	dword TotalSize = size * count;
-	dword RemainingSize = VBuffer.GetAvailable(); // data length in buffer
-	if ( !WriteBuffer && VBuffer.Length > 0 && RemainingSize > 0) // OMG THERE IS READ DATA INSIDE!
-	{
-		throw Exception("There is still data inside read buffer, try flushing it");
-	}
 	WriteBuffer = true;
 
 	if (TotalSize > VBuffer.Capacity)
@@ -108,42 +89,14 @@ void TBufferedStream::Write( void* buffer,int size,int count )
 
 int TBufferedStream::ReadByte()
 {
-	byte r;
-	int sz = Read(&r,1,1);
-	if (sz == 0)
+	if (VBuffer.GetAvailable() == 0)
 	{
-		return -1;
-	}
-	return r;
-	// TODO: fix this
-
-	/*assert( VBuffer.Index <= VBuffer.Capacity );
-
-	if (VBuffer.Index == VBuffer.Capacity)
-	{
-		VBuffer.VirtualRewind();
-	}
-
-	if(VBuffer.Length == 0)
-	{
-		dword CurRealPos = Source->Position();
-		int ReadSize = Source->Read(VBuffer.Data,1,VBuffer.Capacity);
-		if (ReadSize > 0)
+		if ( ReadNextChunk() == 0 ) // 0 bytes readed
 		{
-			VBuffer.SetVirtual(CurRealPos,CurRealPos + ReadSize);
-		}
-		else
-		{
-			throw Exception("End of stream");
+			return -1;
 		}
 	}
-
-	if (VBuffer.Index + VBuffer.VirtualStart == VBuffer.Length)
-	{
-		throw Exception("End of stream");
-	}
-
-	return VBuffer.GetByte();*/
+	return VBuffer.ReadByteNoCheck();
 }
 
 void TBufferedStream::Seek( dword offset,SeekOrigin origin )
@@ -153,7 +106,7 @@ void TBufferedStream::Seek( dword offset,SeekOrigin origin )
 	case sBegin:
 		if (VBuffer.VirtualStart <= offset && VBuffer.VirtualEnd >= offset) // if offset is inside buffered area
 		{
-			VBuffer.SetPosition(offset - VBuffer.VirtualStart);
+			VBuffer.Set(offset - VBuffer.VirtualStart);
 			return;
 		}
 		break;
@@ -196,15 +149,24 @@ void TBufferedStream::Close()
 	delete this;
 }
 
-int TBufferedStream::Peek()
+int TBufferedStream::PeekByte()
 {
-	int r = ReadByte();
-	Source->Seek( Source->Position() -1 , sBegin);
-	// TODO: fix this shit.
-
-	/*if (r != -1)
+	if (VBuffer.GetAvailable() == 0)
 	{
-	VBuffer.Advance(-1);
-	}*/
-	return r;
+		if ( ReadNextChunk() == 0 ) // 0 bytes readed
+		{
+			return -1;
+		}
+	}
+	return VBuffer.PeekByteNoCheck();
 }
+
+void TBufferedStream::WriteByte( byte value )
+{
+	if (VBuffer.GetAvailable() == 0)
+	{
+		Flush();
+	}
+	VBuffer.AddByteNoCheck(value);
+}
+

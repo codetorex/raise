@@ -18,6 +18,14 @@ public:
 		Width = _width;
 		Height = _height;
 	}
+
+	inline void SetRectangleFrom(TRectangle* othr)
+	{
+		X = othr->X;
+		Y = othr->Y;
+		Width = othr->Width;
+		Height = othr->Height;
+	}
 };
 
 #endif

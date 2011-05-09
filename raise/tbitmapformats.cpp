@@ -1,12 +1,12 @@
 #include "stdafx.h"
 #include "tbitmap.h"
 
-TFormatElement* TBitmapChannels::cRed = 0;
-TFormatElement* TBitmapChannels::cGreen = 0;
-TFormatElement* TBitmapChannels::cBlue = 0;
-TFormatElement* TBitmapChannels::cAlpha = 0;
+TCompositionPrimitive* TBitmapChannels::cRed = 0;
+TCompositionPrimitive* TBitmapChannels::cGreen = 0;
+TCompositionPrimitive* TBitmapChannels::cBlue = 0;
+TCompositionPrimitive* TBitmapChannels::cAlpha = 0;
 
-TArray<TFormatElement*>* TBitmapChannels::BitmapChannelRegistry = 0;
+TArray<TCompositionPrimitive*>* TBitmapChannels::BitmapChannelRegistry = 0;
 
 TBufferFormat* TBitmapFormats::fARGB = 0;
 TBufferFormat* TBitmapFormats::fABGR = 0;
@@ -19,12 +19,12 @@ TArray<TBufferFormat*>* TBitmapFormats::BitmapFormatRegistry = 0;
 
 void TBitmapChannels::CreateDefaultChannels()
 {
-	cRed = new TFormatElement("Red (byte)","R8",tc_byte);
-	cGreen = new TFormatElement("Green (byte)","G8",tc_byte);
-	cBlue = new TFormatElement("Blue (byte)","B8",tc_byte);
-	cAlpha = new TFormatElement("Alpha (byte)","A8",tc_byte);
+	cRed = new TCompositionPrimitive("Red (byte)","R8",tc_byte);
+	cGreen = new TCompositionPrimitive("Green (byte)","G8",tc_byte);
+	cBlue = new TCompositionPrimitive("Blue (byte)","B8",tc_byte);
+	cAlpha = new TCompositionPrimitive("Alpha (byte)","A8",tc_byte);
 
-	BitmapChannelRegistry = new TArray<TFormatElement*> ();
+	BitmapChannelRegistry = new TArray<TCompositionPrimitive*> ();
 	BitmapChannelRegistry->Add(cRed);
 	BitmapChannelRegistry->Add(cGreen);
 	BitmapChannelRegistry->Add(cBlue);
