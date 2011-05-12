@@ -1,7 +1,7 @@
 #include "stdafx.h"
 #include "tcompositebuffer.h"
 
-void TCompositeBuffer::Allocate( int _newItemCapacity )
+void TCompositeBuffer::AllocateItemCapacity( int _newItemCapacity )
 {
 	if (_newItemCapacity < CapacityItem)
 	{
@@ -26,7 +26,7 @@ void TCompositeBuffer::Allocate( int _newItemCapacity )
 	Used = 0;
 }
 
-void TCompositeBuffer::Grow( int _newItemCapacity )
+void TCompositeBuffer::GrowItemCapacity( int _newItemCapacity )
 {
 	if (CapacityItem > _newItemCapacity)
 	{
@@ -43,7 +43,7 @@ void TCompositeBuffer::Grow( int _newItemCapacity )
 	delete [] OldBuffer;
 }
 
-void TCompositeBuffer::Allocate( TBufferFormat* _format /*= 0*/,int _itemCapacity /*= 0*/ )
+void TCompositeBuffer::AllocateItemCapacity( TBufferFormat* _format /*= 0*/,int _itemCapacity /*= 0*/ )
 {
 	CapacityItem = _itemCapacity;
 	Used = 0;
@@ -51,7 +51,7 @@ void TCompositeBuffer::Allocate( TBufferFormat* _format /*= 0*/,int _itemCapacit
 	Data = 0;
 	if (CapacityItem != 0)
 	{
-		Allocate(CapacityItem);
+		AllocateItemCapacity(CapacityItem);
 	}
 }
 
@@ -115,7 +115,7 @@ bool TCompositeBuffer::Convert( TBufferFormat* newFormat )
 	// TODO: IMPLEMENT A GENERIC FORMAT EXCHANGING VIRTUAL MACHINE AND X86 COMPILER HERE
 }
 
-void TCompositeBuffer::Use( byte* newBuffer, int newItemCap,int newUsed /*= 0*/ )
+/*void TCompositeBuffer::Use( byte* newBuffer, int newItemCap,int newUsed )
 {
 	if (Data)
 	{
@@ -127,4 +127,4 @@ void TCompositeBuffer::Use( byte* newBuffer, int newItemCap,int newUsed /*= 0*/ 
 	Index = 0;
 	CapacityItem = newItemCap;
 	Used = newUsed;
-}
+}*/

@@ -87,7 +87,7 @@ public:
 		return new byte [ ByteCapacity(_itemcapacity) ];
 	}
 
-	inline TCompositeBuffer* CreateBuffer(int _itemCapacity);
+	TCompositeBuffer* CreateBuffer(int _itemCapacity);
 };
 
 #endif

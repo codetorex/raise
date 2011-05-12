@@ -1,7 +1,7 @@
 #ifndef TTHREAD_H
 #define TTHREAD_H
 
-#include "tstring.h"
+#include "tstringfixedwidth.h"
 #include "tevent.h"
 
 class TThread

@@ -1,7 +1,7 @@
 #ifndef TRMLREADER_H
 #define TRMLREADER_H
 
-#include "tstring.h"
+#include "tstringfixedwidth.h"
 #include "tdictionary.h"
 #include "tstreamreader.h"
 

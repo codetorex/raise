@@ -1,7 +1,7 @@
 #ifndef TEXCEPTION_H
 #define TEXCEPTION_H
 
-#include "tstring.h"
+#include "tstringfixedwidth.h"
 
 class Exception
 {

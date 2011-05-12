@@ -3,7 +3,7 @@
 
 
 #include "raisetypes.h"
-#include "tstring.h"
+#include "tstringfixedwidth.h"
 #include "tbuffer.h"
 #include "tevent.h"
 
@@ -44,7 +44,7 @@ public:
 	{
 		str8 result(512);
 		Read(address,result.Chars,512);
-		result.Length = StringDriver::Length(result.Chars);
+		result.Length = StringDriverFixedWidth::Length(result.Chars);
 		return result;
 	}
 

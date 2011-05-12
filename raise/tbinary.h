@@ -2,7 +2,7 @@
 #define TBINARY_H
 
 #include "raisetypes.h"
-#include "tstring.h"
+#include "tstringfixedwidth.h"
 
 #define NOTNEEDED
 

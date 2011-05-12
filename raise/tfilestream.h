@@ -2,7 +2,7 @@
 #define TFILESTREAM_H
 
 #include "stdafx.h"
-#include "tstring.h"
+#include "tstringfixedwidth.h"
 #include "tstream.h"
 
 

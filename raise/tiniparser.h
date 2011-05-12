@@ -2,7 +2,7 @@
 #define TINIPARSER_H
 
 #include "tstreamreader.h"
-#include "tstring.h"
+#include "tstringfixedwidth.h"
 #include "thashmap.h"
 
 // TODO: use dictionary in future?

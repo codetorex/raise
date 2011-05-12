@@ -1,7 +1,7 @@
 #ifndef TTEXTREADER_H
 #define TTEXTREADER_H
 
-#include "tstring.h"
+#include "tstringfixedwidth.h"
 
 //TODO: make this class converts its content to UTF-8 to UTF-16
 

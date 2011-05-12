@@ -1,7 +1,7 @@
 #ifndef TENCODINGINFO_H
 #define TENCODINGINFO_H
 
-#include "tstring.h"
+#include "tstringfixedwidth.h"
 #include "tarray.h"
 
 class TEncodingInfo

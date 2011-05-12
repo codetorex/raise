@@ -2,7 +2,7 @@
 #include "tbitset.h"
 #include "tmemory.h"
 #include "tprofiler.h"
-#include "tstring.h"
+#include "tstringfixedwidth.h"
 #include "mvector3.h"
 #include "mquaternion.h"
 #include "mray.h"

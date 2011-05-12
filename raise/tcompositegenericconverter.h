@@ -23,7 +23,7 @@ public:
 	void Convert(TCompositeBuffer* srcBuffer,TCompositeBuffer* dstBuffer)
 	{
 		int itemCount = srcBuffer->CapacityItem;
-		dstBuffer->Allocate(DestinationFormat,itemCount);
+		dstBuffer->AllocateItemCapacity(DestinationFormat,itemCount);
 
 		DoConversion(srcBuffer->Data,dstBuffer->Data,itemCount);
 	}

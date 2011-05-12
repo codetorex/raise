@@ -54,28 +54,22 @@
     <Filter Include="Source Files\IO\Literacy">
       <UniqueIdentifier>{fb02e27b-b7ba-4763-9d57-3c8067846614}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Source Files\IO\File Formats">
-      <UniqueIdentifier>{d1815025-1ec4-4f07-acea-436bfefa99f1}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Source Files\IO\File Formats\INI">
+    <Filter Include="Source Files\IO\Literacy\INI">
       <UniqueIdentifier>{9a547ae8-936e-4004-9dd7-84bf2ad41b25}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Source Files\IO\File Formats\RML">
-      <UniqueIdentifier>{a55c0f8b-568e-4beb-81b8-ad57aaca3fc7}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Source Files\IO\File Formats\Binary">
+    <Filter Include="Source Files\IO\Literacy\Binary">
       <UniqueIdentifier>{b25ff54c-04e5-4d3d-81cd-2e90d43c3ac2}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Source Files\IO\File Formats\XML">
+    <Filter Include="Source Files\IO\Literacy\XML">
       <UniqueIdentifier>{9e7428af-3a21-4aae-81de-ab0d6197b7fa}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\IO\Literacy\RML">
+      <UniqueIdentifier>{a55c0f8b-568e-4beb-81b8-ad57aaca3fc7}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="raisetypes.h">
       <Filter>Source Files</Filter>
-    </ClInclude>
-    <ClInclude Include="tstring.h">
-      <Filter>Source Files\String</Filter>
     </ClInclude>
     <ClInclude Include="tlinkedlist.h">
       <Filter>Source Files\Collection</Filter>
@@ -155,9 +149,6 @@
     <ClInclude Include="tsystem.h">
       <Filter>Source Files\System</Filter>
     </ClInclude>
-    <ClInclude Include="tstringdriver.h">
-      <Filter>Source Files\String</Filter>
-    </ClInclude>
     <ClInclude Include="tmemorydriver.h">
       <Filter>Source Files\System</Filter>
     </ClInclude>
@@ -228,10 +219,10 @@
       <Filter>Source Files\System</Filter>
     </ClInclude>
     <ClInclude Include="trmlwriter.h">
-      <Filter>Source Files\IO\File Formats\RML</Filter>
+      <Filter>Source Files\IO\Literacy\RML</Filter>
     </ClInclude>
     <ClInclude Include="trmlreader.h">
-      <Filter>Source Files\IO\File Formats\RML</Filter>
+      <Filter>Source Files\IO\Literacy\RML</Filter>
     </ClInclude>
     <ClInclude Include="tkeyvalue.h">
       <Filter>Source Files\Collection</Filter>
@@ -242,16 +233,7 @@
     <ClInclude Include="tencodinginfo.h">
       <Filter>Source Files\Text</Filter>
     </ClInclude>
-    <ClInclude Include="tstringmb.h">
-      <Filter>Source Files\String</Filter>
-    </ClInclude>
     <ClInclude Include="tencoding.h">
-      <Filter>Source Files\Text</Filter>
-    </ClInclude>
-    <ClInclude Include="tencoder.h">
-      <Filter>Source Files\Text</Filter>
-    </ClInclude>
-    <ClInclude Include="tdecoder.h">
       <Filter>Source Files\Text</Filter>
     </ClInclude>
     <ClInclude Include="tcharacter.h">
@@ -303,13 +285,10 @@
       <Filter>Source Files\IO\Literacy</Filter>
     </ClInclude>
     <ClInclude Include="tiniparser.h">
-      <Filter>Source Files\IO\File Formats\INI</Filter>
+      <Filter>Source Files\IO\Literacy\INI</Filter>
     </ClInclude>
     <ClInclude Include="tbinaryreader.h">
-      <Filter>Source Files\IO\File Formats\Binary</Filter>
-    </ClInclude>
-    <ClInclude Include="tserializable.h">
-      <Filter>Source Files\IO\File Formats</Filter>
+      <Filter>Source Files\IO\Literacy\Binary</Filter>
     </ClInclude>
     <ClInclude Include="tcompositionprimitive.h">
       <Filter>Source Files\IO\Buffer</Filter>
@@ -323,6 +302,24 @@
     <ClInclude Include="tcompositegenericconverter.h">
       <Filter>Source Files\IO\Buffer</Filter>
     </ClInclude>
+    <ClInclude Include="tserializable.h">
+      <Filter>Source Files\IO\Literacy</Filter>
+    </ClInclude>
+    <ClInclude Include="tstringfixedwidth.h">
+      <Filter>Source Files\String</Filter>
+    </ClInclude>
+    <ClInclude Include="tstring.h">
+      <Filter>Source Files\String</Filter>
+    </ClInclude>
+    <ClInclude Include="tstringdriverfixedwidth.h">
+      <Filter>Source Files\String</Filter>
+    </ClInclude>
+    <ClInclude Include="tstringdriver.h">
+      <Filter>Source Files\String</Filter>
+    </ClInclude>
+    <ClInclude Include="tutf8encoding.h">
+      <Filter>Source Files\Text</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">
@@ -330,9 +327,6 @@
     </ClCompile>
     <ClCompile Include="tmemory.cpp">
       <Filter>Source Files\System</Filter>
-    </ClCompile>
-    <ClCompile Include="tstring.cpp">
-      <Filter>Source Files\String</Filter>
     </ClCompile>
     <ClCompile Include="tbitset.cpp">
       <Filter>Source Files\Collection</Filter>
@@ -377,10 +371,10 @@
       <Filter>Source Files\Graphics\File Formats</Filter>
     </ClCompile>
     <ClCompile Include="trmlwriter.cpp">
-      <Filter>Source Files\IO\File Formats\RML</Filter>
+      <Filter>Source Files\IO\Literacy\RML</Filter>
     </ClCompile>
     <ClCompile Include="trmlreader.cpp">
-      <Filter>Source Files\IO\File Formats\RML</Filter>
+      <Filter>Source Files\IO\Literacy\RML</Filter>
     </ClCompile>
     <ClCompile Include="tencodinginfo.cpp">
       <Filter>Source Files\Text</Filter>
@@ -398,10 +392,16 @@
       <Filter>Source Files\IO\Literacy</Filter>
     </ClCompile>
     <ClCompile Include="tiniparser.cpp">
-      <Filter>Source Files\IO\File Formats\INI</Filter>
+      <Filter>Source Files\IO\Literacy\INI</Filter>
     </ClCompile>
     <ClCompile Include="tcomposition.cpp">
       <Filter>Source Files\IO\Buffer</Filter>
+    </ClCompile>
+    <ClCompile Include="tstringfixedwidth.cpp">
+      <Filter>Source Files\String</Filter>
+    </ClCompile>
+    <ClCompile Include="tutf8encoding.cpp">
+      <Filter>Source Files\Text</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

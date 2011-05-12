@@ -50,7 +50,7 @@ void TBitmap::Create(int _width,int _height, TBufferFormat* _format)
 
 	PixelCount = _width * _height;
 
-	Allocate(PixelCount);
+	AllocateItemCapacity(PixelCount);
 
 	Width = _width;
 	Height = _height;

@@ -1,7 +1,7 @@
 #ifndef TPATH_H
 #define TPATH_H
 
-#include "tstring.h"
+#include "tstringfixedwidth.h"
 #include "tqueue.h"
 #include "texception.h"
 

@@ -2,7 +2,7 @@
 #define TCOMPOSITIONPRIMITIVE_H
 
 #include "raisetypes.h"
-#include "tstring.h"
+#include "tstringfixedwidth.h"
 
 
 enum TPrimitiveTypes

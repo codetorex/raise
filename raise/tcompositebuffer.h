@@ -27,11 +27,11 @@ public:
 		CapacityItem = Used = 0;
 	}
 
-	void Allocate(int _newItemCapacity);
+	void AllocateItemCapacity(int _newItemCapacity);
 
-	void Grow(int _newItemCapacity);
+	void GrowItemCapacity(int _newItemCapacity);
 
-	void Allocate(TBufferFormat* _format = 0,int _itemCapacity = 0);
+	void AllocateItemCapacity(TBufferFormat* _format = 0,int _itemCapacity = 0);
 
 	inline byte* GetBufferEnd()
 	{
@@ -40,12 +40,12 @@ public:
 
 	TCompositeBuffer()
 	{
-		Allocate();
+		AllocateItemCapacity();
 	}
 
 	TCompositeBuffer(TBufferFormat* _format,int _itemCapacity)
 	{
-		Allocate(_format,_itemCapacity);
+		AllocateItemCapacity(_format,_itemCapacity);
 	}
 
 	TCompositeBuffer(TBufferFormat* _format,byte* _buffer,int _bufferLength)
@@ -67,10 +67,10 @@ public:
 
 	inline int ItemCapacity()
 	{
-		return BufferFormat->ItemCapacity(CapacityItem);
+		return BufferFormat->ItemCapacity(Capacity);
 	}
 
-	void Nullify()
+	/*void Nullify()
 	{
 		Data = 0;		// Buffer start pointer
 		Index = 0;	// Current write pointer
@@ -82,7 +82,7 @@ public:
 		BufferFormat = 0;	// Format definition
 	}
 
-	void Use(byte* newBuffer, int newItemCap,int newUsed = 0);
+	void Use(byte* newBuffer, int newItemCap,int newUsed = 0);*/
 
 	void ExchangeBuffer(TCompositeBuffer* excBuffer);
 

@@ -1,7 +1,7 @@
 #ifndef TTEXTWRITER_H
 #define TTEXTWRITER_H
 
-#include "tstring.h"
+#include "tstringfixedwidth.h"
 #include "tencoding.h"
 
 //TODO: make this class converts its content to UTF-8 to UTF-16

@@ -133,9 +133,7 @@
     <ClInclude Include="tcomposition.h" />
     <ClInclude Include="tcompositionprimitive.h" />
     <ClInclude Include="tdatetime.h" />
-    <ClInclude Include="tdecoder.h" />
     <ClInclude Include="tdictionary.h" />
-    <ClInclude Include="tencoder.h" />
     <ClInclude Include="tencoding.h" />
     <ClInclude Include="tencodinginfo.h" />
     <ClInclude Include="tenumerator.h" />
@@ -170,13 +168,14 @@
     <ClInclude Include="tstreamreader.h" />
     <ClInclude Include="tstreamwriter.h" />
     <ClInclude Include="tstring.h" />
+    <ClInclude Include="tstringdriver.h" />
+    <ClInclude Include="tstringfixedwidth.h" />
     <ClInclude Include="tbitset.h" />
     <ClInclude Include="tlinkedlist.h" />
     <ClInclude Include="tmemory.h" />
     <ClInclude Include="stdafx.h" />
     <ClInclude Include="tcompositebuffer.h" />
-    <ClInclude Include="tstringdriver.h" />
-    <ClInclude Include="tstringmb.h" />
+    <ClInclude Include="tstringdriverfixedwidth.h" />
     <ClInclude Include="tsystem.h" />
     <ClInclude Include="ttextreader.h" />
     <ClInclude Include="ttextwriter.h" />
@@ -184,6 +183,7 @@
     <ClInclude Include="tcolor.h" />
     <ClInclude Include="ttimedriver.h" />
     <ClInclude Include="ttypeinfo.h" />
+    <ClInclude Include="tutf8encoding.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">
@@ -212,9 +212,10 @@
     <ClCompile Include="trmlreader.cpp" />
     <ClCompile Include="trmlwriter.cpp" />
     <ClCompile Include="tstreamreader.cpp" />
-    <ClCompile Include="tstring.cpp" />
+    <ClCompile Include="tstringfixedwidth.cpp" />
     <ClCompile Include="tthread.cpp" />
     <ClCompile Include="ttimedriver.cpp" />
+    <ClCompile Include="tutf8encoding.cpp" />
   </ItemGroup>
   <ItemGroup>
     <None Include="design.cd" />

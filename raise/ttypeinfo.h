@@ -1,7 +1,7 @@
 #ifndef TTYPEINFO_H
 #define TTYPEINFO_H
 
-#include "tstring.h"
+#include "tstringfixedwidth.h"
 
 class TTypeInfo
 {

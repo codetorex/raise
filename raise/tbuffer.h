@@ -57,26 +57,6 @@ public:
 		Index = newpos;
 	}
 
-	inline void IncreaseBufferByteCapacity(int newCapacity)
-	{
-		if ((dword)newCapacity < Capacity) // warning sikned un sikned mismatchhhh
-		{
-			throw Exception("new capacity is lower than old capacity");
-		}
-
-		if (newCapacity == Capacity)
-		{
-			return;
-		}
-
-		byte* newBuffer = new byte[newCapacity];
-		MemoryDriver::Copy(newBuffer,Data,Capacity);
-		
-		delete Data;
-		Data = newBuffer;
-		Capacity = newCapacity;
-	}
-
 	/**
 	* Adds byte to buffer and increases buffer when needed.
 	*/
@@ -84,7 +64,7 @@ public:
 	{
 		if (Capacity == Index)
 		{
-			IncreaseBufferByteCapacity(Capacity * 2);
+			Grow(Capacity * 2);
 		}
 		Data[Index++] = value;
 	}
@@ -113,7 +93,7 @@ public:
 	{
 		if (Capacity - Index < length)
 		{
-			IncreaseBufferByteCapacity(Capacity * 2);
+			Grow(Capacity * 2);
 		}
 		MemoryDriver::Copy(Data+Index,values,length);
 		Index += length;
