@@ -66,6 +66,9 @@
     <Filter Include="Source Files\IO\Literacy\RML">
       <UniqueIdentifier>{a55c0f8b-568e-4beb-81b8-ad57aaca3fc7}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Source Files\System\Windows">
+      <UniqueIdentifier>{7b09620a-1851-48fe-90c5-c7153a1b6d48}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="raisetypes.h">
@@ -320,6 +323,18 @@
     <ClInclude Include="tutf8encoding.h">
       <Filter>Source Files\Text</Filter>
     </ClInclude>
+    <ClInclude Include="tregistry.h">
+      <Filter>Source Files\System\Windows</Filter>
+    </ClInclude>
+    <ClInclude Include="tproperty.h">
+      <Filter>Source Files\System</Filter>
+    </ClInclude>
+    <ClInclude Include="tconvert.h">
+      <Filter>Source Files\System</Filter>
+    </ClInclude>
+    <ClInclude Include="tsharedpointer.h">
+      <Filter>Source Files\System</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">
@@ -400,8 +415,17 @@
     <ClCompile Include="tstringfixedwidth.cpp">
       <Filter>Source Files\String</Filter>
     </ClCompile>
-    <ClCompile Include="tutf8encoding.cpp">
+    <ClCompile Include="tencoding.cpp">
       <Filter>Source Files\Text</Filter>
+    </ClCompile>
+    <ClCompile Include="tstring.cpp">
+      <Filter>Source Files\String</Filter>
+    </ClCompile>
+    <ClCompile Include="tstringdriver.cpp">
+      <Filter>Source Files\String</Filter>
+    </ClCompile>
+    <ClCompile Include="tbytearray.cpp">
+      <Filter>Source Files\System</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

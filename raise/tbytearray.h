@@ -2,6 +2,8 @@
 #define TBYTEARRAY_H
 
 #include "raisetypes.h"
+#include "tmemorydriver.h"
+#include "tsystem.h"
 
 class TByteArray
 {
@@ -9,19 +11,25 @@ public:
 	byte* Data;
 	dword Capacity;
 
-	inline TByteArray()
+	/**
+	 * @brief Constructor that copies existing byte array to new array with new capacity.
+	 * @param [in] other Other byte array that to be copied to new.
+	 * @param _NewCapacity New capacity (if smaller than existing capacity will be extended)
+	 */
+	inline void Initialize(const TByteArray* other, dword _NewCapacity)
 	{
-		Data = 0;
-		Capacity = 0;
+		if (_NewCapacity < other->Capacity) _NewCapacity = other->Capacity;
+		Data = new byte[_NewCapacity];
+		MemoryDriver::Copy(Data,other->Data,other->Capacity);
 	}
 
-	inline TByteArray(dword _Capacity)
+	inline void Initialize(dword _Capacity)
 	{
 		Data = 0;
 		Allocate(_Capacity);
 	}
 
-	inline TByteArray(byte* _Data, dword _Capacity)
+	inline void Initialize(byte* _Data, dword _Capacity)
 	{
 		Use(_Data,_Capacity);
 	}
@@ -64,6 +72,56 @@ public:
 	{
 		if ( Data ) delete Data;
 		Use(0,0);
+	}
+
+	~TByteArray()
+	{
+		delete [] Data;
+	}
+
+// Constructors
+public:
+
+	inline TByteArray()
+	{
+		Data = 0;
+		Capacity = 0;
+	}
+
+	inline TByteArray(dword _Capacity)
+	{
+		Initialize(_Capacity);
+	}
+
+	inline TByteArray(const TByteArray* other, dword _NewCapacity)
+	{
+		Initialize(other,_NewCapacity);
+	}
+};
+
+class TSharedByteArray: public TByteArray
+{
+public:
+	int RefCount;
+	
+
+	TSharedByteArray(): TByteArray()
+	{
+		RefCount = 1;
+	}
+
+	TSharedByteArray(TByteArray* ary)
+	{
+		Data = ary->Data;
+		Capacity = ary->Capacity;
+		RefCount = 1;
+	}
+
+	TSharedByteArray(byte* _Data, dword _Capacity)
+	{
+		Data = _Data;
+		Capacity = _Capacity;
+		RefCount = 1;
 	}
 };
 

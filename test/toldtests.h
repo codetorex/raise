@@ -44,7 +44,7 @@ class TStringTest
 {
 public:
 
-	void PrintString(string& k)
+	void PrintString(stringfw& k)
 	{
 		wprintf(k.Chars);
 		wprintf(L" %i %i\n", k.Length, k.Capacity);
@@ -52,18 +52,18 @@ public:
 
 	void Test()
 	{
-		string teststr = L"this is test string";
+		stringfw teststr = L"this is test string";
 		PrintString(teststr);
 		teststr.ToUpper();
 		PrintString(teststr);
 		teststr.ToLower();
 		PrintString(teststr);
 
-		string pok = teststr.Substring(0,4);
+		stringfw pok = teststr.Substring(0,4);
 		PrintString(pok);
 
 
-		string test2 = L"Concentration test: ";
+		stringfw test2 = L"Concentration test: ";
 		PrintString(test2);
 		test2 += L"Concentration string";
 		PrintString(test2);

@@ -152,28 +152,19 @@ public:
 	{
 		if (Chars) { StringDriverFixedWidth::Lower(Chars); }
 	}
-
+	
 	void ToUpper()
 	{
 		if (Chars) { StringDriverFixedWidth::Upper(Chars); }
 	}
 	
-	/**
-	* Finds a string in string.
-	* @param value string to search.
-	* @return Index of found string. -1 when not found.
-	*/
+
 	inline int IndexOf(T* value)
 	{
 		return IndexOf(value,0);
 	}
 
-	/**
-	* Finds a string in string from starting a startindex.
-	* @param value string to search.
-	* @param startIndex start point.
-	* @return Index of found string. -1 when not found.
-	*/
+
 	inline int IndexOf(T* value, int startIndex)
 	{
 		T* kp = StringDriverFixedWidth::Find(Chars+startIndex,value);
@@ -187,13 +178,7 @@ public:
 		}
 	}
 
-	/**
-	* Finds a string in string from between start index and given count of characters.
-	* @param value string to search.
-	* @param startIndex start point.
-	* @param count search length.
-	* @return Index of found string. -1 when not found.
-	*/
+
 	int IndexOf(T* value, int startIndex,int count)
 	{
 		T temp = Chars[startIndex+count];
@@ -841,7 +826,7 @@ protected:
 
 typedef TStringFixedWidth<ch8>		TString8;	// long bit wise string type
 typedef TStringFixedWidth<ch16>		TString16;	// long bit wise string type
-typedef TString16			string;		// generic string type
+typedef TString16			stringfw;		// generic string type
 
 typedef TString8			str8;		// short bit wise string type
 typedef TString16			str16;		// short bit wise string type

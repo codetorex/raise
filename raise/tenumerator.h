@@ -1,7 +1,6 @@
 #ifndef TENUMERATOR_H
 #define TENUMERATOR_H
 
-
 /**
 * Enumerator interface...
 */
@@ -10,21 +9,25 @@ class TEnumerator
 {
 public:
 	/**
-	* Set enumerator to first item.
-	*/
+	 * @brief Set enumerator to first item.
+	 */
 	virtual void Reset() = 0;
 
 	/**
-	* Advance enumerator to next item.
-	*/
+	 * @brief Advance enumerator to next item.
+	 */
 	virtual bool MoveNext() = 0;
 
-	/**
-	* Get current enumerator item.
-	*/
-	virtual T* Current() = 0;
+	/// Current item
+	T Current;
 };
 
-// IEnumerable Interface
+
+template<class T>
+class TEnumerable
+{
+public:
+	virtual T GetEnumerator() = 0;
+};
 
 #endif

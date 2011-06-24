@@ -57,6 +57,8 @@
     <OutDir Condition="'$(Configuration)|$(Platform)'=='Template|Win32'">../bin/</OutDir>
     <IncludePath Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">C:\Library\Libraries\libpng-1.5.2;C:\Library\Libraries\zlib-1.2.4;$(IncludePath)</IncludePath>
     <LibraryPath Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">C:\Library\Libraries\libpng-1.5.2\bin;$(LibraryPath)</LibraryPath>
+    <IncludePath Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">C:\Library\Libraries\libpng-1.5.2;C:\Library\Libraries\zlib-1.2.4;$(IncludePath)</IncludePath>
+    <LibraryPath Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">C:\Library\Libraries\libpng-1.5.2\bin;$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>
@@ -132,6 +134,7 @@
     <ClInclude Include="tcompositegenericconverter.h" />
     <ClInclude Include="tcomposition.h" />
     <ClInclude Include="tcompositionprimitive.h" />
+    <ClInclude Include="tconvert.h" />
     <ClInclude Include="tdatetime.h" />
     <ClInclude Include="tdictionary.h" />
     <ClInclude Include="tencoding.h" />
@@ -156,13 +159,16 @@
     <ClInclude Include="tprocessdebug.h" />
     <ClInclude Include="tprocessmodule.h" />
     <ClInclude Include="tprofiler.h" />
+    <ClInclude Include="tproperty.h" />
     <ClInclude Include="tqueue.h" />
     <ClInclude Include="trange.h" />
     <ClInclude Include="trectangle.h" />
     <ClInclude Include="tregion.h" />
+    <ClInclude Include="tregistry.h" />
     <ClInclude Include="trmlreader.h" />
     <ClInclude Include="trmlwriter.h" />
     <ClInclude Include="tserializable.h" />
+    <ClInclude Include="tsharedpointer.h" />
     <ClInclude Include="tstack.h" />
     <ClInclude Include="tstream.h" />
     <ClInclude Include="tstreamreader.h" />
@@ -198,8 +204,10 @@
     <ClCompile Include="tbitmaptga.cpp" />
     <ClCompile Include="tbitset.cpp" />
     <ClCompile Include="tbufferedstream.cpp" />
+    <ClCompile Include="tbytearray.cpp" />
     <ClCompile Include="tcolor.cpp" />
     <ClCompile Include="tcomposition.cpp" />
+    <ClCompile Include="tencoding.cpp" />
     <ClCompile Include="tencodinginfo.cpp" />
     <ClCompile Include="tcompositebuffer.cpp" />
     <ClCompile Include="tiniparser.cpp" />
@@ -212,10 +220,11 @@
     <ClCompile Include="trmlreader.cpp" />
     <ClCompile Include="trmlwriter.cpp" />
     <ClCompile Include="tstreamreader.cpp" />
+    <ClCompile Include="tstring.cpp" />
+    <ClCompile Include="tstringdriver.cpp" />
     <ClCompile Include="tstringfixedwidth.cpp" />
     <ClCompile Include="tthread.cpp" />
     <ClCompile Include="ttimedriver.cpp" />
-    <ClCompile Include="tutf8encoding.cpp" />
   </ItemGroup>
   <ItemGroup>
     <None Include="design.cd" />

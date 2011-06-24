@@ -21,9 +21,10 @@ public:
 
 	int CodePage;
 
-	//static byte* Convert(TEncoding* srcEncoding, TEncoding* dstEncoding, byte* bytes,int length);
+	TEncodingInfo()
+	{
 
-	TEncodingInfo(int _codePage);
+	}
 
 	/**
 	 * @brief Encoding constructor.
@@ -35,6 +36,7 @@ public:
 	TEncodingInfo(const str8& encName, const str8& _displayName, int _min, int _max, int _cp)
 	{
 		Name = encName;
+		DisplayName = _displayName;
 		MinLengthPerChar = _min;
 		MaxLengthPerChar = _max;
 		CodePage = _cp;

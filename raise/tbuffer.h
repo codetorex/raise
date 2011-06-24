@@ -35,7 +35,7 @@ public:
 		Allocate(_Capacity);
 	}
 
-	inline void Allocate(dword _Capacity)
+	inline void Allocate(dword _Capacity) // THIS IS VERY WRONG
 	{
 		this->TByteArray::Allocate(_Capacity);
 		Index = 0;
@@ -68,7 +68,7 @@ public:
 		}
 		Data[Index++] = value;
 	}
-
+	
 	inline void AddByteNoCheck(byte value)
 	{
 		Data[Index++] = value;

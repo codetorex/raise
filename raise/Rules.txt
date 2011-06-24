@@ -1,4 +1,4 @@
-Rules of coding for Raise and Realizer 3D Engine
+Rules and Info to coding for Raise and Realizer 3D Engine
 23.02.2011 11:00
 
 Error-Handling
@@ -7,3 +7,17 @@ Thanks: http://www.parashift.com/c++-faq-lite/exceptions.html
 
 * Always throw derivatives of Exception class
 * Always catch by reference if you don't have a good reason.
+
+
+KISS Scheme
+___________________________________________________
+
+
+
+Weak-Ptr
+___________________________________________________
+So, during a high usage period the component would acquire a shared_ptr to the resource and store it. 
+Another component might also acquire the shared_ptr during the same time. 
+When the component enters a period of no usage, it releases the shared_ptr, but keeps a weak_ptr. 
+When the component needs the resource again, it first checks if the weak_ptr is still valid. 
+If not, it has to reload the resource from disk.

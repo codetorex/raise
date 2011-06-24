@@ -3,74 +3,173 @@
 
 #include "tcharacter.h"
 
+const static byte bytesFromUTF8[256] = {
+	1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1,
+	1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1,
+	1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1,
+	1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1,
+	0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+	0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+	2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2,
+	3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 4, 4, 4, 4, 4, 4, 4, 4, 5, 5, 5, 5, 6, 6, 0, 0
+};
+
 class StringDriver
 {
 public:
-	inline static void LengthASCII(char* data, dword& length, dword& bytelength)
-	{
-		length = bytelength = strlen(data);
-	}
-
-
-
+	
 	/**
-	 * @brief Calculates length of a utf-8 encoded string.
-	 * @param [in] data pointer to string.
-	 * @param [out] length The character length of string.
-	 * @param [out] bytelength The byte length of string.
+	 * @brief Decodes a character from UTF-8 string.
+	 * @param [in] charptr Pointer to character.
+	 * @param [in,out] byteLength Decoded byte count.
+	 * @return Decoded character.
 	 */
-	static void LengthUTF8(char* data, dword& length, dword& bytelength)
-	{
-
-	}
+	static ch32 Decode(const byte* charptr, int& byteLength);
 
 	/**
-	 * @brief Encodes a character in utf-8.
-	 * @param value The character.
-	 * @param [in,out] data data pointer (should have enough space).
-	 * @return Bytes written.
+	 * @brief Encodes one character to target byte array without safety.
+	 * @param [out] charptr Pointer to byte array where encoded character to be written.
+	 * @param value The character to be encoded.
+	 * @return Written byte count.
 	 */
-	inline static int EncodeUTF8(ch32 value, byte*& data)
-	{
+	static int Encode(byte* charptr, ch32 c);
 
+	inline static ch32 DecodeFast(const byte* charptr, int& byteLength)
+	{
+		if (*charptr < 0x80)
+		{
+			byteLength = 1;
+			return *charptr;
+		}
+		
+		return Decode(charptr,byteLength);
 	}
 
-
-	/**
-	 * @brief Encodes a character in utf-8 with checking capacity.
-	 * @param value The character.
-	 * @param [in,out] data [in,out] data pointer.
-	 * @param cap The capacity of data pointer.
-	 */
-	inline static void EncodeUTF8(ch32 value, byte*& data, int cap)
+	inline static ch32 DecodeAdv( byte*& src )
 	{
-
+		if (*src < 0x80)
+		{ 
+			return *src++; 
+		}
+		int ln;
+		ch32 result = Decode(src,ln);
+		src += ln;
+		return result;
 	}
 
+	inline static void EncodeAdv( byte*& dst, ch32 character)
+	{
+		if (character < 0x80)
+		{
+			*dst = (byte)character;
+			dst++;
+			return;
+		}
+		int ln = StringDriver::Encode(dst,character);
+		dst += ln;
+	}
+
+	static void Length(const byte* data,int capacity, dword& length, dword& bytelength)
+	{
+		length = 0;
+		bytelength = 0;
+		for (int i=0;i<capacity;i++)
+		{
+			if (data[i] == 0) break;
+			i += bytesFromUTF8[ data[i] ];
+			length++;
+		}
+	}
+
+	inline static bool IsTrail(byte c)
+	{
+		return ( c & 0xc0 ) == 0x80;
+	}
 
 	/**
-	 * @brief Decode a utf-8 character.
-	 * @param [in,out] data [in,out] pointer reference to data.
+	 * @brief Reversed decoding for scanning from reverse.
+	 * @param [in,out] charptr Pointer to character array.
+	 * @param length Should be remaining length of array for avoiding any catastrophic event.
+	 * @param [out] bytelength The byte length of read character in array.
 	 * @return The character.
 	 */
-	inline static ch32 DecodeUTF8(byte*& data)
+	inline static ch32 ReverseDecode(byte* charptr, int length, int& bytelength)
 	{
+		if (*charptr < 0x80)
+		{
+			return (ch32)*charptr;
+		}
+		
+		while(length--)
+		{
+			if( IsTrail( *(--charptr) ) )
+			{
+				continue;
+			}
+			else
+			{
+				return Decode(charptr,bytelength);
+			}
+		}
 
+		return 0;
 	}
 
-	inline static ch32 GetNextUTF8(char*& data)
+
+
+	static void Length(const byte* data, dword& length, dword& bytelength)
 	{
-		ch32 result;
-		if (*data > 0)
+		length = 0;
+		bytelength = 0;
+		int i=0;
+		byte c = data[i];
+		while( c != 0 )
 		{
-			result = *data;
-			data++;
+			if (!IsTrail(c))
+			{
+				length++;
+			}
+			bytelength++;
+			c = *(++data);
 		}
-		else
+	}
+
+
+	/**
+	 * @brief Counts chars and returns pointer when counter ends.
+	 * @param src The source.
+	 * @param charToCount Number of character to count.
+	 * @return Address of where counter stops.
+	 */
+	static byte* Count(byte* src, int charToCount)
+	{
+		if (charToCount == 0) return src;
+
+		while(*src)
 		{
-			return DecodeUTF8(data);
+			if (!IsTrail(*src))
+			{
+				charToCount--;
+				if (charToCount == 0)
+				{
+					return src;
+				}
+			}
 		}
-		return result;
+
+		return src;
+	}
+
+	static int RequiredBytes(const ch32* data,int length);
+
+	static inline int GetMaxByteCount( int charCount )
+	{
+		return charCount * 4;
+	}
+
+	static inline int GetMaxCharCount( int byteCount )
+	{
+		return byteCount;
 	}
 };
 
