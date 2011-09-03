@@ -7,14 +7,16 @@ class TBinaryReader
 {
 public:
 	TStream* BaseStream;
-	TBufferedStream* BufSource; // Buffered Source
+	//TBufferedStream* BufSource; // Buffered Source
+	TStream* BufSource; // not using buffer this time
 
 	bool EndOfStream;
 
 	TBinaryReader(TStream* stream,int bufferSize = 8192)
 	{
 		BaseStream = stream;
-		BufSource = new TBufferedStream(stream,bufferSize);
+		//BufSource = new TBufferedStream(stream,bufferSize);
+		BufSource = stream;
 		EndOfStream = false;
 	}
 

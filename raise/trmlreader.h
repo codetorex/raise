@@ -1,17 +1,17 @@
 #ifndef TRMLREADER_H
 #define TRMLREADER_H
 
-#include "tstringfixedwidth.h"
+#include "tstring.h"
 #include "tdictionary.h"
 #include "tstreamreader.h"
 
 class TRMLNode
 {
 public:
-	str8 Name;
+	TString Name;
 
-	TDictionary<str8*> Values;
-	//TArray< TKeyValue<str8,str8>* > Values; // similar to attributes in XML
+	TDictionary<TString*> Values;
+	//TArray< TKeyValue<TString,TString>* > Values; // similar to attributes in XML
 	TArray< TRMLNode* > Nodes;
 
 	TRMLNode()
@@ -19,7 +19,7 @@ public:
 		Name = "BaseNode";
 	}
 
-	TRMLNode(const str8& NodeName)
+	TRMLNode(const TString& NodeName)
 	{
 		Name = NodeName;
 	}
@@ -29,7 +29,7 @@ class TRMLReader
 {
 public:
 	TStream* BaseStream;
-	StreamReader* TextStream;
+	TStreamReader* TextStream;
 
 	TRMLReader(TStream* readStream);
 	~TRMLReader();

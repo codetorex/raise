@@ -75,9 +75,9 @@ public:
 		return value;
 	}
 
-	inline str8& tostring()
+	inline TString ToString()
 	{
-		return TBinary::tostring(bin);
+		return TBinary::ToString(bin);
 	}
 };
 

@@ -28,5 +28,17 @@
     <ClInclude Include="toldtests.h">
       <Filter>Tests</Filter>
     </ClInclude>
+    <ClInclude Include="tconsolereport.h">
+      <Filter>Source Files</Filter>
+    </ClInclude>
+    <ClInclude Include="test_datetime.h">
+      <Filter>Tests</Filter>
+    </ClInclude>
+    <ClInclude Include="test_string.h">
+      <Filter>Tests</Filter>
+    </ClInclude>
+    <ClInclude Include="test_array.h">
+      <Filter>Tests</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>

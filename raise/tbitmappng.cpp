@@ -3,6 +3,10 @@
 #include "tbitmap.h"
 #include "tstream.h"
 
+
+#ifndef NOPNGLIB
+
+
 #include "png.h"
 #include "pngstruct.h"
 
@@ -198,3 +202,5 @@ void TBitmapPNG::Install()
 	Readers.Add(png);
 	Writers.Add(png);
 }
+
+#endif

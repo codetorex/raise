@@ -1,6 +1,9 @@
 #include "stdafx.h"
 #include "tstringdriver.h"
 
+static const ch32 s_Whitespaces[] = { 0x20, 0x09, 0x0A, 0x0D, 0x0B, 0x0 };
+const TArray<ch32> StringDriver::Whitespaces(s_Whitespaces);
+
 static const dword MaximumChar = 0x7FFFFFFF;
 
 int StringDriver::RequiredBytes( const ch32* data,int length )
@@ -25,24 +28,7 @@ int StringDriver::RequiredBytes( const ch32* data,int length )
 	return result;
 }
 
-ch32 StringDriver::Decode( const byte* charptr, int& byteLength )
-{
-	byteLength = bytesFromUTF8[ charptr[0] ];
-	ch32 result = *charptr & ((1<<(7-byteLength))-1); // leading byte
-	switch(byteLength)
-	{
-	case 4:
-		result = (result<<6) | (*(++charptr) & 0x3F);
-	case 3:
-		result = (result<<6) | (*(++charptr) & 0x3F);
-	case 2:
-		result = (result<<6) | (*(++charptr) & 0x3F);
-		break;
-	}
-	return result;
-}
-
-int StringDriver::Encode( byte* charptr, ch32 c )
+int StringDriver::EncodeOnlyUnicode( byte* charptr, ch32 c )
 {
 	if (c <= 0x7FF)
 	{
@@ -71,4 +57,21 @@ int StringDriver::Encode( byte* charptr, ch32 c )
 	charptr[1] = 0x96;
 	charptr[2] = 0x87;
 	return 3;
+}
+
+ch32 StringDriver::DecodeOnlyUnicode( const byte* charptr, int& byteLength )
+{
+	byteLength = bytesFromUTF8[ charptr[0] ];
+	ch32 result = *charptr & ((1<<(7-byteLength))-1); // leading byte
+	switch(byteLength)
+	{
+	case 4:
+		result = (result<<6) | (*(++charptr) & 0x3F);
+	case 3:
+		result = (result<<6) | (*(++charptr) & 0x3F);
+	case 2:
+		result = (result<<6) | (*(++charptr) & 0x3F);
+		break;
+	}
+	return result;
 }

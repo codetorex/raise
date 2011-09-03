@@ -2,7 +2,7 @@
 #include "tcompositebuffer.h"
 #include "texception.h"
 
-void TComposition::CreateElementList( TArray<TCompositionPrimitive*>* allElements, const str8& elementNames )
+void TComposition::CreateElementList( TArray<TCompositionPrimitive*>* allElements, const TString& elementNames )
 {
 	ElementCount = 0;
 

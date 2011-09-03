@@ -22,6 +22,17 @@ public:
 		memcpy(dst,src,length);
 	}
 
+	/**
+	 * Copies data that aligns to 32 bits.
+	 */
+	inline void CopyDword(dword* dst,dword* src,int cnt)
+	{
+		while(cnt--)
+		{
+			*(dst++) = *(src++);
+		}
+	}
+
 #ifndef LINUX
 #ifndef M64
 	inline static void ShortCopy(void* _dst,void* _src,int _size)

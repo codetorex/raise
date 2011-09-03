@@ -6,7 +6,7 @@
 #include "texception.h"
 
 #define NFOUND	0xFFFFFFFF
-
+;
 class TBuffer: public TByteArray
 {
 public:
@@ -179,6 +179,8 @@ public:
 		return MemoryDriver::SearchPattern(Data,Index,needle,pattern,length);
 	}
 };
+
+typedef TBuffer TByteBuffer;
 
 class TVirtualBuffer: public TBuffer
 {

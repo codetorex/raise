@@ -2,18 +2,19 @@
 #define THASHMAP_H
 
 #include "raisetypes.h"
-#include "tstringfixedwidth.h"
+#include "tstring.h"
 #include "tkeyvalue.h"
+#include "thashcodeprovider.h"
 
 
 
 template <class T>
-class RDLL THashKeyValue: public TKeyValue<str8,T>
+class RDLL THashKeyValue: public TKeyValue<TString,T>
 {
 public:
 	dword Hash;
 
-	THashKeyValue(dword h,str8& k, T v)
+	THashKeyValue(dword h,TString& k, T v)
 	{
 		Hash = h;
 		Key = k;
@@ -34,7 +35,7 @@ public:
 	int valueCount;
 	bool leaf; // true if its a leaf, false if branch
 
-	inline virtual THashKeyValue<T>* Get(dword h,const str8& key) = 0;
+	inline virtual THashKeyValue<T>* Get(dword h,const TString& key) = 0;
 	inline virtual void Add(dword h,THashKeyValue<T>* value) = 0;
 };
 
@@ -50,7 +51,7 @@ public:
 
 	THashKeyValue<T>* values[4];
 
-	inline THashKeyValue<T>* Get(dword h,const str8& key)
+	inline THashKeyValue<T>* Get(dword h,const TString& key)
 	{
 		int i=valueCount;
 		while(i--)
@@ -124,7 +125,7 @@ public:
 		delete oldLeaf;
 	}
 
-	inline THashKeyValue<T>* Get(dword h,const str8& key)
+	inline THashKeyValue<T>* Get(dword h,const TString& key)
 	{
 		int i = MOD32(h >> branchShift);
 		//h >>= 8;
@@ -161,12 +162,17 @@ template <class T>
 class RDLL THashMap
 {
 public:
-	int totalValues;
+	int Count;
 	TMapBranch<T> Root;
 
-	inline bool ContainsKey(const str8& key)
+	THashMap()
 	{
-		dword h = str8::GetHash(key);
+		Count = 0;
+	}
+
+	inline bool ContainsKey(const TString& key)
+	{
+		dword h = TBasicHashCodeProvider::Instance.GetHashCode(key); // TString::GetHash(key);
 		THashKeyValue<T>* r = Root.Get(h,key);
 		if (r == NULL)
 		{
@@ -175,14 +181,14 @@ public:
 		return true;
 	}
 
-	inline THashKeyValue<T>* Get(const str8& key)
+	inline THashKeyValue<T>* Get(const TString& key)
 	{
-		dword h = str8::GetHash(key);
+		dword h = TBasicHashCodeProvider::Instance.GetHashCode(key);
 		THashKeyValue<T>* r = Root.Get(h,key);
 		return r;
 	}
 
-	inline T GetValue(const str8& key)
+	inline T GetValue(const TString& key)
 	{
 		THashKeyValue<T>* tkp = Get(key);
 		if (tkp == NULL)
@@ -192,11 +198,12 @@ public:
 		return tkp->Value;
 	}
 
-	inline void Add(str8& key,T value)
+	inline void Add(TString& key,T value)
 	{
-		dword h = str8::GetHash(key);
+		dword h = TBasicHashCodeProvider::Instance.GetHashCode(key); // TString::GetHash(key);
 		THashKeyValue<T>* kvp = new THashKeyValue<T>(h,key,value);
 		Root.Add(h,kvp);
+		Count++;
 	}
 };
 

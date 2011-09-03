@@ -7,6 +7,7 @@
 #include "tenumerator.h"
 #include "tmemorydriver.h"
 #include "tarray.h"
+#include "mmathdriver.h"
 
 
 /**
@@ -31,10 +32,6 @@ public:
 	TSharedByteArray* Ref; // internal reference for avoid unnecessary copying
 
 private:
-	inline void CountCharsAndBytes()
-	{
-		StringDriver::Length(Data,Capacity,Length,ByteLength);
-	}
 
 	inline void CountCharsAndBytesConst()
 	{
@@ -56,7 +53,11 @@ private:
 	inline void StringAllocateCopy(int newCap,byte* src, int srcLength)
 	{
 		StringAllocate(newCap);
-		MemoryDriver::Copy(Data,src,srcLength);
+		if (srcLength > newCap)
+		{
+			srcLength = newCap;
+		}
+		if ( srcLength > 0 ) MemoryDriver::Copy(Data,src,srcLength);
 		Data[srcLength] = 0;
 	}
 
@@ -82,6 +83,10 @@ private:
 		Ref = new TSharedByteArray(Data,Capacity);
 	}
 
+	inline int GetTrimStartPoint(const TArray<ch32>& trimChars, int& bytesToSkip);
+	inline int GetTrimEndPoint(const TArray<ch32>& trimChars, int& bytesToSkip);
+
+public:
 	/**
 	 * Detaches string data from referenced point.
 	 * Should be called whenever needed to write to Data.
@@ -104,6 +109,11 @@ private:
 			else
 			{
 				Ref->RefCount--;
+				if (Ref->RefCount == 0)
+				{
+					delete Ref;
+					Ref = 0;
+				}
 				StringAllocateCopy(newCap,Ref->Data,ByteLength);
 				CreateRef();
 			}
@@ -115,6 +125,20 @@ private:
 		}
 	}
 
+	inline void DetachToEdit()
+	{
+		if (Capacity != 0)
+		{
+			DetachToEdit(Capacity);
+		}
+		else
+		{
+			DetachToEdit(ByteLength);
+		}	
+	}
+
+private:
+
 	inline void DetachToDestroy()
 	{
 		if (Ref)
@@ -123,13 +147,14 @@ private:
 			if (Ref->RefCount == 0)
 			{
 				delete Ref;
+				Ref = 0;
 			}
 		}
 	}
 
-	inline void Append(const byte* src,int length)
+	inline void Append(const byte* src,int length, int charlength)
 	{
-		int newCap = length + ByteLength;
+		dword newCap = length + ByteLength;
 		if ( newCap >= Capacity-1 )
 		{
 			newCap += Capacity / 2; // so appending means we gona use a little bit more space
@@ -140,28 +165,20 @@ private:
 		{
 			Data[ByteLength++] = *src++;
 		}
-	}
-
-	inline void FastCopyDword(dword* dst,dword* src,int cnt)
-	{
-		while(cnt--)
-		{
-			*(dst++) = *(src++);
-		}
+		Length += charlength;
+		Data[ByteLength] = 0;
 	}
 
 public:
-
-	static TString Empty;
-
-	TString()
+	
+	// TODO: change name of this function
+	inline void CountCharsAndBytes()
 	{
-		Data = 0;
-		Capacity = 0;
-		Length = 0;
-		ByteLength = 0;
-		Ref = 0;
+		StringDriver::Length(Data,Capacity,Length,ByteLength);
 	}
+
+	/// Empty string holder
+	static TString Empty;
 
 	/**
 	 * @brief String literal constructor.
@@ -188,13 +205,24 @@ public:
 	}
 
 
-
 	~TString()
 	{
 		DetachToDestroy();
 	}
 
+	inline bool IsASCII() const
+	{
+		return ByteLength == Length;
+	}
+
+	/**
+	 * Checks if this string have specified character.
+	 */
 	bool Have(ch32 character) const;
+
+	/**
+	 * Checks if this string have any character of given string.
+	 */
 	bool Have(const TString& any) const;
 
 	/**
@@ -203,7 +231,7 @@ public:
 	void Truncate(dword newLength)
 	{
 		if (newLength >= Length) return;
-		DetachToEdit(Capacity); // detach because we gona change data.
+		DetachToEdit(); // detach because we will change data.
 
 		byte* endptr = StringDriver::Count(Data,newLength);
 		*endptr = 0;
@@ -211,16 +239,48 @@ public:
 		ByteLength = endptr - Data;
 	}
 
-	inline TString& operator += (const TChar& chr)
+	/**
+	 * Just adds the character without checking capacity and doesn't cares for references.
+	 * Call detach before using this, or just use it while creating strings first time.
+	 */
+	inline void AppendASCIIFast(char chr)
+	{
+		Data[ByteLength++] = (byte)chr;
+		Length++;
+	}
+
+	/**
+	 * Appends an ASCII character, so it checks capacity and reference but doesn't struggles with encoding character.
+	 */
+	inline void AppendASCII( char chr )
+	{
+		Append((byte*)&chr,1,1);
+	}
+
+	inline void AppendUnicode( ch32 chr)
 	{
 		byte tmp[8];
-		int ln = StringDriver::Encode(tmp,chr.Character);
-		Append(tmp,ln); // already detaches
+		int ln = StringDriver::Encode(tmp,chr);
+		Append(tmp,ln,1); // already detaches
+	}
+
+	inline TString& operator += ( ch32 chr )
+	{
+		AppendUnicode(chr);
+		return *this;
+	}
+
+	inline TString& operator += ( const TChar& chr )
+	{
+		AppendUnicode(chr.Character);
 		return *this;
 	}
 
 	TString ToLower() const;
 	TString ToUpper() const;
+
+	void ToLowerInplace();
+	void ToUpperInplace();
 
 	/**
 	 * @brief Finds a string in string.
@@ -252,7 +312,7 @@ public:
 	 */
 	inline int IndexOf(const TString& value, int startIndex, int count) const
 	{
-		return IndexOf(value.Data + startIndex, min(count,ByteLength - startIndex));
+		return IndexOf(value.Data + startIndex, min(count,(int)ByteLength - startIndex));
 	}
 
 	/**
@@ -273,11 +333,56 @@ public:
 		return MemoryDriver::Compare((Data + ByteLength) - value.ByteLength,value.Data,value.Length) == 0;
 	}
 
-	TString Substring(int startIndex, int lengt) const;
+	/**
+	 * Gets a part of string from this object. Index is zero based.
+	 */
+	TString Substring( dword startIndex, dword lengt ) const;
 
-	inline TString Substring(int startIndex) const
+	TString Substring( dword startIndex ) const;
+
+
+
+	inline TString Trim()
 	{
-		return Substring(startIndex,Length - startIndex);
+		return Trim(StringDriver::Whitespaces);
+	}
+
+	inline TString TrimStart()
+	{
+		return TrimStart(StringDriver::Whitespaces);
+	}
+
+	inline TString TrimEnd()
+	{
+		return TrimEnd(StringDriver::Whitespaces);
+	}
+
+	inline TString Trim(const TArray<ch32>& trimChars)
+	{
+		return TrimStart().TrimEnd();
+	}
+
+	TString TrimStart(const TArray<ch32>& trimChars);
+
+	TString TrimEnd(const TArray<ch32>& trimChars);
+
+	void TrimStartInplace(const TArray<ch32>& trimChars);
+	void TrimEndInplace(const TArray<ch32>& trimChars);
+	void TrimInplace(const TArray<ch32>& trimChars);
+
+	void TrimStartInplace()
+	{
+		TrimStartInplace(StringDriver::Whitespaces);
+	}
+
+	void TrimEndInplace()
+	{
+		TrimEndInplace(StringDriver::Whitespaces);
+	}
+
+	void TrimInplace()
+	{
+		TrimInplace(StringDriver::Whitespaces);
 	}
 
 	/**
@@ -289,7 +394,7 @@ public:
 		if (ByteLength > 0)
 		{
 			int blength;
-			ch32 result = StringDriver::Decode(Data,blength);
+			ch32 result = StringDriver::DecodeFast(Data,blength);
 			return result;
 		}
 		return 0;
@@ -305,16 +410,15 @@ public:
 		if (ByteLength > 0)
 		{
 			int blength;
-			ch32 result = StringDriver::ReverseDecode(Data+ByteLength,ByteLength,blength);
+			ch32 result = StringDriver::ReverseDecode(Data+ByteLength-1,ByteLength,blength);
 			return result;
 		}
 		return 0;
 	}
 
+	TArray<TString*> Split(const TArray<ch32>& seprators, bool removeEmpty = false) const;
 
-	TArray<TString*>* Split(ch32* seprators, bool removeEmpty = false) const;
-
-	TArray<TString*>* Split(const TArray<TString*>& seprators, bool removeEMpty = false) const;
+	TArray<TString*> Split(const TArray<TString*>& seprators, bool removeEMpty = false) const;
 
 	inline TString& operator = (const char* value)
 	{
@@ -323,6 +427,7 @@ public:
 		Capacity = 0;
 		Ref = 0;
 		CountCharsAndBytesConst();
+		return *this;
 	}
 
 	inline TString& operator = (const TString& value)
@@ -341,25 +446,50 @@ public:
 		return *this;
 	}
 
+	TString()
+	{
+		*this = Empty;
+	}
+
 	TString(const TString& value)
 	{
 		*this = value;
 	}
 
+	TString(const byte* value, int length)
+	{
+		StringAllocateEmpty(length);
+		CreateRef();
+		MemoryDriver::Copy(Data,value,length);
+		Length = StringDriver::Length(Data,Capacity);
+		ByteLength = length;
+		Data[ByteLength] = 0;
+	}
+
+	TString(const byte* value, int length, int charlength)
+	{
+		StringAllocateEmpty(length);
+		CreateRef();
+		MemoryDriver::Copy(Data,value,length);
+		Length = charlength;
+		ByteLength = length;
+		Data[ByteLength] = 0;
+	}
+
 	inline TString& operator += (const TString& value)
 	{
 		// this function automaticly detaches, increases capacity when necessary and appends data
-		Append(value.Data,value.ByteLength);
+		Append(value.Data,value.ByteLength,value.Length);
 		return *this;
 	}
 	
-	inline TString operator + (const TString& value) const
+	/*inline TString operator + (const TString& value) const
 	{
 		TString result(ByteLength + value.ByteLength);
 		result += *this;
 		result += value;
 		return result;
-	}
+	}*/
 
 	inline bool operator == (const TString& value) const
 	{
@@ -369,8 +499,131 @@ public:
 		}
 		return MemoryDriver::Compare(Data,value.Data,ByteLength) == 0;
 	}
+
+	static TString Format(const TString& format,...);
+
+	void FormatInplace(const TString& format, ... );
+
+	/*inline static TString Format(const TString& format,...)
+	{
+		va_list args;
+		va_start (args, format);
+		vsprintf (buffer,format, args);
+		perror (buffer);
+		vsnprintf()
+		va_end (args);
+	}*/
 };
 
+/**
+ * Can add char* + tstring, or tstring + char* brilliant isn't it?
+ */
+inline TString operator + (const TString& value, const TString& value2 )
+{
+	TString tmp = value;
+	tmp += value2;
+	return tmp;
+}
+
+class TCharacterReverseEnumerator: public TEnumerator<ch32>
+{
+public:
+	inline void Reset()
+	{
+		Current = MXDWORD;
+		StrData = SrcString->Data;
+		EndData = StrData + SrcString->ByteLength - 1;
+		CharIndex = SrcString->Length-1;
+	}
+
+	inline bool MoveNext()
+	{
+		if (EndData <= StrData)
+		{
+			return false;
+		}
+		int lng;
+		Current = StringDriver::ReverseDecode(EndData,EndData - StrData, lng );
+		EndData -= lng;
+		CharIndex--;
+		return true;
+	}
+
+	ch32 ReadChar()
+	{
+		MoveNext();
+		return Current;
+	}
+
+	TCharacterReverseEnumerator(const TString& src)
+	{
+		SrcString = &src;
+		Reset();
+	}
+
+	const TString* SrcString;
+	byte* StrData;
+	byte* EndData;
+	int CharIndex;
+};
+
+class TCharacterEnumerator: public TEnumerator<ch32>
+{
+public:
+	inline void Reset()
+	{
+		Current = MXDWORD;
+		StrData = SrcString->Data;
+		EndData = StrData + SrcString->ByteLength;
+		CharIndex = 0;
+	}
+
+	inline bool MoveNext()
+	{
+		if (StrData >= EndData)
+		{
+			return false;
+		}
+		Current = StringDriver::DecodeAdv(StrData);
+		CharIndex++;
+		return true;
+	}
+
+	inline void SkipChars(dword charsToSkip)
+	{
+		if (charsToSkip >= SrcString->Length - CharIndex)
+		{
+			StrData = EndData;
+			return;
+		}
+		if (SrcString->IsASCII())
+		{
+			StrData += charsToSkip;
+		}
+		else
+		{
+			StrData = StringDriver::Count(StrData,charsToSkip);
+		}
+		CharIndex += charsToSkip;
+	}
+
+	ch32 ReadChar()
+	{
+		MoveNext();
+		return Current;
+	}
+
+	TCharacterEnumerator(const TString& src)
+	{
+		SrcString = &src;
+		Reset();
+	}
+
+	const TString* SrcString;
+	byte* StrData;
+	byte* EndData;
+	int CharIndex;
+};
 
 typedef TString string;
 

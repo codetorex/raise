@@ -36,9 +36,6 @@
     <Filter Include="Source Files\Hacking">
       <UniqueIdentifier>{d848e625-12bb-48a1-a63e-505cfb61153b}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Source Files\Text">
-      <UniqueIdentifier>{4487af07-604a-4d8f-993d-ff915a4969bd}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Source Files\Graphics\File Formats">
       <UniqueIdentifier>{be8702b5-8a32-4c00-8060-f53e46449429}</UniqueIdentifier>
     </Filter>
@@ -68,6 +65,18 @@
     </Filter>
     <Filter Include="Source Files\System\Windows">
       <UniqueIdentifier>{7b09620a-1851-48fe-90c5-c7153a1b6d48}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\System\Testing">
+      <UniqueIdentifier>{2dc78062-2149-4741-b90d-76fde35f4d5a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\System\DateTime">
+      <UniqueIdentifier>{ddf397f6-02df-47be-b5ce-7a58dd2eb7fd}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\System\Globalization">
+      <UniqueIdentifier>{dc6ad56a-227d-49ee-9047-ec20336bbb28}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Cryptography">
+      <UniqueIdentifier>{d7fc52e5-163b-43bb-bb42-983f0bdb3ce2}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -140,19 +149,10 @@
     <ClInclude Include="tenumerator.h">
       <Filter>Source Files\Collection</Filter>
     </ClInclude>
-    <ClInclude Include="tdatetime.h">
-      <Filter>Source Files\System</Filter>
-    </ClInclude>
     <ClInclude Include="tevent.h">
       <Filter>Source Files\System</Filter>
     </ClInclude>
     <ClInclude Include="texception.h">
-      <Filter>Source Files\System</Filter>
-    </ClInclude>
-    <ClInclude Include="tsystem.h">
-      <Filter>Source Files\System</Filter>
-    </ClInclude>
-    <ClInclude Include="tmemorydriver.h">
       <Filter>Source Files\System</Filter>
     </ClInclude>
     <ClInclude Include="tthread.h">
@@ -170,9 +170,6 @@
     <ClInclude Include="tqueue.h">
       <Filter>Source Files\Collection</Filter>
     </ClInclude>
-    <ClInclude Include="ttimedriver.h">
-      <Filter>Source Files\System</Filter>
-    </ClInclude>
     <ClInclude Include="tpackedrectangle.h">
       <Filter>Source Files\Graphics</Filter>
     </ClInclude>
@@ -180,9 +177,6 @@
       <Filter>Source Files\Mathematics</Filter>
     </ClInclude>
     <ClInclude Include="mvector3.h">
-      <Filter>Source Files\Mathematics</Filter>
-    </ClInclude>
-    <ClInclude Include="mmathdriver.h">
       <Filter>Source Files\Mathematics</Filter>
     </ClInclude>
     <ClInclude Include="tregion.h">
@@ -232,12 +226,6 @@
     </ClInclude>
     <ClInclude Include="mdecibel.h">
       <Filter>Source Files\Mathematics</Filter>
-    </ClInclude>
-    <ClInclude Include="tencodinginfo.h">
-      <Filter>Source Files\Text</Filter>
-    </ClInclude>
-    <ClInclude Include="tencoding.h">
-      <Filter>Source Files\Text</Filter>
     </ClInclude>
     <ClInclude Include="tcharacter.h">
       <Filter>Source Files\String</Filter>
@@ -317,12 +305,6 @@
     <ClInclude Include="tstringdriverfixedwidth.h">
       <Filter>Source Files\String</Filter>
     </ClInclude>
-    <ClInclude Include="tstringdriver.h">
-      <Filter>Source Files\String</Filter>
-    </ClInclude>
-    <ClInclude Include="tutf8encoding.h">
-      <Filter>Source Files\Text</Filter>
-    </ClInclude>
     <ClInclude Include="tregistry.h">
       <Filter>Source Files\System\Windows</Filter>
     </ClInclude>
@@ -334,6 +316,81 @@
     </ClInclude>
     <ClInclude Include="tsharedpointer.h">
       <Filter>Source Files\System</Filter>
+    </ClInclude>
+    <ClInclude Include="ttest.h">
+      <Filter>Source Files\System\Testing</Filter>
+    </ClInclude>
+    <ClInclude Include="ttestsuitereporting.h">
+      <Filter>Source Files\System\Testing</Filter>
+    </ClInclude>
+    <ClInclude Include="tdatetimeunix.h">
+      <Filter>Source Files\System\DateTime</Filter>
+    </ClInclude>
+    <ClInclude Include="tdatetime.h">
+      <Filter>Source Files\System\DateTime</Filter>
+    </ClInclude>
+    <ClInclude Include="tdatetimeexpanded.h">
+      <Filter>Source Files\System\DateTime</Filter>
+    </ClInclude>
+    <ClInclude Include="tdatetimewindows.h">
+      <Filter>Source Files\System\DateTime</Filter>
+    </ClInclude>
+    <ClInclude Include="ttimedriver.h">
+      <Filter>Source Files\System</Filter>
+    </ClInclude>
+    <ClInclude Include="tmemorydriver.h">
+      <Filter>Source Files\System</Filter>
+    </ClInclude>
+    <ClInclude Include="mmathdriver.h">
+      <Filter>Source Files\Mathematics</Filter>
+    </ClInclude>
+    <ClInclude Include="tstringdriver.h">
+      <Filter>Source Files\String</Filter>
+    </ClInclude>
+    <ClInclude Include="mdecimal.h">
+      <Filter>Source Files\Mathematics</Filter>
+    </ClInclude>
+    <ClInclude Include="tstringbuilder.h">
+      <Filter>Source Files\String</Filter>
+    </ClInclude>
+    <ClInclude Include="tcultureinfo.h">
+      <Filter>Source Files\System\Globalization</Filter>
+    </ClInclude>
+    <ClInclude Include="tdatetimeformatinfo.h">
+      <Filter>Source Files\System\Globalization</Filter>
+    </ClInclude>
+    <ClInclude Include="tnumberformatinfo.h">
+      <Filter>Source Files\System\Globalization</Filter>
+    </ClInclude>
+    <ClInclude Include="tutf8encoding.h">
+      <Filter>Source Files\String</Filter>
+    </ClInclude>
+    <ClInclude Include="tencoding.h">
+      <Filter>Source Files\String</Filter>
+    </ClInclude>
+    <ClInclude Include="tencodinginfo.h">
+      <Filter>Source Files\String</Filter>
+    </ClInclude>
+    <ClInclude Include="tutf16encoding.h">
+      <Filter>Source Files\String</Filter>
+    </ClInclude>
+    <ClInclude Include="tcharbuffer.h">
+      <Filter>Source Files\String</Filter>
+    </ClInclude>
+    <ClInclude Include="tstreamreaderutf8.h">
+      <Filter>Source Files\IO\Literacy</Filter>
+    </ClInclude>
+    <ClInclude Include="twintools.h">
+      <Filter>Source Files\System\Windows</Filter>
+    </ClInclude>
+    <ClInclude Include="thashcodeprovider.h">
+      <Filter>Source Files\Collection</Filter>
+    </ClInclude>
+    <ClInclude Include="tasciiextended.h">
+      <Filter>Source Files\String</Filter>
+    </ClInclude>
+    <ClInclude Include="tlatin1encoding.h">
+      <Filter>Source Files\String</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -370,9 +427,6 @@
     <ClCompile Include="tbitmapconverters.cpp">
       <Filter>Source Files\Graphics</Filter>
     </ClCompile>
-    <ClCompile Include="ttimedriver.cpp">
-      <Filter>Source Files\System</Filter>
-    </ClCompile>
     <ClCompile Include="tpackedrectangle.cpp">
       <Filter>Source Files\Graphics</Filter>
     </ClCompile>
@@ -391,9 +445,6 @@
     <ClCompile Include="trmlreader.cpp">
       <Filter>Source Files\IO\Literacy\RML</Filter>
     </ClCompile>
-    <ClCompile Include="tencodinginfo.cpp">
-      <Filter>Source Files\Text</Filter>
-    </ClCompile>
     <ClCompile Include="tbufferedstream.cpp">
       <Filter>Source Files\IO\Stream</Filter>
     </ClCompile>
@@ -402,9 +453,6 @@
     </ClCompile>
     <ClCompile Include="tpath.cpp">
       <Filter>Source Files\IO\File System</Filter>
-    </ClCompile>
-    <ClCompile Include="tstreamreader.cpp">
-      <Filter>Source Files\IO\Literacy</Filter>
     </ClCompile>
     <ClCompile Include="tiniparser.cpp">
       <Filter>Source Files\IO\Literacy\INI</Filter>
@@ -415,21 +463,49 @@
     <ClCompile Include="tstringfixedwidth.cpp">
       <Filter>Source Files\String</Filter>
     </ClCompile>
-    <ClCompile Include="tencoding.cpp">
-      <Filter>Source Files\Text</Filter>
-    </ClCompile>
     <ClCompile Include="tstring.cpp">
-      <Filter>Source Files\String</Filter>
-    </ClCompile>
-    <ClCompile Include="tstringdriver.cpp">
       <Filter>Source Files\String</Filter>
     </ClCompile>
     <ClCompile Include="tbytearray.cpp">
       <Filter>Source Files\System</Filter>
     </ClCompile>
+    <ClCompile Include="tconvert.cpp">
+      <Filter>Source Files\System</Filter>
+    </ClCompile>
+    <ClCompile Include="ttest.cpp">
+      <Filter>Source Files\System\Testing</Filter>
+    </ClCompile>
+    <ClCompile Include="ttestsuitereporting.cpp">
+      <Filter>Source Files\System\Testing</Filter>
+    </ClCompile>
+    <ClCompile Include="tdatetime.cpp">
+      <Filter>Source Files\System\DateTime</Filter>
+    </ClCompile>
+    <ClCompile Include="ttimedriver.cpp">
+      <Filter>Source Files\System</Filter>
+    </ClCompile>
+    <ClCompile Include="tstringdriver.cpp">
+      <Filter>Source Files\String</Filter>
+    </ClCompile>
+    <ClCompile Include="tstringbuilder.cpp">
+      <Filter>Source Files\String</Filter>
+    </ClCompile>
+    <ClCompile Include="tencoding.cpp">
+      <Filter>Source Files\String</Filter>
+    </ClCompile>
+    <ClCompile Include="tencodinginfo.cpp">
+      <Filter>Source Files\String</Filter>
+    </ClCompile>
+    <ClCompile Include="twintools.cpp">
+      <Filter>Source Files\System\Windows</Filter>
+    </ClCompile>
+    <ClCompile Include="thashcodeprovider.cpp">
+      <Filter>Source Files\Collection</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <None Include="design.cd" />
     <None Include="Rules.txt" />
+    <None Include="ClassDiagram1.cd" />
   </ItemGroup>
 </Project>

@@ -3,9 +3,13 @@
 #include "texception.h"
 
 
-void TProcess::OpenFromWindow( const str8& windowname )
+void TProcess::OpenFromWindow( const TString& windowname )
 {
-	HWND wnd = FindWindowA(0,windowname.Chars);
+	if (!windowname.IsASCII())
+	{
+		throw Exception("Window name has unicode characters");
+	}
+	HWND wnd = FindWindowA(0,(char*)windowname.Data);
 	if (!wnd)
 	{
 		throw Exception("Can't find window");
@@ -24,7 +28,7 @@ void TProcess::OpenFromWindow( const str8& windowname )
 	}
 }
 
-void TProcess::CreateFromExecutable( const str8& exepath, const str8& params /*= 0*/ )
+void TProcess::CreateFromExecutable( const TString& exepath, const TString& params /*= 0*/ )
 {
 	throw Exception("Not implemented yet");
 }

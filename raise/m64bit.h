@@ -13,7 +13,10 @@ typedef long long qword;
 #else
 
 // I heard it was supported in regual c++ too after c99...
-typedef long long qword;
+typedef unsigned long long qword;
+
+typedef qword	uint64;
+typedef signed long long int64;
 
 //TODO: test qword class.
 
@@ -52,7 +55,7 @@ public:
 		return sum;
 	}
 
-	str8& ToString()
+	TString& ToString()
 	{
 
 	}

@@ -2,7 +2,7 @@
 #define TFILESTREAM_H
 
 #include "stdafx.h"
-#include "tstringfixedwidth.h"
+#include "tstring.h"
 #include "tstream.h"
 
 
@@ -23,7 +23,7 @@ static const char* FileModeConversion[] = { "rb", "r+b", "wb", "w+b", "ab", "a+b
 class RDLL TFileStream: public TStream
 {
 public:
-	str8		FilePath;
+	TString		FilePath;
 	FILE*		FileHandle;
 	FileMode	CurrentMode;
 
@@ -33,7 +33,7 @@ public:
 		CurrentMode = fm_NotOpened;
 	}
 
-/*	static TFileStream* Open(const str8& path, FileMode mode)
+/*	static TFileStream* Open(const TString& path, FileMode mode)
 	{
 		FILE* FileHandle = fopen(path.Chars,FileModeConversion[mode]);
 		if (FileHandle == NULL)
@@ -43,22 +43,23 @@ public:
 		return new TFileStream(FileHandle,path,mode);
 	}
 
-	static TFileStream* OpenRead(const str8& path)
+	static TFileStream* OpenRead(const TString& path)
 	{
 
 	}*/
 
-	TFileStream(FILE* fHandle,const str8& path,FileMode mode)
+	TFileStream(FILE* fHandle,const TString& path,FileMode mode)
 	{
 		FileHandle = fHandle;
 		FilePath = path;
 		CurrentMode = mode;
 	}
 
-	TFileStream(const str8& path, FileMode mode )
+	TFileStream(const TString& path, FileMode mode )
 	{
-		FileHandle = fopen(path.Chars,FileModeConversion[mode]);
-		if (FileHandle == NULL)
+		//TODO: use better string usage like OpenFile( converttowide( path ) )
+		int result = fopen_s(&FileHandle,(char*)path.Data,FileModeConversion[mode]);
+		if (result != 0)
 		{
 			throw Exception("Can't open file");
 			/*CurrentMode = fm_NotOpened;

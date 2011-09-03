@@ -1,7 +1,7 @@
 #ifndef TTHREAD_H
 #define TTHREAD_H
 
-#include "tstringfixedwidth.h"
+#include "tstring.h"
 #include "tevent.h"
 
 class TThread
@@ -22,7 +22,7 @@ public:
 
 	};
 
-	str8		Name;
+	TString		Name;
 	bool		IsAlive;
 	int			ThreadState;
 	Priorities	Priority;

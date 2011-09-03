@@ -2,7 +2,7 @@
 #define TCOMPOSITIONPRIMITIVE_H
 
 #include "raisetypes.h"
-#include "tstringfixedwidth.h"
+#include "tstring.h"
 
 
 enum TPrimitiveTypes
@@ -31,8 +31,8 @@ enum TPrimitiveTypes
 class TCompositionPrimitive
 {
 public:
-	str8 Name;
-	str8 ShortName;
+	TString Name;
+	TString ShortName;
 	int DataType;
 
 	TCompositionPrimitive()
@@ -40,7 +40,7 @@ public:
 		DataType = tc_notdefined;
 	}
 
-	TCompositionPrimitive(const str8& _name, const str8& _short, int _dataType)
+	TCompositionPrimitive(const TString& _name, const TString& _short, int _dataType)
 	{
 		Name = _name;
 		ShortName = _short;

@@ -1,34 +1,41 @@
 #ifndef TPATH_H
 #define TPATH_H
 
-#include "tstringfixedwidth.h"
+#include "tstring.h"
 #include "tqueue.h"
 #include "texception.h"
+#include "tconvert.h"
 
 #ifdef WIN32
 
+#include "twintools.h"
 
 class TPathDriver
 {
 public:
-	static void CurrentDirectory(str8& buffer)
+	static TString CurrentDirectory()
 	{
-		buffer.Length = GetCurrentDirectoryA(buffer.Capacity,buffer.Chars);
+		ch16 tmp[512];
+		int tmplength = GetCurrentDirectoryW(512,tmp);
+		return TWinTools::RaiseString(tmp);
 	}
 
-	static void TempDirectory(str8& buffer)
+	static TString TempDirectory()
 	{
-		GetTempPathA(buffer.Capacity,buffer.Chars);
+		ch16 tmp[1024];
+		GetTempPathW(1024,tmp);
+		return TWinTools::RaiseString(tmp);
 	}
 
-	static void CreateFolder(str8& path)
+	static void CreateFolder(const TString& path)
 	{
-		if ( CreateDirectoryA(path.Chars,NULL) == FALSE )
+		if ( CreateDirectoryW(TWinTools::SystemString16(path),NULL) == FALSE )
 		{
 			dword errorId = GetLastError();
 			if (errorId != ERROR_ALREADY_EXISTS)
 			{
-				throw Exception(str8::FormatNew("Creating directory failed. Error: 0x%X",errorId));
+				throw Exception("Creating directory failed. " + Convert::ToString(errorId));
+				//throw Exception(TString::FormatNew("Creating directory failed. Error: 0x%X",errorId));
 			}
 		}
 	}
@@ -39,19 +46,19 @@ public:
 class TPathDriver
 {
 public:
-	static void CurrentDirectory(str8& buffer)
+	static void CurrentDirectory(TString& buffer)
 	{
-		getcwd(buffer.Chars,buffer.Capacity); // TODO: Not forget to set string length after loading.
+		getcwd(buffer.Data,buffer.Capacity); // TODO: Not forget to set string length after loading.
 	}
 
-	static void TempDirectory(str8& buffer)
+	static void TempDirectory(TString& buffer)
 	{
 		buffer = "/tmp/";
 	}
 
-	static void CreateFolder(str8& path)
+	static void CreateFolder(TString& path)
 	{
-		if ( mkdir(path.Chars,NULL) == 0 )
+		if ( mkdir(path.Data,NULL) == 0 )
 		{
 			throw Exception("Creating directory failed");
 		}
@@ -68,12 +75,11 @@ private:
 	{
 		if (TempFolder.Length == 0)
 		{
-			TempFolder.Allocate(256);
-			TPathDriver::TempDirectory(TempFolder);
+			TempFolder = TPathDriver::TempDirectory();
 		}
 	}
 
-	inline static bool IsDirectorySeprator(ch8 chr)
+	inline static bool IsDirectorySeprator(ch32 chr)
 	{
 		if (chr == AltDirectorySeprator || chr == DirectorySeprator)
 		{
@@ -82,24 +88,21 @@ private:
 		return false;
 	}
 
+	inline static bool IsRelativePathWin32(const TString& path)
+	{
+		TCharacterEnumerator schars(path);
+		if (schars.ReadChar() == '.') return true;
 
-
-	inline static bool IsRelativePathWin32(const str8& path)
-	{	// TODO: function may fail if path.length < 3
-		if (path.Chars[0] == '.')
-		{
-			return true;
-		}
-		if (path.Chars[1] == ':' && IsDirectorySeprator(path.Chars[2]))
+		if (schars.ReadChar() == ':' && IsDirectorySeprator(schars.ReadChar()))
 		{
 			return false;
 		}
 		return true;			
 	}
 
-	inline static bool IsRelativePathLinux(const str8& path)
+	inline static bool IsRelativePathLinux(const TString& path)
 	{
-		if (path.Chars[0] == '.')
+		if (path.GetFirst() == '.')
 		{
 			return true;
 		}
@@ -115,48 +118,41 @@ private:
 
 public:
 
-	static ch8 AltDirectorySeprator;
-	static ch8 DirectorySeprator;
+	static ch32 AltDirectorySeprator;
+	static ch32 DirectorySeprator;
 
-	static str8 TempFolder;
-	static str8 CurrentFolder;
+	static TString TempFolder;
+	static TString CurrentFolder;
 
-	static dword GetExtensionAsDword(const str8& path)
+	static dword GetExtensionAsDword(const TString& path)
 	{
-		ch8 dw[4];
-		for (int i= path.Length-4,k=0;i<path.Length;i++,k++)
+		if (!path.IsASCII())
 		{
-			ch8 curChr = path.Chars[i];
+			throw NotImplementedException();
+		}
+		ch8 dw[4];
+		for (dword i= path.Length-4,k=0;i<path.Length;i++,k++)
+		{
+			ch8 curChr = path.Data[i];
 			if (curChr >= 'a' && curChr <= 'z' ) curChr -= 32; // lowercase
 			dw[k] = curChr;
 		}
 		return *(dword*)dw;
-
-
-		/*if (path.Length < 5) return 0; 
-		dword val = 0;
-		for (int i= path.Length-4;i<path.Length;i++)
-		{
-			val <<= 8;
-			ch8 curChr = path.Chars[i];
-			if (curChr >= 'a' && curChr <= 'z' ) curChr -= 32; // lowercase
-			val |= curChr;
-		}
-		return val;*/
 	}
 
-	static void CorrectSeprators(str8& path)
+	static void CorrectSepratorsInplace(TString& path)
 	{
-		for (int i=0;i< path.Length;i++)
+		path.DetachToEdit();
+		for (dword i=0;i< path.Length;i++)
 		{
-			if (path.Chars[i] == AltDirectorySeprator)
+			if (path.Data[i] == AltDirectorySeprator)
 			{
-				path.Chars[i] = DirectorySeprator;
+				path.Data[i] = DirectorySeprator;
 			}
 		}
 	}
 
-	static bool IsDirectory(const str8& path)
+	static bool IsDirectory(const TString& path)
 	{
 		if (IsDirectorySeprator(path.GetLast()))
 		{
@@ -165,11 +161,27 @@ public:
 		return false;
 	}
 
-	static str8 ChangeExtension(const str8& path, str8& extension)
+	static TString ChangeExtension(const TString& path, const TString& extension)
 	{
-		str8 tempStr(path.Length + extension.Length + 8);
-		int i = path.Length;
-		while(i--)
+		TString tempStr(path.Length + extension.Length + 8);
+		TCharacterReverseEnumerator schars(path);
+		while(schars.MoveNext())
+		{
+			if (schars.Current == '.')
+			{
+				tempStr = path;
+				tempStr.Truncate(schars.CharIndex);
+				tempStr += extension;
+				return tempStr;
+			}
+			else if (IsDirectorySeprator(schars.Current))
+			{
+				tempStr = path;
+			}
+		}
+		return tempStr;
+
+		/*while(i--)
 		{
 			if (path.Chars[i] == '.')
 			{
@@ -183,12 +195,26 @@ public:
 				tempStr = path;
 			}
 		}
-		return tempStr;
+		return tempStr;*/
 	}
 
-	static str8 GetExtension(const str8& path)
+	static TString GetExtension(const TString& path)
 	{
-		int i = path.Length;
+		TCharacterReverseEnumerator schars(path);
+		while(schars.MoveNext())
+		{
+			if (schars.Current == '.')
+			{
+				return path.Substring(schars.CharIndex+1);
+			}
+			else if (IsDirectorySeprator(schars.Current))
+			{
+				return TString::Empty;
+			}
+		}
+		return TString::Empty;
+
+		/*int i = path.Length;
 		while(i--)
 		{
 			if (path.Chars[i] == '.')
@@ -198,15 +224,16 @@ public:
 			else if (IsDirectorySeprator(path.Chars[i]))
 			{
 				// return empty string.
-				return str8::Empty;
+				return TString::Empty;
 			}
 		}
-		return str8::Empty;
+		return TString::Empty;*/
 	}
 
-	static void StripFilename(str8& path)
+	static void StripFilename(TString& path)
 	{
-		int i = path.Length;
+		throw NotImplementedException();
+		/*int i = path.Length;
 		while(i--)
 		{
 			if (IsDirectorySeprator(path.Chars[i]))
@@ -215,48 +242,46 @@ public:
 				path.Length = i+1;
 				break;
 			}
-		}
+		}*/
 	}
 
-	static str8 GetDirectoryName(str8& path)
+	static TString GetDirectoryName(TString& path)
 	{
 		int f = path.Length;
-		int i = path.Length;
-		if (IsDirectorySeprator(path.Chars[i]))
+		if (IsDirectorySeprator(path.GetLast()))
 		{
-			i--;
-			f = i;
+			f--;
 		}
 
-		while(i--)
+		TCharacterReverseEnumerator schars(path);
+		while(schars.MoveNext())
 		{
-			if (IsDirectorySeprator(path.Chars[i]))
+			if (IsDirectorySeprator(schars.Current))
 			{
 				break;
 			}
 		}
-
-		return path.Substring(i,f-i);
+		return path.Substring(schars.CharIndex+1,(f-schars.CharIndex)-1);
 	}
 
-	static str8 GetFileName(str8& path)
+	static TString GetFileName(TString& path)
 	{
-		int i = path.Length;
-		while(i--)
+		TCharacterReverseEnumerator schars(path);
+		while(schars.MoveNext())
 		{
-			if (IsDirectorySeprator(path.Chars[i]))
+			if (IsDirectorySeprator(schars.Current))
 			{
-				return path.Substring(i+1);
+				return path.Substring(schars.CharIndex+1);
 			}
 		}
 		return path; // path is already filename?
 	}
 
-	static str8 GetFileNameWithoutExtension(const str8& path) // correct usage is const
+	static TString GetFileNameWithoutExtension(const TString& path) // correct usage is const
 	{
-		if (path == str8::Empty)
+		/*if (path == TString::Empty)
 		{
-			return str8::Empty;
+			return TString::Empty;
 		}
 
 		int i = path.Length;
@@ -277,14 +302,15 @@ public:
 			}
 		}
 
-		return path.Substring(i,k-i);
+		return path.Substring(i,k-i);*/
+		throw NotImplementedException();
 	}
 
 
 	/**
 	* If path starts or ends with separator, this function will remove them.
 	*/
-	static str8 GetPathCleared(str8& path)
+	static TString GetPathCleared(TString& path)
 	{
 		int start = 0;
 		int end = path.Length;
@@ -298,38 +324,36 @@ public:
 		return path.Substring(start,end-start);
 	}
 
-	static bool HasParents(const str8& path)
+	static bool HasParents(const TString& path)
 	{
-		int i = path.Length;
-		while(i--)
+		TCharacterReverseEnumerator schars(path);
+		while(schars.MoveNext())
 		{
-			ch8 curChar = path.Chars[i];
-			if (IsDirectorySeprator(curChar))
+			if (IsDirectorySeprator(schars.Current))
 			{
-				if (i > 2)
+				if (schars.ReadChar() == '.')
 				{
-					if (path.Chars[i-1] == '.' && path.Chars[i-2] == '.')
+					if ( schars.ReadChar() == '.')
 					{
 						return true;
 					}
 				}
 			}
 		}
-
 		return false;
 	}
 
-	static str8 EliminateParents(str8& path)
+	static TString EliminateParents(TString& path)
 	{
-		ch8 seprators[3] = {DirectorySeprator,AltDirectorySeprator,0};
-		str8 cleared = GetPathCleared(path);
+		ch32 seprators[3] = {DirectorySeprator,AltDirectorySeprator,0};
+		TString cleared = GetPathCleared(path);
 
-		TArray<str8*> psplit = cleared.Split(seprators);
-		TArray<str8*> ary;
+		TArray<TString*> psplit = cleared.Split(seprators);
+		TArray<TString*> ary;
 
 		for (dword i=0;i<psplit.Count;i++)
 		{
-			str8* curpart = psplit.Item[i]; 
+			TString* curpart = psplit.Item[i]; 
 			if (*curpart == "..")
 			{
 				ary.RemoveLast();
@@ -340,7 +364,7 @@ public:
 			}
 		}
 
-		str8 result(path.Length+16);
+		TString result(path.Length+16);
 
 		for (dword i=0;i<ary.Count;i++)
 		{
@@ -351,7 +375,7 @@ public:
 		return result;
 	}
 
-	static bool IsEndsWithDirectorySeprator(const str8& path)
+	static bool IsEndsWithDirectorySeprator(const TString& path)
 	{
 		if ( IsDirectorySeprator(path.GetLast()) )
 		{
@@ -360,7 +384,7 @@ public:
 		return false;
 	}
 
-	static void AppendDirectorySeprator(str8& path)
+	static void AppendDirectorySeprator(TString& path)
 	{
 		if (IsDirectorySeprator(path.GetLast()))
 		{
@@ -369,15 +393,14 @@ public:
 		path += DirectorySeprator;
 	}
 
-	static str8 GetFullPath(const str8& path)
+	static TString GetFullPath(const TString& path)
 	{	
 		// TODO: resolve relativity.
 		if (CurrentFolder.Length == 0)
 		{
-			CurrentFolder.Allocate(256);
-			TPathDriver::CurrentDirectory(CurrentFolder);
+			CurrentFolder = TPathDriver::CurrentDirectory();
 		}
-		str8 tmpPath(CurrentFolder.Length + path.Length + 16);
+		TString tmpPath(CurrentFolder.Length + path.Length + 16);
 		tmpPath += CurrentFolder;
 		
 		if (!IsEndsWithDirectorySeprator(tmpPath))
@@ -391,7 +414,7 @@ public:
 			tmpPath = path;
 		}
 
-		CorrectSeprators(tmpPath);
+		CorrectSepratorsInplace(tmpPath);
 
 		if (HasParents(tmpPath))
 		{
@@ -401,14 +424,15 @@ public:
 		return tmpPath;
 	}
 
-	static str8& GetTempFileName()
+	static TString GetTempFileName()
 	{
 		// TODO: implement something that uses system api. GetTempFileName for win.tempnam for linux.
 		CheckTempFolder();
-		return TempFolder + str8::Random(8);
+		throw NotImplementedException();
+		//return TempFolder + TString::Random(8);
 	}
 
-	static str8& GetTempPath()
+	static TString GetTempPath()
 	{
 		CheckTempFolder();
 		return TempFolder;

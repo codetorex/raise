@@ -101,6 +101,10 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClInclude Include="stdafx.h" />
+    <ClInclude Include="tconsolereport.h" />
+    <ClInclude Include="test_array.h" />
+    <ClInclude Include="test_datetime.h" />
+    <ClInclude Include="test_string.h" />
     <ClInclude Include="toldtests.h" />
   </ItemGroup>
   <ItemGroup>

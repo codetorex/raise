@@ -2,7 +2,7 @@
 #include "tbitset.h"
 #include "tmemory.h"
 #include "tprofiler.h"
-#include "tstringfixedwidth.h"
+#include "tstring.h"
 #include "mvector3.h"
 #include "mquaternion.h"
 #include "mray.h"
@@ -13,6 +13,12 @@
 #include "tbinary.h"
 #include "tbitfield.h"
 #include "tbitstack.h"
+
+
+#include "thashmap.h"
+#include <hash_map>
+
+
 
 class TBitArrayTest
 {
@@ -71,7 +77,7 @@ public:
 		PrintString(test2);
 		test2 += L" ";
 		PrintString(test2);
-		str8 eight = " 8bit string ";
+		TString eight = " 8bit string ";
 		test2 += eight;
 		PrintString(test2);
 		test2 += 8;
@@ -203,5 +209,112 @@ public:
 		Report(tb,tb.pops(3) == -3);
 		Report(tb,tb.pop(4) == 1);
 		Report(tb,tb.pops(4) == -7);
+	}
+};
+
+
+using namespace std;
+
+struct strCmp 
+{
+	static const int bucket_size = 32;
+
+	dword operator() ( const TString& s1 ) const
+	{
+		return TString::GetHash(s1);
+	}
+
+	bool operator()( const TString& s1, const TString& s2 ) const
+	{
+		return (s1 == s2);
+	}
+};
+
+
+
+class THashMapTest
+{
+public:
+	TProfiler tp;
+
+	void Test()
+	{
+		THashMap<int> myhashmap;
+		myhashmap.Add(TString("quit"),500);
+
+		if (myhashmap.GetValue(TString("quit")) == 500)
+		{
+			printf("IT WORKS!");
+		}
+	}
+
+	void Test2()
+	{
+		vector<TString*> dataToHash;
+
+		srand(65536);
+		int i = 10000;
+		while(i--)
+		{
+			TString* newstr = new TString(8);
+			newstr->Length = 8;
+			TString::Random(*newstr);
+			dataToHash.push_back(newstr);
+		}
+
+
+		THashMap<int> myhashmap;
+
+		i = 10000;
+		tp.BeginProfiling(10000);
+		while(i--)
+		{
+			myhashmap.Add(*dataToHash[i],rand());
+		}
+		tp.EndProfiling();
+		printf("Your algorithm took %i ms for mapping 10000 entries.\n", tp.tickDelta);
+		printf("Average %0.2f us per map\n\n",tp.PerOperationTime());
+
+
+		int k = 100;
+		tp.BeginProfiling(10000 * 100);
+		while(k--)
+		{
+			i = 10000;
+			while(i--)
+			{
+				int value = myhashmap.GetValue(*dataToHash[i]);
+			}
+		}
+		tp.EndProfiling();
+		printf("Your algorithm took %i ms for getting 10000000 entries.\n", tp.tickDelta);
+		printf("Average %0.2f us per get\n\n",tp.PerOperationTime());
+
+
+		i = 10000;
+		hash_map<TString,int,strCmp> stdmap;
+		tp.BeginProfiling(10000);
+		while (i--)
+		{
+			stdmap[ *dataToHash[i]] = rand();
+		}
+		tp.EndProfiling();
+		printf("STD algorithm took %i ms for mapping 10000 entries.\n", tp.tickDelta);
+		printf("Average %0.2f us per map\n\n",tp.PerOperationTime());
+
+		k = 100;
+		tp.BeginProfiling(10000);
+		while(k--)
+		{
+			i = 10000;
+			while(i--)
+			{
+				int value = stdmap[*dataToHash[i]];
+			}
+		}
+		tp.EndProfiling();
+		printf("STD algorithm took %i ms for getting 10000000 entries.\n", tp.tickDelta);
+		printf("Average %0.2f us per get\n\n",tp.PerOperationTime());
+
 	}
 };

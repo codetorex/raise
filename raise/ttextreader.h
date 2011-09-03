@@ -1,7 +1,7 @@
 #ifndef TTEXTREADER_H
 #define TTEXTREADER_H
 
-#include "tstringfixedwidth.h"
+#include "tstring.h"
 
 //TODO: make this class converts its content to UTF-8 to UTF-16
 
@@ -30,19 +30,19 @@ public:
 	 * @param count Number of characters to read.
 	 * @return Read character count.
 	 */
-	virtual int Read(ch16* buffer, int count) = 0;
+	virtual int Read(ch32* buffer, int count) = 0;
 
 	/**
 	 * @brief Reads a line.
 	 * @return The line.
 	 */
-	virtual str8 ReadLine() = 0;
+	virtual TString ReadLine() = 0;
 
 	/**
 	 * @brief Reads to end.
 	 * @return String of file.
 	 */
-	virtual str8 ReadToEnd() = 0;
+	virtual TString ReadToEnd() = 0;
 
 	/**
 	 * @brief Reads string until encounters with any of interruption character.
@@ -51,7 +51,7 @@ public:
 	 * @param [out] interrupt The interrupt.
 	 * @return The string before interruption.
 	 */
-	virtual str8 ReadInterrupted(const str8& interrupChars, const str8& ignoreChars, int& interrupt) = 0;
+	virtual TString ReadInterrupted(const TString& interrupChars, const TString& ignoreChars, int& interrupt) = 0;
 
 	/**
 	 * Closes the reader.

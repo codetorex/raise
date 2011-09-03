@@ -5,6 +5,8 @@
 #include "tbuffer.h"
 
 
+// NOTE: this is broken at this time! maybe need a rewrite?
+
 /**
 * A buffer is a block of bytes in memory used to cache data, 
 * thereby reducing the number of calls to the operating system. 
@@ -23,6 +25,15 @@ public:
 	TVirtualBuffer VBuffer;
 
 	bool WriteBuffer; // True = write, false = read
+
+	TBufferedStream(TStream* src, byte* buffer, int bufferCapacity )
+	{
+		assert(src!=0);
+		assert(buffer!=0);
+		Source = src;
+		VBuffer.Use(buffer, bufferCapacity);
+		WriteBuffer = true;
+	}
 
 	TBufferedStream(TStream* src, int bufferSize = 4096)
 	{

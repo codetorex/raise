@@ -73,9 +73,11 @@ typedef unsigned int	dword; // It was unsigned long before but in linux longs ha
 #define MOD16(x)			( (x) & 15 )
 #define MOD32(x)			( (x) & 31 )
 
-#define DW1BYTE			0xFF
-#define DW2BYTE			0xFF00
-#define DW3BYTE			0xFF0000
+#define DW1BYTE			0x000000FF
+#define DW2BYTE			0x0000FF00
+#define DW3BYTE			0x00FF0000
 #define DW4BYTE			0xFF000000
+
+//#define NOPNGLIB
 
 #endif

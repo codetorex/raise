@@ -77,7 +77,8 @@
     <Lib>
       <AdditionalLibraryDirectories>
       </AdditionalLibraryDirectories>
-      <AdditionalDependencies>libpng.lib;zlib.lib</AdditionalDependencies>
+      <AdditionalDependencies>
+      </AdditionalDependencies>
       <LinkTimeCodeGeneration>true</LinkTimeCodeGeneration>
     </Lib>
   </ItemDefinitionGroup>
@@ -104,6 +105,7 @@
   <ItemGroup>
     <ClInclude Include="m64bit.h" />
     <ClInclude Include="mdecibel.h" />
+    <ClInclude Include="mdecimal.h" />
     <ClInclude Include="mfixed.h" />
     <ClInclude Include="mmathdriver.h" />
     <ClInclude Include="mmatrix.h" />
@@ -115,6 +117,7 @@
     <ClInclude Include="mvector2.h" />
     <ClInclude Include="raisetypes.h" />
     <ClInclude Include="tarray.h" />
+    <ClInclude Include="tasciiextended.h" />
     <ClInclude Include="tbinary.h" />
     <ClInclude Include="tbinaryreader.h" />
     <ClInclude Include="tbitfield.h" />
@@ -130,12 +133,18 @@
     <ClInclude Include="tbufferedstream.h" />
     <ClInclude Include="tbytearray.h" />
     <ClInclude Include="tcharacter.h" />
+    <ClInclude Include="tcharbuffer.h" />
     <ClInclude Include="tcompositeconverter.h" />
     <ClInclude Include="tcompositegenericconverter.h" />
     <ClInclude Include="tcomposition.h" />
     <ClInclude Include="tcompositionprimitive.h" />
     <ClInclude Include="tconvert.h" />
+    <ClInclude Include="tcultureinfo.h" />
     <ClInclude Include="tdatetime.h" />
+    <ClInclude Include="tdatetimeexpanded.h" />
+    <ClInclude Include="tdatetimeformatinfo.h" />
+    <ClInclude Include="tdatetimeunix.h" />
+    <ClInclude Include="tdatetimewindows.h" />
     <ClInclude Include="tdictionary.h" />
     <ClInclude Include="tencoding.h" />
     <ClInclude Include="tencodinginfo.h" />
@@ -146,12 +155,15 @@
     <ClInclude Include="tfileinfo.h" />
     <ClInclude Include="tfilestream.h" />
     <ClInclude Include="tdirectoryinfo.h" />
+    <ClInclude Include="thashcodeprovider.h" />
     <ClInclude Include="thashmap.h" />
     <ClInclude Include="tindex.h" />
     <ClInclude Include="tiniparser.h" />
     <ClInclude Include="tkeyvalue.h" />
+    <ClInclude Include="tlatin1encoding.h" />
     <ClInclude Include="tmemorydriver.h" />
     <ClInclude Include="tmemorystream.h" />
+    <ClInclude Include="tnumberformatinfo.h" />
     <ClInclude Include="tpackedrectangle.h" />
     <ClInclude Include="tpath.h" />
     <ClInclude Include="tposition.h" />
@@ -172,8 +184,10 @@
     <ClInclude Include="tstack.h" />
     <ClInclude Include="tstream.h" />
     <ClInclude Include="tstreamreader.h" />
+    <ClInclude Include="tstreamreaderutf8.h" />
     <ClInclude Include="tstreamwriter.h" />
     <ClInclude Include="tstring.h" />
+    <ClInclude Include="tstringbuilder.h" />
     <ClInclude Include="tstringdriver.h" />
     <ClInclude Include="tstringfixedwidth.h" />
     <ClInclude Include="tbitset.h" />
@@ -182,14 +196,17 @@
     <ClInclude Include="stdafx.h" />
     <ClInclude Include="tcompositebuffer.h" />
     <ClInclude Include="tstringdriverfixedwidth.h" />
-    <ClInclude Include="tsystem.h" />
+    <ClInclude Include="ttest.h" />
+    <ClInclude Include="ttestsuitereporting.h" />
     <ClInclude Include="ttextreader.h" />
     <ClInclude Include="ttextwriter.h" />
     <ClInclude Include="tthread.h" />
     <ClInclude Include="tcolor.h" />
     <ClInclude Include="ttimedriver.h" />
     <ClInclude Include="ttypeinfo.h" />
+    <ClInclude Include="tutf16encoding.h" />
     <ClInclude Include="tutf8encoding.h" />
+    <ClInclude Include="twintools.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">
@@ -207,9 +224,12 @@
     <ClCompile Include="tbytearray.cpp" />
     <ClCompile Include="tcolor.cpp" />
     <ClCompile Include="tcomposition.cpp" />
+    <ClCompile Include="tconvert.cpp" />
+    <ClCompile Include="tdatetime.cpp" />
     <ClCompile Include="tencoding.cpp" />
     <ClCompile Include="tencodinginfo.cpp" />
     <ClCompile Include="tcompositebuffer.cpp" />
+    <ClCompile Include="thashcodeprovider.cpp" />
     <ClCompile Include="tiniparser.cpp" />
     <ClCompile Include="tmemory.cpp" />
     <ClCompile Include="tpackedrectangle.cpp" />
@@ -219,14 +239,18 @@
     <ClCompile Include="tprocessmodule.cpp" />
     <ClCompile Include="trmlreader.cpp" />
     <ClCompile Include="trmlwriter.cpp" />
-    <ClCompile Include="tstreamreader.cpp" />
     <ClCompile Include="tstring.cpp" />
+    <ClCompile Include="tstringbuilder.cpp" />
     <ClCompile Include="tstringdriver.cpp" />
     <ClCompile Include="tstringfixedwidth.cpp" />
+    <ClCompile Include="ttest.cpp" />
+    <ClCompile Include="ttestsuitereporting.cpp" />
     <ClCompile Include="tthread.cpp" />
     <ClCompile Include="ttimedriver.cpp" />
+    <ClCompile Include="twintools.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="ClassDiagram1.cd" />
     <None Include="design.cd" />
     <None Include="Rules.txt" />
   </ItemGroup>

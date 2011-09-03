@@ -5,78 +5,205 @@
 #include "tmemorystream.h"
 #include "ttextreader.h"
 #include "tfile.h"
+#include "tencoding.h"
 
 
+//TODO: bufferi char buffer olarak yap süper olur .net stayla, boylece TBufferedStreame felan gerek kalmaz.
+// yani catir catir okuyup ch32 olarak bufferda tutsun, bunun icin charBuffer gibi bir class yapabiliriz
 
-template <class T>
 class TStreamReader: public TTextReader
 {
 private:
-	void LoadStream(TStream* stream,int bufferSize);
+
+	void DetectEncodingFromBOM(const TEncoding& defaultencoding)
+	{
+		BaseStream->Read(Cache.Data,1,4);
+		word utf16char = ((word*)Cache.Data)[0];
+		dword utf32char = ((dword*)Cache.Data)[0];
+
+		if (Cache.Data[0] == 0xEF)
+		{
+			if (Cache.Data[1] == 0xBB)
+			{
+				if (Cache.Data[2] == 0xBF)
+				{
+					CurrentEncoding = (TEncoding&)TEncoding::UTF8;
+					Cache.Data[0] = Cache.Data[3];
+					CacheStart = 1;
+				}
+			}
+		}
+		else if ( utf16char == 0xFEFF )
+		{
+			CurrentEncoding = (TEncoding&)TEncoding::UTF16;
+			Cache.Data[0] = Cache.Data[2];
+			Cache.Data[1] = Cache.Data[3];
+			CacheStart = 2;
+		}
+		else if (utf16char == 0xFFFE )
+		{
+			throw NotImplementedException(); // BIG ENDIAN UTF16
+		}
+		else if (utf32char == 0xFEFF)
+		{
+			throw NotImplementedException(); // UTF32 encoding
+		}
+		else if (utf32char == 0xFFFE0000)
+		{
+			throw NotImplementedException(); // big endian UTF32 encoding
+		}
+		else
+		{
+			CurrentEncoding = defaultencoding;
+			CacheStart = 4;
+		}
+	}
+
+	void LoadStream(TStream* stream,const TEncoding& encoding, bool detectBOM, int bufferSize)
+	{
+		BaseStream = stream;
+		Buffer.InitializeArray( bufferSize );
+		EndOfStream = false;
+		Cache.Allocate(16384);
+		CacheStart = 0;
+		BufferReadIndex = 0;
+		EndOfBaseStream = false;
+		CurrentEncoding = encoding;
+
+		if (detectBOM)
+		{
+			DetectEncodingFromBOM(encoding);
+		}
+	}
 
 public:
 	/// The base stream
 	TStream* BaseStream;
 
-	/// The buffer source
-	T* BufSource;
+	bool EndOfBaseStream;
 
+	/// Current encoding of stream;
+	TEncoding& CurrentEncoding;
+
+	/// The buffer source
+	TCharBuffer Buffer;
+
+	TByteArray Cache;
+
+	/// When first readed chunk doesn't completes last character, it postponed to next chunk. So this member will show how much bytes postponed.
+	dword CacheStart;
+
+	dword BufferReadIndex;
+
+	void FillBuffer()
+	{
+		if (EndOfBaseStream) return;
+
+		Buffer.Rewind();
+		dword readed = BaseStream->Read( Cache.Data + CacheStart, 1, Cache.Capacity - CacheStart);
+		bool isEnded = readed < Cache.Capacity - CacheStart;
+		int used = CurrentEncoding.GetChars(Cache.Data,readed + CacheStart,Buffer);
+	
+
+		if (used < readed)
+		{
+			CacheStart = readed - used;
+			MemoryDriver::Copy(Cache.Data,Cache.Data + used, CacheStart);
+		}
+		else
+		{
+			CacheStart = 0;
+		}
+
+		BufferReadIndex = 0;
+
+		if( isEnded )
+		{
+			EndOfBaseStream = true;
+			Buffer.AddCharacter( MXDWORD );
+		}
+	}
 
 	/**
 	 * @brief Constructor with stream.
 	 * @param [in] stream The stream to be readed.
 	 * @param bufferSize Size of the buffer.
 	 */
-	TStreamReader(TStream* stream,int bufferSize = 8192)
+	TStreamReader(TStream* stream,int bufferSize = 8192) : CurrentEncoding( (TEncoding&)TEncoding::Latin1 ) 
 	{
-		LoadStream(stream,bufferSize);
+		LoadStream(stream,CurrentEncoding,true,bufferSize);
 	}
 
+	TStreamReader(TStream* stream,const TEncoding& encoding, bool detectBOM = true, int buffersize = 8192): CurrentEncoding( (TEncoding&)TEncoding::Latin1 ) 
+	{
+		LoadStream(stream,encoding,detectBOM,buffersize);
+	}
 
 	/**
 	 * @brief Constructor with filename.
 	 * @param path Full pathname of the file.
 	 * @param bufferSize Size of the buffer.
 	 */
-	TStreamReader(const str8& path,int bufferSize = 8192) // open file
+	TStreamReader(const TString& path,int bufferSize = 8192): CurrentEncoding( (TEncoding&)TEncoding::Latin1 ) 
 	{
-		LoadStream(File::OpenRead(path),bufferSize);
+		LoadStream(File::OpenRead(path),CurrentEncoding,true,bufferSize);
 	}
 
 	inline ch32 Peek()
 	{
-		return BufSource->PeekByte(); // TODO: This function should read as char.
+		if ( BufferReadIndex == Buffer.Index )
+		{
+			if (!EndOfBaseStream)
+			{
+				FillBuffer();
+			}
+			else
+			{
+				EndOfStream = true;
+				return MXDWORD;
+			}
+		}
+		return Buffer.Data[BufferReadIndex];
 	}
 
 	inline ch32 Read()
 	{
-		return BufSource->ReadByte(); // TODO: This function should read as char.
+		if ( BufferReadIndex == Buffer.Index )
+		{
+			if (!EndOfBaseStream)
+			{
+				FillBuffer();
+			}
+			else
+			{
+				EndOfStream = true;
+				return MXDWORD;
+			}
+		}
+		return Buffer.Data[BufferReadIndex++];
 	}
 
-	inline int Read(ch16* buffer,int count)
+	inline int Read(ch32* buffer,int count)
 	{
-		throw Exception("Not implemented");
-		return 0;
+		throw NotImplementedException();
 		// TODO: This function should read as char.
 	}
 
-	str8 ReadLine()
+	TString ReadLine()
 	{
-		str8 result(1024); // TODO: This function should read as char. check UTF compatability of document and there should be string encoding system defined as in .net framewrok
+		TString result(1024); 
+		ch32 d;
 		while(1)
 		{
-			int d = BufSource->ReadByte();
-			if (d < 0)
-			{
-				EndOfStream = true;
+			d = Read();
+			if (EndOfStream)
 				break;
-			}
 
 			if (d != 0x0A)
 			{
 				if (d != 0x0D)
 				{
-					result += ((ch8)d);
+					result += d;
 				}
 				else
 				{
@@ -89,21 +216,26 @@ public:
 			}
 		}
 
+		// skip end of line character
+		d = Peek();
+		if (d == 0x0A || d == 0x0D)
+		{
+			Read();
+		}
+		
 		return result;
 	}
 
-	str8 ReadToEnd()
+	TString ReadToEnd()
 	{
-		// TODO: This function should read as char.
-		int length = BaseStream->Length();
-		BaseStream->Seek(0,sBegin);
-		str8 result(length);
+		// TODO: this function can be optimized but who cares?
+		TString result(1024);
 
-		int d = BufSource->ReadByte();
+		ch32 d = Read();
 		while(d > 0)
 		{
-			result += ((ch16)d);
-			d = BufSource->ReadByte();
+			result += d;
+			d = Read();
 		}
 
 		EndOfStream = true;
@@ -111,25 +243,24 @@ public:
 		return result;
 	}
 
-	str8 ReadInterrupted(const str8& interrupChars, const str8& ignoreChars, int& interrupt)
+	TString ReadInterrupted(const TString& interrupChars, const TString& ignoreChars, int& interrupt)
 	{
-		str8 readed(512);
-		int d = BufSource->ReadByte();
-		while(d > 0)
+		TString readed(512);
+		ch32 d = Read();
+		while(!EndOfStream)
 		{
-			if (interrupChars.HaveChar(d))
+			if (interrupChars.Have(d))
 			{
 				interrupt = d;
 				return readed;
 			}
-			if (!ignoreChars.HaveChar(d))
+			if (!ignoreChars.Have(d))
 			{
-				readed += ((ch8)d);
+				readed += d;
 			}
-			d = BufSource->ReadByte();
+			d = Read();
 		}
 
-		EndOfStream = true;
 		interrupt = -1;
 		return readed;
 	}
@@ -139,23 +270,13 @@ public:
 	 */
 	void Close()
 	{
-		BufSource->Close();
-		BufSource = 0;
+		BaseStream->Close();
+		BaseStream = 0;
 		delete this;
 	}
 
 	//virtual void DiscardBufferedData() = 0;
 };
-
-/**
-* Uses buffered stream and reads from real file with some buffer.
-*/
-typedef TStreamReader<TBufferedStream>	StreamReader;
-
-/**
-* Faster version. Which uses memory cached stream as source. Not recommended for big files. But what the hell...
-*/
-typedef TStreamReader<TMemoryStream>	CacheReader;
 
 #endif
 

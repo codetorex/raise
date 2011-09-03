@@ -2,9 +2,13 @@
 #include "tprocessdebug.h"
 #include "tprocessmodule.h"
 
-dword TProcessMemoryRegion::FindString( const str8& src )
+dword TProcessMemoryRegion::FindString( const TString& src )
 {
-	return Parent->Search(StartAddress,EndAddress,src.Chars,src.Length);
+	if (src.Length != src.ByteLength)
+	{
+		throw Exception("String should be ASCII (no characters over 127)");
+	}
+	return Parent->Search(StartAddress,EndAddress,src.Data,src.Length);
 }
 
 dword TProcessMemoryRegion::FindXref( dword addr)
@@ -39,7 +43,7 @@ dword TProcessMemoryRegion::FindFunctionBegin( dword addr ,int intCount)
 	return NFOUND;
 }
 
-dword TProcessMemoryRegion::FindFunctionFromString( const str8& src )
+dword TProcessMemoryRegion::FindFunctionFromString( const TString& src )
 {
 	dword strAddr = FindString(src);
 	if (strAddr == NFOUND)
@@ -61,7 +65,7 @@ dword TProcessMemoryRegion::FindFunctionFromString( const str8& src )
 	return fncBegin;
 }
 
-dword TProcessMemoryRegion::FindFunctionFromString( const str8& src, byte firstByte)
+dword TProcessMemoryRegion::FindFunctionFromString( const TString& src, byte firstByte)
 {
 	dword fncAddr = FindFunctionFromString(src);
 	byte RealFirstByte = Parent->ReadByte(fncAddr);
@@ -72,7 +76,7 @@ dword TProcessMemoryRegion::FindFunctionFromString( const str8& src, byte firstB
 	return fncAddr;
 }
 
-void TProcessMemoryRegion::Initialize( const str8& _name, dword _start,dword _end,TProcessHack* _prn )
+void TProcessMemoryRegion::Initialize( const TString& _name, dword _start,dword _end,TProcessHack* _prn )
 {
 	ModuleName = _name;
 	StartAddress = _start;
@@ -82,13 +86,13 @@ void TProcessMemoryRegion::Initialize( const str8& _name, dword _start,dword _en
 	Parent = _prn;
 }
 
-TProcessMemoryRegion::TProcessMemoryRegion( const str8& _name, const str8& _file,dword _start,dword _end,TProcessHack* _prn )
+TProcessMemoryRegion::TProcessMemoryRegion( const TString& _name, const TString& _file,dword _start,dword _end,TProcessHack* _prn )
 {
 	Initialize(_name,_start,_end,_prn);
 	FileName = _file;
 }
 
-TProcessMemoryRegion::TProcessMemoryRegion( const str8& _name, dword _start,dword _end,TProcessHack* _prn )
+TProcessMemoryRegion::TProcessMemoryRegion( const TString& _name, dword _start,dword _end,TProcessHack* _prn )
 {
 	Initialize(_name,_start,_end,_prn);
 }

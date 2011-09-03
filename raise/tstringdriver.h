@@ -2,6 +2,7 @@
 #define TSTRINGDRIVER_H
 
 #include "tcharacter.h"
+#include "tarray.h"
 
 const static byte bytesFromUTF8[256] = {
 	1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1,
@@ -17,14 +18,26 @@ const static byte bytesFromUTF8[256] = {
 class StringDriver
 {
 public:
-	
+
+	const static TArray<ch32> Whitespaces;
+
 	/**
 	 * @brief Decodes a character from UTF-8 string.
 	 * @param [in] charptr Pointer to character.
 	 * @param [in,out] byteLength Decoded byte count.
 	 * @return Decoded character.
 	 */
-	static ch32 Decode(const byte* charptr, int& byteLength);
+	static inline ch32 Decode(const byte* charptr, int& byteLength)
+	{
+		if ((*charptr) < 0x80)
+		{
+			byteLength = 1;
+			return (ch32)*charptr;
+		}
+		return DecodeOnlyUnicode(charptr, byteLength);
+	}
+
+	static ch32 DecodeOnlyUnicode(const byte* charptr, int& byteLength);
 
 	/**
 	 * @brief Encodes one character to target byte array without safety.
@@ -32,7 +45,20 @@ public:
 	 * @param value The character to be encoded.
 	 * @return Written byte count.
 	 */
-	static int Encode(byte* charptr, ch32 c);
+	static inline int Encode(byte* charptr, ch32 c)
+	{
+		if (c < 0x80)
+		{
+			*charptr = (char)c;
+			return 1;
+		}
+		return EncodeOnlyUnicode(charptr,c);
+	}
+	
+	/**
+	 * Skips checking character if its ASCII, it just encodes unicode characters and fails if ASCII.
+	 */
+	static int EncodeOnlyUnicode(byte* charptr, ch32 c);
 
 	inline static ch32 DecodeFast(const byte* charptr, int& byteLength)
 	{
@@ -49,10 +75,10 @@ public:
 	{
 		if (*src < 0x80)
 		{ 
-			return *src++; 
+			return *src++;
 		}
 		int ln;
-		ch32 result = Decode(src,ln);
+		ch32 result = DecodeOnlyUnicode(src,ln);
 		src += ln;
 		return result;
 	}
@@ -65,7 +91,7 @@ public:
 			dst++;
 			return;
 		}
-		int ln = StringDriver::Encode(dst,character);
+		int ln = StringDriver::EncodeOnlyUnicode(dst,character);
 		dst += ln;
 	}
 
@@ -97,6 +123,7 @@ public:
 	{
 		if (*charptr < 0x80)
 		{
+			bytelength = 1;
 			return (ch32)*charptr;
 		}
 		
@@ -115,7 +142,21 @@ public:
 		return 0;
 	}
 
-
+	/**
+	 * Counts chars in a byte array.
+	 */
+	static dword Length(const byte* data, dword capacity)
+	{
+		dword result = 0;
+		for (dword i=0;i<capacity;i++)
+		{
+			if (!IsTrail(data[i]))
+			{
+				result++;
+			}
+		}
+		return result;
+	}
 
 	static void Length(const byte* data, dword& length, dword& bytelength)
 	{
@@ -145,16 +186,18 @@ public:
 	{
 		if (charToCount == 0) return src;
 
-		while(*src)
+		byte curbyte = *src;
+		while(curbyte)
 		{
-			if (!IsTrail(*src))
+			if (!IsTrail(curbyte))
 			{
-				charToCount--;
 				if (charToCount == 0)
 				{
 					return src;
 				}
+				charToCount--;
 			}
+			curbyte = *(++src);
 		}
 
 		return src;

@@ -20,7 +20,6 @@ enum MemberTypes
 	MT_POINTER,
 	MT_OBJECT,
 	MT_STRING,
-	MT_USTRING,
 	MT_ARRAY,
 };
 
@@ -35,7 +34,7 @@ public:
 	
 	int ID;
 	int Offset;
-	str8 Name;
+	TString Name;
 };
 
 /**
@@ -48,7 +47,7 @@ public:
 	TArray< TMember* > Members;
 
 	/**
-	* Sets object name from offset. It should be str8.
+	* Sets object name from offset. It should be TString.
 	*/
 	TMember* SetObjectName(int offset)
 	{
@@ -65,7 +64,7 @@ public:
 	/**
 	* Adds a member with name.
 	*/
-	TMember* AddMember(const str8& name,int offset, MemberTypes typ, MemberTypes subtyp = MT_NONE,TMemberInfo* minfo = NULL)
+	TMember* AddMember(const TString& name,int offset, MemberTypes typ, MemberTypes subtyp = MT_NONE,TMemberInfo* minfo = NULL)
 	{
 		TMember* nmember = new TMember();
 		nmember->ID = Members.Count;

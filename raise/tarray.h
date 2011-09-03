@@ -5,60 +5,7 @@
 #include "raisetypes.h"
 #include "tmemorydriver.h"
 
-
 #define TARRAYDEFSIZE	4
-
-
-template<class T,int Sz>
-class TStaticArray
-{
-public:
-	T	Item[Sz];
-	int Count;
-
-	TStaticArray()
-	{
-		Count = 0;
-	}
-
-	inline int LastIndexOf(T value)
-	{
-		int c = Sz;
-		while(c--)
-		{
-			if (Item[c] == value)
-			{
-				return c;
-			}
-		}
-		return -1;
-	}
-
-	inline void RemoveAt(int index)
-	{
-		if (index == (Sz -1))
-		{
-			Count--;
-			return;
-		}
-		Item[index] = Item[--Count];
-	}
-
-	inline void Remove(T value)
-	{
-		int i = LastIndexOf(value);
-		if (i != -1)
-		{
-			RemoveAt(i);
-		}
-	}
-
-	inline void	Add(T value)
-	{
-		Item[Count++] = value;
-	}
-};
-
 
 /**
 * Order not preserved in this implementation.
@@ -67,6 +14,10 @@ template <class T>
 class TArray
 {
 public:
+	T*		Item;
+	dword	Count;
+	dword	Capacity;
+
 	TArray()
 	{
 		Item = 0;
@@ -81,7 +32,24 @@ public:
 		Count = 0;
 	}
 
-	TArray( const TArray<T>& cpy)
+	TArray( const T* data )
+	{
+		Item = (T*)data;
+		Count = CountOfZeroEnding(data);
+		Capacity = 0;
+	}
+
+	/**
+	 * Constructs a static array.
+	 */
+	TArray( T* data, int dataCount)
+	{
+		Item = data;
+		Count = dataCount;
+		Capacity = 0;
+	}
+
+	TArray( const TArray<T>& cpy )
 	{
 		Item = 0;
 		Count = 0;
@@ -98,11 +66,12 @@ public:
 		Capacity = 0;
 	}
 
-	T*		Item;
-	dword	Count;
-	dword	Capacity;
 
-	void	Insert(T value,int index);
+
+	void	Insert(T value,int index)
+	{
+		throw NotImplementedException();
+	}
 	
 	/**
 	* When no changes needed anymore, you can use this to create static array with length of count. (without additional capacity)
@@ -117,7 +86,7 @@ public:
 	/**
 	* Generic counter for zero ending array.
 	*/
-	static inline int CountOfZeroEnding(T* _array)
+	static inline int CountOfZeroEnding(const T* _array)
 	{
 		for (int i = 0; true ; i++)
 		{
@@ -128,14 +97,14 @@ public:
 			}
 			if (i == 1024)
 			{
-				throw Exception("Impossible"); // TODO: if it will be possible someday change this.
+				throw -1; //Exception("Impossible"); // TODO: if it will be possible someday change this.
 			}
 		}
 	}
 
 	inline int IndexOf(T value)
 	{
-		for (int i=0;i<Count;i++)
+		for (dword i=0;i<Count;i++)
 		{
 			if (Item[i] == value)
 			{
@@ -160,6 +129,8 @@ public:
 
 	inline void Remove(T value)
 	{
+		assert(Capacity != 0);
+
 		int i = LastIndexOf(value);
 		if (i != -1)
 		{
@@ -169,6 +140,8 @@ public:
 
 	inline void RemoveAt(int index)
 	{
+		assert(Capacity != 0);
+
 		if (index == Count -1)
 		{
 			Count--;
@@ -185,6 +158,8 @@ public:
 
 	void Clear()
 	{
+		assert(Capacity != 0);
+
 		memset(Item,NULL, sizeof(T) * Count);
 		Count = 0;
 	}
@@ -207,9 +182,6 @@ public:
 		Item[Count++] = value;
 	}
 
-
-
-
 	bool Contains(T value)
 	{
 		int i = LastIndexOf(value);
@@ -225,14 +197,18 @@ public:
 
 	inline void Free()
 	{
-		if (Item)
+		if (Item && Capacity > 0) // if capacity is 0 then this means data is static
 		{
 			delete [] Item;
 		}
 	}
 
-	inline T operator [] (int index)
+	inline T operator [] (dword index)
 	{
+		if (index < 0 || index > Count)
+		{
+			throw Exception("Index out of bounds");
+		}
 		return Item[index];
 	}
 
@@ -248,15 +224,16 @@ public:
 	/**
 	* Assigning of arrays will destroy other.
 	*/
-	inline T& operator = (TArray<T>& other)
+	inline TArray<T>& operator = (TArray<T>& other)
 	{
+		// TODO: USE SHARED STUFF LIKE TSTRING HERE
 		Free();
 		Item = other.Item;
 		Count = other.Count;
 		Capacity = other.Capacity;
 		other.Item = 0;
-		other.Count = 0;
 		other.Capacity = 0;
+		other.Count = 0;
 		return *this;
 	}
 
@@ -270,7 +247,7 @@ protected:
 			Capacity = 0;
 			Item = 0;
 			Count = 0;
-			throw Exception("Tried to allocate 0, uncessary");
+			throw Exception("Tried to allocate 0, unnecessary");
 			return;
 		}
 

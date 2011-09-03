@@ -3,7 +3,6 @@
 
 #include "raisetypes.h"
 #include "tmemorydriver.h"
-#include "tsystem.h"
 
 class TByteArray
 {
@@ -16,20 +15,20 @@ public:
 	 * @param [in] other Other byte array that to be copied to new.
 	 * @param _NewCapacity New capacity (if smaller than existing capacity will be extended)
 	 */
-	inline void Initialize(const TByteArray* other, dword _NewCapacity)
+	inline void InitializeByteArray(const TByteArray* other, dword _NewCapacity)
 	{
 		if (_NewCapacity < other->Capacity) _NewCapacity = other->Capacity;
 		Data = new byte[_NewCapacity];
 		MemoryDriver::Copy(Data,other->Data,other->Capacity);
 	}
 
-	inline void Initialize(dword _Capacity)
+	inline void InitializeByteArray(dword _Capacity)
 	{
 		Data = 0;
 		Allocate(_Capacity);
 	}
 
-	inline void Initialize(byte* _Data, dword _Capacity)
+	inline void InitializeByteArray(byte* _Data, dword _Capacity)
 	{
 		Use(_Data,_Capacity);
 	}
@@ -38,6 +37,11 @@ public:
 	{
 		Data = value.Data;
 		Capacity = value.Capacity;
+	}
+
+	inline void Detach()
+	{
+		Use( 0, 0 );
 	}
 
 	inline void Use(byte* _Data, dword _Capacity)
@@ -90,12 +94,12 @@ public:
 
 	inline TByteArray(dword _Capacity)
 	{
-		Initialize(_Capacity);
+		InitializeByteArray(_Capacity);
 	}
 
 	inline TByteArray(const TByteArray* other, dword _NewCapacity)
 	{
-		Initialize(other,_NewCapacity);
+		InitializeByteArray(other,_NewCapacity);
 	}
 };
 

@@ -7,7 +7,7 @@ template <class T>
 class RDLL TDictonaryPage
 {
 public:
-	TArray< TKeyValue<str8,T>* > Values;
+	TArray< TKeyValue<TString,T>* > Values;
 };
 
 template <class T>
@@ -27,12 +27,12 @@ public:
 	 * @param key Key for lookup in dictionary.
 	 * @return The value of key.
 	 */
-	T Get(const str8& key)
+	T Get(const TString& key)
 	{
-		int page = MOD32(key.Chars[0]);
+		int page = MOD32(key.Data[0]);
 		for (int i=0;i<Map[page].values.Count;i++)
 		{
-			TKeyValue<str8,T>* curKV = Map[page].Values.Item[i];
+			TKeyValue<TString,T>* curKV = Map[page].Values.Item[i];
 			if (curKV->Key == key)
 			{
 				return curKV->Value;
@@ -46,10 +46,10 @@ public:
 	 * @param key The key.
 	 * @param value The Value.
 	 */
-	void Add(const str8& key,T value)
+	void Add(const TString& key,T value)
 	{
-		int Page = MOD32(key.Chars[0]);
-		TKeyValue<str8, T>* newKV = new TKeyValue<str8, T>(key, value);
+		int Page = MOD32(key.Data[0]);
+		TKeyValue<TString, T>* newKV = new TKeyValue<TString, T>(key, value);
 		Map[Page].Values.Add(newKV);
 		totalValues++;
 	}

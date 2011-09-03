@@ -5,28 +5,28 @@
 TRMLReader::TRMLReader( TStream* readStream )
 {
 	BaseStream = readStream;
-	TextStream = new StreamReader ( readStream );
+	TextStream = new TStreamReader ( readStream, (TEncoding&)TEncoding::Latin1 );
 }
 
 void TRMLReader::Parse( bool closeStream )
 {
-	str8 data;
+	TString data;
 	int interrupt;
 
 	bool keySet = false;
-	str8 curKey;
+	TString curKey;
 
 	bool valueSet = false;
-	str8 curValue;
+	TString curValue;
 
 	TRMLNode* curNode;
 	bool waitingValue = false;
 	bool waitingEnd = false;
 
-	str8 interruptChars = "{}:;/\"";
-	str8 ignoreChars = "\x20\x09\x0A\x0D\0x0B";
+	TString interruptChars = "{}:;/\"";
+	TString ignoreChars = "\x20\x09\x0A\x0D\0x0B";
 	
-	str8 quotChars = "\x22";
+	TString quotChars = "\x22";
 
 	TStack<TRMLNode*> nodeStack(128);
 	nodeStack.Push(&BaseNode);
@@ -59,7 +59,7 @@ void TRMLReader::Parse( bool closeStream )
 			if (waitingValue)
 			{
 				if (!valueSet) curValue = data;
-				curNode->Values.Add(curKey,new str8(curValue));
+				curNode->Values.Add(curKey,new TString(curValue));
 				valueSet = false;
 				keySet = false;
 				waitingValue = false;
@@ -67,7 +67,7 @@ void TRMLReader::Parse( bool closeStream )
 			break;
 
 		case '"':
-			data = TextStream->ReadInterrupted(quotChars,str8::Empty,interrupt);
+			data = TextStream->ReadInterrupted(quotChars,TString::Empty,interrupt);
 			if (waitingValue)
 			{
 				curValue = data;

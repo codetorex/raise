@@ -15,12 +15,12 @@ public:
 
 	inline void BeginProfiling()
 	{
-		tickStart = TTimeDriver::TickCount();
+		tickStart = TimeDriver::TickCount();
 	}
 
 	inline void EndProfiling()
 	{
-		tickDelta = TTimeDriver::TickCount() - tickStart;
+		tickDelta = TimeDriver::TickCount() - tickStart;
 	}
 
 	inline void BeginProfiling(dword callCount)
@@ -28,7 +28,6 @@ public:
 		this->callCount = callCount;
 		BeginProfiling();
 	}
-
 
 	/**
 	* Returns per operation time as nanosecond.

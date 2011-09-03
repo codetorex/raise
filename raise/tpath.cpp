@@ -1,18 +1,18 @@
 #include "stdafx.h"
 #include "tpath.h"
 
-str8 TPath::CurrentFolder;
-str8 TPath::TempFolder;
+TString TPath::CurrentFolder;
+TString TPath::TempFolder;
 
 #ifdef WIN32
 
-ch8 TPath::DirectorySeprator = '\\';
-ch8 TPath::AltDirectorySeprator = '/';
+ch32 TPath::DirectorySeprator = '\\';
+ch32 TPath::AltDirectorySeprator = '/';
 
 #else
 
-ch8 TPath::DirectorySeprator = '/';
-ch8 TPath::AltDirectorySeprator = '\\';
+ch32 TPath::DirectorySeprator = '/';
+ch32 TPath::AltDirectorySeprator = '\\';
 
 #endif
 

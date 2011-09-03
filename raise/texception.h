@@ -1,16 +1,25 @@
 #ifndef TEXCEPTION_H
 #define TEXCEPTION_H
 
-#include "tstringfixedwidth.h"
+#include "tstring.h"
 
 class Exception
 {
 public:
-	str8 Message;
+	TString Message;
 
-	Exception(const str8& msg)
+	Exception(const TString& msg)
 	{
 		Message = msg;
+	}
+};
+
+class NotImplementedException: public Exception
+{
+public:
+	NotImplementedException(): Exception("Not Implemented")
+	{
+
 	}
 };
 
@@ -19,7 +28,7 @@ class ObjectException: public Exception
 public:
 	void* Object;
 
-	ObjectException(const str8& msg, void* obj): Exception(msg)
+	ObjectException(const TString& msg, void* obj): Exception(msg)
 	{
 		Object = obj;
 	}

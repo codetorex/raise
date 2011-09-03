@@ -3,7 +3,7 @@
 
 
 #include "raisetypes.h"
-#include "tstringfixedwidth.h"
+#include "tstring.h"
 #include "tbuffer.h"
 #include "tevent.h"
 
@@ -16,10 +16,10 @@ public:
 	DWORD processID;
 	HANDLE processHandle;
 
-	void OpenFromWindow(const str8& windowname);
-	void CreateFromExecutable(const str8& exepath,const str8& params = 0);
+	void OpenFromWindow(const TString& windowname);
+	void CreateFromExecutable(const TString& exepath,const TString& params = TString::Empty);
 
-	TArray<str16*> GetModules();
+	TArray<TString*> GetModules();
 };
 
 
@@ -40,21 +40,23 @@ public:
 		Buffer.Allocate(4 * 1024);
 	}
 
-	inline str8 ReadString(dword address)
+	inline TString ReadString(dword address)
 	{
-		str8 result(512);
-		Read(address,result.Chars,512);
-		result.Length = StringDriverFixedWidth::Length(result.Chars);
+		TString result(512);
+		Read(address,result.Data,512);
+		result.CountCharsAndBytes();
 		return result;
 	}
 
-	inline str8 ReadLongString(dword address, int size)
+	inline TString ReadLongString(dword address, int size)
 	{
-		str8 result(size+1);
-		Read(address,result.Chars,size);
-		result.Length = size;
+		TString result(size+1);
+		Read(address,result.Data,size);
+		result.CountCharsAndBytes();
 		return result;
 	}
+
+	//TODO: implement wide char string reading functions
 
 	inline dword Read(dword address, void* buffer, int length)
 	{

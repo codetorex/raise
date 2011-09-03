@@ -32,8 +32,8 @@ enum FileAttributes
 class IFileSystemNode
 {
 public:
-	virtual str8&				GetFullName() = 0;
-	virtual str8				GetName() = 0;
+	virtual TString				GetFullName() = 0;
+	virtual TString				GetName() = 0;
 
 	virtual bool				Exists() = 0;
 
@@ -51,14 +51,14 @@ public:
 class IFile: public IFileSystemNode
 {
 public:
-	virtual str8				GetExtension() = 0;
+	virtual TString				GetExtension() = 0;
 
 	virtual	IDirectory*			GetParent() = 0;
 
 	virtual TStream*			Open(FileMode mode) = 0;
 	virtual TStream*			Create() = 0;
 	virtual	bool				Delete() = 0;
-	virtual bool				MoveTo(str8& destFileName) = 0;
+	virtual bool				MoveTo(TString& destFileName) = 0;
 };
 
 #ifdef WIN32
@@ -69,21 +69,21 @@ public:
 class TFileInfo: public IFile
 {
 public:
-	str8 OriginalPath;
-	str8 FullPath;
+	TString OriginalPath;
+	TString FullPath;
 
-	TFileInfo(const str8& path)
+	TFileInfo(const TString& path)
 	{
 		OriginalPath = path;
 		FullPath = TPath::GetFullPath(OriginalPath);
 	}
 
-	str8& GetFullName()
+	TString GetFullName()
 	{
 		return FullPath;
 	}
 
-	inline str8 GetExtension()
+	inline TString GetExtension()
 	{
 		return TPath::GetExtension(FullPath);
 	}
@@ -93,7 +93,7 @@ public:
 		throw "Not Implemented";
 	}
 
-	bool MoveTo(str8& destFileName)
+	bool MoveTo(TString& destFileName)
 	{
 		throw "Not Implemented";
 	}
@@ -123,14 +123,14 @@ public:
 		return tf;
 	}
 
-	inline str8 GetName()
+	inline TString GetName()
 	{
 		return TPath::GetFileName(FullPath);
 	}
 
 	inline FileAttribute GetAttributes()
 	{
-		return GetFileAttributesA(FullPath.Chars);
+		return GetFileAttributesW(TWinTools::SystemString16(FullPath));
 	}
 
 	inline void SetAttributes(FileAttribute attributes)
@@ -153,9 +153,9 @@ public:
 		throw "Not Implemented";
 	}
 
-	static bool Exists(const str8& path)
+	static bool Exists(const TString& path)
 	{
-		FileAttribute fa = GetFileAttributesA(path.Chars);
+		FileAttribute fa = GetFileAttributesW(TWinTools::SystemString16(path));
 
 		if (fa == fa_INVALID)
 		{

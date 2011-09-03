@@ -19,14 +19,14 @@ TINIParser::TINIParser(TStream* readStream)
 void TINIParser::SetSource( TStream* readStream )
 {
 	BaseStream = readStream;
-	TextStream = new StreamReader(readStream);
+	TextStream = new TStreamReader(readStream);
 }
 
 void TINIParser::Parse(bool closeStream)
 {
 	while(!TextStream->EndOfStream)
 	{
-		str8 currentLine = TextStream->ReadLine();
+		TString currentLine = TextStream->ReadLine();
 		if (currentLine.StartsWith(";"))
 		{
 			continue;
@@ -39,7 +39,7 @@ void TINIParser::Parse(bool closeStream)
 			CurrentClass = newClass;
 			if (LowerCaseKeys)
 			{
-				CurrentClass->Name.ToLower();
+				CurrentClass->Name.ToLowerInplace();
 			}
 			Classes.Add(CurrentClass->Name, CurrentClass);
 			continue;
@@ -52,15 +52,15 @@ void TINIParser::Parse(bool closeStream)
 			continue; // skip that line if no equality
 		}
 
-		str8 keyName = currentLine.Substring(0,EqualityOperator);
-		keyName.TrimStart();
+		TString keyName = currentLine.Substring(0,EqualityOperator);
+		keyName.TrimStartInplace();
 
-		str8* value = new str8(currentLine.Substring(EqualityOperator+1,currentLine.Length-EqualityOperator-1));
-		value->Trim();
+		TString* value = new TString(currentLine.Substring(EqualityOperator+1,currentLine.Length-EqualityOperator-1));
+		value->TrimInplace();
 
 		if (LowerCaseKeys)
 		{
-			keyName.ToLower();
+			keyName.ToLowerInplace();
 		}
 		CurrentClass->Variables.Add(keyName,value);
 	}
@@ -73,9 +73,9 @@ void TINIParser::Parse(bool closeStream)
 	}
 }
 
-str8* TINIParser::GetValue( const str8& className, const str8& key )
+TString* TINIParser::GetValue( const TString& className, const TString& key )
 {
 	TINIClass* keyClass = Classes.GetValue(className);
-	str8* value = keyClass->Variables.GetValue(key);
+	TString* value = keyClass->Variables.GetValue(key);
 	return value;
 }

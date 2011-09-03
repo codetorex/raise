@@ -1,17 +1,17 @@
 #ifndef TENCODINGINFO_H
 #define TENCODINGINFO_H
 
-#include "tstringfixedwidth.h"
+#include "tstring.h"
 #include "tarray.h"
 
 class TEncodingInfo
 {
 public:
 	/// The encoding name
-	str8 Name;
+	TString Name;
 
 	/// Encoding name in human readable form.
-	str8 DisplayName;
+	TString DisplayName;
 	
 	/// The minimum bit length per character
 	int MinLengthPerChar;
@@ -33,7 +33,7 @@ public:
 	 * @param _max The maximum bit per character.
 	 * @param _cp The code page.
 	 */
-	TEncodingInfo(const str8& encName, const str8& _displayName, int _min, int _max, int _cp)
+	TEncodingInfo(const TString& encName, const TString& _displayName, int _min, int _max, int _cp)
 	{
 		Name = encName;
 		DisplayName = _displayName;

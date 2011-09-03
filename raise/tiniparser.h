@@ -2,7 +2,7 @@
 #define TINIPARSER_H
 
 #include "tstreamreader.h"
-#include "tstringfixedwidth.h"
+#include "tstring.h"
 #include "thashmap.h"
 
 // TODO: use dictionary in future?
@@ -10,11 +10,11 @@
 class TINIClass
 {
 public:
-	str8 Name;
+	TString Name;
 
-	THashMap<str8*> Variables;
+	THashMap<TString*> Variables;
 
-	TINIClass(const str8& _name)
+	TINIClass(const TString& _name)
 	{
 		Name = _name;
 	}
@@ -39,17 +39,17 @@ public:
 	void SetSource(TStream* readStream);
 	void Parse(bool closeStream = true);
 
-	str8* GetValue(const str8& className, const str8& key);
+	TString* GetValue(const TString& className, const TString& key);
 
 	/**
 	* @return TINIClass if available, null if not.
 	*/
-	TINIClass* GetClass(const str8& className)
+	TINIClass* GetClass(const TString& className)
 	{
 		return Classes.GetValue(className);
 	}
 
-	bool ContainsClass(const str8& className)
+	bool ContainsClass(const TString& className)
 	{
 		return Classes.ContainsKey(className);	
 	}

@@ -23,7 +23,7 @@ public:
 
 	virtual void					Create() = 0;
 	virtual bool					Delete(bool recursive) = 0;
-	virtual bool					MoveTo(str8& destDirName) = 0;
+	virtual bool					MoveTo(TString& destDirName) = 0;
 
 	virtual	IDirectory*				GetParent() = 0;
 };
@@ -34,10 +34,10 @@ public:
 class TDirectoryInfo: public IDirectory
 {
 public:
-	str8 OriginalPath;
-	str8 FullPath;
+	TString OriginalPath;
+	TString FullPath;
 
-	TDirectoryInfo(const str8& path)
+	TDirectoryInfo(const TString& path)
 	{
 		OriginalPath = path;
 		FullPath = TPath::GetFullPath(path);
@@ -47,15 +47,16 @@ public:
 	/**
 	* Creates all directories and subdirectories in the specified path.
 	*/
-	static TDirectoryInfo CreateDir(const str8& path)
+	static TDirectoryInfo CreateDir(const TString& path)
 	{
 		char tmp[512];
-		str8 tmpstr(tmp);
-		CreateDirSlient(path,tmpstr.Chars);
+		TString tmpstr(tmp);
+		throw NotImplementedException();
+		//CreateDirSlient(path,tmpstr.Chars);
 		return TDirectoryInfo(tmpstr);
 	}
 
-	static void CreateDirSlient(const str8& path,char* output = 0)
+	/*static void CreateDirSlient(const TString& path,char* output = 0)
 	{
 		if (path.Length <= 1)
 		{
@@ -65,7 +66,7 @@ public:
 		char tmp[512];
 		MemoryDriver::Set(tmp,0,512);
 		MemoryDriver::Copy(tmp,path.Chars,path.Length);
-		str8 tmpstr(tmp);
+		TString tmpstr(tmp);
 		TPath::CorrectSeprators(tmpstr);
 		TPath::StripFilename(tmpstr);
 
@@ -91,21 +92,21 @@ public:
 		{
 			MemoryDriver::Copy(output,tmpstr.Chars,tmpstr.Length);
 		}
-	}
+	}*/
 
-	str8& GetFullName()
+	TString GetFullName()
 	{
 		return FullPath;
 	}
 
-	inline str8 GetName()
+	inline TString GetName()
 	{
 		return TPath::GetDirectoryName(FullPath);
 	}
 
 	inline FileAttribute GetAttributes()
 	{
-		return GetFileAttributesA(FullPath.Chars);
+		return GetFileAttributesW(TWinTools::SystemString16(FullPath));
 	}
 
 	inline void SetAttributes(FileAttribute attributes)
@@ -169,7 +170,7 @@ public:
 		throw "Not Implemented";
 	}
 
-	bool MoveTo(str8& destDirName) 
+	bool MoveTo(TString& destDirName) 
 	{ 
 		throw "Not Implemented";
 	}

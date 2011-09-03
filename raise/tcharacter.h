@@ -29,6 +29,10 @@ public:
 		{
 			return (Character + ('a'-'A'));
 		}
+		else if (Character < 0x80)
+		{
+			return Character;
+		}
 		return '?';
 	}
 
@@ -37,6 +41,10 @@ public:
 		if('a' <= Character && Character <= 'z') 
 		{
 			return (Character - ('a'-'A'));
+		}
+		else if (Character < 0x80)
+		{
+			return Character;
 		}
 		return '?';
 	}

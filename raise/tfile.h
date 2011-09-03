@@ -1,24 +1,24 @@
 #ifndef TFILE_H
 #define TFILE_H
 
-#include "tstringfixedwidth.h"
+#include "tstring.h"
 #include "tfilestream.h"
 
 class TFile
 {
 public:
 
-	static inline TFileStream* Open(const str8& path,FileMode mode)
+	static inline TFileStream* Open(const TString& path,FileMode mode)
 	{
 		return new TFileStream(path, mode);
 	}
 
-	static inline TFileStream* OpenRead(const str8& path)
+	static inline TFileStream* OpenRead(const TString& path)
 	{
 		return new TFileStream(path, fm_Read);
 	}
 
-	static inline TFileStream* OpenWrite(const str8& path)
+	static inline TFileStream* OpenWrite(const TString& path)
 	{
 		return new TFileStream(path, fm_Write);
 	}

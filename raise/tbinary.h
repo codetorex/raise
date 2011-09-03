@@ -2,7 +2,7 @@
 #define TBINARY_H
 
 #include "raisetypes.h"
-#include "tstringfixedwidth.h"
+#include "tstring.h"
 
 #define NOTNEEDED
 
@@ -162,21 +162,21 @@ public:
 	/**
 	* Returns string representation of binary.
 	*/
-	inline str8& tostring()
+	inline TString ToString()
 	{
-		return tostring(value);
+		return ToString(value);
 	}
 
-	static inline str8& tostring(dword binvalue)
+	static inline TString ToString(dword binvalue)
 	{
 		register dword v = binvalue;
-		str8* str = new str8(32,'0');
+		TString result(32);
 		for (int i=0;i<32;i++)
 		{
-			str->Chars[i] += v & 1;
+			result.AppendASCIIFast('0' + (v & 1));
 			v >>= 1;
 		}
-		return *str;
+		return result;
 	}
 
 	/**

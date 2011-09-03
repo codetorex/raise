@@ -19,7 +19,7 @@ public:
 		Encoding = TEncodingInfo::ASCII;
 	}
 
-	TStreamWriter(const str8& path,int bufferSize = 8192) // open file
+	TStreamWriter(const TString& path,int bufferSize = 8192) // open file
 	{
 		TStream* srcStream = File::OpenWrite(path);
 		BaseStream = srcStream;
@@ -28,7 +28,7 @@ public:
 		Encoding = TEncodingInfo::ASCII;
 	}
 
-	inline void Write(const str8& value)
+	inline void Write(const TString& value)
 	{
 		// TODO: fix this shit with encoding converter
 		if (Encoding == TEncodingInfo::ASCII || Encoding == TEncodingInfo::UTF8)
@@ -51,7 +51,7 @@ public:
 		}
 		else
 		{
-			str8 tmpStr;
+			TString tmpStr;
 			tmpStr = value;
 			Write(tmpStr);
 		}

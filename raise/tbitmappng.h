@@ -4,6 +4,7 @@
 #include "tbitmapreader.h"
 #include "tbitmapwriter.h"
 
+#ifndef NOPNGLIB
 
 class TBitmapPNG: public TBitmapReader, public TBitmapWriter
 {
@@ -19,5 +20,7 @@ public:
 
 	static void Install();
 };
+
+#endif
 
 #endif
