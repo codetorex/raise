@@ -29,6 +29,11 @@ public:
 		return TempSystemString;
 	}
 
+	inline static void SystemString16(const TString& raiseStr, ch16* output, int outputSize)
+	{
+		Encoding::UTF16.ConvertString(raiseStr,output,outputSize);
+	}
+
 	inline static TString RaiseString(const ch16* systemStr)
 	{
 		return Encoding::UTF16.GetString(systemStr);

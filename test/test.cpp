@@ -23,7 +23,12 @@
 // TODO: test stack
 // TODO: test tstreamreader
 
+// TODO: test rml writer
+// TODO: test rml reader
+// TODO: test string builder
 
+#include "trmlwriter.h"
+#include "tfile.h"
 
 #ifdef WIN32
 int _tmain(int argc, wchar_t* argv[])
@@ -36,7 +41,7 @@ int main(int argc,char** argv)
 	suite.AddTest(&TStringCheck);
 	suite.AddTest(&TDateTimeCheck);
 	suite.AddTest(&TArrayCheck);
-	
+
 	//suite.PrintOutputs = true;
 	suite.RunSuite();
 

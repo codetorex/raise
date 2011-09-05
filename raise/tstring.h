@@ -210,9 +210,33 @@ public:
 		DetachToDestroy();
 	}
 
+	void Allocate(dword ByteCapacity)
+	{
+		DetachToDestroy();
+		StringAllocateEmpty(ByteCapacity);
+		Length = 0;
+		ByteLength = 0;
+		CreateRef();
+	}
+
+	inline void IncreaseCapacity(dword newCapacity)
+	{
+		DetachToEdit(newCapacity);
+	}
+
+	inline void IncreaseCapacity()
+	{
+		IncreaseCapacity(Capacity * 2);
+	}
+
 	inline bool IsASCII() const
 	{
 		return ByteLength == Length;
+	}
+
+	void CopyTo(byte* dst, dword bytecount) const
+	{
+		MemoryDriver::Copy(dst,Data,MathDriver::Min(bytecount,Capacity));
 	}
 
 	/**
@@ -240,6 +264,26 @@ public:
 	}
 
 	/**
+	 * Truncates this string, use this function if you know byte length and length.
+	 * Useful for if you derived this string from something else and appended something and you want it back.
+	 */
+	void Truncate(dword newLength, dword newByteLength)
+	{
+		DetachToEdit();
+		Length = newLength;
+		ByteLength = newByteLength;
+		Data[ByteLength] = 0;
+	}
+
+	/**
+	 * Simpler version of Truncate(dword newLength, dword newByteLength).
+	 */
+	inline void TruncateDerived(const TString& other)
+	{
+		Truncate(other.Length,other.ByteLength);
+	}
+
+	/**
 	 * Just adds the character without checking capacity and doesn't cares for references.
 	 * Call detach before using this, or just use it while creating strings first time.
 	 */
@@ -255,6 +299,18 @@ public:
 	inline void AppendASCII( char chr )
 	{
 		Append((byte*)&chr,1,1);
+	}
+
+	inline void AppendUnicodeFast( ch32 chr )
+	{
+		byte tmp[8];
+		byte* src = tmp;
+		int ln = StringDriver::Encode(tmp,chr);
+		while(ln--)
+		{
+			Data[ByteLength++] = *src++;
+		}
+		Length++;
 	}
 
 	inline void AppendUnicode( ch32 chr)
@@ -273,6 +329,16 @@ public:
 	inline TString& operator += ( const TChar& chr )
 	{
 		AppendUnicode(chr.Character);
+		return *this;
+	}
+
+	TString& operator += (const ch16* value)
+	{
+		while(*value > 0)
+		{
+			AppendUnicode((ch32)*value);
+			value++;
+		}
 		return *this;
 	}
 
@@ -420,6 +486,14 @@ public:
 
 	TArray<TString*> Split(const TArray<TString*>& seprators, bool removeEMpty = false) const;
 
+	void Clear()
+	{
+		DetachToEdit(Capacity);
+		ByteLength = 0;
+		Length = 0;
+		Data[ByteLength] = 0;
+	}
+
 	inline TString& operator = (const char* value)
 	{
 		DetachToDestroy();
@@ -433,6 +507,7 @@ public:
 	inline TString& operator = (const TString& value)
 	{
 		//FastCopyDword((dword*)this,(dword*)&value,sizeof(TString) / sizeof(dword));
+		DetachToDestroy();
 
 		Data = value.Data;
 		Capacity = value.Capacity;
@@ -448,11 +523,13 @@ public:
 
 	TString()
 	{
+		Ref = 0;
 		*this = Empty;
 	}
 
 	TString(const TString& value)
 	{
+		Ref = 0;
 		*this = value;
 	}
 
@@ -533,7 +610,7 @@ public:
 		Current = MXDWORD;
 		StrData = SrcString->Data;
 		EndData = StrData + SrcString->ByteLength - 1;
-		CharIndex = SrcString->Length-1;
+		CharIndex = SrcString->Length;
 	}
 
 	inline bool MoveNext()

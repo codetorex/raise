@@ -205,7 +205,7 @@ public:
 		{
 			if (schars.Current == '.')
 			{
-				return path.Substring(schars.CharIndex+1);
+				return path.Substring(schars.CharIndex); // charIndex + 1 wasnt used for .net compability?
 			}
 			else if (IsDirectorySeprator(schars.Current))
 			{
@@ -230,19 +230,24 @@ public:
 		return TString::Empty;*/
 	}
 
-	static void StripFilename(TString& path)
+	static TString StripFilename(const TString& path)
 	{
-		throw NotImplementedException();
-		/*int i = path.Length;
-		while(i--)
+		TCharacterReverseEnumerator schars(path);
+
+		while(schars.MoveNext())
 		{
-			if (IsDirectorySeprator(path.Chars[i]))
+			if (IsDirectorySeprator(schars.Current))
 			{
-				path.Chars[i+1] = 0;
-				path.Length = i+1;
 				break;
 			}
-		}*/
+		}
+
+		if (schars.CharIndex == 0)
+		{
+			return TString::Empty;
+		}
+
+		return path.Substring(0,schars.CharIndex+1);
 	}
 
 	static TString GetDirectoryName(TString& path)

@@ -81,7 +81,7 @@ public:
 	*/
 	int ReadByte();
 	void Seek(dword offset,SeekOrigin origin);
-	void Write(void* buffer,int size,int count);
+	void Write(const void* buffer,int size,int count);
 	int PeekByte();
 
 	void WriteByte(byte value);

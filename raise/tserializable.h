@@ -35,6 +35,31 @@ public:
 	int ID;
 	int Offset;
 	TString Name;
+
+	TString* GetStringPtr(void* object)
+	{
+		return (TString*)((byte*)object + Offset);
+	}
+
+	bool* GetBoolPtr(void* object)
+	{
+		return (bool*)((byte*)object + Offset);
+	}
+
+	int* GetIntPtr(void* object)
+	{
+		return (int*)((byte*)object + Offset);
+	}
+
+	void* GetVoidPtr(void* object)
+	{
+		return (void*)((byte*)object + Offset);
+	}
+
+	void** GetPtrPtr(void* object)
+	{
+		return (void**)((byte*)object + Offset);
+	}
 };
 
 /**
@@ -64,7 +89,7 @@ public:
 	/**
 	* Adds a member with name.
 	*/
-	TMember* AddMember(const TString& name,int offset, MemberTypes typ, MemberTypes subtyp = MT_NONE,TMemberInfo* minfo = NULL)
+	TMember* AddMember(const TString& name,int offset, MemberTypes typ, MemberTypes subtyp = MT_NONE,TMemberInfo* minfo = 0)
 	{
 		TMember* nmember = new TMember();
 		nmember->ID = Members.Count;
@@ -80,7 +105,7 @@ public:
 	/**
 	* Adds a member with just ID.
 	*/
-	TMember* AddMember(int offset, MemberTypes typ, MemberTypes subtyp = MT_NONE,TMemberInfo* minfo = NULL)
+	TMember* AddMember(int offset, MemberTypes typ, MemberTypes subtyp = MT_NONE,TMemberInfo* minfo = 0)
 	{
 		TMember* nmember = new TMember();
 		nmember->ID = Members.Count;
@@ -105,6 +130,14 @@ class TSerializer
 {
 public:
 	virtual void Serialize(TMemberInfo* minfo, void* object) = 0;
+};
+
+/**
+ * Deserialize interface that deserializes the objects.
+ */
+class TDeserializer
+{
+public:
 	virtual void Deserialize(TMemberInfo* minfo, void* object) = 0;
 };
 

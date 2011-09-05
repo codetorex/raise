@@ -78,6 +78,9 @@
     <Filter Include="Source Files\Cryptography">
       <UniqueIdentifier>{d7fc52e5-163b-43bb-bb42-983f0bdb3ce2}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Source Files\IO\File System\Win32">
+      <UniqueIdentifier>{e45eca2d-315d-4710-9328-c1ece9c1e581}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="raisetypes.h">
@@ -392,6 +395,18 @@
     <ClInclude Include="tlatin1encoding.h">
       <Filter>Source Files\String</Filter>
     </ClInclude>
+    <ClInclude Include="tstreamwriterutf8.h">
+      <Filter>Source Files\IO\Literacy</Filter>
+    </ClInclude>
+    <ClInclude Include="tbinaryserializer.h">
+      <Filter>Source Files\IO\Literacy\Binary</Filter>
+    </ClInclude>
+    <ClInclude Include="tdirectorywin32.h">
+      <Filter>Source Files\IO\File System\Win32</Filter>
+    </ClInclude>
+    <ClInclude Include="tfilewin32.h">
+      <Filter>Source Files\IO\File System\Win32</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">
@@ -502,10 +517,15 @@
     <ClCompile Include="thashcodeprovider.cpp">
       <Filter>Source Files\Collection</Filter>
     </ClCompile>
+    <ClCompile Include="tstreamwriterutf8.cpp">
+      <Filter>Source Files\IO\Literacy</Filter>
+    </ClCompile>
+    <ClCompile Include="tdirectorywin32.cpp">
+      <Filter>Source Files\IO\File System\Win32</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <None Include="design.cd" />
     <None Include="Rules.txt" />
-    <None Include="ClassDiagram1.cd" />
   </ItemGroup>
 </Project>

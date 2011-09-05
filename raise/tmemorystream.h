@@ -128,7 +128,7 @@ public:
 		}
 	}
 
-	inline void Write(void* buffer,int size,int count)
+	inline void Write(const void* buffer,int size,int count)
 	{
 		int TotalLength = size * count;
 		DataBuffer.AddBytesIncreasing((byte*)buffer,TotalLength);

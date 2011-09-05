@@ -102,7 +102,7 @@ public:
 		Buffer.Rewind();
 		dword readed = BaseStream->Read( Cache.Data + CacheStart, 1, Cache.Capacity - CacheStart);
 		bool isEnded = readed < Cache.Capacity - CacheStart;
-		int used = CurrentEncoding.GetChars(Cache.Data,readed + CacheStart,Buffer);
+		dword used = CurrentEncoding.GetChars(Cache.Data,readed + CacheStart,Buffer);
 	
 
 		if (used < readed)
@@ -193,6 +193,8 @@ public:
 	{
 		TString result(1024); 
 		ch32 d;
+
+		int i;
 		while(1)
 		{
 			d = Read();
@@ -203,7 +205,12 @@ public:
 			{
 				if (d != 0x0D)
 				{
-					result += d;
+					result.AppendUnicodeFast(d);
+					i = result.Capacity - result.ByteLength;
+					if (i < 8)
+					{
+						result.IncreaseCapacity();
+					}
 				}
 				else
 				{

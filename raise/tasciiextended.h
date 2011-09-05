@@ -92,7 +92,7 @@ public:
 		throw NotImplementedException();
 	}
 
-	inline int GetChars( byte* bytes, int bytecount, TCharBuffer& buffer ) const
+	inline dword GetChars( byte* bytes, dword bytecount, TCharBuffer& buffer ) const
 	{
 		if (buffer.Capacity < bytecount)
 		{

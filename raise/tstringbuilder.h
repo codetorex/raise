@@ -7,10 +7,11 @@
 
 class TStringBuilder: private TByteArray
 {
-private:
+public:
 	dword Length;
 	dword ByteLength;
 
+private:
 	inline void CheckCapacity(dword length)
 	{
 		if ( ByteLength + length >= Capacity )
@@ -75,6 +76,8 @@ private:
 	}
 
 public:
+
+
 	TStringBuilder() : TByteArray(512) 
 	{
 		Length = 0;
@@ -100,11 +103,10 @@ public:
 		ByteLength = 0;
 	}
 
-	~TStringBuilder()
+	inline const byte* GetData() const
 	{
-		delete [] Data;
+		return Data;
 	}
-
 
 	/**
 	 * Should be called if used stack array. So it wont get tried to be destroyed.
@@ -134,6 +136,12 @@ public:
 		Data[ByteLength++] = c;
 	}
 
+	inline void AppendChar(char c, int repeatCount)
+	{
+		if (repeatCount == 0) return;
+		InternalRepeatChar(c,repeatCount);
+	}
+
 	inline void Append(const TString& value)
 	{
 		InternalAppend(value.Data,value.ByteLength,value.Length);
@@ -142,6 +150,12 @@ public:
 	inline void AppendLine()
 	{
 		AppendChar('\n');
+	}
+
+	inline void Clear()
+	{
+		ByteLength = 0;
+		Length = 0;
 	}
 
 	string ToString();

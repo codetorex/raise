@@ -34,12 +34,8 @@ public:
 		return (int64) (value-0.5);
 	}
 
-	inline static int Min(int value1,int value2)
-	{
-		return value1 < value2 ? value1 : value2;
-	}
-
-	inline static int Min(dword value1,dword value2)
+	template<class T>
+	inline static int Min(T value1,T value2)
 	{
 		return value1 < value2 ? value1 : value2;
 	}

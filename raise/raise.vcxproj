@@ -120,6 +120,7 @@
     <ClInclude Include="tasciiextended.h" />
     <ClInclude Include="tbinary.h" />
     <ClInclude Include="tbinaryreader.h" />
+    <ClInclude Include="tbinaryserializer.h" />
     <ClInclude Include="tbitfield.h" />
     <ClInclude Include="tbitmap.h" />
     <ClInclude Include="tbitmapbmp.h" />
@@ -146,6 +147,7 @@
     <ClInclude Include="tdatetimeunix.h" />
     <ClInclude Include="tdatetimewindows.h" />
     <ClInclude Include="tdictionary.h" />
+    <ClInclude Include="tdirectorywin32.h" />
     <ClInclude Include="tencoding.h" />
     <ClInclude Include="tencodinginfo.h" />
     <ClInclude Include="tenumerator.h" />
@@ -155,6 +157,7 @@
     <ClInclude Include="tfileinfo.h" />
     <ClInclude Include="tfilestream.h" />
     <ClInclude Include="tdirectoryinfo.h" />
+    <ClInclude Include="tfilewin32.h" />
     <ClInclude Include="thashcodeprovider.h" />
     <ClInclude Include="thashmap.h" />
     <ClInclude Include="tindex.h" />
@@ -186,6 +189,7 @@
     <ClInclude Include="tstreamreader.h" />
     <ClInclude Include="tstreamreaderutf8.h" />
     <ClInclude Include="tstreamwriter.h" />
+    <ClInclude Include="tstreamwriterutf8.h" />
     <ClInclude Include="tstring.h" />
     <ClInclude Include="tstringbuilder.h" />
     <ClInclude Include="tstringdriver.h" />
@@ -226,6 +230,7 @@
     <ClCompile Include="tcomposition.cpp" />
     <ClCompile Include="tconvert.cpp" />
     <ClCompile Include="tdatetime.cpp" />
+    <ClCompile Include="tdirectorywin32.cpp" />
     <ClCompile Include="tencoding.cpp" />
     <ClCompile Include="tencodinginfo.cpp" />
     <ClCompile Include="tcompositebuffer.cpp" />
@@ -239,6 +244,7 @@
     <ClCompile Include="tprocessmodule.cpp" />
     <ClCompile Include="trmlreader.cpp" />
     <ClCompile Include="trmlwriter.cpp" />
+    <ClCompile Include="tstreamwriterutf8.cpp" />
     <ClCompile Include="tstring.cpp" />
     <ClCompile Include="tstringbuilder.cpp" />
     <ClCompile Include="tstringdriver.cpp" />
@@ -250,7 +256,6 @@
     <ClCompile Include="twintools.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="ClassDiagram1.cd" />
     <None Include="design.cd" />
     <None Include="Rules.txt" />
   </ItemGroup>

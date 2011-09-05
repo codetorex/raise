@@ -5,6 +5,7 @@
 #include "tstring.h"
 #include "tkeyvalue.h"
 #include "thashcodeprovider.h"
+#include "tenumerator.h"
 
 
 
@@ -14,7 +15,7 @@ class RDLL THashKeyValue: public TKeyValue<TString,T>
 public:
 	dword Hash;
 
-	THashKeyValue(dword h,TString& k, T v)
+	THashKeyValue(dword h,const TString& k, T v)
 	{
 		Hash = h;
 		Key = k;
@@ -198,12 +199,101 @@ public:
 		return tkp->Value;
 	}
 
-	inline void Add(TString& key,T value)
+	inline T GetValueOrNull( const TString& key)
+	{
+		THashKeyValue<T>* tkp = Get(key);
+		if (tkp == NULL)
+		{
+			return 0;
+		}
+		return tkp->Value;
+	}
+
+	inline void Add(const TString& key,T value)
 	{
 		dword h = TBasicHashCodeProvider::Instance.GetHashCode(key); // TString::GetHash(key);
 		THashKeyValue<T>* kvp = new THashKeyValue<T>(h,key,value);
 		Root.Add(h,kvp);
 		Count++;
+	}
+};
+
+template<class T>
+class THashMapEnumerator: public TEnumerator< THashKeyValue<T>* >
+{
+private:
+	THashMap<T>* hmap;
+	TMapBranch<T>* rootBranch;
+
+	int LastLeafItem;
+	int Levels[4]; // will hold branch levels
+	int CurLevel;
+
+	bool NoItemLeft;
+
+	THashKeyValue<T>* LoopLeaf(TMapLeaf<T>* pLeaf)
+	{
+		for (;LastLeafItem < pLeaf->valueCount;)
+		{
+			return pLeaf->values[LastLeafItem++];
+		}
+
+		LastLeafItem = 0;
+		return 0;
+	}
+
+	bool LoopLevel(int level, TMapBranch<T>* branch)
+	{
+		int& levelCounter = Levels[level];
+		for (; levelCounter < 32; levelCounter++)
+		{
+			CurLevel = level;
+			TMapNode<T>* curNode = branch->Map[ levelCounter ];
+			if (!curNode) continue;
+			if (curNode->leaf)
+			{
+				Current = LoopLeaf( (TMapLeaf<T>*)curNode );
+				if (Current) return true;
+			}
+			else
+			{
+				bool result = LoopLevel( level + 1, (TMapBranch<T>*)curNode);
+				if (result) return true;
+			}
+		}
+
+		if (level == 0)
+		{
+			NoItemLeft = true;
+		}
+
+		return false;
+	}
+
+public:
+
+
+	THashMapEnumerator( THashMap<T>* _hmap )
+	{
+		hmap = _hmap;
+		rootBranch = &hmap->Root;
+		Reset();
+	}
+
+	void Reset()
+	{
+		Levels[0] = Levels[1] = Levels[2] = Levels[3] = 0;
+		LastLeafItem= 0;
+		NoItemLeft=false;
+	}
+
+	bool MoveNext()
+	{
+		if (NoItemLeft)
+		{
+			return false;
+		}
+		return LoopLevel(0,rootBranch);
 	}
 };
 

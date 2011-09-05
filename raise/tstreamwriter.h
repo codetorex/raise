@@ -43,20 +43,6 @@ public:
 		}
 	}
 
-	void Write(const str16& value)
-	{
-		if (Encoding == TEncodingInfo::Unicode)
-		{
-			BufSource->Write(value.Chars,2,value.Length);
-		}
-		else
-		{
-			TString tmpStr;
-			tmpStr = value;
-			Write(tmpStr);
-		}
-	}
-
 	void Close()
 	{
 		BufSource->Close();

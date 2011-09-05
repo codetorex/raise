@@ -100,9 +100,9 @@ public:
 		throw NotImplementedException();
 	}*/
 
-	int GetChars( byte* bytes, int bytecount, TCharBuffer& buffer ) const
+	dword GetChars( byte* bytes, dword bytecount, TCharBuffer& buffer ) const
 	{
-		int bcstart = bytecount; // storage of bytecount while begining algorithm
+		dword bcstart = bytecount; // storage of bytecount while begining algorithm
 
 		while( bytecount > 0 )
 		{
@@ -118,7 +118,7 @@ public:
 			{
 				int blen = 0;
 				blen = bytesFromUTF8[curbyte];
-				if (bytecount < blen)
+				if ((int)bytecount < blen)
 				{
 					return bcstart - bytecount;
 				}

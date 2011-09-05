@@ -112,7 +112,7 @@ public:
 	/**
 	 * Returns how many bytes are read. Converted char count can be get from buffer.index
 	 */
-	virtual int GetChars( byte* bytes, int bytecount, TCharBuffer& buffer ) const = 0;
+	virtual dword GetChars( byte* bytes, dword bytecount, TCharBuffer& buffer ) const = 0;
 
 	/**
 	 * @brief Encodes a char array to this encoding

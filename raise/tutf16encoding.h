@@ -209,7 +209,7 @@ public:
 		throw NotImplementedException();
 	}*/
 
-	int GetChars( byte* bytes, int bytecount, TCharBuffer& buffer ) const
+	dword GetChars( byte* bytes, dword bytecount, TCharBuffer& buffer ) const
 	{
 		throw NotImplementedException();
 	}

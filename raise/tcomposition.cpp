@@ -6,7 +6,7 @@ void TComposition::CreateElementList( TArray<TCompositionPrimitive*>* allElement
 {
 	ElementCount = 0;
 
-	int curPos = 0;
+	dword curPos = 0;
 
 	TArray<TCompositionPrimitive*> newList;
 	while (curPos < elementNames.Length)

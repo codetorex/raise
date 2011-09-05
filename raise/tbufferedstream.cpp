@@ -66,7 +66,7 @@ int TBufferedStream::ReadSmallData( void* buffer,int total )
 	}
 }
 
-void TBufferedStream::Write( void* buffer,int size,int count )
+void TBufferedStream::Write( const void* buffer,int size,int count )
 {
 	dword TotalSize = size * count;
 	WriteBuffer = true;

@@ -105,7 +105,7 @@ public:
 		fseek(FileHandle,offset,origin);
 	}
 
-	inline void Write(void* buffer,int size,int count)
+	inline void Write(const void* buffer,int size,int count)
 	{
 		fwrite(buffer,size,count,FileHandle);
 	}
