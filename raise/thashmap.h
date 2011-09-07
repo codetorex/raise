@@ -262,6 +262,8 @@ private:
 			}
 		}
 
+		levelCounter = 0;
+
 		if (level == 0)
 		{
 			NoItemLeft = true;

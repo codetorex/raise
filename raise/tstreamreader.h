@@ -230,6 +230,8 @@ public:
 			Read();
 		}
 		
+		result.Data[result.ByteLength] = 0;
+		
 		return result;
 	}
 

@@ -130,9 +130,9 @@ public:
 
 		struct
 		{
-			byte r;
-			byte g;
 			byte b;
+			byte g;
+			byte r;
 			byte a;
 		};
 	};
@@ -149,12 +149,18 @@ public:
 
 	inline TColor32( byte _r, byte _g, byte _b, byte _a)
 	{
-		color = (((byte)(_r)|((word)((byte)(_g))<<8))|(((dword)(byte)(_b))<<16)|(((dword)(byte)(_a))<<24));
+		r = _r;
+		g = _g;
+		b = _b;
+		a = _a;
 	}
 
 	inline TColor32(byte _r, byte _g, byte _b)
 	{
-		color = (((byte)(_r)|((word)((byte)(_g))<<8))|(((dword)(byte)(_b))<<16)|(((dword)(byte)(0xFF))<<24));
+		r = _r;
+		g = _g;
+		b = _b;
+		a = 255;
 	}
 
 	inline TColor32( const TColor24& value)
@@ -166,12 +172,18 @@ public:
 
 	inline void Set(byte _r, byte _g, byte _b, byte _a)
 	{
-		color = (((byte)(_r)|((word)((byte)(_g))<<8))|(((dword)(byte)(_b))<<16)|(((dword)(byte)(_a))<<24));
+		r = _r;
+		g = _g;
+		b = _b;
+		a = _a;
 	}
 
 	inline void Set(byte _r, byte _g, byte _b)
 	{
-		color = (((byte)(_r)|((word)((byte)(_g))<<8))|(((dword)(byte)(_b))<<16)|(((dword)(byte)(0xFF))<<24));
+		r = _r;
+		g = _g;
+		b = _b;
+		a = 255;
 	}
 
 	inline TColor32& operator = (const TColor32& value)
@@ -251,6 +263,7 @@ public:
 		return res;
 	}
 
+
 	inline void mono()
 	{
 		int ts = ((int)r + (int)g + (int)b) / 3;
@@ -263,6 +276,7 @@ public:
 /**
 * 32 bit color class with ARGB ordering.
 */
+/*
 class TColor32ARGB
 {
 public:
@@ -282,7 +296,7 @@ public:
 
 	inline TColor32ARGB()
 	{
-		color = 0x000000FF;
+		color = (((byte)(0)|((word)((byte)(0))<<8))|(((dword)(byte)(0))<<16)|(((dword)(byte)(255))<<24));
 	}
 
 	inline TColor32ARGB(dword _color)
@@ -302,14 +316,23 @@ public:
 
 	inline TColor32ARGB(const TColor32& othr)
 	{
-		color = (othr.color << 8) | (othr.color >> 24);
+		//color = (othr.color << 8) | (othr.color >> 24);
+		color = (((byte)(othr.b)|((word)((byte)(othr.g))<<8))|(((dword)(byte)(othr.r))<<16)|(((dword)(byte)(othr.a))<<24));
 	}
+
+	inline TColor32ARGB& operator = (const TColor32& othr)
+	{
+		color = (((byte)(othr.b)|((word)((byte)(othr.g))<<8))|(((dword)(byte)(othr.r))<<16)|(((dword)(byte)(othr.a))<<24));
+		return *this;
+	}
+
 
 	inline operator dword (void) const
 	{
 		return color;
 	}
 };
+*/
 
 inline TColorHSL::TColorHSL(const TColor32& value)
 {

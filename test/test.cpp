@@ -9,6 +9,30 @@
 #include "test_string.h"
 #include "test_array.h"
 
+
+#include "tcolor.h"
+
+
+class TestTColor: public TTestCheck
+{
+public:
+	TestTColor(): TTestCheck("TColor check") {};
+
+	void Test()
+	{
+		TColor32 clr(255,0,255);
+
+		AddResult( clr.r == 255 && clr.g == 0 && clr.b == 255 && clr.a == 255, "Color r,g,b constructor" );
+		
+		TColor32ARGB argb = clr;
+		
+		AddResult( argb.r == 255 && argb.g == 0 && argb.b == 255 && argb.a == 255, "Color r,g,b constructor" );
+	
+		//TStringBuilder sb;
+		
+	}
+} TColorCheck;
+
 // TODO: test utf 16 encoding class
 // TODO: test buffered stream
 // TODO: test composite buffer shit
@@ -41,6 +65,7 @@ int main(int argc,char** argv)
 	suite.AddTest(&TStringCheck);
 	suite.AddTest(&TDateTimeCheck);
 	suite.AddTest(&TArrayCheck);
+	suite.AddTest(&TColorCheck);
 
 	//suite.PrintOutputs = true;
 	suite.RunSuite();
