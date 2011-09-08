@@ -24,9 +24,9 @@ public:
 
 		AddResult( clr.r == 255 && clr.g == 0 && clr.b == 255 && clr.a == 255, "Color r,g,b constructor" );
 		
-		TColor32ARGB argb = clr;
+/*		TColor32ARGB argb = clr;
 		
-		AddResult( argb.r == 255 && argb.g == 0 && argb.b == 255 && argb.a == 255, "Color r,g,b constructor" );
+		AddResult( argb.r == 255 && argb.g == 0 && argb.b == 255 && argb.a == 255, "Color r,g,b constructor" );*/
 	
 		//TStringBuilder sb;
 		

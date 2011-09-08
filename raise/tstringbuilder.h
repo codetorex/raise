@@ -97,6 +97,17 @@ public:
 		ByteLength = 0;
 	}
 
+	/**
+	 * Uses string as a buffer.
+	 */
+	TStringBuilder(TString& stringBuffer)
+	{
+		Data = stringBuffer.Data;
+		Capacity = stringBuffer.Capacity;
+		Length = stringBuffer.Length;
+		ByteLength = stringBuffer.ByteLength;
+	}
+
 	TStringBuilder(int capacity): TByteArray(capacity)
 	{
 		Length = 0;
@@ -114,6 +125,13 @@ public:
 	inline void UnbindByteArray()
 	{
 		Data = 0;
+	}
+
+	inline void UnbindStringBuffer(TString& stringBuffer)
+	{
+		Data = 0;
+		stringBuffer.Length = Length;
+		stringBuffer.ByteLength = ByteLength;
 	}
 
 	inline void Append(int value)

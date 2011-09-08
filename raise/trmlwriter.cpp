@@ -96,7 +96,7 @@ void TRMLWriter::Serialize( TMemberInfo* minfo, void* object )
 
 	WriteElementStart(*objectname);
 
-	for (int i=0;i<minfo->Members.Count;i++)
+	for (dword i=0;i<minfo->Members.Count;i++)
 	{
 		TMember* curMember = minfo->Members.Item[i];
 		if (curMember->MemberType != MT_ARRAY)
@@ -144,7 +144,7 @@ void TRMLWriter::SerializeArray( TMember* curMember, void* object )
 	{
 	case MT_OBJECT:
 		TArray< void* >* arrayMember = (TArray< void* >*)object;
-		for (int i=0;i<arrayMember->Count;i++)
+		for (dword i=0;i<arrayMember->Count;i++)
 		{
 			Serialize(curMember->ObjectInfo, arrayMember->Item[i]);
 		}

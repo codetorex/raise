@@ -30,6 +30,14 @@ public:
 		result.Data[ln] = 0;
 		return result;
 	}
+
+	static inline void AppendToString(int value, TString& output)
+	{
+		int ln = ToCharArray(value,(char*)output.Data + output.ByteLength,output.Capacity);
+		output.Length += ln;
+		output.ByteLength += ln;
+		output.Data[output.ByteLength] = 0;
+	}
 	
 	static TString ToString(int value, int base)
 	{
