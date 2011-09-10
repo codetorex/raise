@@ -34,6 +34,7 @@ private:
 		while(cnt--)
 		{
 			Data[ByteLength++] = chr;
+			Length++;
 		}
 	}
 
@@ -134,6 +135,21 @@ public:
 		stringBuffer.ByteLength = ByteLength;
 	}
 
+	/**
+	 * Removes characters from end of the string builder.
+	 */
+	inline void RemoveLast(int count)
+	{
+		if (Length == ByteLength)
+		{
+			Length -= count;
+			ByteLength -= count;
+			Data[ByteLength] = 0;
+			return;
+		}
+		throw NotImplementedException();
+	}
+
 	inline void Append(int value)
 	{
 		char tmp[16];
@@ -152,6 +168,7 @@ public:
 	{
 		CheckCapacity(1);
 		Data[ByteLength++] = c;
+		Length++;
 	}
 
 	inline void AppendChar(char c, int repeatCount)

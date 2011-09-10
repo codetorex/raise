@@ -66,11 +66,53 @@ public:
 		Capacity = 0;
 	}
 
-
-
-	void	Insert(T value,int index)
+	void RemoveBetween(dword startIndex, dword length)
 	{
-		throw NotImplementedException();
+		if (startIndex >= Count)
+			startIndex = Count-1;
+		
+		if (startIndex + length > Count)
+			length = Count - startIndex;
+
+		if (startIndex == Count-1 && length == 1)
+		{
+			RemoveLast();
+			return;
+		}
+
+		int rstart = startIndex + length;
+		int remaining = Count - rstart;
+		for (int i=0;i<remaining;i++)
+		{
+			Item[startIndex+i] = Item[rstart+i];
+		}
+
+		Count -= length;
+	}
+
+	void Insert(const T& value,int index)
+	{
+		if (Capacity <= Count) // TODO: make this a function named CheckCapacity
+		{
+			if (Capacity == 0) Capacity = 2;
+			Allocate(Capacity<<1); // Multiply the cache
+		}
+
+		if (index == Count)
+		{
+			Add(value);
+			return;
+		}
+
+		// Move items ( slow operation )
+		int i = Count;
+		while(i-- >= index)
+		{
+			Item[i+1] = Item[i];
+		}
+
+		Item[index] = value;
+		Count++;
 	}
 	
 	/**
@@ -164,7 +206,7 @@ public:
 		Count = 0;
 	}
 	
-	inline void	Add(T value)
+	inline void	Add(const T& value)
 	{
 		if (Capacity <= Count)
 		{

@@ -7,6 +7,9 @@ int TConvert::ToCharArray( int value, char* dst , int dstCap )
 {
 	int division = value;
 
+	bool negative = division < 0;
+	if (negative) division = -division;
+
 	char tmp[16];
 	char* out = tmp;
 	do 
@@ -16,9 +19,9 @@ int TConvert::ToCharArray( int value, char* dst , int dstCap )
 		*(out++) = rem + '0';
 	} while (division);
 
-	if (value < 0)
+	if (negative)
 	{
-		*out++ = '-';
+		*(out++) = '-';
 	}
 
 	*out = 0;
