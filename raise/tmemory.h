@@ -121,7 +121,7 @@ private:
 };
 
 // Will have size less than 4gbs for using over 4gb use multiple pools
-class TMemoryPool: public TListNode<TMemoryPool>
+class TMemoryPool: public TListNode<TMemoryPool*>
 {
 public:
 	void* PoolStart;	// beginning of memory pool
@@ -145,7 +145,7 @@ public:
 
 
 
-class TMemoryManager: public TList<TMemoryPool>, public TMemoryAllocator
+class TMemoryManager: public TList<TMemoryPool*>, public TMemoryAllocator
 {
 public:
 	bool			AllowNewPools;

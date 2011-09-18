@@ -90,7 +90,7 @@ public:
 		Count -= length;
 	}
 
-	void Insert(const T& value,int index)
+	void Insert(const T& value,dword index)
 	{
 		if (Capacity <= Count) // TODO: make this a function named CheckCapacity
 		{
@@ -98,14 +98,14 @@ public:
 			Allocate(Capacity<<1); // Multiply the cache
 		}
 
-		if (index == Count)
+		if (index >= Count)
 		{
 			Add(value);
 			return;
 		}
 
 		// Move items ( slow operation )
-		int i = Count;
+		dword i = Count;
 		while(i-- >= index)
 		{
 			Item[i+1] = Item[i];
@@ -245,16 +245,16 @@ public:
 		}
 	}
 
-	inline T operator [] (dword index)
+	inline T& operator [] (dword index)
 	{
-		if (index < 0 || index > Count)
+		if ( index > Count )
 		{
 			throw Exception("Index out of bounds");
 		}
 		return Item[index];
 	}
 
-	inline T GetLast()
+	inline T& GetLast()
 	{
 		if (Count > 0)
 		{
