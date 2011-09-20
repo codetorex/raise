@@ -9,12 +9,12 @@ typedef class TStream Stream;
 class TBitmapReader
 {
 public:
-	dword ReadExtension;
+	ui32 ReadExtension;
 	virtual void ReadBitmap(TBitmap* bmp, Stream* src) = 0;
 
 	static TArray< TBitmapReader* > Readers;
 
-	static TBitmapReader* GetReader(dword extension)
+	static TBitmapReader* GetReader(ui32 extension)
 	{
 		int i= Readers.Count;
 		while(i--)

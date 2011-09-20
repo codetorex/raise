@@ -13,9 +13,9 @@ template <class T>
 class RDLL THashKeyValue: public TKeyValue<TString,T>
 {
 public:
-	dword Hash;
+	ui32 Hash;
 
-	THashKeyValue(dword h,const TString& k, T v)
+	THashKeyValue(ui32 h,const TString& k, T v)
 	{
 		Hash = h;
 		Key = k;
@@ -36,8 +36,8 @@ public:
 	int valueCount;
 	bool leaf; // true if its a leaf, false if branch
 
-	inline virtual THashKeyValue<T>* Get(dword h,const TString& key) = 0;
-	inline virtual void Add(dword h,THashKeyValue<T>* value) = 0;
+	inline virtual THashKeyValue<T>* Get(ui32 h,const TString& key) = 0;
+	inline virtual void Add(ui32 h,THashKeyValue<T>* value) = 0;
 };
 
 
@@ -52,7 +52,7 @@ public:
 
 	THashKeyValue<T>* values[4];
 
-	inline THashKeyValue<T>* Get(dword h,const TString& key)
+	inline THashKeyValue<T>* Get(ui32 h,const TString& key)
 	{
 		int i=valueCount;
 		while(i--)
@@ -69,7 +69,7 @@ public:
 	}
 
 
-	inline void Add(dword h,THashKeyValue<T>* value)
+	inline void Add(ui32 h,THashKeyValue<T>* value)
 	{
 		values[valueCount++] = value;
 	}
@@ -126,7 +126,7 @@ public:
 		delete oldLeaf;
 	}
 
-	inline THashKeyValue<T>* Get(dword h,const TString& key)
+	inline THashKeyValue<T>* Get(ui32 h,const TString& key)
 	{
 		int i = MOD32(h >> branchShift);
 		//h >>= 8;
@@ -137,7 +137,7 @@ public:
 		return NULL;
 	}
 
-	inline void Add(dword h,THashKeyValue<T>* value)
+	inline void Add(ui32 h,THashKeyValue<T>* value)
 	{
 		int i = MOD32(h >> branchShift);
 		if (Map[i] != 0)
@@ -173,7 +173,7 @@ public:
 
 	inline bool ContainsKey(const TString& key)
 	{
-		dword h = TBasicHashCodeProvider::Instance.GetHashCode(key); // TString::GetHash(key);
+		ui32 h = TBasicHashCodeProvider::Instance.GetHashCode(key); // TString::GetHash(key);
 		THashKeyValue<T>* r = Root.Get(h,key);
 		if (r == NULL)
 		{
@@ -184,7 +184,7 @@ public:
 
 	inline THashKeyValue<T>* Get(const TString& key)
 	{
-		dword h = TBasicHashCodeProvider::Instance.GetHashCode(key);
+		ui32 h = TBasicHashCodeProvider::Instance.GetHashCode(key);
 		THashKeyValue<T>* r = Root.Get(h,key);
 		return r;
 	}
@@ -211,7 +211,7 @@ public:
 
 	inline void Add(const TString& key,T value)
 	{
-		dword h = TBasicHashCodeProvider::Instance.GetHashCode(key); // TString::GetHash(key);
+		ui32 h = TBasicHashCodeProvider::Instance.GetHashCode(key); // TString::GetHash(key);
 		THashKeyValue<T>* kvp = new THashKeyValue<T>(h,key,value);
 		Root.Add(h,kvp);
 		Count++;

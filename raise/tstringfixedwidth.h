@@ -685,9 +685,9 @@ public:
 
 	static TStringFixedWidth<T> Empty;
 
-	static inline dword GetHash(const TStringFixedWidth<ch8>& value)
+	static inline ui32 GetHash(const TStringFixedWidth<ch8>& value)
 	{
-		register dword hash = 0;
+		register ui32 hash = 0;
 		int i = value.Length;
 		while(i--)
 		{

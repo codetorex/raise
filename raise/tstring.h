@@ -21,13 +21,13 @@ public:
 	byte* Data;
 
 	/// Byte capacity of Data
-	dword Capacity;
+	ui32 Capacity;
 
 	/// Character length
-	dword Length;
+	ui32 Length;
 
 	/// Byte length of character data
-	dword ByteLength;
+	ui32 ByteLength;
 
 	TSharedByteArray* Ref; // internal reference for avoid unnecessary copying
 
@@ -92,7 +92,7 @@ public:
 	 * Should be called whenever needed to write to Data.
 	 * @param newCap new capacity of detached string.
 	 */
-	inline void DetachToEdit(dword newCap)
+	inline void DetachToEdit(ui32 newCap)
 	{
 		if (Ref)
 		{
@@ -154,7 +154,7 @@ private:
 
 	inline void Append(const byte* src,int length, int charlength)
 	{
-		dword newCap = length + ByteLength;
+		ui32 newCap = length + ByteLength;
 		if ( newCap >= Capacity-1 )
 		{
 			newCap += Capacity / 2; // so appending means we gona use a little bit more space
@@ -196,7 +196,7 @@ public:
 	 * @brief Capacity based constructor for faster operations.
 	 * @param _Capacity The capacity + 1 for trailing zero.
 	 */
-	TString(dword ByteCapacity)
+	TString(ui32 ByteCapacity)
 	{
 		StringAllocateEmpty(ByteCapacity);
 		Length = 0;
@@ -210,7 +210,7 @@ public:
 		DetachToDestroy();
 	}
 
-	void Allocate(dword ByteCapacity)
+	void Allocate(ui32 ByteCapacity)
 	{
 		DetachToDestroy();
 		StringAllocateEmpty(ByteCapacity);
@@ -219,7 +219,7 @@ public:
 		CreateRef();
 	}
 
-	inline void IncreaseCapacity(dword newCapacity)
+	inline void IncreaseCapacity(ui32 newCapacity)
 	{
 		DetachToEdit(newCapacity);
 	}
@@ -234,7 +234,7 @@ public:
 		return ByteLength == Length;
 	}
 
-	void CopyTo(byte* dst, dword bytecount) const
+	void CopyTo(byte* dst, ui32 bytecount) const
 	{
 		MemoryDriver::Copy(dst,Data,MathDriver::Min(bytecount,Capacity));
 	}
@@ -252,7 +252,7 @@ public:
 	/**
 	 * Truncates this string, without copying new.
 	 */
-	void Truncate(dword newLength)
+	void Truncate(ui32 newLength)
 	{
 		if (newLength >= Length) return;
 		DetachToEdit(); // detach because we will change data.
@@ -267,7 +267,7 @@ public:
 	 * Truncates this string, use this function if you know byte length and length.
 	 * Useful for if you derived this string from something else and appended something and you want it back.
 	 */
-	void Truncate(dword newLength, dword newByteLength)
+	void Truncate(ui32 newLength, ui32 newByteLength)
 	{
 		DetachToEdit();
 		Length = newLength;
@@ -402,9 +402,9 @@ public:
 	/**
 	 * Gets a part of string from this object. Index is zero based.
 	 */
-	TString Substring( dword startIndex, dword lengt ) const;
+	TString Substring( ui32 startIndex, ui32 lengt ) const;
 
-	TString Substring( dword startIndex ) const;
+	TString Substring( ui32 startIndex ) const;
 
 
 
@@ -666,7 +666,7 @@ public:
 		return true;
 	}
 
-	inline void SkipChars(dword charsToSkip)
+	inline void SkipChars(ui32 charsToSkip)
 	{
 		if (charsToSkip >= SrcString->Length - CharIndex)
 		{

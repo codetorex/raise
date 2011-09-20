@@ -1,5 +1,5 @@
-#ifndef TFLEXIBLEBUFFER_H
-#define TFLEXIBLEBUFFER_H
+#ifndef TCOMPOSITEBUFFER_H
+#define TCOMPOSITEBUFFER_H
 
 #include "texception.h" // includes string too
 #include "tcomposition.h"
@@ -114,9 +114,9 @@ public:
 		Index += sizeof(int);
 	}
 
-	inline void AddDword(dword value)
+	inline void AddDword(ui32 value)
 	{
-		*(dword*)Data[Index] = value;
+		*(ui32*)Data[Index] = value;
 		Index += 4;
 	}
 

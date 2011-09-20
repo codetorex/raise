@@ -11,8 +11,8 @@ class RDLL TQueue
 {
 public:
 	T*		Item;
-	dword	Count;
-	dword	Capacity;
+	ui32	Count;
+	ui32	Capacity;
 
 	int Head;
 	int Tail;

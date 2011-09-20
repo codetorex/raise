@@ -15,8 +15,8 @@ class TArray
 {
 public:
 	T*		Item;
-	dword	Count;
-	dword	Capacity;
+	ui32	Count;
+	ui32	Capacity;
 
 	TArray()
 	{
@@ -66,7 +66,7 @@ public:
 		Capacity = 0;
 	}
 
-	void RemoveBetween(dword startIndex, dword length)
+	void RemoveBetween(ui32 startIndex, ui32 length)
 	{
 		if (startIndex >= Count)
 			startIndex = Count-1;
@@ -90,7 +90,7 @@ public:
 		Count -= length;
 	}
 
-	void Insert(const T& value,dword index)
+	void Insert(const T& value,ui32 index)
 	{
 		if (Capacity <= Count) // TODO: make this a function named CheckCapacity
 		{
@@ -105,7 +105,7 @@ public:
 		}
 
 		// Move items ( slow operation )
-		dword i = Count;
+		ui32 i = Count;
 		while(i-- >= index)
 		{
 			Item[i+1] = Item[i];
@@ -146,7 +146,7 @@ public:
 
 	inline int IndexOf(T value)
 	{
-		for (dword i=0;i<Count;i++)
+		for (ui32 i=0;i<Count;i++)
 		{
 			if (Item[i] == value)
 			{
@@ -245,7 +245,7 @@ public:
 		}
 	}
 
-	inline T& operator [] (dword index)
+	inline T& operator [] (ui32 index)
 	{
 		if ( index > Count )
 		{

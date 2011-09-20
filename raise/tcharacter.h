@@ -5,7 +5,7 @@
 
 typedef char	ch8;
 typedef wchar_t ch16;
-typedef dword	ch32;
+typedef ui32	ch32;
 
 
 class TChar

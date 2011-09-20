@@ -14,7 +14,7 @@ void TBufferedStream::Flush()
 
 int TBufferedStream::ReadNextChunk()
 {
-	dword CurRealPos = Source->Position();
+	ui32 CurRealPos = Source->Position();
 	int ReadSize = Source->Read(VBuffer.Data,1,VBuffer.Capacity);
 	if (ReadSize > 0)
 	{
@@ -29,7 +29,7 @@ int TBufferedStream::ReadNextChunk()
 
 int TBufferedStream::ReadBigData( void* buffer, int total )
 {
-	dword RemainingSize = VBuffer.GetAvailable(); // data length in buffer
+	ui32 RemainingSize = VBuffer.GetAvailable(); // data length in buffer
 	if (RemainingSize > 0)
 	{
 		VBuffer.GetBytes((byte*)buffer,RemainingSize);
@@ -68,7 +68,7 @@ int TBufferedStream::ReadSmallData( void* buffer,int total )
 
 void TBufferedStream::Write( const void* buffer,int size,int count )
 {
-	dword TotalSize = size * count;
+	ui32 TotalSize = size * count;
 	WriteBuffer = true;
 
 	if (TotalSize > VBuffer.Capacity)
@@ -79,7 +79,7 @@ void TBufferedStream::Write( const void* buffer,int size,int count )
 		Source->Write(buffer,size,count);
 	}
 
-	if ((dword)VBuffer.GetAvailable() < TotalSize)
+	if ((ui32)VBuffer.GetAvailable() < TotalSize)
 	{
 		Flush(); // if there is still data inside buffer flush it
 	}
@@ -99,7 +99,7 @@ int TBufferedStream::ReadByte()
 	return VBuffer.ReadByteNoCheck();
 }
 
-void TBufferedStream::Seek( dword offset,SeekOrigin origin )
+void TBufferedStream::Seek( ui32 offset,SeekOrigin origin )
 {
 	switch( origin )
 	{
@@ -115,7 +115,7 @@ void TBufferedStream::Seek( dword offset,SeekOrigin origin )
 		int available = VBuffer.GetAvailable();
 		if (available > 0)
 		{
-			if (offset <= (dword)available)
+			if (offset <= (ui32)available)
 			{
 				VBuffer.Advance(offset);
 				return;

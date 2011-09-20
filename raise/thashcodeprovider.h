@@ -12,7 +12,7 @@ class TString;
 class THashCodeProvider
 {
 public:
-	virtual dword GetHashCode(const TString& value) = 0;
+	virtual ui32 GetHashCode(const TString& value) = 0;
 };
 
 class TBasicHashCodeProvider: public THashCodeProvider
@@ -21,7 +21,7 @@ public:
 
 	static TBasicHashCodeProvider Instance;
 
-	dword GetHashCode(const TString& value);
+	ui32 GetHashCode(const TString& value);
 };
 
 #endif

@@ -125,7 +125,7 @@ class TColor32
 public:
 	union
 	{
-		dword color;
+		ui32 color;
 		byte bclr[4];
 
 		struct
@@ -142,7 +142,7 @@ public:
 		color = 0xFF000000;
 	}
 
-	inline TColor32(dword _color)
+	inline TColor32(ui32 _color)
 	{
 		color = _color;
 	}
@@ -192,7 +192,7 @@ public:
 		return *this;
 	}
 
-	inline TColor32& operator = (dword value)
+	inline TColor32& operator = (ui32 value)
 	{
 		color = value;
 		return *this;
@@ -204,7 +204,7 @@ public:
 		return *this;
 	}
 
-	inline bool operator == (dword value)
+	inline bool operator == (ui32 value)
 	{
 		if (color == value)
 		{
@@ -252,14 +252,14 @@ public:
 		return kp;
 	}
 
-	inline operator dword (void) const
+	inline operator ui32 (void) const
 	{
 		return color;
 	}
 
-	inline dword GetARGB() const
+	inline ui32 GetARGB() const
 	{
-		dword res = (((byte)(b)|((word)((byte)(g))<<8))|(((dword)(byte)(r))<<16)|(((dword)(byte)(a))<<24));
+		ui32 res = (((byte)(b)|((uint16)((byte)(g))<<8))|(((ui32)(byte)(r))<<16)|(((ui32)(byte)(a))<<24));
 		return res;
 	}
 

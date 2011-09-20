@@ -137,6 +137,7 @@
     <ClInclude Include="tcharbuffer.h" />
     <ClInclude Include="tcompositeconverter.h" />
     <ClInclude Include="tcompositegenericconverter.h" />
+    <ClInclude Include="tcompositesimple.h" />
     <ClInclude Include="tcomposition.h" />
     <ClInclude Include="tcompositionprimitive.h" />
     <ClInclude Include="tconvert.h" />

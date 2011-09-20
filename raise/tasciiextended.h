@@ -65,7 +65,7 @@ public:
 		return capacity;
 	}
 
-	inline void Length(const byte* src,dword capacity, dword& length, dword& bytelength) const
+	inline void Length(const byte* src,ui32 capacity, ui32& length, ui32& bytelength) const
 	{
 		length = capacity;
 		bytelength = capacity;
@@ -92,7 +92,7 @@ public:
 		throw NotImplementedException();
 	}
 
-	inline dword GetChars( byte* bytes, dword bytecount, TCharBuffer& buffer ) const
+	inline ui32 GetChars( byte* bytes, ui32 bytecount, TCharBuffer& buffer ) const
 	{
 		if (buffer.Capacity < bytecount)
 		{

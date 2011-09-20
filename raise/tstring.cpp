@@ -89,7 +89,7 @@ TString TString::ToUpper() const
 	return result;
 }
 
-TString TString::Substring( dword startIndex, dword lengt ) const
+TString TString::Substring( ui32 startIndex, ui32 lengt ) const
 {
 	if (startIndex + lengt > Length)
 	{
@@ -120,7 +120,7 @@ TString TString::Substring( dword startIndex, dword lengt ) const
 	return result;
 }
 
-TString TString::Substring( dword startIndex ) const
+TString TString::Substring( ui32 startIndex ) const
 {
 	if (startIndex == 0)
 	{

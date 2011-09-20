@@ -82,12 +82,12 @@ public:
 		Format(dest,destsize,"%0.2f",value);
 	}
 
-	inline static void ConvertValue(ch16* dest,int destsize,dword value)
+	inline static void ConvertValue(ch16* dest,int destsize,ui32 value)
 	{
 		Format(dest,destsize,L"%u",value);
 	}
 
-	inline static void ConvertValue(ch8* dest,int destsize,dword value)
+	inline static void ConvertValue(ch8* dest,int destsize,ui32 value)
 	{
 		Format(dest,destsize,"%u",value);
 	}

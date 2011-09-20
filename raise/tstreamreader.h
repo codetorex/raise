@@ -18,8 +18,8 @@ private:
 	void DetectEncodingFromBOM(const TEncoding& defaultencoding)
 	{
 		BaseStream->Read(Cache.Data,1,4);
-		word utf16char = ((word*)Cache.Data)[0];
-		dword utf32char = ((dword*)Cache.Data)[0];
+		uint16 utf16char = ((uint16*)Cache.Data)[0];
+		ui32 utf32char = ((ui32*)Cache.Data)[0];
 
 		if (Cache.Data[0] == 0xEF)
 		{
@@ -91,18 +91,18 @@ public:
 	TByteArray Cache;
 
 	/// When first readed chunk doesn't completes last character, it postponed to next chunk. So this member will show how much bytes postponed.
-	dword CacheStart;
+	ui32 CacheStart;
 
-	dword BufferReadIndex;
+	ui32 BufferReadIndex;
 
 	void FillBuffer()
 	{
 		if (EndOfBaseStream) return;
 
 		Buffer.Rewind();
-		dword readed = BaseStream->Read( Cache.Data + CacheStart, 1, Cache.Capacity - CacheStart);
+		ui32 readed = BaseStream->Read( Cache.Data + CacheStart, 1, Cache.Capacity - CacheStart);
 		bool isEnded = readed < Cache.Capacity - CacheStart;
-		dword used = CurrentEncoding.GetChars(Cache.Data,readed + CacheStart,Buffer);
+		ui32 used = CurrentEncoding.GetChars(Cache.Data,readed + CacheStart,Buffer);
 	
 
 		if (used < readed)

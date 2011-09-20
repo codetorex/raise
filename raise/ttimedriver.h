@@ -17,12 +17,12 @@ public:
 	static string LocalStandartName;
 	static string LocalDaylightName;
 	static int LocalDaylight;
-	static dword LocalLastUpdate;
+	static ui32 LocalLastUpdate;
 
 	/// Local time difference in seconds
 	static int LocalDifference;
 
-	static dword TickCount()
+	static ui32 TickCount()
 	{
 		return GetTickCount();
 	}
@@ -73,7 +73,7 @@ public:
 	static void UpdateLocalTimezone()
 	{
 		TIME_ZONE_INFORMATION dtz;
-		dword status = GetTimeZoneInformation (&dtz);
+		ui32 status = GetTimeZoneInformation (&dtz);
 
 		if (status == TIME_ZONE_ID_STANDARD || status == TIME_ZONE_ID_UNKNOWN)
 		{
@@ -101,7 +101,7 @@ public:
 
 	// http://linux.die.net/man/3/daylight
 
-	static dword TickCount()
+	static ui32 TickCount()
 	{
 		tms tm;
 		return times(&tm);

@@ -8,9 +8,9 @@
 class TMemoryAllocator
 {
 public:
-	virtual void* Allocate(dword size) = 0;
+	virtual void* Allocate(ui32 size) = 0;
 	virtual int Deallocate(void* ptr) = 0;
-	virtual int Reallocate(void* ptr, dword newsize) = 0;
+	virtual int Reallocate(void* ptr, ui32 newsize) = 0;
 	virtual bool IsFull() = 0;
 };
 
@@ -111,13 +111,13 @@ public:
 	void*	operator new(size_t,TMemoryPool* pool);
 	void	operator delete(void* obj,TMemoryPool* pool);
 
-	void*			Allocate(dword size);
+	void*			Allocate(ui32 size);
 	int				Deallocate(void* ptr);
-	int				Reallocate(void* ptr, dword newsize);
+	int				Reallocate(void* ptr, ui32 newsize);
 	bool			IsFull();
 
 private:
-	int				CalculateRequiredBlocks(dword length);
+	int				CalculateRequiredBlocks(ui32 length);
 };
 
 // Will have size less than 4gbs for using over 4gb use multiple pools
@@ -126,21 +126,21 @@ class TMemoryPool: public TListNode<TMemoryPool*>
 public:
 	void* PoolStart;	// beginning of memory pool
 
-	dword MemSize;
-	dword MemUsed;
-	dword MemFree;
+	ui32 MemSize;
+	ui32 MemUsed;
+	ui32 MemFree;
 
 	TMemoryPool();
 	
-	void*	operator new(size_t,dword rsize);
-	void	operator delete(void* obj,dword rsize);
+	void*	operator new(size_t,ui32 rsize);
+	void	operator delete(void* obj,ui32 rsize);
 
 	TMemoryAllocator* Allocator;
 
 	//void UseBookkeperAllocator();
 	void UseBitmapAllocator(int bytesPerBlock);
 	
-	void* InitializeAllocate(dword size);
+	void* InitializeAllocate(ui32 size);
 };
 
 
@@ -150,11 +150,11 @@ class TMemoryManager: public TList<TMemoryPool*>, public TMemoryAllocator
 public:
 	bool			AllowNewPools;
 	
-	TMemoryPool*	CreateNewPool(dword size);
+	TMemoryPool*	CreateNewPool(ui32 size);
 
-	void*			Allocate(dword size);
+	void*			Allocate(ui32 size);
 	int				Deallocate(void* ptr);
-	int				Reallocate(void* ptr, dword newsize);
+	int				Reallocate(void* ptr, ui32 newsize);
 	bool			IsFull();
 
 };

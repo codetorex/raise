@@ -14,10 +14,10 @@
 #define NIL			((void*)0)
 
 typedef unsigned char	byte;
-typedef unsigned short	word;
-typedef unsigned int	dword; // It was unsigned long before but in linux longs have 8 bytes. (64 bit stuff?)
+typedef unsigned short	uint16;
+typedef unsigned int	ui32; // It was unsigned long before but in linux longs have 8 bytes. (64 bit stuff?)
 
-#define DWORDSTR(x) (*(dword*)x)
+#define DWORDSTR(x) (*(ui32*)x)
 
 #define PI			3.1415926535897f
 #define HALFPI		1.5707963267948f

@@ -2,7 +2,7 @@
 #include "tbitset.h"
 #include <list>
 
-TBitset::TBitset( dword* data,int length )
+TBitset::TBitset( ui32* data,int length )
 {
 	UseBitLength(length);
 	this->Data = data;
@@ -12,7 +12,7 @@ TBitset::TBitset( dword* data,int length )
 TBitset::TBitset( int length )
 {
 	UseBitLength(length);
-	Data = new dword[DwordLength];
+	Data = new ui32[DwordLength];
 	ClearBits();
 }
 
@@ -25,7 +25,7 @@ void TBitset::ClearBits()
 }
 
 
-dword TBitset::CalculateDwordLengthFromBitLength( int bitlength )
+ui32 TBitset::CalculateDwordLengthFromBitLength( int bitlength )
 {
 	int irrpart = MOD32(bitlength);
 	int dwdpart = DIV32( (bitlength-irrpart) );
@@ -45,7 +45,7 @@ char* TBitset::GetBitsAsChar( int start,int length )
 {
 	int irrstart = MOD32(start);
 	int relstart = DIV32( (start-irrstart) );
-	dword k = 1 << irrstart;
+	ui32 k = 1 << irrstart;
 	int j = irrstart;
 
 	char* charBuf = new char[length+1];
@@ -54,7 +54,7 @@ char* TBitset::GetBitsAsChar( int start,int length )
 
 	for (int i=relstart;i<DwordLength;i++)
 	{
-		dword dtemp = Data[i];
+		ui32 dtemp = Data[i];
 		for (;j<32;j++)
 		{
 			if ((dtemp & k) == 0)
@@ -82,12 +82,12 @@ int TBitset::FillBits( int start,int length, bool value )
 	int f=0;
 	int irrstart = MOD32(start);
 	int relstart = DIV32( (start-irrstart) );
-	dword k = 1 << irrstart;
+	ui32 k = 1 << irrstart;
 	int j = irrstart;
 
 	for (int i=relstart;i<DwordLength;i++)
 	{
-		dword dtemp = Data[i];
+		ui32 dtemp = Data[i];
 		for (;j<32;j++)
 		{
 			if (value)
@@ -118,12 +118,12 @@ int TBitset::SearchEmptyBits( int bitcount, int start )
 	int f = 0;
 	int irrstart = MOD32(start);
 	int relstart = DIV32( (start-irrstart) );
-	dword k = 1 << irrstart;
+	ui32 k = 1 << irrstart;
 	int j = irrstart;
 
 	for (int i=relstart;i<DwordLength;i++)
 	{
-		dword dtemp = Data[i];
+		ui32 dtemp = Data[i];
 		if (dtemp == MXDWORD) // full
 		{
 			f = 0;

@@ -22,9 +22,9 @@ public:
 
 	//dword	Length;
 
-	virtual dword	Position() = 0;
+	virtual ui32	Position() = 0;
 	
-	virtual dword	Length()
+	virtual ui32	Length()
 	{
 		throw new Exception("Not Supported");
 	}
@@ -33,7 +33,7 @@ public:
 	virtual void	Flush() = 0;
 	virtual int		Read(void* buffer,int size,int count) = 0;
 	virtual int		ReadByte() = 0;
-	virtual void	Seek(dword offset,SeekOrigin origin) = 0;
+	virtual void	Seek(ui32 offset,SeekOrigin origin) = 0;
 	virtual void	Write(const void* buffer,int size,int count) = 0;
 	virtual void	WriteByte(byte value) = 0;
 

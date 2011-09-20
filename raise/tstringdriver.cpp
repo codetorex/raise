@@ -4,7 +4,7 @@
 static const ch32 s_Whitespaces[] = { 0x20, 0x09, 0x0A, 0x0D, 0x0B, 0x0 };
 const TArray<ch32> StringDriver::Whitespaces(s_Whitespaces);
 
-static const dword MaximumChar = 0x7FFFFFFF;
+static const ui32 MaximumChar = 0x7FFFFFFF;
 
 int StringDriver::RequiredBytes( const ch32* data,int length )
 {
@@ -12,7 +12,7 @@ int StringDriver::RequiredBytes( const ch32* data,int length )
 
 	while(length--)
 	{
-		dword ch = data[length];
+		ui32 ch = data[length];
 
 		if      (ch < 0x80        ) {result += 1;}
 		else if (ch < 0x800       ) {result += 2;}

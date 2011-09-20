@@ -8,35 +8,35 @@ TMemoryBitmapAllocator::TMemoryBitmapAllocator( TMemoryPool* pool,int bpb )
 	this->Pool = pool;
 	BytesPerBit = bpb;
 
-	dword memRem = pool->MemSize % bpb;
-	dword memQuo = (pool->MemSize - memRem) / bpb;
-	dword reqBits = memQuo;
+	ui32 memRem = pool->MemSize % bpb;
+	ui32 memQuo = (pool->MemSize - memRem) / bpb;
+	ui32 reqBits = memQuo;
 	if (memRem > 0)
 		reqBits++;
 	
-	dword reqDwords = TBitset::CalculateDwordLengthFromBitLength(reqBits);
+	ui32 reqDwords = TBitset::CalculateDwordLengthFromBitLength(reqBits);
 	totalBlocks = reqBits;
 
 	BitArray = (TBitset*)pool->InitializeAllocate(sizeof(TBitset));
-	dword* dArray = (dword*)pool->InitializeAllocate(reqDwords * sizeof(dword));
+	ui32* dArray = (ui32*)pool->InitializeAllocate(reqDwords * sizeof(ui32));
 	*BitArray = TBitset(dArray,reqBits);
-	dword alreadyFullBlocks = CalculateRequiredBlocks(pool->MemUsed); // Used by InitializeAllocate funcs.
+	ui32 alreadyFullBlocks = CalculateRequiredBlocks(pool->MemUsed); // Used by InitializeAllocate funcs.
 	emptyBlocks = totalBlocks - alreadyFullBlocks;
 	BitArray->FillBits(0, alreadyFullBlocks ,true);
 	firstFreeBlock = (int)alreadyFullBlocks;
 }
 
-int TMemoryBitmapAllocator::CalculateRequiredBlocks( dword length )
+int TMemoryBitmapAllocator::CalculateRequiredBlocks( ui32 length )
 {
-	dword bitRem = length % BytesPerBit;
-	dword bitQuo = (length - bitRem) / BytesPerBit;
+	ui32 bitRem = length % BytesPerBit;
+	ui32 bitQuo = (length - bitRem) / BytesPerBit;
 	int bitReq = (int)bitQuo;
 	if (bitRem > 0)
 		bitReq++;
 	return bitReq;
 }
 
-void* TMemoryBitmapAllocator::Allocate( dword size )
+void* TMemoryBitmapAllocator::Allocate( ui32 size )
 {
 	int reqBlocks = CalculateRequiredBlocks(size + sizeof(int));
 	if (failedToAllocate >= reqBlocks) return 0; // this way we avoid searching again...
@@ -69,7 +69,7 @@ int TMemoryBitmapAllocator::Deallocate( void* ptr )
 	int* iPtr = (int*)ptr;
 	int blocksToFreed = *(--iPtr);
 	
-	dword relPtr = (dword)((byte*)iPtr - (byte*)Pool->PoolStart);
+	ui32 relPtr = (ui32)((byte*)iPtr - (byte*)Pool->PoolStart);
 	int startBlock = relPtr / BytesPerBit;
 	BitArray->FillBits(startBlock,blocksToFreed,false);
 	emptyBlocks+= blocksToFreed;
@@ -81,7 +81,7 @@ bool TMemoryBitmapAllocator::IsFull()
 	return (emptyBlocks > 0);
 }
 
-int TMemoryBitmapAllocator::Reallocate( void* ptr, dword newsize )
+int TMemoryBitmapAllocator::Reallocate( void* ptr, ui32 newsize )
 {
 	return 0;
 }
@@ -181,19 +181,19 @@ TMemoryPool::TMemoryPool()
 	InitializeAllocate(sizeof(TMemoryPool));
 }
 
-void* TMemoryPool::operator new(size_t, dword rsize)
+void* TMemoryPool::operator new(size_t, ui32 rsize)
 {
 	void* pool = malloc(rsize);
 	((TMemoryPool*)pool)->MemSize = rsize;
 	return pool;
 }
 
-void TMemoryPool::operator delete(void* obj,dword rsize)
+void TMemoryPool::operator delete(void* obj,ui32 rsize)
 {
 	free(obj);
 }
 
-void* TMemoryPool::InitializeAllocate( dword size )
+void* TMemoryPool::InitializeAllocate( ui32 size )
 {
 	if (MemFree < size)
 		return 0;
@@ -209,14 +209,14 @@ void TMemoryPool::UseBitmapAllocator(int bytesPerBlock)
 	Allocator = new (this) TMemoryBitmapAllocator(this,bytesPerBlock);
 }
 
-TMemoryPool* TMemoryManager::CreateNewPool( dword size )
+TMemoryPool* TMemoryManager::CreateNewPool( ui32 size )
 {
 	TMemoryPool* mp = new(size) TMemoryPool();
 	Add(mp);
 	return mp;
 }
 
-void* TMemoryManager::Allocate( dword size )
+void* TMemoryManager::Allocate( ui32 size )
 {
 	return 0;
 }
@@ -226,7 +226,7 @@ int TMemoryManager::Deallocate( void* ptr )
 	return 0;
 }
 
-int TMemoryManager::Reallocate( void* ptr, dword newsize )
+int TMemoryManager::Reallocate( void* ptr, ui32 newsize )
 {
 	return 0;
 }

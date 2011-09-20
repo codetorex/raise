@@ -68,7 +68,7 @@ void TBitmapPNG::ReadBitmap( TBitmap* bmp, Stream* src )
 
 	png_read_info(png_ptr, info_ptr);
 
-	dword piWidth,piHeight;
+	ui32 piWidth,piHeight;
 	int iBitDepth,iColorType;
 	png_get_IHDR(png_ptr, info_ptr, &piWidth, &piHeight, &iBitDepth,&iColorType, NULL, NULL, NULL);
 
@@ -116,7 +116,7 @@ void TBitmapPNG::ReadBitmap( TBitmap* bmp, Stream* src )
 	potr = new png_bytep [piHeight];
 
 
-	for (dword i = 0; i < piHeight; i++)
+	for (ui32 i = 0; i < piHeight; i++)
 		potr[i] = bmp->Data + i * rowbytes;
 
 	png_read_image(png_ptr, potr);

@@ -82,7 +82,7 @@ public:
 		return (int)(curptr - Result);
 	}
 
-	void RunSuite(dword tests = TEST_CHECK);
+	void RunSuite(ui32 tests = TEST_CHECK);
 };
 
 #endif

@@ -10,7 +10,7 @@
 class TBuffer: public TByteArray
 {
 public:
-	dword Index; // Index of current position
+	ui32 Index; // Index of current position
 
 	inline TBuffer()
 	{
@@ -35,13 +35,13 @@ public:
 		Allocate(_Capacity);
 	}
 
-	inline void Allocate(dword _Capacity) // THIS IS VERY WRONG
+	inline void Allocate(ui32 _Capacity) // THIS IS VERY WRONG
 	{
 		this->TByteArray::Allocate(_Capacity);
 		Index = 0;
 	}
 
-	inline void Use(byte* _Data, dword _Capacity)
+	inline void Use(byte* _Data, ui32 _Capacity)
 	{
 		this->TByteArray::Use(_Data,_Capacity);
 		Index = 0;
@@ -89,7 +89,7 @@ public:
 	/**
 	* Add bytes to buffer and increases buffer when needed.
 	*/
-	inline void AddBytesIncreasing(byte* values, dword length)
+	inline void AddBytesIncreasing(byte* values, ui32 length)
 	{
 		if (Capacity - Index < length)
 		{
@@ -99,7 +99,7 @@ public:
 		Index += length;
 	}
 
-	inline void AddBytes(byte* values,dword length)
+	inline void AddBytes(byte* values,ui32 length)
 	{
 		if (Capacity - Index < length)
 		{
@@ -110,7 +110,7 @@ public:
 		Index += length;
 	}
 
-	inline void GetBytes(byte* dst, dword length)
+	inline void GetBytes(byte* dst, ui32 length)
 	{
 		if (Capacity - Index < length)
 		{
@@ -185,9 +185,9 @@ typedef TBuffer TByteBuffer;
 class TVirtualBuffer: public TBuffer
 {
 public:
-	dword VirtualStart;
-	dword VirtualEnd;
-	dword Length;
+	ui32 VirtualStart;
+	ui32 VirtualEnd;
+	ui32 Length;
 
 	TVirtualBuffer()
 	{
@@ -211,12 +211,12 @@ public:
 		Length = 0;
 	}
 
-	inline dword GetVirtualIndex()
+	inline ui32 GetVirtualIndex()
 	{
 		return VirtualStart + Index;
 	}
 
-	inline void SetVirtual(dword start,dword end)
+	inline void SetVirtual(ui32 start,ui32 end)
 	{
 		VirtualStart = start;
 		VirtualEnd = end;
@@ -224,7 +224,7 @@ public:
 		//Index = Length;
 	}
 
-	inline dword VirtualSearch(const byte* needle,int nlength)
+	inline ui32 VirtualSearch(const byte* needle,int nlength)
 	{
 		int found = Search(needle,nlength);
 		if (found > -1)
@@ -234,7 +234,7 @@ public:
 		return NFOUND;
 	}
 
-	inline dword VirtualSearchPattern(const byte* needle, const byte* pattern, int nlength)
+	inline ui32 VirtualSearchPattern(const byte* needle, const byte* pattern, int nlength)
 	{
 		int found = SearchPattern(needle,pattern,nlength);
 		if(found > -1)

@@ -54,7 +54,7 @@ public:
 		WriteBuffer = true;
 	}
 	
-	inline dword Position()
+	inline ui32 Position()
 	{
 		return VBuffer.GetVirtualIndex();
 	}
@@ -66,7 +66,7 @@ public:
 	void Flush();
 	inline int Read(void* buffer,int size,int count)
 	{
-		dword totalSize = size * count;
+		ui32 totalSize = size * count;
 		if (totalSize <= VBuffer.Capacity)
 		{
 			return ReadSmallData(buffer,totalSize);
@@ -80,7 +80,7 @@ public:
 	* Trys to read a byte, throws exception if end of stream.
 	*/
 	int ReadByte();
-	void Seek(dword offset,SeekOrigin origin);
+	void Seek(ui32 offset,SeekOrigin origin);
 	void Write(const void* buffer,int size,int count);
 	int PeekByte();
 

@@ -7,7 +7,7 @@
 class TRegistryKey
 {
 public:
-	dword Handle;
+	ui32 Handle;
 
 	string GetName();
 	int GetSubKeyCount();

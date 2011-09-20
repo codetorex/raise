@@ -6,7 +6,7 @@
 #include "tfile.h"
 #include "tdatetime.h"
 
-typedef dword FileAttribute;
+typedef ui32 FileAttribute;
 class IDirectory;
 
 enum FileAttributes

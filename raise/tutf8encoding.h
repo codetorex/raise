@@ -42,12 +42,12 @@ public:
 
 	inline int GetCharCount(const byte* data, int capacity) const
 	{
-		dword leng,byteleng;
+		ui32 leng,byteleng;
 		Length(data,capacity,leng,byteleng);
 		return leng;
 	}
 	
-	inline void Length(const byte* data, dword capacity, dword& length, dword& bytelength) const
+	inline void Length(const byte* data, ui32 capacity, ui32& length, ui32& bytelength) const
 	{
 		StringDriver::Length(data,capacity,length,bytelength);
 	}
@@ -100,9 +100,9 @@ public:
 		throw NotImplementedException();
 	}*/
 
-	dword GetChars( byte* bytes, dword bytecount, TCharBuffer& buffer ) const
+	ui32 GetChars( byte* bytes, ui32 bytecount, TCharBuffer& buffer ) const
 	{
-		dword bcstart = bytecount; // storage of bytecount while begining algorithm
+		ui32 bcstart = bytecount; // storage of bytecount while begining algorithm
 
 		while( bytecount > 0 )
 		{

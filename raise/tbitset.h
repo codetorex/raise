@@ -12,13 +12,13 @@ class TMemoryPool;
 class TBitset
 {
 protected:
-	dword*	Data;
+	ui32*	Data;
 
 public:
 	int		DwordLength;
 	int		Length;
 	
-	TBitset(dword* data,int length);
+	TBitset(ui32* data,int length);
 	TBitset(int length);
 
 	int		SearchEmptyBits(int bitcount, int start);
@@ -27,7 +27,7 @@ public:
 	void	ClearBits();
 
 
-	static dword CalculateDwordLengthFromBitLength(int bitlength);
+	static ui32 CalculateDwordLengthFromBitLength(int bitlength);
 
 private:
 	void UseBitLength(int bitlength);

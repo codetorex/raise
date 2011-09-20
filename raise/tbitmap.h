@@ -22,7 +22,7 @@ class RDLL TBitmap: public TCompositeBuffer, public TRange
 public:
 	int PixelCount; // width * height means total pixel count
 	int LogWidth; // log base 2 of width
-	dword Flags;
+	ui32 Flags;
 	//TBufferFormat* format;
 
 	TBitmap();
@@ -90,7 +90,7 @@ public:
 	inline void SetPixel32(int x,int y,byte* clr)
 	{
 		byte* ldata = GetPixel32(x,y);
-		*(dword*)ldata = *(dword*)clr;
+		*(ui32*)ldata = *(ui32*)clr;
 	}
 
 	/**
@@ -107,7 +107,7 @@ public:
 	inline void SetPixel232(int x,int y,byte* clr)
 	{
 		byte* ldata = GetPixel(x,y);
-		*(dword*)ldata = *(dword*)clr;
+		*(ui32*)ldata = *(ui32*)clr;
 	}
 
 	/**
@@ -117,9 +117,9 @@ public:
 	{
 		if (BufferFormat->BitsPerItem == 32)
 		{
-			dword* tbytes = (dword*)Data;// temp byte ptr
+			ui32* tbytes = (ui32*)Data;// temp byte ptr
 			int pc = PixelCount; // temp pixel count 
-			dword px = *(dword*)clr;
+			ui32 px = *(ui32*)clr;
 			while(pc--)
 			{
 				*tbytes = px;

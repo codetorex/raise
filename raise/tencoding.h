@@ -59,7 +59,7 @@ public:
 	 * @param [out] length The length of string.
 	 * @param [out] bytelength The byte length of string.
 	 */
-	virtual void Length(const byte* src,dword capacity, dword& length, dword& bytelength) const = 0;
+	virtual void Length(const byte* src,ui32 capacity, ui32& length, ui32& bytelength) const = 0;
 
 	/**
 	 * @brief Decodes a character
@@ -112,7 +112,7 @@ public:
 	/**
 	 * Returns how many bytes are read. Converted char count can be get from buffer.index
 	 */
-	virtual dword GetChars( byte* bytes, dword bytecount, TCharBuffer& buffer ) const = 0;
+	virtual ui32 GetChars( byte* bytes, ui32 bytecount, TCharBuffer& buffer ) const = 0;
 
 	/**
 	 * @brief Encodes a char array to this encoding

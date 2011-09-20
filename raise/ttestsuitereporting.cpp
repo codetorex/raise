@@ -3,7 +3,7 @@
 #include "texception.h"
 
 
-void TTestSuiteReport::RunSuite( dword tests /*= TEST_CHECK*/ )
+void TTestSuiteReport::RunSuite( ui32 tests /*= TEST_CHECK*/ )
 {
 	Initialize();
 
@@ -11,7 +11,7 @@ void TTestSuiteReport::RunSuite( dword tests /*= TEST_CHECK*/ )
 	AppendLine(TestName);
 	AppendDashLine();
 
-	for (dword i=0;i<Tests.Count;i++)
+	for (ui32 i=0;i<Tests.Count;i++)
 	{
 		TTest* curTest = Tests[i];
 		if ( !(curTest->TestType & tests))
@@ -36,7 +36,7 @@ void TTestSuiteReport::RunSuite( dword tests /*= TEST_CHECK*/ )
 			if (curCheck->CountFail > 0 || ( curCheck->CountOutput > 0 && PrintOutputs ) )
 			{
 				AppendNewLine();
-				for (dword k =0;k<curCheck->Results.Count;k++)
+				for (ui32 k =0;k<curCheck->Results.Count;k++)
 				{
 					TTestResult* curResult = curCheck->Results[k];
 					if (curResult->Result == TEST_FAILED)

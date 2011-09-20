@@ -7,11 +7,11 @@
 class TProfiler
 {
 private:
-	dword tickStart;
+	ui32 tickStart;
 
 public:
-	dword callCount;
-	dword tickDelta;
+	ui32 callCount;
+	ui32 tickDelta;
 
 	inline void BeginProfiling()
 	{
@@ -23,7 +23,7 @@ public:
 		tickDelta = TimeDriver::TickCount() - tickStart;
 	}
 
-	inline void BeginProfiling(dword callCount)
+	inline void BeginProfiling(ui32 callCount)
 	{
 		this->callCount = callCount;
 		BeginProfiling();

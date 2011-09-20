@@ -7,4 +7,4 @@ string TimeDriver::LocalStandartName;
 string TimeDriver::LocalDaylightName;
 int TimeDriver::LocalDaylight;
 int TimeDriver::LocalDifference;
-dword TimeDriver::LocalLastUpdate = 0;
+ui32 TimeDriver::LocalLastUpdate = 0;

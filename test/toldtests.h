@@ -121,7 +121,7 @@ public:
 
 		TColor24 clr2;
 
-		wprintf(L"size of dword: %i\n", sizeof(dword));
+		wprintf(L"size of dword: %i\n", sizeof(ui32));
 		wprintf(L"size32: %i size24: %i sizeHSL: %i\n",sizeof(TColor32),sizeof(TColor24),sizeof(TColorHSL));
 
 		TColorHSL hsl = clr;
@@ -219,7 +219,7 @@ struct strCmp
 {
 	static const int bucket_size = 32;
 
-	dword operator() ( const TString& s1 ) const
+	ui32 operator() ( const TString& s1 ) const
 	{
 		return TString::GetHash(s1);
 	}

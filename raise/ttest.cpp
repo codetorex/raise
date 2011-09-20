@@ -32,7 +32,7 @@ void TTestPerformance::Test()
 {
 	Profiler.BeginProfiling(LoopCount);
 
-	for (dword i=0;i< LoopCount;i+=5)
+	for (ui32 i=0;i< LoopCount;i+=5)
 	{
 		PerformanceTest();
 		PerformanceTest();
@@ -44,9 +44,9 @@ void TTestPerformance::Test()
 	Profiler.EndProfiling();
 }
 
-void TTestSuite::RunSuite( dword tests /*= TEST_CHECK*/ )
+void TTestSuite::RunSuite( ui32 tests /*= TEST_CHECK*/ )
 {
-	for (dword i=0;i<Tests.Count;i++)
+	for (ui32 i=0;i<Tests.Count;i++)
 	{
 		TTest* curTest = Tests.Item[i];
 		if ( (curTest->TestType & tests))

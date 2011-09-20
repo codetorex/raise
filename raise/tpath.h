@@ -31,7 +31,7 @@ public:
 	{
 		if ( CreateDirectoryW(TWinTools::SystemString16(path),NULL) == FALSE )
 		{
-			dword errorId = GetLastError();
+			ui32 errorId = GetLastError();
 			if (errorId != ERROR_ALREADY_EXISTS)
 			{
 				throw Exception("Creating directory failed. " + Convert::ToString(errorId));
@@ -124,26 +124,26 @@ public:
 	static TString TempFolder;
 	static TString CurrentFolder;
 
-	static dword GetExtensionAsDword(const TString& path)
+	static ui32 GetExtensionAsDword(const TString& path)
 	{
 		if (!path.IsASCII())
 		{
 			throw NotImplementedException();
 		}
 		ch8 dw[4];
-		for (dword i= path.Length-4,k=0;i<path.Length;i++,k++)
+		for (ui32 i= path.Length-4,k=0;i<path.Length;i++,k++)
 		{
 			ch8 curChr = path.Data[i];
 			if (curChr >= 'a' && curChr <= 'z' ) curChr -= 32; // lowercase
 			dw[k] = curChr;
 		}
-		return *(dword*)dw;
+		return *(ui32*)dw;
 	}
 
 	static void CorrectSepratorsInplace(TString& path)
 	{
 		path.DetachToEdit();
-		for (dword i=0;i< path.Length;i++)
+		for (ui32 i=0;i< path.Length;i++)
 		{
 			if (path.Data[i] == AltDirectorySeprator)
 			{
@@ -356,7 +356,7 @@ public:
 		TArray<TString*> psplit = cleared.Split(seprators);
 		TArray<TString*> ary;
 
-		for (dword i=0;i<psplit.Count;i++)
+		for (ui32 i=0;i<psplit.Count;i++)
 		{
 			TString* curpart = psplit.Item[i]; 
 			if (*curpart == "..")
@@ -371,7 +371,7 @@ public:
 
 		TString result(path.Length+16);
 
-		for (dword i=0;i<ary.Count;i++)
+		for (ui32 i=0;i<ary.Count;i++)
 		{
 			result += *ary.Item[i];
 			result += DirectorySeprator;

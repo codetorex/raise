@@ -9,8 +9,8 @@ class RDLL TStack
 public:
 	T		CurItem;
 	T*		Item;
-	dword	Count;
-	dword	Capacity;
+	ui32	Count;
+	ui32	Capacity;
 
 	TStack()
 	{

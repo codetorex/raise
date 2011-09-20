@@ -12,18 +12,18 @@ class TDateTimeExpanded;
 class TDateTimeUnix
 {
 public:
-	dword TimeStamp;
+	ui32 TimeStamp;
 
 	TDateTimeUnix& operator = (const TDateTime& value);
 	
 	TDateTimeUnix& operator = (const TDateTimeExpanded& value);
 
-	TDateTimeUnix& operator = (dword value)
+	TDateTimeUnix& operator = (ui32 value)
 	{
 		TimeStamp = value;
 	}
 
-	TDateTimeUnix(dword value)
+	TDateTimeUnix(ui32 value)
 	{
 		TimeStamp = value;
 	}

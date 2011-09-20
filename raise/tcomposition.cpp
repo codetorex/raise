@@ -6,13 +6,13 @@ void TComposition::CreateElementList( TArray<TCompositionPrimitive*>* allElement
 {
 	ElementCount = 0;
 
-	dword curPos = 0;
+	ui32 curPos = 0;
 
 	TArray<TCompositionPrimitive*> newList;
 	while (curPos < elementNames.Length)
 	{
 		bool found = false;
-		for (dword i=0;i<allElements->Count;i++)
+		for (ui32 i=0;i<allElements->Count;i++)
 		{
 			TCompositionPrimitive* curElement = allElements->Item[i];
 			if (elementNames.StartsWith(curElement->ShortName,curPos))
@@ -106,7 +106,7 @@ int TComposition::CalculateBitsPerItem()
 
 TCompositeConverter* TComposition::GetConverter( TBufferFormat* TargetFormat )
 {
-	for(dword i=0;i<Converters.Count;i++)
+	for(ui32 i=0;i<Converters.Count;i++)
 	{
 		if (Converters.Item[i]->DestinationFormat == TargetFormat)
 		{

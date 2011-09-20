@@ -8,27 +8,27 @@ class TByteArray
 {
 public:
 	byte* Data;
-	dword Capacity;
+	ui32 Capacity;
 
 	/**
 	 * @brief Constructor that copies existing byte array to new array with new capacity.
 	 * @param [in] other Other byte array that to be copied to new.
 	 * @param _NewCapacity New capacity (if smaller than existing capacity will be extended)
 	 */
-	inline void InitializeByteArray(const TByteArray* other, dword _NewCapacity)
+	inline void InitializeByteArray(const TByteArray* other, ui32 _NewCapacity)
 	{
 		if (_NewCapacity < other->Capacity) _NewCapacity = other->Capacity;
 		Data = new byte[_NewCapacity];
 		MemoryDriver::Copy(Data,other->Data,other->Capacity);
 	}
 
-	inline void InitializeByteArray(dword _Capacity)
+	inline void InitializeByteArray(ui32 _Capacity)
 	{
 		Data = 0;
 		Allocate(_Capacity);
 	}
 
-	inline void InitializeByteArray(byte* _Data, dword _Capacity)
+	inline void InitializeByteArray(byte* _Data, ui32 _Capacity)
 	{
 		Use(_Data,_Capacity);
 	}
@@ -44,13 +44,13 @@ public:
 		Use( 0, 0 );
 	}
 
-	inline void Use(byte* _Data, dword _Capacity)
+	inline void Use(byte* _Data, ui32 _Capacity)
 	{
 		Data = _Data;
 		Capacity = _Capacity;
 	}
 
-	inline void Grow(dword _Capacity)
+	inline void Grow(ui32 _Capacity)
 	{
 		if ( !Data ) return Allocate(_Capacity);
 		if (_Capacity <= Capacity) return;
@@ -60,9 +60,15 @@ public:
 		Use(NData,_Capacity);
 	}
 
-	inline void Allocate(dword _Capacity)
+	inline void Grow()
 	{
-		if (Data) delete Data;
+		assert(Capacity != 0);
+		Grow(Capacity * 2);
+	}
+
+	inline void Allocate(ui32 _Capacity)
+	{
+		Free();
 		Data = new byte [_Capacity];
 		Capacity = _Capacity;
 	}
@@ -74,13 +80,13 @@ public:
 
 	inline void Free()
 	{
-		if ( Data ) delete Data;
+		if ( Data ) delete [] Data;
 		Use(0,0);
 	}
 
 	~TByteArray()
 	{
-		delete [] Data;
+		Free();
 	}
 
 // Constructors
@@ -92,12 +98,12 @@ public:
 		Capacity = 0;
 	}
 
-	inline TByteArray(dword _Capacity)
+	inline TByteArray(ui32 _Capacity)
 	{
 		InitializeByteArray(_Capacity);
 	}
 
-	inline TByteArray(const TByteArray* other, dword _NewCapacity)
+	inline TByteArray(const TByteArray* other, ui32 _NewCapacity)
 	{
 		InitializeByteArray(other,_NewCapacity);
 	}
@@ -121,7 +127,7 @@ public:
 		RefCount = 1;
 	}
 
-	TSharedByteArray(byte* _Data, dword _Capacity)
+	TSharedByteArray(byte* _Data, ui32 _Capacity)
 	{
 		Data = _Data;
 		Capacity = _Capacity;

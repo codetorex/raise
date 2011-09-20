@@ -11,9 +11,9 @@ public:
 	TByteArray Buffer;
 
 	ch32* Data;
-	dword Capacity;
+	ui32 Capacity;
 
-	dword Index;
+	ui32 Index;
 
 	TCharBuffer()
 	{
@@ -22,12 +22,12 @@ public:
 		Index = 0;
 	}
 
-	TCharBuffer(dword _Capacity)
+	TCharBuffer(ui32 _Capacity)
 	{
 		InitializeArray( _Capacity );
 	}
 
-	void InitializeArray(dword _Capacity)
+	void InitializeArray(ui32 _Capacity)
 	{
 		Capacity = _Capacity;
 		Buffer.Allocate(_Capacity * sizeof(ch32)); // 1 char holds maximum of 4 bytes
@@ -41,7 +41,7 @@ public:
 		Data[ Index++ ] = chr;
 	}
 
-	void Grow( dword _NewCharCapacity )
+	void Grow( ui32 _NewCharCapacity )
 	{
 		Capacity = _NewCharCapacity;
 		Buffer.Grow( _NewCharCapacity * sizeof(ch32) );

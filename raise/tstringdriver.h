@@ -95,7 +95,7 @@ public:
 		dst += ln;
 	}
 
-	static void Length(const byte* data,int capacity, dword& length, dword& bytelength)
+	static void Length(const byte* data,int capacity, ui32& length, ui32& bytelength)
 	{
 		length = 0;
 		bytelength = 0;
@@ -145,10 +145,10 @@ public:
 	/**
 	 * Counts chars in a byte array.
 	 */
-	static dword Length(const byte* data, dword capacity)
+	static ui32 Length(const byte* data, ui32 capacity)
 	{
-		dword result = 0;
-		for (dword i=0;i<capacity;i++)
+		ui32 result = 0;
+		for (ui32 i=0;i<capacity;i++)
 		{
 			if (!IsTrail(data[i]))
 			{
@@ -158,7 +158,7 @@ public:
 		return result;
 	}
 
-	static void Length(const byte* data, dword& length, dword& bytelength)
+	static void Length(const byte* data, ui32& length, ui32& bytelength)
 	{
 		length = 0;
 		bytelength = 0;

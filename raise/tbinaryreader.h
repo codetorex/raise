@@ -63,16 +63,16 @@ public:
 		return result;
 	}
 
-	inline word ReadWord()
+	inline uint16 ReadWord()
 	{
-		word result;
+		uint16 result;
 		Read((byte*)&result,2,1);
 		return result;
 	}
 
-	inline dword ReadDWord()
+	inline ui32 ReadDWord()
 	{
-		dword result;
+		ui32 result;
 		Read((byte*)&result,4,1);
 		return result;
 	}

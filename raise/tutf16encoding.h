@@ -30,7 +30,7 @@ public:
 		return byteCount / 4;
 	}
 
-	inline bool IsSurrogate(dword curchar) const
+	inline bool IsSurrogate(ui32 curchar) const
 	{
 		return curchar >= 0xD800 && curchar <= 0xDFFF;
 	}
@@ -56,16 +56,16 @@ public:
 
 	inline int GetCharCount(const byte* data, int capacity) const
 	{
-		dword leng,byteleng;
+		ui32 leng,byteleng;
 		Length(data,capacity,leng,byteleng);
 		return leng;
 	}
 
-	inline void Length(const byte* data, dword capacity, dword& length, dword& bytelength) const
+	inline void Length(const byte* data, ui32 capacity, ui32& length, ui32& bytelength) const
 	{
 
-		dword llength = 0;
-		dword lblength = 0;
+		ui32 llength = 0;
+		ui32 lblength = 0;
 
 		while(lblength < capacity)
 		{
@@ -88,10 +88,10 @@ public:
 
 	ch32 Decode(ch16 hi,ch16 lo) const
 	{
-		dword X = (hi & ((1 << 6) -1)) << 10 | lo & ((1 << 10) -1);
-		dword W = (hi >> 6) & ((1 << 5) - 1);
-		dword U = W + 1;
-		dword C = U << 16 | X;
+		ui32 X = (hi & ((1 << 6) -1)) << 10 | lo & ((1 << 10) -1);
+		ui32 W = (hi >> 6) & ((1 << 5) - 1);
+		ui32 U = W + 1;
+		ui32 C = U << 16 | X;
 		return C;
 	}
 
@@ -209,7 +209,7 @@ public:
 		throw NotImplementedException();
 	}*/
 
-	dword GetChars( byte* bytes, dword bytecount, TCharBuffer& buffer ) const
+	ui32 GetChars( byte* bytes, ui32 bytecount, TCharBuffer& buffer ) const
 	{
 		throw NotImplementedException();
 	}

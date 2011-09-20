@@ -69,7 +69,7 @@ public:
 		CurrentMode = mode;
 	}
 
-	inline dword Position()
+	inline ui32 Position()
 	{
 		return ftell(FileHandle);
 	}
@@ -100,7 +100,7 @@ public:
 		return (int)tmp;
 	}
 
-	inline void Seek(dword offset,SeekOrigin origin)
+	inline void Seek(ui32 offset,SeekOrigin origin)
 	{
 		fseek(FileHandle,offset,origin);
 	}

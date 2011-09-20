@@ -42,7 +42,7 @@ class TTest
 {
 public:
 	string TestName;
-	dword TestType;
+	ui32 TestType;
 
 
 	TTest(const string& _testName)
@@ -82,12 +82,12 @@ public:
 class TTestPerformance: public TTest
 {
 public:
-	dword LoopCount;
+	ui32 LoopCount;
 	TProfiler Profiler;
 
 	TTestPerformance(const string& _testName): TTest(_testName) {}
 
-	TTestPerformance(const string& _testName, dword _loopCount):TTest(_testName)
+	TTestPerformance(const string& _testName, ui32 _loopCount):TTest(_testName)
 	{
 		LoopCount = _loopCount;
 		TestType = TEST_PERFORMANCE;
@@ -140,7 +140,7 @@ public:
 	 * @brief Loops through tests and does test.
 	 * @param tests Which test types going to be tested.
 	 */
-	virtual void RunSuite(dword tests = TEST_CHECK);
+	virtual void RunSuite(ui32 tests = TEST_CHECK);
 
 	void Test()
 	{

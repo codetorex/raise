@@ -106,7 +106,7 @@ public:
 
 		if (fa == fa_INVALID)
 		{
-			dword err = GetLastError();
+			ui32 err = GetLastError();
 			if (err == ERROR_FILE_NOT_FOUND || err == ERROR_PATH_NOT_FOUND)
 			{
 				return false;

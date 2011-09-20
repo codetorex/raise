@@ -25,7 +25,7 @@ public:
 	/**
 	 * Copies data that aligns to 32 bits.
 	 */
-	inline void CopyDword(dword* dst,dword* src,int cnt)
+	inline void CopyDword(ui32* dst,ui32* src,int cnt)
 	{
 		while(cnt--)
 		{
@@ -152,13 +152,13 @@ public:
 		return -1;
 	}
 
-	inline static int SearchWord(const byte* src, int srcLength, word needle)
+	inline static int SearchWord(const byte* src, int srcLength, uint16 needle)
 	{
 		if (srcLength <= 1) return -1;
 		int i = srcLength - 1;
 		while(i--)
 		{
-			if (*(word*)(&src[i]) == needle)
+			if (*(uint16*)(&src[i]) == needle)
 			{
 				return i;
 			}
@@ -166,14 +166,14 @@ public:
 		return -1;
 	}
 
-	inline static int SearchDWord(const byte* src, int srcLength, dword needle )
+	inline static int SearchDWord(const byte* src, int srcLength, ui32 needle )
 	{
 		if (srcLength <= 3) return -1;
 		int i = srcLength - 3;
 
 		while(i--)
 		{
-			if (*(dword*)(&src[i]) == needle)
+			if (*(ui32*)(&src[i]) == needle)
 			{
 				return i;
 			}
@@ -213,10 +213,10 @@ public:
 			return SearchByte(src,srcLength,*needle);
 
 		case 2:
-			return SearchWord(src,srcLength,*(word*)needle);
+			return SearchWord(src,srcLength,*(uint16*)needle);
 
 		case 4:
-			return SearchDWord(src,srcLength,*(dword*)needle);
+			return SearchDWord(src,srcLength,*(ui32*)needle);
 
 		default:
 			return SearchVariable(src,srcLength,needle,length);

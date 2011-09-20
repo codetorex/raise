@@ -43,7 +43,7 @@ enum BitEnum
 	BIT31 = 0x80000000
 };
 
-static const dword bits[] = 
+static const ui32 bits[] = 
 { 
 	0x00000001, 0x00000002, 0x00000004, 0x00000008,
 	0x00000010, 0x00000020, 0x00000040, 0x00000080,
@@ -55,7 +55,7 @@ static const dword bits[] =
 	0x10000000, 0x20000000, 0x40000000, 0x80000000,
 };
 
-static const dword bitmasks[] =
+static const ui32 bitmasks[] =
 {
 	0x00000001, 0x00000003, 0x00000007, 0x0000000f,
 	0x0000001f, 0x0000003f, 0x0000007f, 0x000000ff,
@@ -67,7 +67,7 @@ static const dword bitmasks[] =
 	0x1fffffff, 0x3fffffff, 0x7fffffff, 0xffffffff,
 };
 
-static const dword invbitmasks[] = 
+static const ui32 invbitmasks[] = 
 {
 	0xfffffffe, 0xfffffffc, 0xfffffff8, 0xfffffff0,
 	0xffffffe0, 0xffffffc0, 0xffffff80, 0xffffff00,
@@ -85,14 +85,14 @@ static const dword invbitmasks[] =
 class RDLL TBinary
 {
 public:
-	dword value;
+	ui32 value;
 
 	TBinary()
 	{
 		value = 0;
 	}
 
-	TBinary(dword _value)
+	TBinary(ui32 _value)
 	{
 		value = _value;
 	}
@@ -108,7 +108,7 @@ public:
 			0, 1, 28, 2, 29, 14, 24, 3, 30, 22, 20, 15, 25, 17, 4, 8, 
 			31, 27, 13, 23, 21, 19, 16, 7, 26, 12, 18, 6, 11, 5, 10, 9
 		};
-		return (MultiplyDeBruijnBitPosition2[(dword)(value * 0x077CB531U) >> 27]);
+		return (MultiplyDeBruijnBitPosition2[(ui32)(value * 0x077CB531U) >> 27]);
 	}
 
 
@@ -117,7 +117,7 @@ public:
 	*/
 	inline int log2()
 	{
-		register dword v = value;
+		register ui32 v = value;
 		static const int MultiplyDeBruijnBitPosition[32] = 
 		{
 			0, 9, 1, 10, 13, 21, 2, 29, 11, 14, 16, 18, 22, 25, 3, 30,
@@ -130,7 +130,7 @@ public:
 		v |= v >> 8;
 		v |= v >> 16;
 
-		return MultiplyDeBruijnBitPosition[(dword)(v * 0x07C4ACDDU) >> 27];
+		return MultiplyDeBruijnBitPosition[(ui32)(v * 0x07C4ACDDU) >> 27];
 	}
 
 
@@ -152,10 +152,10 @@ public:
 	*/
 	inline int popcount()
 	{
-		register dword v = value;
+		register ui32 v = value;
 		v = v - ((v >> 1) & 0x55555555);                    // reuse input as temporary
 		v = (v & 0x33333333) + ((v >> 2) & 0x33333333);     // temp
-		dword c = ((v + (v >> 4) & 0xF0F0F0F) * 0x1010101) >> 24; // count
+		ui32 c = ((v + (v >> 4) & 0xF0F0F0F) * 0x1010101) >> 24; // count
 		return c;
 	}
 
@@ -167,9 +167,9 @@ public:
 		return ToString(value);
 	}
 
-	static inline TString ToString(dword binvalue)
+	static inline TString ToString(ui32 binvalue)
 	{
-		register dword v = binvalue;
+		register ui32 v = binvalue;
 		TString result(32);
 		for (int i=0;i<32;i++)
 		{
@@ -196,7 +196,7 @@ public:
 	*/
 	inline int log2_naive()
 	{
-		register dword vcopy = value;
+		register ui32 vcopy = value;
 		int r = 0;
 		while(vcopy>>=1)
 			r++;
@@ -208,7 +208,7 @@ public:
 	*/
 	inline int log2_calc()
 	{
-		dword v = value;
+		ui32 v = value;
 		register unsigned int r; // result of log2(v) will go here
 		register unsigned int shift;
 
@@ -227,7 +227,7 @@ public:
 	inline int popcount_naive()
 	{
 		int bits = 32;
-		register dword v = value;
+		register ui32 v = value;
 		int c = 0;
 		while(bits--)
 		{
@@ -242,8 +242,8 @@ public:
 	*/
 	inline int popcount_brian()
 	{
-		register dword v = value;
-		dword c; // c accumulates the total bits set in v
+		register ui32 v = value;
+		ui32 c; // c accumulates the total bits set in v
 		for (c = 0; v; c++)
 		{
 			v &= v - 1; // clear the least significant bit set
@@ -265,7 +265,7 @@ public:
 			B6(0), B6(1), B6(1), B6(2)
 		};
 
-		register dword v = value;
+		register ui32 v = value;
 		int c; // c is the total bits set in v
 
 		unsigned char * p = (unsigned char *) &v;

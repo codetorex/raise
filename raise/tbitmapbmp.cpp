@@ -6,26 +6,26 @@
 
 struct BITMAPFILEHEADER 
 {
-	word bfType;
-	dword bfSize;
-	word bfReserved1;
-	word bfReserved2;
-	dword bfOffBits;
+	uint16 bfType;
+	ui32 bfSize;
+	uint16 bfReserved1;
+	uint16 bfReserved2;
+	ui32 bfOffBits;
 } __attribute((packed));
 
 struct BITMAPINFOHEADER
 {
-	dword biSize;
+	ui32 biSize;
 	int biWidth;
 	int biHeight;
-	word biPlanes;
-	word biBitCount;
-	dword biCompression;
-	dword biSizeImage;
-	dword biXPelsPerMeter;
-	dword biYPelsPerMeter;
-	dword biClrUsed;
-	dword biClrImportant;
+	uint16 biPlanes;
+	uint16 biBitCount;
+	ui32 biCompression;
+	ui32 biSizeImage;
+	ui32 biXPelsPerMeter;
+	ui32 biYPelsPerMeter;
+	ui32 biClrUsed;
+	ui32 biClrImportant;
 }  __attribute((packed));
 
 #endif
@@ -117,9 +117,9 @@ void TBitmapBMP::WriteBitmap( TBitmap* bmp, Stream* dst )
 	dst->Write(&fileHeader,1,sizeof(BITMAPFILEHEADER));
 	dst->Write(&infoHeader,1,sizeof(BITMAPINFOHEADER));
 
-	dword row = bmp->Width * 3;
-	dword alig = row % 4;
-	dword zero = 0;
+	ui32 row = bmp->Width * 3;
+	ui32 alig = row % 4;
+	ui32 zero = 0;
 
 	byte* rowstart;
 	TCompositeBuffer* newBuffer = 0;

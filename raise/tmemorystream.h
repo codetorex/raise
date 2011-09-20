@@ -48,12 +48,12 @@ public:
 		LoadStream(source);
 	}
 
-	inline dword Position()
+	inline ui32 Position()
 	{
 		return DataBuffer.Index;
 	}
 
-	inline dword Length()
+	inline ui32 Length()
 	{
 		return DataBuffer.Capacity;
 	}
@@ -97,7 +97,7 @@ public:
 		return DataBuffer.PeekByte();
 	}
 
-	inline void Seek(dword offset,SeekOrigin origin)
+	inline void Seek(ui32 offset,SeekOrigin origin)
 	{
 		switch(origin)
 		{

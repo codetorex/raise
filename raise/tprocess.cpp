@@ -33,13 +33,13 @@ void TProcess::CreateFromExecutable( const TString& exepath, const TString& para
 	throw Exception("Not implemented yet");
 }
 
-dword TProcessMemory::Search( dword start,dword end, const void* needle, int length )
+ui32 TProcessMemory::Search( ui32 start,ui32 end, const void* needle, int length )
 {
-	for (dword addr=start;addr < end; addr += Buffer.Capacity)
+	for (ui32 addr=start;addr < end; addr += Buffer.Capacity)
 	{
 		if (FillBuffer(addr) != 0) // 0 bytes readed at that section
 		{
-			dword found = Buffer.VirtualSearch((byte*)needle,length);
+			ui32 found = Buffer.VirtualSearch((byte*)needle,length);
 			if (found != NFOUND) return found;
 		}
 		addr -= length-1;
@@ -47,13 +47,13 @@ dword TProcessMemory::Search( dword start,dword end, const void* needle, int len
 	return NFOUND;
 }
 
-dword TProcessMemory::SearchPattern( dword start,dword end, const void* needle, const byte* pattern, int length )
+ui32 TProcessMemory::SearchPattern( ui32 start,ui32 end, const void* needle, const byte* pattern, int length )
 {
-	for (dword addr=start;addr < end; addr += Buffer.Capacity)
+	for (ui32 addr=start;addr < end; addr += Buffer.Capacity)
 	{
 		if (FillBuffer(addr) != 0) // 0 bytes readed at that section
 		{
-			dword found = Buffer.VirtualSearchPattern((byte*)needle,pattern,length);
+			ui32 found = Buffer.VirtualSearchPattern((byte*)needle,pattern,length);
 			if (found != NFOUND) return found;
 		}
 		addr -= length-1;

@@ -9,7 +9,7 @@
 class TBitfield
 {
 public:
-	dword* bin;
+	ui32* bin;
 	int fieldcount;
 	int* fieldstart;
 	int* fieldlength;
@@ -37,7 +37,7 @@ public:
 
 	inline int getvalue(int which)
 	{
-		register dword v = *bin;
+		register ui32 v = *bin;
 		v >>= fieldstart[which];
 		v &= bitmasks[ fieldlength[which] ];
 		return v;
@@ -46,8 +46,8 @@ public:
 	inline void setvalue(int which,int value)
 	{
 		// set those bits 0 first
-		dword bitmask = bitmasks[ fieldlength[which] ];
-		dword start = fieldstart[which];
+		ui32 bitmask = bitmasks[ fieldlength[which] ];
+		ui32 start = fieldstart[which];
 		*bin &= ~(bitmask << start);
 
 		// set new value

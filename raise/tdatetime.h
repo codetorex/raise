@@ -203,7 +203,7 @@ public:
 		return *this;
 	}
 
-	inline TDateTime& AddMilliseconds(dword ms)
+	inline TDateTime& AddMilliseconds(ui32 ms)
 	{
 		Ticks += ms * 1000;
 		return *this;

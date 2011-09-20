@@ -5,9 +5,9 @@
 
 TBasicHashCodeProvider TBasicHashCodeProvider::Instance;
 
-dword TBasicHashCodeProvider::GetHashCode( const TString& value )
+ui32 TBasicHashCodeProvider::GetHashCode( const TString& value )
 {
-	register dword hash = 0;
+	register ui32 hash = 0;
 	int i = value.ByteLength;
 	while(i--)
 	{

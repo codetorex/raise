@@ -6,8 +6,8 @@ void TBreakpoint::SetBreakpoint()
 {
 	if (!IsSet)
 	{
-		OrginalByte = Parent->ReadByte((dword)Address);
-		Parent->WriteByte((dword)Address,0xCC);
+		OrginalByte = Parent->ReadByte((ui32)Address);
+		Parent->WriteByte((ui32)Address,0xCC);
 		IsSet = true;
 	}
 }
@@ -16,7 +16,7 @@ void TBreakpoint::UnsetBreakpoint()
 {
 	if (IsSet)
 	{
-		Parent->WriteByte((dword)Address,OrginalByte);
+		Parent->WriteByte((ui32)Address,OrginalByte);
 		IsSet = false;
 	}
 }
@@ -49,7 +49,7 @@ bool TProcessDebug::ExitDebugMode()
 	return true;
 }
 
-TBreakpoint* TProcessDebug::CreateBreakpoint( dword addr )
+TBreakpoint* TProcessDebug::CreateBreakpoint( ui32 addr )
 {
 	TBreakpoint* tb = GetBreakpoint(addr);
 	if (tb == NULL)
@@ -62,13 +62,13 @@ TBreakpoint* TProcessDebug::CreateBreakpoint( dword addr )
 
 
 
-TBreakpoint* TProcessDebug::GetBreakpoint( dword addr )
+TBreakpoint* TProcessDebug::GetBreakpoint( ui32 addr )
 {
 	int i = Breakpoints.Count;
 	while(i--)
 	{
 		TBreakpoint* tb = Breakpoints.Item[i];
-		if ((dword)tb->Address == addr)
+		if ((ui32)tb->Address == addr)
 		{
 			return tb;
 		}
@@ -191,7 +191,7 @@ void TProcessDebug::DebuggerLoop()
 			{
 				if (DebugEvent.u.Exception.ExceptionRecord.ExceptionCode == EXCEPTION_ACCESS_VIOLATION)
 				{
-					OnAccessViolation.call(this,(dword)DebugEvent.u.Exception.ExceptionRecord.ExceptionAddress);
+					OnAccessViolation.call(this,(ui32)DebugEvent.u.Exception.ExceptionRecord.ExceptionAddress);
 					ContinueDebugEvent(DebugEvent.dwProcessId,DebugEvent.dwThreadId, DBG_CONTINUE);
 					continue;
 				}
@@ -204,7 +204,7 @@ void TProcessDebug::DebuggerLoop()
 
 				if (DebugEvent.u.Exception.ExceptionRecord.ExceptionCode == EXCEPTION_BREAKPOINT)
 				{
-					CurrentBreakpointAddr = (dword)DebugEvent.u.Exception.ExceptionRecord.ExceptionAddress;
+					CurrentBreakpointAddr = (ui32)DebugEvent.u.Exception.ExceptionRecord.ExceptionAddress;
 					CurrentBreakpoint = GetBreakpoint(CurrentBreakpointAddr); // TODO: 32 bit 64 bit fucks
 					if (CurrentBreakpoint != 0)
 					{

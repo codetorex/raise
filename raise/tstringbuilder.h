@@ -8,11 +8,11 @@
 class TStringBuilder: private TByteArray
 {
 public:
-	dword Length;
-	dword ByteLength;
+	ui32 Length;
+	ui32 ByteLength;
 
 private:
-	inline void CheckCapacity(dword length)
+	inline void CheckCapacity(ui32 length)
 	{
 		if ( ByteLength + length >= Capacity )
 		{

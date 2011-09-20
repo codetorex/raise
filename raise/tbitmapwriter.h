@@ -9,12 +9,12 @@ typedef class TStream Stream;
 class TBitmapWriter
 {
 public:
-	dword WriteExtension;
+	ui32 WriteExtension;
 	virtual void WriteBitmap(TBitmap* bmp, Stream* dst) = 0;
 
 	static TArray< TBitmapWriter* > Writers;
 
-	static TBitmapWriter* GetWriter(dword extension)
+	static TBitmapWriter* GetWriter(ui32 extension)
 	{
 		int i= Writers.Count;
 		while(i--)

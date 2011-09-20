@@ -13,9 +13,9 @@
 class TBitstack
 {
 public:
-	dword bin;
+	ui32 bin;
 
-	TBitstack(dword _bin)
+	TBitstack(ui32 _bin)
 	{
 		bin = _bin;
 	}
@@ -25,7 +25,7 @@ public:
 	*/
 	void pushs(int value,int bit)
 	{
-		dword data = abs(value);
+		ui32 data = abs(value);
 		if ( data > bitmasks[bit-2] )
 			throw "Value out of bounds.";
 		
@@ -56,7 +56,7 @@ public:
 	/**
 	* Unsigned value push to bit stack.
 	*/
-	void push(dword value,int bit)
+	void push(ui32 value,int bit)
 	{
 		if (value > bitmasks[bit-1])
 			throw "Value out of bounds.";
@@ -68,9 +68,9 @@ public:
 	/**
 	* Unsigned value pop from bit stack.
 	*/
-	dword pop(int bit)
+	ui32 pop(int bit)
 	{
-		dword value = bin & bitmasks[bit-1];
+		ui32 value = bin & bitmasks[bit-1];
 		bin >>= bit;
 		return value;
 	}

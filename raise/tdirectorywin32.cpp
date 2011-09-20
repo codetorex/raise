@@ -15,7 +15,7 @@ public:
 
 	bool NoFilesLeft;
 
-	dword EnumerateFilter;
+	ui32 EnumerateFilter;
 
 	TFileInfo CurFile;
 	TDirectoryInfo CurDirectory;

@@ -62,7 +62,7 @@ class TProcessDebug: public TProcessMemory
 {
 public:
 	typedef delegate1<void,char*> DebugStringEvent;
-	typedef delegate2<void,TProcessDebug*,dword> GenericDebugEvent; // TProcessDebug* sender, dword address
+	typedef delegate2<void,TProcessDebug*,ui32> GenericDebugEvent; // TProcessDebug* sender, dword address
 
 	TProcessDebug();
 
@@ -73,8 +73,8 @@ public:
 	bool EnterDebugMode();
 	bool ExitDebugMode();
 
-	TBreakpoint*	CreateBreakpoint	(dword addr); // returns orginal code
-	TBreakpoint*	GetBreakpoint		(dword addr);
+	TBreakpoint*	CreateBreakpoint	(ui32 addr); // returns orginal code
+	TBreakpoint*	GetBreakpoint		(ui32 addr);
 	void			RemoveBreakpoint	(TBreakpoint* bp);
 	
 	void RemoveBreakpoints();
@@ -98,7 +98,7 @@ public:
 	CONTEXT CurrentContext;
 	HANDLE CurrentThread;
 	TBreakpoint* CurrentBreakpoint;
-	dword CurrentBreakpointAddr;
+	ui32 CurrentBreakpointAddr;
 
 
 

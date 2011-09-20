@@ -13,11 +13,11 @@ const int TDateTime::MonthStartLeap[] = {0,31,60,91,121,152,182,213,244,274,305,
 TDateTimeExpanded& TDateTimeExpanded::operator=( const TDateTime& value )
 {
 	int64 microdata = (value.Ticks % 86400000000LL);
-	dword datedata = (dword)(value.Ticks / 86400000000LL);
+	ui32 datedata = (ui32)(value.Ticks / 86400000000LL);
 
 	MicroSecond = microdata % 1000;
 	microdata /= 1000;
-	dword timedata = (dword)microdata;
+	ui32 timedata = (ui32)microdata;
 
 	MilliSecond = timedata % 1000;
 	timedata /= 1000;
@@ -28,9 +28,9 @@ TDateTimeExpanded& TDateTimeExpanded::operator=( const TDateTime& value )
 	Hour = timedata;
 
 	int leapdays =  TDateTime::GetLeapDays(datedata);
-	dword sdays = datedata - leapdays;
-	dword years = sdays / 365;
-	dword rdays = sdays % 365;
+	ui32 sdays = datedata - leapdays;
+	ui32 years = sdays / 365;
+	ui32 rdays = sdays % 365;
 
 	Year = years + 1;
 	Leap = false;
@@ -162,7 +162,7 @@ TDateTimeUnix& TDateTimeUnix::operator=( const TDateTime& value )
 {
 	int64 tmp = value.Ticks / 1000000;
 	tmp -= 719162LL * 24 * 60 * 60; // 719162 * 24 * 60 * 60 * 1000000;
-	TimeStamp = (dword)tmp;
+	TimeStamp = (ui32)tmp;
 	return *this;
 }
 

@@ -26,7 +26,7 @@ public:
 	bool		IsAlive;
 	int			ThreadState;
 	Priorities	Priority;
-	dword		ID;
+	ui32		ID;
 	int			MaximumStackSize;
 	bool		IsParamterized;
 	HANDLE		ThreadHandle;
@@ -62,7 +62,7 @@ public:
 
 	}
 
-	void Join(dword timeout = INFINITE)
+	void Join(ui32 timeout = INFINITE)
 	{
 
 	}

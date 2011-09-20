@@ -407,6 +407,9 @@
     <ClInclude Include="tfilewin32.h">
       <Filter>Source Files\IO\File System\Win32</Filter>
     </ClInclude>
+    <ClInclude Include="tcompositesimple.h">
+      <Filter>Source Files\IO\Buffer</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">
