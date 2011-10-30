@@ -177,6 +177,10 @@ private:
 };
 
 
+
+/**
+ * TODO: make it T instead of T* so data is stored internally, will be fast to access?
+ */
 template <class T>
 class event
 {

@@ -305,5 +305,7 @@ protected:
 };
 
 
+//TODO: implement tarray enumerator?
+
 
 #endif

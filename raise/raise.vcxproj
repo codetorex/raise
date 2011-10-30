@@ -147,6 +147,7 @@
     <ClInclude Include="tdatetimeformatinfo.h" />
     <ClInclude Include="tdatetimeunix.h" />
     <ClInclude Include="tdatetimewindows.h" />
+    <ClInclude Include="tdiagram.h" />
     <ClInclude Include="tdictionary.h" />
     <ClInclude Include="tdirectorywin32.h" />
     <ClInclude Include="tencoding.h" />

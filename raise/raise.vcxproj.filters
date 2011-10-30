@@ -81,6 +81,9 @@
     <Filter Include="Source Files\IO\File System\Win32">
       <UniqueIdentifier>{e45eca2d-315d-4710-9328-c1ece9c1e581}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Source Files\Diagram">
+      <UniqueIdentifier>{a64b93ab-7ad5-4cf6-8beb-bfaedbe611e1}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="raisetypes.h">
@@ -409,6 +412,9 @@
     </ClInclude>
     <ClInclude Include="tcompositesimple.h">
       <Filter>Source Files\IO\Buffer</Filter>
+    </ClInclude>
+    <ClInclude Include="tdiagram.h">
+      <Filter>Source Files\Diagram</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
