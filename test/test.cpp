@@ -20,9 +20,30 @@ public:
 
 	void Test()
 	{
-		TColor32 clr(255,0,255);
+		TColor32 clr(64,128,178,255);
 
-		AddResult( clr.r == 255 && clr.g == 0 && clr.b == 255 && clr.a == 255, "Color r,g,b constructor" );
+		TStringBuilder sb;
+		sb.Append("R: ");
+		sb.AppendPadded(clr.r,3,' ');
+		sb.Append("G: ");
+		sb.AppendPadded(clr.g,3,' ');
+		sb.Append("B: ");
+		sb.AppendPadded(clr.b,3,' ');
+		sb.Append("A: ");
+		sb.AppendPadded(clr.a,3,' ');
+
+		sb.Append("clr[0] = ");
+		sb.AppendPadded(clr.bclr[0],3,' ');
+		sb.Append("clr[1] = ");
+		sb.AppendPadded(clr.bclr[1],3,' ');
+		sb.Append("clr[2] = ");
+		sb.AppendPadded(clr.bclr[2],3,' ');
+		sb.Append("clr[3] = ");
+		sb.AppendPadded(clr.bclr[3],3,' ');
+
+		AddOutput(sb.ToString());
+
+		//AddResult( clr.r == 255 && clr.g == 0 && clr.b == 255 && clr.a == 255, "Color r,g,b constructor" );
 		
 /*		TColor32ARGB argb = clr;
 		
@@ -67,7 +88,7 @@ int main(int argc,char** argv)
 	suite.AddTest(&TArrayCheck);
 	suite.AddTest(&TColorCheck);
 
-	//suite.PrintOutputs = true;
+	suite.PrintOutputs = true;
 	suite.RunSuite();
 
 	getchar();

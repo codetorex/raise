@@ -90,7 +90,7 @@ public:
 		Count -= length;
 	}
 
-	void Insert(const T& value,ui32 index)
+	void Insert(T value,ui32 index)
 	{
 		if (Capacity <= Count) // TODO: make this a function named CheckCapacity
 		{
@@ -104,9 +104,8 @@ public:
 			return;
 		}
 
-		// Move items ( slow operation )
-		ui32 i = Count;
-		while(i-- >= index)
+		int i = (int)Count;
+		while( i-- >= (int)index)
 		{
 			Item[i+1] = Item[i];
 		}

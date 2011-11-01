@@ -181,7 +181,7 @@ public:
 
 	TLinkedListEnumerator( TList<T>* pList ): mList(pList)
 	{
-
+		Reset();
 	}
 
 	void Reset()

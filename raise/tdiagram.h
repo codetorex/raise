@@ -23,23 +23,61 @@ public:
 	
 	TDiagramOutput< T >* Connection;
 
-	void Connect( const TDiagramOutput<T>& Output );
+	inline void Connect( const TDiagramOutput<T>& Output )
+	{
+		Output.Connections.Add(&Value);
+		Value = Output.Value;
+		Connection = &Output;
+	}
+
+	inline void Disconnect()
+	{
+		if (Connection)
+		{
+			Connection->Connections.Remove(&Value);
+			Connection = 0;
+		}
+	}
+
+	TDiagramInput()
+	{
+		Connection = 0;
+	}
+
+	~TDiagramInput()
+	{
+		Disconnect();
+	}
+};
+
+template <class iT,class oT>
+class TDiagramConverter
+{
+public:
+	oT* TargetPtr;
+	
+	void UpdateValue(iT value)
+	{
+		*oT = (oT)value;
+	}
+};
+
+
+enum TDiagramOutputType
+{
+	TDG_BOOL,
+	TDG_BYTE,
+	TDG_SHORT,
+	TDG_INT,
+	TDG_USHORT,
+	TDG_UINT,
+	TDG_FLOAT,
 };
 
 class TDiagramOutputMemory
 {
 public:
-	enum TTargetType
-	{
-		TT_BYTE,
-		TT_SHORT,
-		TT_INT,
-		TT_USHORT,
-		TT_UINT,
-		TT_FLOAT,
-	};
-
-	TTargetType TargetType;
+	TDiagramOutputType TargetType;
 	void* TargetPtr;
 };
 
@@ -51,16 +89,15 @@ public:
 
 	T								Value;
 	event < OutputEvent >			ValueChanged; // used for event connection ( maximum 8 connections )
-	TArray< TDiagramInput<T>* >		Connections;
-	TArray< T* >					MemoryConnections; // dangerous! low level but fast!
+	TArray< T* >					Connections; // dangerous! low level but fast!
 	TArray< TDiagramOutputMemory >	MemoryConvertingConnections;
 	
 	void ConnectMemory(T* ptrInput)
 	{
-		MemoryConnections.Add(ptrInput);
+		Connections.Add(ptrInput);
 	}
 
-	void ConnectMemoryConverting(void* ptrInput, TDiagramOutputMemory::TTargetType convertType)
+	void ConnectMemoryConverting(void* ptrInput, TDiagramOutputType convertType)
 	{
 		TDiagramOutputMemory om;
 		om.TargetType = convertType;
@@ -73,9 +110,9 @@ public:
 	 */
 	void UpdateConnections()
 	{
-		for (ui32 i=0;i<MemoryConnections.Count;i++)
+		for (ui32 i=0;i<Connections.Count;i++)
 		{
-			*MemoryConnections.Item[i] = Value;
+			*Connections.Item[i] = Value;
 		}
 
 		for (ui32 i=0;i<MemoryConvertingConnections.Count;i++)
@@ -83,56 +120,37 @@ public:
 			TDiagramOutputMemory& curOutput = MemoryConvertingConnections.Item[i];
 			switch(curOutput.TargetType)
 			{
-			case TDiagramOutputMemory::TT_BYTE:
+			case TDG_BOOL:
+				*(bool*)curOutput.TargetPtr = Value > 0.000001f; // epsilon
+				continue;
+
+			case TDG_BYTE:
 				*(byte*)curOutput.TargetPtr = (byte)Value;
 				continue;
 
-			case TDiagramOutputMemory::TT_SHORT:
+			case TDG_SHORT:
 				*(short*)curOutput.TargetPtr = (short)Value;
 				continue;
 
-			case TDiagramOutputMemory::TT_INT:
+			case TDG_INT:
 				*(int*)curOutput.TargetPtr = (int)Value;
 				continue;
 
-			case TDiagramOutputMemory::TT_USHORT:
+			case TDG_USHORT:
 				*(unsigned short*)curOutput.TargetPtr = (unsigned short)Value;
 				continue;
 
-			case TDiagramOutputMemory::TT_UINT:
+			case TDG_UINT:
 				*(ui32*)curOutput.TargetPtr = (ui32)Value;
 				continue;
 
-			case TDiagramOutputMemory::TT_FLOAT:
+			case TDG_FLOAT:
 				*(float*)curOutput.TargetPtr = (float)Value;
 				continue;
 			}
 		}
 
-		//ValueChanged.call(Value);
-
-		/*for (int i=0;i<Connections.Count;i++)
-		{
-			TDiagramInput* currentInput = Connections[i];
-
-			switch(currentInput->InputType)
-			{
-			case TDiagramInput::IPA_NONE:
-				continue;
-
-			case TDiagramInput::IPA_VALUE:
-				currentInput->Value = Value;
-				continue;
-
-			case TDiagramInput::IPA_MEMORY:
-				*currentInput->ValuePtr = Value;
-				continue;
-
-			case TDiagramInput::IPA_EVENT:
-				currentInput->ValueEvent.call(Value);
-				continue;
-			}
-		}*/
+		ValueChanged.call(Value);
 	}
 
 	inline void Set(const T& v)
@@ -140,12 +158,6 @@ public:
 		Value = v;
 		UpdateConnections();
 	}
-
-	/*inline TDiagramOutput<T>& operator= (const T& v)
-	{
-		Value = v;
-		UpdateConnections();
-	}*/
 };
 
 class TDiagramSocket

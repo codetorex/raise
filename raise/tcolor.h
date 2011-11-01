@@ -119,6 +119,8 @@ public:
 
 /**
 * 32 bit color class with RGBA ordering.
+* In sequential reading it appears like BGRA but when it read as DWORD its RGBA
+* bclr 0=b, 1=g, 2=r,3=a
 */
 class TColor32
 {

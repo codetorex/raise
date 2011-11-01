@@ -286,6 +286,7 @@ public:
 
 
 typedef MVector3<float>		vec3;
+typedef vec3 vector3;
 typedef vec3 point3;
 typedef MVector3<double>	vecd3;
 
