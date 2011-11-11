@@ -188,6 +188,21 @@ public:
 		a = 255;
 	}
 
+	/**
+	 * Alpha will be 255.
+	 */
+	inline void Set24Bit(ui32 color24)
+	{
+		color = color24;
+		a = 255;
+	}
+
+	inline void Set24Bit(ui32 color24, byte _a)
+	{
+		color = color24;
+		a = _a;
+	}
+
 	inline TColor32& operator = (const TColor32& value)
 	{
 		color = value.color;

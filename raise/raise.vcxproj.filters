@@ -8,9 +8,6 @@
     <Filter Include="Source Files\String">
       <UniqueIdentifier>{fd013958-fe8e-4a32-b905-07c4974e55ab}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Source Files\Console">
-      <UniqueIdentifier>{4d5055e3-74f0-48d3-a5fb-88da115ae847}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Source Files\Collection">
       <UniqueIdentifier>{d3cbc9fa-4160-48d2-b6c3-35e40474e474}</UniqueIdentifier>
     </Filter>
@@ -83,6 +80,12 @@
     </Filter>
     <Filter Include="Source Files\Diagram">
       <UniqueIdentifier>{a64b93ab-7ad5-4cf6-8beb-bfaedbe611e1}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\System\Log">
+      <UniqueIdentifier>{addfdb49-49fe-40b1-a6e4-e672e46db80d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\System\Console">
+      <UniqueIdentifier>{4d5055e3-74f0-48d3-a5fb-88da115ae847}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -416,6 +419,27 @@
     <ClInclude Include="tdiagram.h">
       <Filter>Source Files\Diagram</Filter>
     </ClInclude>
+    <ClInclude Include="nserver.h">
+      <Filter>Source Files\Network</Filter>
+    </ClInclude>
+    <ClInclude Include="nserverwindows.h">
+      <Filter>Source Files\Network</Filter>
+    </ClInclude>
+    <ClInclude Include="tlog.h">
+      <Filter>Source Files\System\Log</Filter>
+    </ClInclude>
+    <ClInclude Include="tcriticalsection.h">
+      <Filter>Source Files\System</Filter>
+    </ClInclude>
+    <ClInclude Include="tlogtext.h">
+      <Filter>Source Files\System\Log</Filter>
+    </ClInclude>
+    <ClInclude Include="tapplication.h">
+      <Filter>Source Files\System</Filter>
+    </ClInclude>
+    <ClInclude Include="tstringformat.h">
+      <Filter>Source Files\String</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">
@@ -531,6 +555,18 @@
     </ClCompile>
     <ClCompile Include="tdirectorywin32.cpp">
       <Filter>Source Files\IO\File System\Win32</Filter>
+    </ClCompile>
+    <ClCompile Include="nserverwindows.cpp">
+      <Filter>Source Files\Network</Filter>
+    </ClCompile>
+    <ClCompile Include="tlog.cpp">
+      <Filter>Source Files\System\Log</Filter>
+    </ClCompile>
+    <ClCompile Include="tapplication.cpp">
+      <Filter>Source Files\System</Filter>
+    </ClCompile>
+    <ClCompile Include="tlogtext.cpp">
+      <Filter>Source Files\System\Log</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

@@ -126,7 +126,14 @@ public:
 		AddResult(*SplitResult.Item[0] == "01", "String split multi first element, remove empty");
 		AddResult(*SplitResult.Item[1] == "2011", "String split multi second element, remove empty");
 
+		TString fmttest = TString::Format("Test % % %", sfi(5), sfi(4), sfi(3));
+		AddResult(fmttest == "Test 5 4 3", "String basic format test");
 
+		fmttest = TString::Format("Test % % %", sfi(5,2,'0'),sfi(4,2,'0'),sfi(3,3,'0'));
+		AddResult(fmttest == "Test 05 04 003", "String padded basic format test");
+
+		fmttest = TString::Format("Test %", sfx(64));
+		AddResult(fmttest == "Test 40", "String format hex test");
 
 		// TODO: test unicode stuff here
 	}

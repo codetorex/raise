@@ -115,7 +115,10 @@
     <ClInclude Include="mtriangle.h" />
     <ClInclude Include="mvector3.h" />
     <ClInclude Include="mvector2.h" />
+    <ClInclude Include="nserver.h" />
+    <ClInclude Include="nserverwindows.h" />
     <ClInclude Include="raisetypes.h" />
+    <ClInclude Include="tapplication.h" />
     <ClInclude Include="tarray.h" />
     <ClInclude Include="tasciiextended.h" />
     <ClInclude Include="tbinary.h" />
@@ -141,6 +144,7 @@
     <ClInclude Include="tcomposition.h" />
     <ClInclude Include="tcompositionprimitive.h" />
     <ClInclude Include="tconvert.h" />
+    <ClInclude Include="tcriticalsection.h" />
     <ClInclude Include="tcultureinfo.h" />
     <ClInclude Include="tdatetime.h" />
     <ClInclude Include="tdatetimeexpanded.h" />
@@ -166,6 +170,8 @@
     <ClInclude Include="tiniparser.h" />
     <ClInclude Include="tkeyvalue.h" />
     <ClInclude Include="tlatin1encoding.h" />
+    <ClInclude Include="tlog.h" />
+    <ClInclude Include="tlogtext.h" />
     <ClInclude Include="tmemorydriver.h" />
     <ClInclude Include="tmemorystream.h" />
     <ClInclude Include="tnumberformatinfo.h" />
@@ -202,6 +208,7 @@
     <ClInclude Include="stdafx.h" />
     <ClInclude Include="tcompositebuffer.h" />
     <ClInclude Include="tstringdriverfixedwidth.h" />
+    <ClInclude Include="tstringformat.h" />
     <ClInclude Include="ttest.h" />
     <ClInclude Include="ttestsuitereporting.h" />
     <ClInclude Include="ttextreader.h" />
@@ -215,10 +222,12 @@
     <ClInclude Include="twintools.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="nserverwindows.cpp" />
     <ClCompile Include="stdafx.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Create</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Create</PrecompiledHeader>
     </ClCompile>
+    <ClCompile Include="tapplication.cpp" />
     <ClCompile Include="tbitmap.cpp" />
     <ClCompile Include="tbitmapbmp.cpp" />
     <ClCompile Include="tbitmapconverters.cpp" />
@@ -238,6 +247,8 @@
     <ClCompile Include="tcompositebuffer.cpp" />
     <ClCompile Include="thashcodeprovider.cpp" />
     <ClCompile Include="tiniparser.cpp" />
+    <ClCompile Include="tlog.cpp" />
+    <ClCompile Include="tlogtext.cpp" />
     <ClCompile Include="tmemory.cpp" />
     <ClCompile Include="tpackedrectangle.cpp" />
     <ClCompile Include="tpath.cpp" />

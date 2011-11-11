@@ -3,7 +3,7 @@
 #include "texception.h"
 
 
-int TConvert::ToCharArray( int value, char* dst , int dstCap )
+int TConvert::ToCharArrayInt( int value, char* dst , int dstCap )
 {
 	int division = value;
 
@@ -39,7 +39,7 @@ int TConvert::ToCharArray( int value, char* dst , int dstCap )
 	return (dstw - dst);
 }
 
-int TConvert:: ToInt32Ambiguous( const TString& value, int startIndex,int* numLength, bool skipBegin )
+int TConvert::ToInt32Ambiguous( const TString& value, int startIndex,int* numLength, bool skipBegin )
 {
 	TCharacterEnumerator schars(value);
 

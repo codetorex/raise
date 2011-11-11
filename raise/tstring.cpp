@@ -3,6 +3,9 @@
 #include "tutf16encoding.h"
 #include "texception.h"
 
+#include "tstringbuilder.h"
+#include "tstringformat.h"
+
 TString TString::Empty("");
 
 bool TString::Have( ch32 character ) const
@@ -350,7 +353,54 @@ void TString::ToUpperInplace()
 	throw NotImplementedException();
 }
 
+TString TString::Format( const TString& format,int argc , const TStringFormatElementBase** args )
+{
+	TStringBuilder sb(format.ByteLength*8);
 
+	int curarg = 0;
+	for (int i=0;i<format.ByteLength;i++)
+	{
+		char curChar = format.Data[i];
+		if (curChar == '%')
+		{
+			if (format.Data[i+1] == '%')
+			{
+				sb.AppendCharFaster('%');
+				i++; // skip next char
+			}
+			else
+			{
+				if (curarg == argc)
+				{
+					// NOTE FROM BACK OF TIME:
+					// SOME PEOPLE MAY USE THIS FOR CRASHING SERVER OR SOMETHING
+					// BE CARFUL WHILE PROCESSING USER DATA.
+					throw Exception("Format argument count mismatch");
+				}
+				const TStringFormatElementBase* fmtbase = args[curarg++];
+				sb.Append(*fmtbase);
+			}
+		}
+		else
+		{
+			sb.AppendCharFaster(curChar);
+		}
+	}
+
+	if (format.IsASCII())
+	{
+		sb.Length = sb.ByteLength;
+		sb.Data[sb.ByteLength] = 0;
+	}
+	else
+	{
+		sb.Data[sb.ByteLength] = 0;
+		sb.ReCount();
+	}
+
+	
+	return sb.ToString();
+}
 
 /*TString TString::Format( const TString& format,... )
 {

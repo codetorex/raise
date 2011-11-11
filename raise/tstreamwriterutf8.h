@@ -4,16 +4,29 @@
 #include "tstream.h"
 #include "ttextwriter.h"
 
+/**
+ * UTF8 optimized stream text writer.
+ * TODO: no buffered stream introduced but it will be good?
+ */
 class TStreamWriterUTF8: public TTextWriter
 {
 public:
 	TStream* BaseStream;
 
-	TStreamWriterUTF8(TStream* output)
+	TStreamWriterUTF8()
+	{
+		Encoding = (TEncoding&)TEncoding::UTF8;
+	}
+
+	inline void Initialize(TStream* output)
 	{
 		BaseStream = output;
 		BaseStream->Write(UTF8ByteOrderMark,1,UTF8ByteOrderMarkLength); // WRITE BOM
-		Encoding = (TEncoding&)TEncoding::UTF8;
+	}
+
+	TStreamWriterUTF8(TStream* output)
+	{
+		Initialize(output);
 	}
 
 	inline void Write(const TString& value)

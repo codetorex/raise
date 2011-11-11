@@ -57,6 +57,8 @@ public:
 		IsAlive = false;
 	}
 
+	static ui32 get_CurrentThreadID();
+
 	void SetPriority(Priorities newPriority)
 	{
 

@@ -10,8 +10,13 @@
 
 #include <windows.h>
 
+/*#include <winsock2.h>
+#include <mswsock.h>
+#include <Ws2tcpip.h>*/
+
 #endif
 
 #include <stdlib.h>
 #include <stdio.h>
 #include <stdarg.h>
+

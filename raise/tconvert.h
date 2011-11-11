@@ -14,7 +14,37 @@ public:
 	 * To be safe keep dst at least 12 bytes length.
 	 * Warning: Doesn't puts 0 to ending.
 	 */
-	static int ToCharArray(int value, char* dst, int dstCap);
+	static int ToCharArrayInt(int value, char* dst, int dstCap);
+
+	inline static int ToCharArrayUInt(ui32 value, char* dst, int dstCap)
+	{
+		return sprintf(dst,"%u",value);
+	}
+
+	inline static int ToCharArrayUIntHex(ui32 value, char* dst, int dstCap)
+	{
+		return sprintf(dst,"%x",value);
+	}
+
+	inline static int ToCharArrayUIntHexCapital(ui32 value, char* dst, int dstCap)
+	{
+		return sprintf(dst,"%X",value);
+	}
+
+	inline static int ToCharArrayFloat(float value, char* dst, int dstCap, int precision = 0)
+	{
+		// I am not going to implement this function at this moment
+		// Instead I will cheat >;) 
+
+		if (precision == 0)
+		{
+			return sprintf(dst,"%f", value);
+		}
+		else
+		{
+			return sprintf(dst,"%.*f", precision , value);
+		}
+	}
 
 	/**
 	 * @brief Converts the value of the specified 32-bit signed integer to its equivalent string representation.
@@ -24,7 +54,7 @@ public:
 	static inline TString ToString(int value)
 	{
 		TString result(16);
-		int ln = ToCharArray(value,(char*)result.Data,16);
+		int ln = ToCharArrayInt(value,(char*)result.Data,16);
 		result.Length = ln;
 		result.ByteLength = ln;
 		result.Data[ln] = 0;
@@ -33,7 +63,7 @@ public:
 
 	static inline void AppendToString(int value, TString& output)
 	{
-		int ln = ToCharArray(value,(char*)output.Data + output.ByteLength,output.Capacity);
+		int ln = ToCharArrayInt(value,(char*)output.Data + output.ByteLength,output.Capacity);
 		output.Length += ln;
 		output.ByteLength += ln;
 		output.Data[output.ByteLength] = 0;

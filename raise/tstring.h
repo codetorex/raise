@@ -10,9 +10,12 @@
 #include "mmathdriver.h"
 
 
+class TStringFormatElementBase;
+typedef const TStringFormatElementBase&			sfp; // parameter version
+
 /**
  * UTF-8 based string class.
- * Uses copy on write technique to avoid unecessary copies.
+ * Uses copy on write technique to avoid unnecessary copies.
  */
 class TString
 {
@@ -577,9 +580,48 @@ public:
 		return MemoryDriver::Compare(Data,value.Data,ByteLength) == 0;
 	}
 
-	static TString Format(const TString& format,...);
+	/**
+	 * Formats a string.
+	 * Just use % for placement, and parameters will decide how to format.
+	 * Use sfi for integer, sfx for hex and so on...
+	 */
+	static TString Format(const TString& format, int argc , const TStringFormatElementBase** args );
 
-	void FormatInplace(const TString& format, ... );
+	inline static TString Format(const TString& format, sfp arg0 )
+	{
+		const TStringFormatElementBase* elemarray[1];
+		elemarray[0] = &arg0;
+		return Format(format,1,elemarray);
+	}
+
+	inline static TString Format(const TString& format, sfp arg0 , sfp arg1)
+	{
+		const TStringFormatElementBase* elemarray[2];
+		elemarray[0] = &arg0;
+		elemarray[1] = &arg1;
+		return Format(format,2,elemarray);
+	}
+
+	inline static TString Format(const TString& format, sfp arg0 , sfp arg1 , sfp arg2)
+	{
+		const TStringFormatElementBase* elemarray[3];
+		elemarray[0] = &arg0;
+		elemarray[1] = &arg1;
+		elemarray[2] = &arg2;
+		return Format(format,3,elemarray);
+	}
+
+	inline static TString Format(const TString& format, sfp arg0 , sfp arg1 , sfp arg2 , sfp arg3 )
+	{
+		const TStringFormatElementBase* elemarray[4];
+		elemarray[0] = &arg0;
+		elemarray[1] = &arg1;
+		elemarray[2] = &arg2;
+		elemarray[3] = &arg3;
+		return Format(format,4,elemarray);
+	}
+
+	//void FormatInplace(const TString& format, ... );
 
 	/*inline static TString Format(const TString& format,...)
 	{
