@@ -1,6 +1,7 @@
 #include "stdafx.h"
 #include "ttestsuitereporting.h"
 #include "texception.h"
+#include "tapplication.h"
 
 
 void TTestSuiteReport::RunSuite( ui32 tests /*= TEST_CHECK*/ )
@@ -8,7 +9,16 @@ void TTestSuiteReport::RunSuite( ui32 tests /*= TEST_CHECK*/ )
 	Initialize();
 
 	AppendDashLine();
-	AppendLine(TestName);
+	if (PrintTestName)
+	{
+		AppendLine(TestName);
+	}
+
+	if (PrintApplicationInfo)
+	{
+		AppendLine(Application.IdentifyText);
+	}
+
 	AppendDashLine();
 
 	for (ui32 i=0;i<Tests.Count;i++)

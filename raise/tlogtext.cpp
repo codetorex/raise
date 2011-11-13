@@ -16,12 +16,16 @@ void TLogText::Initialize(TStream* outputStream)
 	TStringBuilder sb(stackbuffer,512);
 	sb.AppendChar('-',25);
 	sb.AppendLine();
-	sb.Append(Application.Name);
-	sb.Append(" - ");
-	sb.Append(Application.Version);
-	sb.Append(" - ");
-	sb.Append(Application.Company);
-	sb.AppendLine();
+
+	sb.AppendLine(Application.IdentifyText);
+
+	for (int i=0;i<Application.Modules.Count;i++)
+	{
+		TModule* curMod = Application.Modules.Item[i];
+		sb.Append("    + ");
+		sb.AppendLine(curMod->IdentifyText);
+	}
+
 	sb.AppendChar('-',25);
 	sb.AppendLine();
 
@@ -42,28 +46,27 @@ void TLogText::Output(TLogEntry* entry)
 		sb.InitializeCapacity(entry->Content.ByteLength+128);
 	}
 
-	if (WriteTicks)
-	{
-		sb.AppendPadded(entry->Tick,16,' ');
-		sb.AppendChar(' ');
-		sb.AppendChar('|');
-	}
-
 	if (WriteGroupName)
 	{
-		sb.AppendPadded(Log.Groups.Item[entry->GroupID]->Name,8,' ',true);
-		sb.AppendChar(' ');
+		sb.Append(Log.Groups.Item[entry->GroupID]->ShortName);
 		sb.AppendChar('|');
+		sb.AppendChar(' ');
 	}
 
 	if (WriteThreadId)
 	{
-		sb.AppendPadded(TThread::get_CurrentThreadID(),6);
-		sb.AppendChar(' ');
+		sb.Append(sfx(TThread::get_CurrentThreadID(),-6));
 		sb.AppendChar('|');
+		sb.AppendChar(' ');
 	}
 
-	sb.AppendChar(' ');
+	if (WriteTicks)
+	{;
+		sb.AppendPadded(entry->Tick,-10,' ');
+		sb.AppendChar('|');
+		sb.AppendChar(' ');
+	}
+
 	sb.Append(entry->Content);
 	sb.AppendLine();
 

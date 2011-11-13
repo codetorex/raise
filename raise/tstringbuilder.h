@@ -53,7 +53,8 @@ private:
 
 	inline void InternalAppendPadded(const void* src,int srclength, int charlength, int padcount, char padchar = ' ', bool truncate = true )
 	{
-		if (charlength >= padcount)
+		int abspad = padcount < 0 ? -padcount : padcount;
+		if (charlength >= abspad)
 		{
 			if (truncate)
 			{
@@ -77,9 +78,8 @@ private:
 			bool padleft = true;
 			if (padcount < 0) // left aligned text
 			{
-				padcount = -padcount;
 				InternalAppend(src,srclength,charlength);
-				InternalRepeatChar(padchar,padcount - charlength);
+				InternalRepeatChar(padchar,abspad - charlength);
 			}
 			else // right aligned text
 			{
@@ -190,7 +190,7 @@ public:
 		}
 	}
 
-	void Append(const TStringFormatElement& fmt)
+	/*void Append(const TStringFormatElement& fmt)
 	{
 		char tmp[32];
 		int blength = 0;
@@ -239,7 +239,7 @@ public:
 		{
 			InternalAppendPadded(src,blength,clength,fmt.PadWidth,fmt.PadChar);
 		}
-	}
+	}*/
 
 	/**
 	 * Appends int value with left padded.
@@ -286,6 +286,12 @@ public:
 	inline void AppendLine()
 	{
 		AppendChar('\n');
+	}
+
+	inline void AppendLine(const TString& value)
+	{
+		InternalAppend(value.Data,value.ByteLength,value.Length);
+		AppendLine();
 	}
 
 	inline void Clear()

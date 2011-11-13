@@ -19,6 +19,7 @@ class TLogGroup
 {
 public:
 	TString		Name;
+	TString		ShortName;
 	ui32		ID;
 	TColor32	DefaultColor;
 };
@@ -39,7 +40,7 @@ enum TLogGroupDefault
 class TLogOutput
 {
 public:
-	virtual void Output(TLogEntry* entry);
+	virtual void Output(TLogEntry* entry) = 0;
 };
 
 class TLog

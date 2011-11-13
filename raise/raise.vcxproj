@@ -59,6 +59,8 @@
     <LibraryPath Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">C:\Library\Libraries\libpng-1.5.2\bin;$(LibraryPath)</LibraryPath>
     <IncludePath Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">C:\Library\Libraries\libpng-1.5.2;C:\Library\Libraries\zlib-1.2.4;$(IncludePath)</IncludePath>
     <LibraryPath Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">C:\Library\Libraries\libpng-1.5.2\bin;$(LibraryPath)</LibraryPath>
+    <CustomBuildBeforeTargets Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    </CustomBuildBeforeTargets>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>
@@ -81,6 +83,13 @@
       </AdditionalDependencies>
       <LinkTimeCodeGeneration>true</LinkTimeCodeGeneration>
     </Lib>
+    <CustomBuildStep>
+      <Command>
+      </Command>
+    </CustomBuildStep>
+    <PreBuildEvent>
+      <Command>"C:\Library\Projects\AutoBuildNumber\AutoBuildNumber\bin\Release\AutoBuildNumber.exe" "$(ProjectDir)raiseversion.h"</Command>
+    </PreBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <ClCompile>
@@ -95,12 +104,24 @@
       <AdditionalIncludeDirectories>
       </AdditionalIncludeDirectories>
     </ClCompile>
+    <CustomBuildStep>
+      <Command>"C:\Library\Projects\AutoBuildNumber\AutoBuildNumber\bin\Release\AutoBuildNumber.exe" "$(ProjectDir)raiseversion.h"</Command>
+    </CustomBuildStep>
+    <PreBuildEvent>
+      <Command>"C:\Library\Projects\AutoBuildNumber\AutoBuildNumber\bin\Release\AutoBuildNumber.exe" "$(ProjectDir)raiseversion.h"</Command>
+    </PreBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Template|Win32'">
     <ClCompile>
       <AdditionalIncludeDirectories>
       </AdditionalIncludeDirectories>
     </ClCompile>
+    <CustomBuildStep>
+      <Command>"C:\Library\Projects\AutoBuildNumber\AutoBuildNumber\bin\Release\AutoBuildNumber.exe" "$(ProjectDir)raiseversion.h"</Command>
+    </CustomBuildStep>
+    <PreBuildEvent>
+      <Command>"C:\Library\Projects\AutoBuildNumber\AutoBuildNumber\bin\Release\AutoBuildNumber.exe" "$(ProjectDir)raiseversion.h"</Command>
+    </PreBuildEvent>
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClInclude Include="m64bit.h" />
@@ -118,6 +139,7 @@
     <ClInclude Include="nserver.h" />
     <ClInclude Include="nserverwindows.h" />
     <ClInclude Include="raisetypes.h" />
+    <ClInclude Include="raiseversion.h" />
     <ClInclude Include="tapplication.h" />
     <ClInclude Include="tarray.h" />
     <ClInclude Include="tasciiextended.h" />

@@ -16,7 +16,7 @@ enum TSign
 	SGN_NONE,
 };
 
-enum TElementType
+/*enum TElementType
 {
 	F_INT			= 'i',
 	F_UINT			= 'u',
@@ -42,7 +42,7 @@ public:
 		float		float_value;
 		TString*	string_value;
 	};
-};
+};*/
 
 /// Second one is here
 /// One class holds string representation of appendix

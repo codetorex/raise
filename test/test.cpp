@@ -11,7 +11,8 @@
 
 
 #include "tcolor.h"
-
+#include "tapplication.h"
+#include "raiseversion.h"
 
 class TestTColor: public TTestCheck
 {
@@ -41,7 +42,7 @@ public:
 		sb.Append("clr[3] = ");
 		sb.AppendPadded(clr.bclr[3],3,' ');
 
-		AddOutput(sb.ToString());
+		//AddOutput(sb.ToString());
 
 		//AddResult( clr.r == 255 && clr.g == 0 && clr.b == 255 && clr.a == 255, "Color r,g,b constructor" );
 		
@@ -81,14 +82,18 @@ int _tmain(int argc, wchar_t* argv[])
 int main(int argc,char** argv)
 #endif
 {
+	Application.Begin( "RaiseLib Test Suite", RaiseModule.Version );
+
 	TConsoleReport suite("RaiseLib Test Suite");
+	suite.PrintApplicationInfo = true;
+	suite.PrintTestName = false;
 
 	suite.AddTest(&TStringCheck);
 	suite.AddTest(&TDateTimeCheck);
 	suite.AddTest(&TArrayCheck);
 	suite.AddTest(&TColorCheck);
 
-	suite.PrintOutputs = true;
+	//suite.PrintOutputs = true;
 	suite.RunSuite();
 
 	getchar();

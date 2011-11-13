@@ -71,10 +71,14 @@ private:
 public:
 	char* Result;
 	bool PrintOutputs;
+	bool PrintApplicationInfo;
+	bool PrintTestName;
 
 	TTestSuiteReport(const string& _testName): TTestSuite(_testName)
 	{
 		PrintOutputs = false;
+		PrintApplicationInfo = false;
+		PrintTestName = true;
 	}
 
 	inline int Length()

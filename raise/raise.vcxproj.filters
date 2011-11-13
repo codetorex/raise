@@ -89,9 +89,6 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="raisetypes.h">
-      <Filter>Source Files</Filter>
-    </ClInclude>
     <ClInclude Include="tlinkedlist.h">
       <Filter>Source Files\Collection</Filter>
     </ClInclude>
@@ -439,6 +436,12 @@
     </ClInclude>
     <ClInclude Include="tstringformat.h">
       <Filter>Source Files\String</Filter>
+    </ClInclude>
+    <ClInclude Include="raisetypes.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="raiseversion.h">
+      <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
