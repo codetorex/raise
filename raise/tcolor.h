@@ -276,7 +276,7 @@ public:
 
 	inline ui32 GetARGB() const
 	{
-		ui32 res = (((byte)(b)|((uint16)((byte)(g))<<8))|(((ui32)(byte)(r))<<16)|(((ui32)(byte)(a))<<24));
+		ui32 res = (((byte)(b)|((ui16)((byte)(g))<<8))|(((ui32)(byte)(r))<<16)|(((ui32)(byte)(a))<<24));
 		return res;
 	}
 

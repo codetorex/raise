@@ -66,6 +66,14 @@ public:
 		Capacity = 0;
 	}
 
+	void DeletePointers()
+	{
+		for (int i=0;i<Count;i++)
+		{
+			delete Item[i];
+		}
+	}
+
 	void RemoveBetween(ui32 startIndex, ui32 length)
 	{
 		if (startIndex >= Count)

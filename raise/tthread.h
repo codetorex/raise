@@ -57,7 +57,15 @@ public:
 		IsAlive = false;
 	}
 
-	static ui32 get_CurrentThreadID();
+	inline static ui32 get_CurrentThreadID()
+	{
+#ifdef WIN32
+		return GetCurrentThreadId();
+#else
+		//http://www.kernel.org/doc/man-pages/online/pages/man2/gettid.2.html
+		return gettid();
+#endif 
+	}
 
 	void SetPriority(Priorities newPriority)
 	{

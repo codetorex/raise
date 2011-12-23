@@ -79,9 +79,9 @@ public:
 		return data;
 	}
 
-	inline uint16 ReadWord(ui32 address)
+	inline ui16 ReadWord(ui32 address)
 	{
-		uint16 data;
+		ui16 data;
 		Read(address,&data,2);
 		return data;
 	}
@@ -98,7 +98,7 @@ public:
 		Write(address,&value,1);
 	}
 
-	inline void WriteWord(ui32 address,uint16 value)
+	inline void WriteWord(ui32 address,ui16 value)
 	{
 		Write(address,&value,2);
 	}

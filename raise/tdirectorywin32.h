@@ -85,7 +85,9 @@ public:
 
 	inline FileAttribute GetAttributes()
 	{
-		return GetFileAttributesW(TWinTools::SystemString16(FullPath));
+		ch16 tmp[1024];
+		TWinTools::SystemString16(FullPath,tmp,1024);
+		return GetFileAttributesW(tmp);
 	}
 
 	inline void SetAttributes(FileAttribute attributes)
@@ -95,7 +97,9 @@ public:
 
 	static bool Exists(const TString& path)
 	{
-		FileAttribute fa = GetFileAttributesW(TWinTools::SystemString16(path));
+		ch16 tmp[1024];
+		TWinTools::SystemString16(path,tmp,1024);
+		FileAttribute fa = GetFileAttributesW(tmp);
 		if ( (fa & fa_DIRECTORY) != 0)
 		{
 			return true;

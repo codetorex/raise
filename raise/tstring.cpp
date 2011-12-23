@@ -358,7 +358,7 @@ TString TString::Format( const TString& format,int argc , const TStringFormatEle
 	TStringBuilder sb(format.ByteLength*8);
 
 	int curarg = 0;
-	for (int i=0;i<format.ByteLength;i++)
+	for (ui32 i=0;i<format.ByteLength;i++)
 	{
 		char curChar = format.Data[i];
 		if (curChar == '%')

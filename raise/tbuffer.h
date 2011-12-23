@@ -4,6 +4,7 @@
 #include "tbytearray.h"
 #include "tmemorydriver.h"
 #include "texception.h"
+#include "tstream.h"
 
 #define NFOUND	0xFFFFFFFF
 ;
@@ -11,6 +12,14 @@ class TBuffer: public TByteArray
 {
 public:
 	ui32 Index; // Index of current position
+
+	inline void CheckCapacity(int length)
+	{
+		if ( Index + length >= Capacity )
+		{
+			Grow(Capacity * 2);
+		}
+	}
 
 	inline TBuffer()
 	{
@@ -62,16 +71,26 @@ public:
 	*/
 	inline void AddByteIncreasing(byte value)
 	{
-		if (Capacity == Index)
-		{
-			Grow(Capacity * 2);
-		}
+		CheckCapacity(1);
 		Data[Index++] = value;
 	}
 	
 	inline void AddByteNoCheck(byte value)
 	{
 		Data[Index++] = value;
+	}
+
+	inline void AddStreamContent( TStream* stream, bool closeStream = true )
+	{
+		ui32 streamLength = stream->Length();
+		CheckCapacity(streamLength);
+
+		stream->Read(Data+Index,1,streamLength);
+
+		if (closeStream)
+		{
+			stream->Close();
+		}
 	}
 
 	/**
@@ -91,10 +110,7 @@ public:
 	*/
 	inline void AddBytesIncreasing(byte* values, ui32 length)
 	{
-		if (Capacity - Index < length)
-		{
-			Grow(Capacity * 2);
-		}
+		CheckCapacity(length);
 		MemoryDriver::Copy(Data+Index,values,length);
 		Index += length;
 	}

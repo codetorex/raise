@@ -3,7 +3,7 @@
 #include "texception.h"
 #include "tlog.h"
 
-/*void NServerWindows::Cleanup()
+void NServerWindows::Cleanup()
 {
 	if(CleanupEvent[0] != WSA_INVALID_EVENT) 
 	{
@@ -12,30 +12,32 @@
 	}
 }
 
-void NServerWindows::SetupServer( NProtocol protocol, const TIPAddress& ip, ui16 port )
+void NServerWindows::StartServer()
+{
+	MainThread = new TThread(GetHandler(this,&NServerWindows::MainThreadFunction));
+}
+
+void NServerWindows::MainThreadFunction()
 {
 	SYSTEM_INFO systemInfo;
 	WSADATA wsaData;
 	int nRet = 0;
 
-	ServerProtocol = protocol;
-	OutputDeviceIP = ip;
-	ServerPort = port;
 	IOCPHandle = INVALID_HANDLE_VALUE;
 	Restart = true;
-	
+
 	GetSystemInfo(&systemInfo);
 	BestWorkerCount = systemInfo.dwNumberOfProcessors * 2;
 
 	if(WSA_INVALID_EVENT == (CleanupEvent[0] = WSACreateEvent()))
 	{
-		throw Exception("WSACreateEvent() failed: %d\n" ); //, WSAGetLastError()); // NOT THROW BUT LOG
+		Log.Output(LG_ERR,"WSACreateEvent() failed: %", sfi(WSAGetLastError()));
 		return;
 	}
 
 	if( (nRet = WSAStartup(0x202, &wsaData)) != 0 ) 
 	{
-		throw Exception("WSAStartup() failed: %d\n"); // ,nRet);  TODO: fix these codes, move to log functions? or debug output?
+		Log.Output(LG_ERR,"WSAStartup() failed: %", sfi(nRet));
 		Cleanup();
 		return;
 	}
@@ -46,22 +48,13 @@ void NServerWindows::SetupServer( NProtocol protocol, const TIPAddress& ip, ui16
 	}
 	catch(int a)
 	{
-		throw Exception("InitializeCriticalSection raised an exception.\n"); // DNOT THROW BUT LOG THESE
+		Log.Output(LG_ERR,"InitializeCriticalSection raised an exception.");
 		Cleanup();
 		return;
 	}
 
-
-}
-
-void NServerWindows::StartServer()
-{
-	MainThread = new TThread(GetHandler(this,&NServerWindows::MainThreadFunction));
-}
-
-void NServerWindows::MainThreadFunction()
-{
-	while( Restart ) {
+	while( Restart ) 
+	{
 		Restart = false;
 		EndServer = false;
 		WSAResetEvent(CleanupEvent[0]);
@@ -76,7 +69,7 @@ void NServerWindows::MainThreadFunction()
 			IOCPHandle = CreateIoCompletionPort(INVALID_HANDLE_VALUE, NULL, 0, 0);
 			if( IOCPHandle == NULL ) 
 			{
-				//myprintf("CreateIoCompletionPort() failed to create I/O completion port: %d\n", GetLastError());
+				Log.Output(LG_ERR,"CreateIoCompletionPort() failed to create I/O completion port: %", sfu(GetLastError()));
 				throw 0;
 			}
 
@@ -87,21 +80,36 @@ void NServerWindows::MainThreadFunction()
 				WorkerThreads.Add(worker);
 			}
 
-			if( !CreateListenSocket() )
+			while(TaskQueue.Count)
 			{
-				throw Exception("Creation of listen socket failed");
+				NServerOperation* opr = TaskQueue.Pop();
+
+				switch (opr->Operation)
+				{
+				case NServerOperation::OT_CREATELISTENER:
+					CreateListenerParameters* prms = (CreateListenerParameters*)opr->Parameter;
+					CreateListenerTask(prms->Device,prms->Port,prms->Protocol,prms->Service);
+					break;
+				}
+
+				delete opr;
+			}
+
+			/*if( !CreateListenSocket() )
+			{
+				Log.Output(LG_ERR,"Creation of listen socket failed");
 			}
 
 			if( !CreateAcceptSocket(true) )
 			{
-				throw Exception("Creation of accept socket failed");
-			}
+				Log.Output(LG_ERR,"Creation of accept socket failed");
+			}*/
 
 			WSAWaitForMultipleEvents(1, CleanupEvent, TRUE, WSA_INFINITE, FALSE);
 		}
 		catch(Exception& exc)
 		{
-			// LOG THE ERROR
+			Log.Output(LG_ERR,"Error occurred at server initialization: %", sfs(exc.Message));
 		}
 
 
@@ -129,7 +137,7 @@ void NServerWindows::MainThreadFunction()
 		//
 		if( WAIT_OBJECT_0 != WaitForMultipleObjects(WorkerThreads.Count,  tHandles, TRUE, 1000) )
 		{
-			Log.OutputFormatted(LG_ERR,"WaitForMultipleObjects() failed: %", sfu(GetLastError()));
+			Log.Output(LG_ERR,"WaitForMultipleObjects() failed: %", sfu(GetLastError()));
 		}
 		else
 		{
@@ -139,6 +147,7 @@ void NServerWindows::MainThreadFunction()
 				if( tHandles[i] != INVALID_HANDLE_VALUE )
 				{
 					CloseHandle(tHandles[i]);
+					
 				}
 				curThread->Abort();
 				curThread->ThreadHandle = INVALID_HANDLE_VALUE;
@@ -146,12 +155,18 @@ void NServerWindows::MainThreadFunction()
 			}
 		}
 
+		/*
+		TODO: close all listener sockets
 		if( ListenSocket != INVALID_SOCKET ) 
 		{
 			closesocket(ListenSocket);                                
 			ListenSocket = INVALID_SOCKET;
-		}
+		}*/
 
+		/*
+		
+		TODO: fix all listener sockets
+		
 		if( g_pCtxtListenSocket ) 
 		{
 			while( !HasOverlappedIoCompleted((LPOVERLAPPED)&g_pCtxtListenSocket->pIOContext->Overlapped) )
@@ -172,7 +187,7 @@ void NServerWindows::MainThreadFunction()
 			g_pCtxtListenSocket = NULL;
 		}
 
-		CtxtListFree();
+		CtxtListFree();*/
 
 		if( IOCPHandle ) 
 		{
@@ -182,11 +197,11 @@ void NServerWindows::MainThreadFunction()
 
 		if( Restart ) 
 		{
-			myprintf("\niocpserverex is restarting...\n");
+			Log.Output(LG_INF,"Raise server is restarting...");
 		} 
 		else
 		{
-			myprintf("\niocpserverex is exiting...\n");
+			Log.Output(LG_INF,"Raise server is exiting...");
 		}
 
 	} //while (g_bRestart)
@@ -196,9 +211,442 @@ void NServerWindows::MainThreadFunction()
 	WSACleanup();
 }
 
+
+NSocketWindows* NServerWindows::AllocateNewSocket( SOCKET sd, PacketIO op )
+{
+	ContextListCS.Lock();
+
+	NSocketWindows* newSocket = new NSocketWindows();
+
+	newSocket->Socket = sd;
+
+	ContextListCS.Unlock();
+
+	return newSocket;
+}
+
+NSocketWindows::NSocketWindows()
+{
+	IOContextSend.Clear();
+	IOContextRecv.Clear();
+}
+
+NSocketWindows* NServerWindows::UpdateCompletionPort( SOCKET sd, PacketIO op, bool addtoList )
+{
+	NSocketWindows* lpPerSocketContext;
+
+	lpPerSocketContext = AllocateNewSocket(sd, op);
+	if( lpPerSocketContext == NULL )
+		return NULL;
+
+	IOCPHandle = CreateIoCompletionPort((HANDLE)sd, IOCPHandle, (ULONG_PTR)lpPerSocketContext, 0);
+	if(IOCPHandle == NULL) 
+	{
+		Log.Output(LG_ERR,"CreateIoCompletionPort() failed: %", sfu(GetLastError()));
+		delete lpPerSocketContext;
+		return NULL;
+	}
+
+	//
+	//The listening socket context (bAddToList is FALSE) is not added to the list.
+	//All other socket contexts are added to the list.
+	//
+	//if( bAddToList ) CtxtListAddTo(lpPerSocketContext);
+
+	Log.Output(LG_INF,"UpdateCompletionPort: Socket(%) added to IOCP", sfu(lpPerSocketContext->Socket));
+
+	return lpPerSocketContext;
+}
+
+
+bool NServerWindows::CreateAcceptSocket( NListenerWindows* Listener, bool UpdateIOCP )
+{
+	int nRet = 0;
+	DWORD dwRecvNumBytes = 0;
+	DWORD bytes = 0;
+
+	//
+	// GUID to Microsoft specific extensions
+	//
+	GUID acceptex_guid = WSAID_ACCEPTEX;
+
+	//
+	//The context for listening socket uses the SockAccept member to store the
+	//socket for client connection. 
+	//
+	if( UpdateIOCP ) 
+	{
+
+		IOCPHandle = CreateIoCompletionPort((HANDLE)Listener->ListenSocket.Socket, IOCPHandle, (ULONG_PTR)Listener, 0);
+		if(IOCPHandle == NULL) 
+		{
+			Log.Output(LG_ERR,"Failed to update listen socket to IOCP: %", sfu(GetLastError()));
+			return NULL;
+		}
+
+		// Load the AcceptEx extension function from the provider for this socket
+		nRet = WSAIoctl(
+			Listener->ListenSocket.Socket,
+			SIO_GET_EXTENSION_FUNCTION_POINTER,
+			&acceptex_guid,
+			sizeof(acceptex_guid),
+			&Listener->ListenSocket.fnAcceptEx,
+			sizeof(Listener->ListenSocket.fnAcceptEx),
+			&bytes,
+			NULL,
+			NULL
+			);
+
+		if (nRet == SOCKET_ERROR)
+		{
+			Log.Output(LG_ERR,"Failed to load AcceptEx: %", sfu(WSAGetLastError()));
+			return NULL;
+		}
+	}
+
+	SOCKET acceptSocket = CreateSocket();
+
+	if( acceptSocket == INVALID_SOCKET) 
+	{
+		Log.Output(LG_ERR,"Failed to create new accept socket");
+		return(FALSE);
+	}
+
+	Listener->ListenSocket.IOContextRecv.SocketAccept = acceptSocket;
+
+	//
+	// pay close attention to these parameters and buffer lengths
+	//
+	nRet = Listener->ListenSocket.fnAcceptEx(Listener->ListenSocket.Socket, Listener->ListenSocket.IOContextRecv.SocketAccept,
+		(LPVOID)(Listener->ListenSocket.IOContextRecv.Buffer),
+		MAX_BUFF_SIZE - (2 * (sizeof(SOCKADDR_STORAGE) + 16)),
+		sizeof(SOCKADDR_STORAGE) + 16, sizeof(SOCKADDR_STORAGE) + 16,
+		&dwRecvNumBytes, 
+		(LPOVERLAPPED) &(Listener->ListenSocket.IOContextRecv.Overlapped));
+
+	if( nRet == SOCKET_ERROR && (ERROR_IO_PENDING != WSAGetLastError()) ) 
+	{
+		Log.Output(LG_ERR,"AcceptEx() failed: %", sfu(WSAGetLastError()));
+		return(FALSE);
+	}
+
+	return(TRUE);
+
+}
+
+
+void NServerWindows::Disconnect( NSocket* Client, bool Graceful )
+{
+	if( Client ) 
+	{
+		NSocketWindows* sock = (NSocketWindows*)Client;
+
+		Log.Output(LG_INF,"CloseClient: Socket(%) connection closing (graceful=%)", sfu(sock->Socket), (Graceful? sfs("TRUE"): sfs("FALSE")));
+		
+		if( !Graceful ) 
+		{
+
+			//
+			// force the subsequent closesocket to be abortative.
+			//
+			LINGER  lingerStruct;
+
+			lingerStruct.l_onoff = 1;
+			lingerStruct.l_linger = 0;
+			setsockopt(sock->Socket, SOL_SOCKET, SO_LINGER,(char *)&lingerStruct, sizeof(lingerStruct) );
+		}
+
+		if( sock->IOContextRecv.SocketAccept != INVALID_SOCKET ) 
+		{
+			closesocket(sock->IOContextRecv.SocketAccept);
+			sock->IOContextRecv.SocketAccept = INVALID_SOCKET;
+		}
+
+		closesocket(sock->Socket);
+		sock->Socket = INVALID_SOCKET;
+
+		sock->Service->Disconnected(sock);
+
+		//CtxtListDeleteFrom(lpPerSocketContext);
+		//lpPerSocketContext = NULL;
+	} 
+	else 
+	{
+		Log.Output(LG_INF,"CloseClient: lpPerSocketContext is NULL");
+	}
+}
+
+void NServerWindows::ReceiveFrom( NSocketWindows* sock )
+{
+	DWORD dwRecvNumBytes;
+	DWORD dwFlags = 0;
+	int nRet = 0;
+	WSABUF buffRecv;
+
+	sock->IOContextRecv.Operation = CIO_Read;
+	dwRecvNumBytes = 0;
+	dwFlags = 0;
+	buffRecv.buf = sock->IOContextRecv.Buffer;
+	buffRecv.len = MAX_BUFF_SIZE;
+
+	nRet = WSARecv(sock->Socket,&buffRecv, 1,&dwRecvNumBytes,&dwFlags,&sock->IOContextRecv.Overlapped, NULL);
+
+	if( nRet == SOCKET_ERROR && (ERROR_IO_PENDING != WSAGetLastError()) ) 
+	{
+		Log.Output(LG_ERR,"WSARecv() failed: %", sfu(WSAGetLastError()));
+		Disconnect(sock, FALSE);
+	}
+}
+
+
+void NServerWindows::Send( NSocket* Client, NPacket* Packet )
+{
+	DWORD dwFlags = 0;
+	int nRet = 0;
+	DWORD dwSendNumBytes = 0;
+	
+	
+
+	NSocketWindows* sock = (NSocketWindows*)Client;
+
+	sock->IOContextSend.Operation = CIO_Write;
+	sock->IOContextSend.wsabuf.buf = (char*)Packet->Data;
+	sock->IOContextSend.wsabuf.len  = Packet->TotalBytes;
+	sock->IOContextSend.SentBytes = 0;
+	sock->IOContextSend.TotalBytes = Packet->TotalBytes;
+
+	dwFlags = 0;
+
+	nRet = WSASend(
+		sock->Socket,
+		&sock->IOContextSend.wsabuf, 1, &dwSendNumBytes,
+		dwFlags,
+		&(sock->IOContextSend.Overlapped), NULL);
+
+	if( nRet == SOCKET_ERROR && (ERROR_IO_PENDING != WSAGetLastError()) ) 
+	{
+		Log.Output(LG_ERR,"WSASend() failed: %", sfu(WSAGetLastError()));
+		Disconnect(sock, FALSE);
+
+
+	/*} else if( g_bVerbose ) {
+		myprintf("WorkerThread %d: Socket(%d) Recv completed (%d bytes), Send posted\n", 
+			GetCurrentThreadId(), lpPerSocketContext->Socket, dwIoSize);*/
+	}
+
+	Packet->Detach();
+	delete Packet; // TODO: use a pool return here.
+}
+
 void NServerWindows::WorkerThreadFunction()
 {
+	BOOL bSuccess = FALSE;
+	int nRet = 0;
+	LPWSAOVERLAPPED lpOverlapped = NULL;
+	NSocketWindows* lpPerSocketContext = NULL;
+	NSocketWindows* lpAcceptSocketContext = NULL;
+	NClientWindowsIO* lpIOContext = NULL; 
+	WSABUF buffRecv;
+	WSABUF buffSend;
+	DWORD dwRecvNumBytes = 0;
+	DWORD dwSendNumBytes = 0;
+	DWORD dwFlags = 0;
+	DWORD dwIoSize = 0;
+	HRESULT hRet;
 
+	ULONG_PTR Key;
+
+	while( TRUE ) 
+	{
+
+		//
+		// continually loop to service io completion packets
+		//
+		bSuccess = GetQueuedCompletionStatus(IOCPHandle,&dwIoSize,&Key,(LPOVERLAPPED *)&lpOverlapped,INFINITE );
+		if( !bSuccess )
+		{
+			Log.Output(LG_ERR,"GetQueuedCompletionStatus() failed: %",sfu(GetLastError()));
+		}
+
+		if( Key == NULL ) 
+		{
+			return;
+		}
+
+		if( EndServer ) 
+		{
+			return;
+		}
+
+		lpIOContext = (NClientWindowsIO*)((ULONG_PTR)lpOverlapped - ((ULONG_PTR)&lpIOContext->Overlapped - (ULONG_PTR)lpIOContext));
+
+		if( lpIOContext->Operation != CIO_Accept ) 
+		{
+			lpPerSocketContext = (NSocketWindows*)Key;
+
+			if( !bSuccess || (bSuccess && (0 == dwIoSize)) ) 
+			{
+				Disconnect(lpPerSocketContext, FALSE); 
+				continue;
+			}
+		}
+
+		//
+		// determine what type of IO packet has completed by checking the PER_IO_CONTEXT 
+		// associated with this socket.  This will determine what action to take.
+		//
+		switch( lpIOContext->Operation ) 
+		{
+		case CIO_Accept:
+			{
+				NListenerWindows* Listener = (NListenerWindows*)Key;
+				lpPerSocketContext = &Listener->ListenSocket;
+
+				nRet = setsockopt(lpPerSocketContext->IOContextRecv.SocketAccept, SOL_SOCKET,SO_UPDATE_ACCEPT_CONTEXT,(char *)&Listener->ListenSocket.Socket,sizeof(Listener->ListenSocket.Socket));
+
+				if( nRet == SOCKET_ERROR ) 
+				{
+					Log.Output(LG_ERR,"setsockopt(SO_UPDATE_ACCEPT_CONTEXT) failed to update accept socket");
+					WSASetEvent(CleanupEvent[0]);
+					return;
+				}
+
+				lpAcceptSocketContext = UpdateCompletionPort(lpPerSocketContext->IOContextRecv.SocketAccept, CIO_Accept, TRUE);
+				lpAcceptSocketContext->Service = Listener->Service;
+
+				if( lpAcceptSocketContext == NULL ) 
+				{
+					Log.Output(LG_ERR,"failed to update accept socket to IOCP");
+					WSASetEvent(CleanupEvent[0]);
+					return;
+				}
+
+				lpAcceptSocketContext->Connected();
+
+				if( dwIoSize ) 
+				{
+					lpAcceptSocketContext->IOContextRecv.Operation = CIO_Read;
+					lpAcceptSocketContext->IOContextRecv.TotalBytes = dwIoSize;
+					lpAcceptSocketContext->IOContextRecv.SentBytes = 0;
+					lpAcceptSocketContext->IOContextRecv.wsabuf.len = dwIoSize;
+
+					MemoryDriver::Copy(lpAcceptSocketContext->IOContextRecv.Buffer,lpPerSocketContext->IOContextRecv.Buffer,dwIoSize);
+
+					lpAcceptSocketContext->Received(&lpAcceptSocketContext->IOContextRecv);
+
+					Log.Output(LG_INF,"WorkerThread %: Socket(%) AcceptEx completed (% bytes)",sfu(GetCurrentThreadId()),sfu(lpPerSocketContext->Socket),sfu(dwIoSize));
+				} 
+				else 
+				{
+					ReceiveFrom(lpAcceptSocketContext);
+					//
+					// AcceptEx completes but doesn't read any data so we need to post
+					// an outstanding overlapped read.
+					//
+					/*lpAcceptSocketContext->IOContextRecv.Operation = CIO_Read;
+					dwRecvNumBytes = 0;
+					dwFlags = 0;
+					buffRecv.buf = lpAcceptSocketContext->IOContextRecv.Buffer;
+					buffRecv.len = MAX_BUFF_SIZE;
+
+					nRet = WSARecv(lpAcceptSocketContext->Socket,&buffRecv, 1,&dwRecvNumBytes,&dwFlags,&lpAcceptSocketContext->IOContext.Overlapped, NULL);
+
+					if( nRet == SOCKET_ERROR && (ERROR_IO_PENDING != WSAGetLastError()) ) 
+					{
+						Log.Output(LG_ERR,"WSARecv() failed: %", sfu(WSAGetLastError()));
+						CloseClient(lpAcceptSocketContext, FALSE);
+					}*/
+				}
+
+				//
+				//Time to post another outstanding AcceptEx
+				//
+				if( !CreateAcceptSocket(Listener,false) ) 
+				{
+					Log.Output(LG_ERR,"Please shut down and reboot the server.");
+					WSASetEvent(CleanupEvent[0]);
+					return;
+				}
+			}
+			break;
+
+
+		case CIO_Read:
+			lpIOContext->TotalBytes = dwIoSize;
+			lpIOContext->SentBytes = 0;
+			lpIOContext->wsabuf.len = dwIoSize;
+			lpPerSocketContext->Received(lpIOContext);
+			Log.Output(LG_INF,"WorkerThread %: Socket(%) Recv completed (% bytes)",  sfu(GetCurrentThreadId()), sfu(lpPerSocketContext->Socket), sfu(dwIoSize));
+			break;
+
+		case CIO_Write:
+
+			//lpPerSocketContext->Service->Sent(lpPerSocketContext,lpIOContext);
+
+			//
+			// a write operation has completed, determine if all the data intended to be
+			// sent actually was sent.
+			//
+			lpIOContext->Operation = CIO_Write;
+			lpIOContext->SentBytes  += dwIoSize;
+			dwFlags = 0;
+			if( lpIOContext->SentBytes < lpIOContext->TotalBytes ) 
+			{
+
+				//
+				// the previous write operation didn't send all the data,
+				// post another send to complete the operation
+				//
+				buffSend.buf = lpIOContext->Buffer + lpIOContext->SentBytes;
+				buffSend.len = lpIOContext->TotalBytes - lpIOContext->SentBytes;
+				nRet = WSASend (
+					lpPerSocketContext->Socket,
+					&buffSend, 1, &dwSendNumBytes,
+					dwFlags,
+					&(lpIOContext->Overlapped), NULL);
+				if( nRet == SOCKET_ERROR && (ERROR_IO_PENDING != WSAGetLastError()) ) 
+				{
+					Log.Output(LG_ERR,"WSASend() failed: %", sfu(WSAGetLastError()));
+					Disconnect(lpPerSocketContext, FALSE);
+				} 
+				else 
+				{
+					Log.Output(LG_INF,"WorkerThread %: Socket(%) Send partially completed (% bytes)", sfu(GetCurrentThreadId()), sfu(lpPerSocketContext->Socket), sfu(dwIoSize));
+				}
+			} 
+			else 
+			{
+				lpPerSocketContext->Sent(lpIOContext);
+				Log.Output(LG_INF,"WorkerThread %: Socket(%) Send completed (% bytes), Recv posted", sfu(GetCurrentThreadId()), sfu(lpPerSocketContext->Socket), sfu(dwIoSize));
+
+				//
+				// previous write operation completed for this socket, post another recv
+				//
+				/*lpIOContext->Operation = CIO_Read; 
+				dwRecvNumBytes = 0;
+				dwFlags = 0;
+				buffRecv.buf = lpIOContext->Buffer;
+				buffRecv.len = MAX_BUFF_SIZE;
+
+				nRet = WSARecv(
+					lpPerSocketContext->Socket,
+					&buffRecv, 1, &dwRecvNumBytes,
+					&dwFlags,
+					&lpIOContext->Overlapped, NULL);
+
+				if( nRet == SOCKET_ERROR && (ERROR_IO_PENDING != WSAGetLastError()) ) 
+				{
+					Log.Output(LG_ERR,"WSARecv() failed: %", sfu(WSAGetLastError()));
+					CloseClient(lpPerSocketContext, FALSE);
+				} 
+				else 
+				{
+					Log.Output(LG_INF,"WorkerThread %: Socket(%) Send completed (% bytes), Recv posted", sfu(GetCurrentThreadId()), sfu(lpPerSocketContext->Socket), sfu(dwIoSize));
+				}*/
+			}
+			break;
+		} //switch
+	} //while
 }
 
 SOCKET NServerWindows::CreateSocket()
@@ -210,69 +658,50 @@ SOCKET NServerWindows::CreateSocket()
 	sdSocket = WSASocket(AF_INET, SOCK_STREAM, IPPROTO_IP, NULL, 0, WSA_FLAG_OVERLAPPED); 
 	if( sdSocket == INVALID_SOCKET ) 
 	{
-		//myprintf("WSASocket(sdSocket) failed: %d\n", WSAGetLastError());
+		Log.Output(LG_ERR,"WSASocket(sdSocket) failed: %", sfi(WSAGetLastError()));
 		return(sdSocket);
 	}
 
-    //
-	// Disable send buffering on the socket.  Setting SO_SNDBUF
-	// to 0 causes winsock to stop buffering sends and perform
-	// sends directly from our buffers, thereby save one memory copy.
-	//
-    // However, this does prevent the socket from ever filling the
-    // send pipeline. This can lead to packets being sent that are
-    // not full (i.e. the overhead of the IP and TCP headers is 
-    // great compared to the amount of data being carried).
-    //
-    // Disabling the send buffer has less serious repercussions 
-    // than disabling the receive buffer.
-	//
 	nZero = 0;
 	nRet = setsockopt(sdSocket, SOL_SOCKET, SO_SNDBUF, (char *)&nZero, sizeof(nZero));
 	if( nRet == SOCKET_ERROR) 
 	{
-		//myprintf("setsockopt(SNDBUF) failed: %d\n", WSAGetLastError());
+		Log.Output(LG_ERR,"setsockopt(SNDBUF) failed: %", sfi(WSAGetLastError()));
 		return(sdSocket);
 	}
 
-    //
-    // Don't disable receive buffering. This will cause poor network
-    // performance since if no receive is posted and no receive buffers,
-    // the TCP stack will set the window size to zero and the peer will
-    // no longer be allowed to send data.
-    //
-
-    // 
-    // Do not set a linger value...especially don't set it to an abortive
-    // close. If you set abortive close and there happens to be a bit of
-    // data remaining to be transfered (or data that has not been 
-    // acknowledged by the peer), the connection will be forcefully reset
-    // and will lead to a loss of data (i.e. the peer won't get the last
-    // bit of data). This is BAD. If you are worried about malicious
-    // clients connecting and then not sending or receiving, the server
-    // should maintain a timer on each connection. If after some point,
-    // the server deems a connection is "stale" it can then set linger
-    // to be abortive and close the connection.
-    //*/
-
-    /*
-	LINGER lingerStruct;
-
-	lingerStruct.l_onoff = 1;
-	lingerStruct.l_linger = 0;
-	nRet = setsockopt(sdSocket, SOL_SOCKET, SO_LINGER,
-					  (char *)&lingerStruct, sizeof(lingerStruct));
-	if( nRet == SOCKET_ERROR ) {
-		myprintf("setsockopt(SO_LINGER) failed: %d\n", WSAGetLastError());
-		return(sdSocket);
-	}
-    */
-
-/*	return(sdSocket);
+	return(sdSocket);
 }
 
-bool NServerWindows::CreateListenSocket()
+
+/*void Main()
 {
+	NServerWindows TheServer;
+	
+	NServiceHTTP HttpService;
+
+	TheServer.AddService(&HttpService);
+
+	HttpService.Configuration.Add()
+
+	TheServer.CreateListener("192.168.2.2",80, NP_TCP, &HttpService);
+	TheServer.CreateListener("127.0.0.1",31, NP_TCP, &HttpService);
+
+	TheServer.StartServer();
+
+}*/
+
+#include "twintools.h"
+
+bool NServerWindows::CreateListenerTask( NIPAddress Device, ui16 Port, NProtocol Protocol, NService* Service )
+{
+	NListenerWindows* WinListener = new NListenerWindows();
+
+	WinListener->Device = Device;
+	WinListener->Port = Port;
+	WinListener->Protocol = Protocol;
+	WinListener->Service = Service;
+
 	int nRet = 0;
 	LINGER lingerStruct;
 	struct addrinfo hints = {0};
@@ -289,42 +718,205 @@ bool NServerWindows::CreateListenSocket()
 	hints.ai_socktype = SOCK_STREAM;
 	hints.ai_protocol = IPPROTO_IP;
 
-	TString portstr = TConvert::ToString(ServerPort);
+	TString portstr = TConvert::ToString(Port);
+	TString addr = Device.ToString();
 
-	if( getaddrinfo(NULL, (char*)portstr.Data, &hints, &addrlocal) != 0 ) 
+	if( getaddrinfo((char*)addr.Data, (char*)portstr.Data, &hints, &addrlocal) != 0 ) 
 	{
-		myprintf("getaddrinfo() failed with error %d\n", WSAGetLastError());
+		Log.Output(LG_ERR,"getaddrinfo() failed with error %", sfs(TWinTools::ErrorToStringWithCode(WSAGetLastError())));
 		return(FALSE);
 	}
 
 	if( addrlocal == NULL ) 
 	{
-		myprintf("getaddrinfo() failed to resolve/convert the interface\n");
+		Log.Output(LG_ERR,"getaddrinfo() failed to resolve/convert the interface");
 		return(FALSE);
 	}
 
-	ListenSocket = CreateSocket();
-	if( ListenSocket == INVALID_SOCKET) {
+	WinListener->ListenSocket.Socket = CreateSocket();
+	if( WinListener->ListenSocket.Socket == INVALID_SOCKET) 
+	{
 		freeaddrinfo(addrlocal);
 		return(FALSE);
 	}
 
-	nRet = bind(ListenSocket, addrlocal->ai_addr, (int) addrlocal->ai_addrlen);
-	if( nRet == SOCKET_ERROR) {
-		myprintf("bind() failed: %d\n", WSAGetLastError());
+	nRet = bind(WinListener->ListenSocket.Socket, addrlocal->ai_addr, (int) addrlocal->ai_addrlen);
+	if( nRet == SOCKET_ERROR) 
+	{
+		Log.Output(LG_ERR,"bind() failed: %", sfi(WSAGetLastError()));
 		freeaddrinfo(addrlocal);
 		return(FALSE);
 	}
 
-	nRet = listen(ListenSocket, 5);
-	if( nRet == SOCKET_ERROR ) {
-		myprintf("listen() failed: %d\n", WSAGetLastError());
+	nRet = listen(WinListener->ListenSocket.Socket, 5);
+	if( nRet == SOCKET_ERROR ) 
+	{
+		Log.Output(LG_ERR,"listen() failed: %", sfi(WSAGetLastError()));
 		freeaddrinfo(addrlocal);
 		return(FALSE);
 	}
 
 	freeaddrinfo(addrlocal);
 
+	Listeners.Add(WinListener);
+
+	CreateAcceptSocket(WinListener,true);
+
 	return true;
 }
-*/
+
+void NServerWindows::StopServer()
+{
+	EndServer = true;
+}
+
+void NServerWindows::RestartServer()
+{
+	Restart = true;
+}
+
+void NServerWindows::CreateListener( NIPAddress Device, ui16 Port, NProtocol Protocol, NService* Service )
+{
+	NServerOperation* nsp = new NServerOperation();
+	
+	nsp->Operation = NServerOperation::OT_CREATELISTENER;
+
+	CreateListenerParameters* clp = (CreateListenerParameters*)nsp->Parameter;
+	clp->Device = Device;
+	clp->Port = Port;
+	clp->Protocol = Protocol;
+	clp->Service = Service;
+
+	TaskQueue.Push(nsp);
+}
+
+void NServiceHTTP::Connected( NSocket* Client )
+{
+	Log.Output(LG_INF,"HTTP Client connected");
+}
+
+void NServiceHTTP::Disconnected( NSocket* Client )
+{
+	Log.Output(LG_INF,"HTTP Client disconnected");
+}
+
+#include "npacketbuilder.h"
+#include "tfileinfo.h"
+
+void NServiceHTTP::Received( NSocket* Client, NPacket* Packet )
+{
+	Log.Output(LG_INF,"HTTP Client request");
+
+	TString header(Packet->Data,Packet->TotalBytes);
+
+	TArray<ch32> SplitChars;
+	SplitChars.Add('\n');
+
+
+	TArray<TString*> headerLines = header.Split(SplitChars);
+
+	Log.Output(LG_INF,*headerLines.Item[0]);
+
+	TString RequestLine = *headerLines.Item[0];
+	
+	TString RequestPath = "index.html";
+
+	if (RequestLine.StartsWith("GET"))
+	{
+		int a = RequestLine.IndexOf(" ",5);
+		if (a > 0)
+		{
+			RequestPath = RequestLine.Substring(4,a-4);
+			if (RequestPath.Length == 1)
+			{
+				RequestPath = "/index.htm";
+			}
+
+			TString totalPath = RootFolder + RequestPath;
+			
+			if (TFileInfo::Exists(totalPath))
+			{
+				TFileStream* fs = File::OpenRead(totalPath);
+
+				NPacketBuilder* npb;
+
+				int fileLength = fs->Length();
+				bool appendfilecontent = false;
+
+				if (fileLength < (8 * KB)) // small files goes in one shot
+				{
+					npb = new NPacketBuilder( 9 * KB);
+					appendfilecontent = true;
+				}
+				
+				TString extension = TPath::GetExtension(totalPath);
+				extension.ToLowerInplace();
+
+				npb->AppendLine("HTTP/1.1 200 OK");
+				npb->AppendLine(ServerVersion);
+				//npb.AppendLine("Last-Modified: Wed, 08 Jan 2003 23:11:55 GMT");
+				npb->AppendLine("Accept-Ranges: bytes");
+				npb->AppendString("Content-Length: "); // HELLO
+				npb->AppendString(fileLength);
+
+				npb->AppendLine("Connection: close");
+				npb->AppendString("Content-Type: ");
+				if (extension.StartsWith("htm"))
+				{
+					npb->AppendLine("text/html; charset=UTF-8");
+				}
+				else if (extension == "jpg")
+				{
+					npb->AppendLine("image/jpeg");
+				}
+				else if (extension == "png")
+				{
+					npb->AppendLine("image/png");
+				}
+				else if (extension == "ico")
+				{
+					npb->AppendLine("image/x-icon");
+				}
+
+				npb->AppendLine();
+				
+				if (appendfilecontent)
+				{
+
+				}
+
+			}
+		}
+	}
+	else
+	{
+		Log.Output(LG_INF,"HTTP Client unsupported request, dropping client");
+		Server->Disconnect(Client,false);
+	}
+
+	headerLines.DeletePointers();
+
+
+	/*NPacketBuilder npb;
+
+	npb.AppendLine("HTTP/1.1 200 OK");
+	npb.AppendLine(ServerVersion);
+	npb.AppendLine("Last-Modified: Wed, 08 Jan 2003 23:11:55 GMT");
+	npb.AppendLine("Accept-Ranges: bytes");
+	npb.AppendLine("Content-Length: 5"); // HELLO
+	npb.AppendLine("Connection: close");
+	npb.AppendLine("Content-Type: text/html; charset=UTF-8");
+	npb.AppendLine();
+	npb.AppendString("HELLO");
+
+	NPacket* response = npb.ToPacket();*/
+
+	//Server->Send(Client,response);
+	//Log.Output(LG_INF,"HTTP Client response sending...");
+}
+
+void NServiceHTTP::Sent( NSocket* Client, NPacket* Packet )
+{
+	Log.Output(LG_INF,"HTTP Client response sent");
+	Server->Disconnect(Client,true);
+}

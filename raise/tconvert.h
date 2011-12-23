@@ -18,17 +18,17 @@ public:
 
 	inline static int ToCharArrayUInt(ui32 value, char* dst, int dstCap)
 	{
-		return sprintf(dst,"%u",value);
+		return sprintf_s(dst,dstCap,"%u",value);
 	}
 
 	inline static int ToCharArrayUIntHex(ui32 value, char* dst, int dstCap)
 	{
-		return sprintf(dst,"%x",value);
+		return sprintf_s(dst,dstCap,"%x",value);
 	}
 
 	inline static int ToCharArrayUIntHexCapital(ui32 value, char* dst, int dstCap)
 	{
-		return sprintf(dst,"%X",value);
+		return sprintf_s(dst,dstCap,"%X",value);
 	}
 
 	inline static int ToCharArrayFloat(float value, char* dst, int dstCap, int precision = 0)
@@ -38,11 +38,11 @@ public:
 
 		if (precision == 0)
 		{
-			return sprintf(dst,"%f", value);
+			return sprintf_s(dst,dstCap,"%f", value);
 		}
 		else
 		{
-			return sprintf(dst,"%.*f", precision , value);
+			return sprintf_s(dst,dstCap,"%.*f", precision , value);
 		}
 	}
 

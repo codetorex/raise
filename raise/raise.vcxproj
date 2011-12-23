@@ -136,6 +136,9 @@
     <ClInclude Include="mtriangle.h" />
     <ClInclude Include="mvector3.h" />
     <ClInclude Include="mvector2.h" />
+    <ClInclude Include="nipaddress.h" />
+    <ClInclude Include="npacket.h" />
+    <ClInclude Include="npacketbuilder.h" />
     <ClInclude Include="nserver.h" />
     <ClInclude Include="nserverwindows.h" />
     <ClInclude Include="raisetypes.h" />
@@ -193,6 +196,7 @@
     <ClInclude Include="tkeyvalue.h" />
     <ClInclude Include="tlatin1encoding.h" />
     <ClInclude Include="tlog.h" />
+    <ClInclude Include="tloghtml.h" />
     <ClInclude Include="tlogtext.h" />
     <ClInclude Include="tmemorydriver.h" />
     <ClInclude Include="tmemorystream.h" />
@@ -244,6 +248,8 @@
     <ClInclude Include="twintools.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="npacketbuilder.cpp" />
+    <ClCompile Include="nserver.cpp" />
     <ClCompile Include="nserverwindows.cpp" />
     <ClCompile Include="stdafx.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Create</PrecompiledHeader>
@@ -267,6 +273,7 @@
     <ClCompile Include="tencoding.cpp" />
     <ClCompile Include="tencodinginfo.cpp" />
     <ClCompile Include="tcompositebuffer.cpp" />
+    <ClCompile Include="tfile.cpp" />
     <ClCompile Include="thashcodeprovider.cpp" />
     <ClCompile Include="tiniparser.cpp" />
     <ClCompile Include="tlog.cpp" />

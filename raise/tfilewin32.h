@@ -12,22 +12,62 @@ public:
 	TString OriginalPath;
 	TString FullPath;
 
+	/// These values will be set after first request of them.
+	bool FileAttributeCache;
+	DWORD Attributes;
+	TDateTimeWindows CreationTime;
+	TDateTimeWindows LastAccessTime;
+	TDateTimeWindows LastWriteTime;
+	ui64 FileSize;
+	bool FileExists;
+
 	TFileInfo()
 	{
 		// LETS PRE ALLCOTE THESE SHIT
 		OriginalPath.Allocate(512);
 		FullPath.Allocate(512);
+		FileAttributeCache = false;
 	}
 
 	TFileInfo(const TString& path)
 	{
 		OriginalPath = path;
 		FullPath = TPath::GetFullPath(OriginalPath);
+		FileAttributeCache = false;
+	}
+
+	inline void UpdateCache()
+	{
+		ch16 tmp[1024];
+		TWinTools::SystemString16(FullPath,tmp,1024);
+		WIN32_FILE_ATTRIBUTE_DATA fileAttributes;
+
+		FileAttributeCache = true;
+		
+		if ( GetFileAttributesExW(tmp,GET_FILEEX_INFO_LEVELS::GetFileExInfoStandard,&fileAttributes) != 0 )
+		{
+			FileExists = true;
+			Attributes = fileAttributes.dwFileAttributes;
+			CreationTime = TDateTimeWindows(fileAttributes.ftCreationTime);
+			LastAccessTime = TDateTimeWindows(fileAttributes.ftLastAccessTime);
+			LastWriteTime = TDateTimeWindows(fileAttributes.ftLastWriteTime);
+			FileSize = ((ui64)(fileAttributes.nFileSizeHigh) << 32) | fileAttributes.nFileSizeLow;
+		}
+		else
+		{
+			FileExists = false;
+		}
 	}
 
 	TString GetFullName()
 	{
 		return FullPath;
+	}
+
+	inline ui64 Length()
+	{
+		if (!FileAttributeCache) UpdateCache();
+		return FileSize;
 	}
 
 	inline TString GetExtension()
@@ -77,7 +117,8 @@ public:
 
 	inline FileAttribute GetAttributes()
 	{
-		return GetFileAttributesW(TWinTools::SystemString16(FullPath));
+		if (!FileAttributeCache) UpdateCache();
+		return Attributes;
 	}
 
 	inline void SetAttributes(FileAttribute attributes)
@@ -87,22 +128,28 @@ public:
 
 	TDateTime GetLastAccessTime()
 	{
-		throw "Not Implemented";
+		if (!FileAttributeCache) UpdateCache();
+		return TDateTime(LastAccessTime);
 	}
 
 	TDateTime GetCreationTime()
 	{
-		throw "Not Implemented";
+		if (!FileAttributeCache) UpdateCache();
+		return TDateTime(CreationTime);
 	}
 
 	TDateTime GetLastWriteTime()
 	{
-		throw "Not Implemented";
+		if (!FileAttributeCache) UpdateCache();
+		return TDateTime(LastWriteTime);
 	}
 
 	static bool Exists(const TString& path)
 	{
-		FileAttribute fa = GetFileAttributesW(TWinTools::SystemString16(path));
+		ch16 tmp[1024];
+		TWinTools::SystemString16(path,tmp,1024);
+
+		FileAttribute fa = GetFileAttributesW(tmp);
 
 		if (fa == fa_INVALID)
 		{

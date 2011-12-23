@@ -13,13 +13,15 @@
 
 #define NIL			((void*)0)
 
-typedef unsigned char	byte;
-typedef unsigned short	uint16;
-typedef unsigned int	ui32; // It was unsigned long before but in linux longs have 8 bytes. (64 bit stuff?)
-typedef unsigned short	ui16;
-typedef short			i16;
-typedef int				i32;
-
+typedef unsigned long long	ui64;
+typedef unsigned int		ui32; // It was unsigned long before but in linux longs have 8 bytes. (64 bit stuff?)
+typedef unsigned short		ui16;
+typedef unsigned char		ui8;
+typedef signed long long	i64;
+typedef int					i32;
+typedef short				i16;
+typedef char				i8;
+typedef unsigned char		byte; // technically ui8
 
 #define DWORDSTR(x) (*(ui32*)x)
 

@@ -18,7 +18,7 @@ private:
 	void DetectEncodingFromBOM(const TEncoding& defaultencoding)
 	{
 		BaseStream->Read(Cache.Data,1,4);
-		uint16 utf16char = ((uint16*)Cache.Data)[0];
+		ui16 utf16char = ((ui16*)Cache.Data)[0];
 		ui32 utf32char = ((ui32*)Cache.Data)[0];
 
 		if (Cache.Data[0] == 0xEF)

@@ -300,6 +300,11 @@ public:
 		Length = 0;
 	}
 
+	inline void PokeZero()
+	{
+		Data[ByteLength] = 0;
+	}
+
 	string ToString();
 
 	string ToString(int startIndex, int length);

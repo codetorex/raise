@@ -51,7 +51,7 @@ private:
 	void Notify(TLogEntry* entry)
 	{
 		LogCSection.Lock();
-		for (int i=0;i<Outputs.Count;i++)
+		for (ui32 i=0;i<Outputs.Count;i++)
 		{
 			TLogOutput* curOutput = Outputs.Item[i];
 			curOutput->Output(entry);

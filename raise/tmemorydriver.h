@@ -152,13 +152,13 @@ public:
 		return -1;
 	}
 
-	inline static int SearchWord(const byte* src, int srcLength, uint16 needle)
+	inline static int SearchWord(const byte* src, int srcLength, ui16 needle)
 	{
 		if (srcLength <= 1) return -1;
 		int i = srcLength - 1;
 		while(i--)
 		{
-			if (*(uint16*)(&src[i]) == needle)
+			if (*(ui16*)(&src[i]) == needle)
 			{
 				return i;
 			}
@@ -213,7 +213,7 @@ public:
 			return SearchByte(src,srcLength,*needle);
 
 		case 2:
-			return SearchWord(src,srcLength,*(uint16*)needle);
+			return SearchWord(src,srcLength,*(ui16*)needle);
 
 		case 4:
 			return SearchDWord(src,srcLength,*(ui32*)needle);

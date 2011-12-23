@@ -55,6 +55,8 @@ public:
 
 	virtual	IDirectory*			GetParent() = 0;
 
+	virtual ui64				Length() = 0;
+
 	virtual TStream*			Open(FileMode mode) = 0;
 	virtual TStream*			Create() = 0;
 	virtual	bool				Delete() = 0;

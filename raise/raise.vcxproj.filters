@@ -416,12 +416,6 @@
     <ClInclude Include="tdiagram.h">
       <Filter>Source Files\Diagram</Filter>
     </ClInclude>
-    <ClInclude Include="nserver.h">
-      <Filter>Source Files\Network</Filter>
-    </ClInclude>
-    <ClInclude Include="nserverwindows.h">
-      <Filter>Source Files\Network</Filter>
-    </ClInclude>
     <ClInclude Include="tlog.h">
       <Filter>Source Files\System\Log</Filter>
     </ClInclude>
@@ -442,6 +436,24 @@
     </ClInclude>
     <ClInclude Include="raiseversion.h">
       <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="tloghtml.h">
+      <Filter>Source Files\System\Log</Filter>
+    </ClInclude>
+    <ClInclude Include="nserver.h">
+      <Filter>Source Files\Network</Filter>
+    </ClInclude>
+    <ClInclude Include="nserverwindows.h">
+      <Filter>Source Files\Network</Filter>
+    </ClInclude>
+    <ClInclude Include="nipaddress.h">
+      <Filter>Source Files\Network</Filter>
+    </ClInclude>
+    <ClInclude Include="npacket.h">
+      <Filter>Source Files\Network</Filter>
+    </ClInclude>
+    <ClInclude Include="npacketbuilder.h">
+      <Filter>Source Files\Network</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -559,9 +571,6 @@
     <ClCompile Include="tdirectorywin32.cpp">
       <Filter>Source Files\IO\File System\Win32</Filter>
     </ClCompile>
-    <ClCompile Include="nserverwindows.cpp">
-      <Filter>Source Files\Network</Filter>
-    </ClCompile>
     <ClCompile Include="tlog.cpp">
       <Filter>Source Files\System\Log</Filter>
     </ClCompile>
@@ -570,6 +579,18 @@
     </ClCompile>
     <ClCompile Include="tlogtext.cpp">
       <Filter>Source Files\System\Log</Filter>
+    </ClCompile>
+    <ClCompile Include="nserver.cpp">
+      <Filter>Source Files\Network</Filter>
+    </ClCompile>
+    <ClCompile Include="nserverwindows.cpp">
+      <Filter>Source Files\Network</Filter>
+    </ClCompile>
+    <ClCompile Include="npacketbuilder.cpp">
+      <Filter>Source Files\Network</Filter>
+    </ClCompile>
+    <ClCompile Include="tfile.cpp">
+      <Filter>Source Files\IO\File System</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

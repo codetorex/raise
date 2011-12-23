@@ -12,6 +12,16 @@ class TDateTimeWindows
 public:
 	FILETIME Date;
 
+	TDateTimeWindows()
+	{
+
+	}
+
+	TDateTimeWindows( FILETIME _date)
+	{
+		Date = _date;
+	}
+
 	// operator from tdatetime
 	// operator to tdatetime
 };

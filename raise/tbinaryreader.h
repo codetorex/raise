@@ -63,9 +63,9 @@ public:
 		return result;
 	}
 
-	inline uint16 ReadWord()
+	inline ui16 ReadWord()
 	{
-		uint16 result;
+		ui16 result;
 		Read((byte*)&result,2,1);
 		return result;
 	}

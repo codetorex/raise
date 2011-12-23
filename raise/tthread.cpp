@@ -2,7 +2,7 @@
 #include "tthread.h"
 #include "texception.h"
 
-#ifdef WIN32
+
 
 DWORD WINAPI WinThread (LPVOID lpdwThreadParam ) 
 {
@@ -33,19 +33,5 @@ void TThread::Start()
 	}
 }
 
-ui32 TThread::get_CurrentThreadID()
-{
-	return GetCurrentThreadId();
-}
-
-#else
-
-ui32 TThread::get_CurrentThreadID()
-{
-	//http://www.kernel.org/doc/man-pages/online/pages/man2/gettid.2.html
-	return gettid();
-}
-
-#endif
 
 

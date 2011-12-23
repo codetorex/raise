@@ -76,6 +76,22 @@ public:
 		return strresult;
 	}
 
+	TString ToStringFileName() const
+	{
+		byte result[20];
+		TStringBuilder str(result,20);
+		str.AppendPadded(Year,4);
+		str.AppendPadded(Month,2);
+		str.AppendPadded(Day,2);
+		str.AppendPadded(Hour,2);
+		str.AppendPadded(Minute,2);
+		str.AppendPadded(Second,2);
+		
+		TString strresult = str.ToString();
+		str.UnbindByteArray();
+		return strresult;
+	}
+
 	TString ToStringUniversal() const
 	{
 		byte result[20];

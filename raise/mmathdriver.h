@@ -40,7 +40,7 @@ public:
 	}
 
 	template<class T>
-	inline static int Min(T value1,T value2)
+	inline static T Min(T value1,T value2)
 	{
 		return value1 < value2 ? value1 : value2;
 	}

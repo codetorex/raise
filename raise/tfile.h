@@ -4,6 +4,8 @@
 #include "tstring.h"
 #include "tfilestream.h"
 
+class TBuffer;
+
 class TFile
 {
 public:
@@ -22,6 +24,16 @@ public:
 	{
 		return new TFileStream(path, fm_Write);
 	}
+
+	/**
+	 * Reads contents of a file and returns how much bytes read.
+	 */
+	static ui32 ReadAllBytes(const TString& path, void* target, ui32 capacity);
+
+	/**
+	 * Reads contents of a file to a buffer object. Returns how much bytes read.
+	 */
+	static ui32 ReadAllBytes(const TString& path, TBuffer& buffer);
 };
 
 typedef TFile File;

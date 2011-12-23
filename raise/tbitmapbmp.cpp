@@ -6,10 +6,10 @@
 
 struct BITMAPFILEHEADER 
 {
-	uint16 bfType;
+	ui16 bfType;
 	ui32 bfSize;
-	uint16 bfReserved1;
-	uint16 bfReserved2;
+	ui16 bfReserved1;
+	ui16 bfReserved2;
 	ui32 bfOffBits;
 } __attribute((packed));
 
@@ -18,8 +18,8 @@ struct BITMAPINFOHEADER
 	ui32 biSize;
 	int biWidth;
 	int biHeight;
-	uint16 biPlanes;
-	uint16 biBitCount;
+	ui16 biPlanes;
+	ui16 biBitCount;
 	ui32 biCompression;
 	ui32 biSizeImage;
 	ui32 biXPelsPerMeter;

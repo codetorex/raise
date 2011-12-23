@@ -76,6 +76,45 @@ public:
 #include "trmlwriter.h"
 #include "tfile.h"
 
+#include "tlogtext.h"
+#include "nserverwindows.h"
+
+
+class TLogConsole: public TLogOutput
+{
+public:
+	void Output( TLogEntry* entry ) 
+	{
+		byte stackbuffer[512];
+
+		TStringBuilder sb(stackbuffer,512);
+
+		sb.Append(Log.Groups.Item[entry->GroupID]->ShortName);
+		sb.AppendChar('|');
+		sb.AppendChar(' ');
+
+
+		sb.Append(sfx(TThread::get_CurrentThreadID(),-6));
+		sb.AppendChar('|');
+		sb.AppendChar(' ');
+
+
+		sb.AppendPadded(entry->Tick,-8,' ');
+		sb.AppendChar('|');
+		sb.AppendChar(' ');
+
+		sb.Append(entry->Content);
+		sb.AppendLine();
+
+		sb.PokeZero();
+
+		printf((char*)sb.GetData());
+		
+
+		sb.UnbindByteArray();
+	}
+};
+
 #ifdef WIN32
 int _tmain(int argc, wchar_t* argv[])
 #else
@@ -84,7 +123,7 @@ int main(int argc,char** argv)
 {
 	Application.Begin( "RaiseLib Test Suite", RaiseModule.Version );
 
-	TConsoleReport suite("RaiseLib Test Suite");
+	/*TConsoleReport suite("RaiseLib Test Suite");
 	suite.PrintApplicationInfo = true;
 	suite.PrintTestName = false;
 
@@ -94,9 +133,29 @@ int main(int argc,char** argv)
 	suite.AddTest(&TColorCheck);
 
 	//suite.PrintOutputs = true;
-	suite.RunSuite();
+	suite.RunSuite();*/
+	
+	TLogText textLog(new TFileStream("log.txt", fm_Write));
+	TLogConsole console;
+	Log.RegisterOutput(&textLog);
+	Log.RegisterOutput(&console);
+
+	NServerWindows winSrv;
+
+	NServiceHTTP http;
+
+	http.RootFolder = "F:\\Inetpub\\wwwroot\\11FenC";
+
+	//winSrv.Initialize();
+
+	winSrv.AddService(&http);
+	winSrv.CreateListener(NIPAddress("127.0.0.1"),31,NP_TCP,&http);
+
+
+	winSrv.MainThreadFunction();
 
 	getchar();
+
 
 	return 0;
 }

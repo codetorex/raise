@@ -29,7 +29,9 @@ public:
 
 	static void CreateFolder(const TString& path)
 	{
-		if ( CreateDirectoryW(TWinTools::SystemString16(path),NULL) == FALSE )
+		ch16 tmp[1024];
+		TWinTools::SystemString16(path,tmp,1024);
+		if ( CreateDirectoryW(tmp,NULL) == FALSE )
 		{
 			ui32 errorId = GetLastError();
 			if (errorId != ERROR_ALREADY_EXISTS)
