@@ -201,7 +201,10 @@ public:
 
 	inline void RemoveLast()
 	{
-		Count--;
+		if (Count)
+		{
+			Count--;
+		}
 		return;
 	}
 
@@ -270,6 +273,18 @@ public:
 		return NULL;
 	}
 
+	inline T GetAndRemoveLast()
+	{
+		if (Count > 0)
+		{
+			T k = Item[Count-1]
+			Count--;
+			return k;
+		}
+		return NULL;
+	}
+
+
 	/**
 	* Assigning of arrays will destroy other.
 	*/
@@ -286,9 +301,6 @@ public:
 		return *this;
 	}
 
-
-
-protected:
 	void Allocate(int newsize)
 	{
 		if (newsize == 0)

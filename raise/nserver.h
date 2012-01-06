@@ -5,6 +5,8 @@
 #include "npacket.h"
 #include "tarray.h"
 
+#define MAX_BUFF_SIZE		8192
+
 class NServer;
 class NService;
 class NSocket;
@@ -56,52 +58,8 @@ public:
 	virtual void Sent			(NSocket* Client, NPacket* Packet) = 0;
 };
 
-// TODO: bu nssocketi bi üst seviyeye çýkarmanýn yolunu bulak
-class NSocket
-{
-public:
-	bool ConnectionStatus;
-	NService* Service;
-	
-	/// You can point to custom data from this pointer.
-	/// OR SHOULD WE MAKE IT DERIVABLE?
-	void* DataPtr;
 
-	inline void Sent(NPacket* packet)
-	{
-		Service->Sent(this,packet);
-	}
 
-	inline void Received(NPacket* packet)
-	{
-		Service->Received(this,packet);
-	}
-
-	inline void Connected()
-	{
-		ConnectionStatus = true;
-		Service->Connected(this);
-	}
-
-	inline void Disconnected()
-	{
-		ConnectionStatus = false;
-		Service->Disconnected(this);
-	}
-
-	/*inline void Send(NPacket* Packet)
-	{
-		Service->Server->Send(this,Packet);
-	}
-
-	inline void Recv()
-	{
-		//Service->Server->
-	}*/
-
-	/*virtual void Send() = 0;
-	virtual void Received() = 0;*/
-};
 
 /**
  * Server interface for networking.
@@ -125,10 +83,9 @@ public:
 
 
 	virtual void Disconnect( NSocket* Client, bool Graceful = false) = 0;
-
+	
 	/**
-	 * After a packet passed to this function, you should not modify it.
-	 * It maybe even got freed!
+	 * You have to take care of the Packet.
 	 */
 	virtual void Send( NSocket* Client, NPacket* Packet) = 0;
 
@@ -140,6 +97,66 @@ public:
 
 	virtual void CreateListener( NIPAddress Device, ui16 Port, NProtocol Protocol, NService* Service) = 0;
 
+};
+
+
+/// SOCKET POOL
+/// BUFFER POOL
+/// BYTE QUEUE
+class NSocket
+{
+public:
+	bool		ConnectionStatus;
+	NService*	Service;
+	NServer*	Server;
+
+	byte		ReceiveByteBuffer[MAX_BUFF_SIZE];
+	byte		SendByteBuffer[MAX_BUFF_SIZE];
+
+	NPacket		ReceiveBuffer;
+	NPacket		SendBuffer;
+
+	/// Object related to this socket can be hold in this variable
+	void*		DataObject;
+
+	NSocket()
+	{
+		ReceiveBuffer.Use(ReceiveByteBuffer,MAX_BUFF_SIZE);
+		SendBuffer.Use(SendByteBuffer,MAX_BUFF_SIZE);
+		DataObject = 0;
+	}
+
+	inline void Sent(NPacket* packet)
+	{
+		Service->Sent(this,packet);
+	}
+
+	inline void Received(NPacket* packet)
+	{
+		Service->Received(this,packet);
+	}
+
+	inline void Connected()
+	{
+		ConnectionStatus = true;
+		Service->Connected(this);
+	}
+
+	inline void Disconnected()
+	{
+		ConnectionStatus = false;
+		Service->Disconnected(this);
+	}
+
+	inline void Send(NPacket* Packet)
+	{
+		Server->Send(this,Packet);
+	}
+
+	inline void Disconnect(bool Graceful = false)
+	{
+		Server->Disconnect(this,Graceful);
+	}
 };
 
 #endif

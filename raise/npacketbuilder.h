@@ -21,9 +21,11 @@ private:
 
 public:
 
-	NPacketBuilder() : TBuffer(512) 
+	NPacket* CurrentPacket;
+
+	NPacketBuilder() : TBuffer() 
 	{
-		Index = 0;
+	
 	}
 
 	/**
@@ -36,6 +38,14 @@ public:
 		Data = dstPtr;
 		Capacity = dstSize;
 		Index = 0;
+	}
+
+	NPacketBuilder(NPacket* target)
+	{
+		Data = target->Data;
+		Capacity = target->Capacity;
+		Index = target->Length;
+		CurrentPacket = target;
 	}
 
 	NPacketBuilder(int _capacity) : TBuffer(_capacity) 
@@ -78,14 +88,19 @@ public:
 		Data[Index++] = '\n';
 	}
 
+	inline void EndPacket()
+	{
+		CurrentPacket->Length = Index;
+		Detach();
+	}
+
 	inline NPacket* ToPacket()
 	{
 		// TODO: USE A OBJECT POOL HERE
 		NPacket* result = new NPacket();
 		
 		result->Use(Data,Capacity);
-		result->TotalBytes = Index;
-		result->SentBytes = 0;
+		result->Length = Index;
 		Detach();
 
 		return result;

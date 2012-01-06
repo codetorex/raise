@@ -227,8 +227,7 @@ NSocketWindows* NServerWindows::AllocateNewSocket( SOCKET sd, PacketIO op )
 
 NSocketWindows::NSocketWindows()
 {
-	IOContextSend.Clear();
-	IOContextRecv.Clear();
+	IOContextRecv.UseRecvPacket(&ReceiveBuffer);
 }
 
 NSocketWindows* NServerWindows::UpdateCompletionPort( SOCKET sd, PacketIO op, bool addtoList )
@@ -318,7 +317,7 @@ bool NServerWindows::CreateAcceptSocket( NListenerWindows* Listener, bool Update
 	// pay close attention to these parameters and buffer lengths
 	//
 	nRet = Listener->ListenSocket.fnAcceptEx(Listener->ListenSocket.Socket, Listener->ListenSocket.IOContextRecv.SocketAccept,
-		(LPVOID)(Listener->ListenSocket.IOContextRecv.Buffer),
+		(LPVOID)(Listener->ListenSocket.ReceiveByteBuffer),
 		MAX_BUFF_SIZE - (2 * (sizeof(SOCKADDR_STORAGE) + 16)),
 		sizeof(SOCKADDR_STORAGE) + 16, sizeof(SOCKADDR_STORAGE) + 16,
 		&dwRecvNumBytes, 
@@ -386,7 +385,7 @@ void NServerWindows::ReceiveFrom( NSocketWindows* sock )
 	sock->IOContextRecv.Operation = CIO_Read;
 	dwRecvNumBytes = 0;
 	dwFlags = 0;
-	buffRecv.buf = sock->IOContextRecv.Buffer;
+	buffRecv.buf = (char*)sock->ReceiveByteBuffer;
 	buffRecv.len = MAX_BUFF_SIZE;
 
 	nRet = WSARecv(sock->Socket,&buffRecv, 1,&dwRecvNumBytes,&dwFlags,&sock->IOContextRecv.Overlapped, NULL);
@@ -405,17 +404,10 @@ void NServerWindows::Send( NSocket* Client, NPacket* Packet )
 	int nRet = 0;
 	DWORD dwSendNumBytes = 0;
 	
-	
-
 	NSocketWindows* sock = (NSocketWindows*)Client;
 
 	sock->IOContextSend.Operation = CIO_Write;
-	sock->IOContextSend.wsabuf.buf = (char*)Packet->Data;
-	sock->IOContextSend.wsabuf.len  = Packet->TotalBytes;
-	sock->IOContextSend.SentBytes = 0;
-	sock->IOContextSend.TotalBytes = Packet->TotalBytes;
-
-	dwFlags = 0;
+	sock->IOContextSend.UseSendPacket(Packet);
 
 	nRet = WSASend(
 		sock->Socket,
@@ -434,8 +426,8 @@ void NServerWindows::Send( NSocket* Client, NPacket* Packet )
 			GetCurrentThreadId(), lpPerSocketContext->Socket, dwIoSize);*/
 	}
 
-	Packet->Detach();
-	delete Packet; // TODO: use a pool return here.
+	//Packet->Detach();
+	//delete Packet; // TODO: use a pool return here.
 }
 
 void NServerWindows::WorkerThreadFunction()
@@ -513,6 +505,9 @@ void NServerWindows::WorkerThreadFunction()
 
 				lpAcceptSocketContext = UpdateCompletionPort(lpPerSocketContext->IOContextRecv.SocketAccept, CIO_Accept, TRUE);
 				lpAcceptSocketContext->Service = Listener->Service;
+				lpAcceptSocketContext->Server = Listener->Service->Server;
+				
+				//lpAcceptSocketContext->IOContextRecv.UseRecvPacket( Listener->Service->CreateReceiveBuffer() );
 
 				if( lpAcceptSocketContext == NULL ) 
 				{
@@ -529,10 +524,12 @@ void NServerWindows::WorkerThreadFunction()
 					lpAcceptSocketContext->IOContextRecv.TotalBytes = dwIoSize;
 					lpAcceptSocketContext->IOContextRecv.SentBytes = 0;
 					lpAcceptSocketContext->IOContextRecv.wsabuf.len = dwIoSize;
+					lpAcceptSocketContext->IOContextRecv.CurrentPacket->Length = dwIoSize;
 
-					MemoryDriver::Copy(lpAcceptSocketContext->IOContextRecv.Buffer,lpPerSocketContext->IOContextRecv.Buffer,dwIoSize);
+					MemoryDriver::Copy(lpAcceptSocketContext->ReceiveByteBuffer,lpPerSocketContext->ReceiveByteBuffer,dwIoSize);
 
-					lpAcceptSocketContext->Received(&lpAcceptSocketContext->IOContextRecv);
+
+					lpAcceptSocketContext->Received(lpAcceptSocketContext->IOContextRecv.CurrentPacket);
 
 					Log.Output(LG_INF,"WorkerThread %: Socket(%) AcceptEx completed (% bytes)",sfu(GetCurrentThreadId()),sfu(lpPerSocketContext->Socket),sfu(dwIoSize));
 				} 
@@ -575,7 +572,8 @@ void NServerWindows::WorkerThreadFunction()
 			lpIOContext->TotalBytes = dwIoSize;
 			lpIOContext->SentBytes = 0;
 			lpIOContext->wsabuf.len = dwIoSize;
-			lpPerSocketContext->Received(lpIOContext);
+			lpIOContext->CurrentPacket->Length = dwIoSize;
+			lpPerSocketContext->Received(lpIOContext->CurrentPacket);
 			Log.Output(LG_INF,"WorkerThread %: Socket(%) Recv completed (% bytes)",  sfu(GetCurrentThreadId()), sfu(lpPerSocketContext->Socket), sfu(dwIoSize));
 			break;
 
@@ -597,7 +595,7 @@ void NServerWindows::WorkerThreadFunction()
 				// the previous write operation didn't send all the data,
 				// post another send to complete the operation
 				//
-				buffSend.buf = lpIOContext->Buffer + lpIOContext->SentBytes;
+				buffSend.buf = (char*)lpIOContext->CurrentPacket->Data + lpIOContext->SentBytes;
 				buffSend.len = lpIOContext->TotalBytes - lpIOContext->SentBytes;
 				nRet = WSASend (
 					lpPerSocketContext->Socket,
@@ -616,8 +614,8 @@ void NServerWindows::WorkerThreadFunction()
 			} 
 			else 
 			{
-				lpPerSocketContext->Sent(lpIOContext);
-				Log.Output(LG_INF,"WorkerThread %: Socket(%) Send completed (% bytes), Recv posted", sfu(GetCurrentThreadId()), sfu(lpPerSocketContext->Socket), sfu(dwIoSize));
+				lpPerSocketContext->Sent(lpIOContext->CurrentPacket);
+				Log.Output(LG_INF,"WorkerThread %: Socket(%) Send completed (% bytes)", sfu(GetCurrentThreadId()), sfu(lpPerSocketContext->Socket), sfu(dwIoSize));
 
 				//
 				// previous write operation completed for this socket, post another recv
@@ -788,135 +786,4 @@ void NServerWindows::CreateListener( NIPAddress Device, ui16 Port, NProtocol Pro
 	clp->Service = Service;
 
 	TaskQueue.Push(nsp);
-}
-
-void NServiceHTTP::Connected( NSocket* Client )
-{
-	Log.Output(LG_INF,"HTTP Client connected");
-}
-
-void NServiceHTTP::Disconnected( NSocket* Client )
-{
-	Log.Output(LG_INF,"HTTP Client disconnected");
-}
-
-#include "npacketbuilder.h"
-#include "tfileinfo.h"
-
-void NServiceHTTP::Received( NSocket* Client, NPacket* Packet )
-{
-	Log.Output(LG_INF,"HTTP Client request");
-
-	TString header(Packet->Data,Packet->TotalBytes);
-
-	TArray<ch32> SplitChars;
-	SplitChars.Add('\n');
-
-
-	TArray<TString*> headerLines = header.Split(SplitChars);
-
-	Log.Output(LG_INF,*headerLines.Item[0]);
-
-	TString RequestLine = *headerLines.Item[0];
-	
-	TString RequestPath = "index.html";
-
-	if (RequestLine.StartsWith("GET"))
-	{
-		int a = RequestLine.IndexOf(" ",5);
-		if (a > 0)
-		{
-			RequestPath = RequestLine.Substring(4,a-4);
-			if (RequestPath.Length == 1)
-			{
-				RequestPath = "/index.htm";
-			}
-
-			TString totalPath = RootFolder + RequestPath;
-			
-			if (TFileInfo::Exists(totalPath))
-			{
-				TFileStream* fs = File::OpenRead(totalPath);
-
-				NPacketBuilder* npb;
-
-				int fileLength = fs->Length();
-				bool appendfilecontent = false;
-
-				if (fileLength < (8 * KB)) // small files goes in one shot
-				{
-					npb = new NPacketBuilder( 9 * KB);
-					appendfilecontent = true;
-				}
-				
-				TString extension = TPath::GetExtension(totalPath);
-				extension.ToLowerInplace();
-
-				npb->AppendLine("HTTP/1.1 200 OK");
-				npb->AppendLine(ServerVersion);
-				//npb.AppendLine("Last-Modified: Wed, 08 Jan 2003 23:11:55 GMT");
-				npb->AppendLine("Accept-Ranges: bytes");
-				npb->AppendString("Content-Length: "); // HELLO
-				npb->AppendString(fileLength);
-
-				npb->AppendLine("Connection: close");
-				npb->AppendString("Content-Type: ");
-				if (extension.StartsWith("htm"))
-				{
-					npb->AppendLine("text/html; charset=UTF-8");
-				}
-				else if (extension == "jpg")
-				{
-					npb->AppendLine("image/jpeg");
-				}
-				else if (extension == "png")
-				{
-					npb->AppendLine("image/png");
-				}
-				else if (extension == "ico")
-				{
-					npb->AppendLine("image/x-icon");
-				}
-
-				npb->AppendLine();
-				
-				if (appendfilecontent)
-				{
-
-				}
-
-			}
-		}
-	}
-	else
-	{
-		Log.Output(LG_INF,"HTTP Client unsupported request, dropping client");
-		Server->Disconnect(Client,false);
-	}
-
-	headerLines.DeletePointers();
-
-
-	/*NPacketBuilder npb;
-
-	npb.AppendLine("HTTP/1.1 200 OK");
-	npb.AppendLine(ServerVersion);
-	npb.AppendLine("Last-Modified: Wed, 08 Jan 2003 23:11:55 GMT");
-	npb.AppendLine("Accept-Ranges: bytes");
-	npb.AppendLine("Content-Length: 5"); // HELLO
-	npb.AppendLine("Connection: close");
-	npb.AppendLine("Content-Type: text/html; charset=UTF-8");
-	npb.AppendLine();
-	npb.AppendString("HELLO");
-
-	NPacket* response = npb.ToPacket();*/
-
-	//Server->Send(Client,response);
-	//Log.Output(LG_INF,"HTTP Client response sending...");
-}
-
-void NServiceHTTP::Sent( NSocket* Client, NPacket* Packet )
-{
-	Log.Output(LG_INF,"HTTP Client response sent");
-	Server->Disconnect(Client,true);
 }

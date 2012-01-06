@@ -85,7 +85,8 @@ public:
 		ui32 streamLength = stream->Length();
 		CheckCapacity(streamLength);
 
-		stream->Read(Data+Index,1,streamLength);
+		int readedBytes = stream->Read(Data+Index,1,streamLength);
+		Index += readedBytes;
 
 		if (closeStream)
 		{

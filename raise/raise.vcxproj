@@ -139,8 +139,10 @@
     <ClInclude Include="nipaddress.h" />
     <ClInclude Include="npacket.h" />
     <ClInclude Include="npacketbuilder.h" />
+    <ClInclude Include="npacketpool.h" />
     <ClInclude Include="nserver.h" />
     <ClInclude Include="nserverwindows.h" />
+    <ClInclude Include="nservicehttpbasic.h" />
     <ClInclude Include="raisetypes.h" />
     <ClInclude Include="raiseversion.h" />
     <ClInclude Include="tapplication.h" />
@@ -201,6 +203,7 @@
     <ClInclude Include="tmemorydriver.h" />
     <ClInclude Include="tmemorystream.h" />
     <ClInclude Include="tnumberformatinfo.h" />
+    <ClInclude Include="tobjectpool.h" />
     <ClInclude Include="tpackedrectangle.h" />
     <ClInclude Include="tpath.h" />
     <ClInclude Include="tposition.h" />
@@ -251,6 +254,7 @@
     <ClCompile Include="npacketbuilder.cpp" />
     <ClCompile Include="nserver.cpp" />
     <ClCompile Include="nserverwindows.cpp" />
+    <ClCompile Include="nservicehttpbasic.cpp" />
     <ClCompile Include="stdafx.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Create</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Create</PrecompiledHeader>

@@ -8,7 +8,7 @@
 #include "tbytearray.h"
 #include "tlinkedlist.h"
 #include "tstack.h"
-#include "tapplication.h"
+
 
 // Bu sekilde olunca bridge pattern oluyo
 
@@ -24,7 +24,6 @@ public:
 
 };
 
-#define MAX_BUFF_SIZE		8192
 
 enum PacketIO
 {
@@ -33,12 +32,11 @@ enum PacketIO
 	CIO_Write,
 };
 
-class NClientWindowsIO: public NPacket
+class NClientWindowsIO
 {
 public:
 	NClientWindowsIO( SOCKET sd = 0, PacketIO op = CIO_Accept)
 	{
-		Use((byte*)Buffer,MAX_BUFF_SIZE);
 		Overlapped.Internal = 0;
 		Overlapped.InternalHigh = 0;
 		Overlapped.Offset = 0;
@@ -48,17 +46,42 @@ public:
 		Operation = op;
 		TotalBytes = 0;
 		SentBytes = 0;
-		wsabuf.buf = Buffer;
-		wsabuf.len = MAX_BUFF_SIZE;
+		/*wsabuf.buf = Buffer;
+		wsabuf.len = MAX_BUFF_SIZE;*/
 		SocketAccept = INVALID_SOCKET;
+
+		Working = false;
+		CurrentPacket = 0;
 	}
 
 	PacketIO			Operation;
 
 	WSAOVERLAPPED		Overlapped;
-	char				Buffer[MAX_BUFF_SIZE];
+
 	WSABUF				wsabuf;
 	SOCKET				SocketAccept;
+	NPacket*			CurrentPacket;
+	ui32				SentBytes;
+	ui32				TotalBytes;
+
+	bool				Working;
+
+	inline void UseRecvPacket(NPacket* pck)
+	{
+		wsabuf.buf = (char*)pck->Data;
+		wsabuf.len = pck->Capacity;
+		CurrentPacket = pck;
+		TotalBytes = pck->Length;
+	}
+
+	inline void UseSendPacket(NPacket* pck)
+	{
+		wsabuf.buf = (char*)pck->Data;
+		wsabuf.len = pck->Length;
+		CurrentPacket = pck;
+		TotalBytes = pck->Length;
+		SentBytes = 0;
+	}
 };
 
 class NSocketWindows: public NSocket
@@ -82,26 +105,7 @@ public:
 	void CreateAcceptSocket();
 };
 
-class NServiceHTTP: public NService
-{
-private:
-	TString ServerVersion;
 
-public:
-
-	TString RootFolder;
-
-	NServiceHTTP()
-	{
-		Name = "Basic HTTP Server";
-		ServerVersion = TString::Format("Server: raise/%", sfs(Application.Version.VersionText));
-	}	
-	
-	void Connected		(NSocket* Client);
-	void Disconnected	(NSocket* Client);
-	void Received		(NSocket* Client, NPacket* Packet);
-	void Sent			(NSocket* Client, NPacket* Packet);
-};
 
 // NCLIENT FACTORY?
 

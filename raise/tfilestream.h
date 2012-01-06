@@ -48,6 +48,8 @@ public:
 
 	}*/
 
+
+
 	TFileStream(FILE* fHandle,const TString& path,FileMode mode)
 	{
 		FileHandle = fHandle;
@@ -72,6 +74,16 @@ public:
 	inline ui32 Position()
 	{
 		return ftell(FileHandle);
+	}
+
+	ui32 Length()
+	{
+		// TODO: we could implement something with file system api
+		ui32 curPos = Position();
+		Seek(0,sEnd);
+		ui32 curLength = Position();
+		Seek(curPos,sBegin);
+		return curLength;
 	}
 
 	/**

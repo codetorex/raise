@@ -53,6 +53,8 @@ public:
 		indice = test2.IndexOf("z");
 		AddResult(indice == -1, "String index of not found test");
 
+		// TODO: test other index of functions because they are more complex!
+
 		string sub = str_test.Substring(6);
 		AddResult(str_test.Substring(1) == "ello, World!","String sub string test 1");
 		AddResult(str_test.Substring(0) == "Hello, World!","String sub string test 2");

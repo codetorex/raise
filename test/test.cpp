@@ -78,7 +78,7 @@ public:
 
 #include "tlogtext.h"
 #include "nserverwindows.h"
-
+#include "nservicehttpbasic.h"
 
 class TLogConsole: public TLogOutput
 {
@@ -88,6 +88,8 @@ public:
 		byte stackbuffer[512];
 
 		TStringBuilder sb(stackbuffer,512);
+
+
 
 		sb.Append(Log.Groups.Item[entry->GroupID]->ShortName);
 		sb.AppendChar('|');
@@ -103,7 +105,16 @@ public:
 		sb.AppendChar('|');
 		sb.AppendChar(' ');
 
-		sb.Append(entry->Content);
+
+		if (entry->Content.Length > 386)
+		{
+			sb.Append("!!! Entry too long !!!");
+		}
+		else
+		{
+			sb.Append(entry->Content);
+		}
+		
 		sb.AppendLine();
 
 		sb.PokeZero();

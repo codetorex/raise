@@ -64,9 +64,9 @@ private:
 		Data[srcLength] = 0;
 	}
 
-	inline int IndexOf(const byte* dst, int length ) const
+	inline int InternalIndexOf(const byte* dst, int dstLength , int offset,int limit) const
 	{
-		return MemoryDriver::SearchVariable(Data,ByteLength,dst,length);
+		return MemoryDriver::SearchVariable(Data + offset,limit,dst,dstLength);
 	}
 
 	/**
@@ -358,18 +358,32 @@ public:
 	 */
 	inline int IndexOf(const TString& value) const
 	{
-		return IndexOf(value.Data,value.ByteLength);
+		return InternalIndexOf(value.Data,value.ByteLength,0,ByteLength);
 	}
 
 	/**
-	 * @brief Finds a string in string from starting a startindex.
+	 * @brief Finds a string in string from starting a startIndex.
 	 * @param value string to search.
 	 * @param startIndex start point.
 	 * @return Index of found string. -1 when not found.
 	 */
 	inline int IndexOf(const TString& value, int startIndex) const
 	{
-		return IndexOf(value.Data + startIndex,value.ByteLength - startIndex);
+		if (IsASCII())
+		{
+			int result = InternalIndexOf(value.Data,value.ByteLength,startIndex,ByteLength-startIndex);
+			if (result != -1)
+			{
+				result += startIndex;
+				return result;
+			}
+			return -1;
+		}
+		else
+		{
+			// TODO: find start index byte start if non ASCII
+			throw 0;
+		}
 	}
 
 	/**
@@ -381,7 +395,22 @@ public:
 	 */
 	inline int IndexOf(const TString& value, int startIndex, int count) const
 	{
-		return IndexOf(value.Data + startIndex, min(count,(int)ByteLength - startIndex));
+		if (IsASCII())
+		{
+			int result = InternalIndexOf(value.Data, value.ByteLength,startIndex, MathDriver::Min<int>(count, ByteLength-startIndex)); //
+			if (result != -1)
+			{
+				result += startIndex;
+				return result;
+			}
+			return -1;
+		}
+		else
+		{
+			// TODO: find start index byte start and end if non ASCII
+			throw 0;
+		}
+		
 	}
 
 	/**
