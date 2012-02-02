@@ -1,6 +1,9 @@
 #include "stdafx.h"
 #include "tdirectorywin32.h"
 
+#ifdef WIN32
+
+
 class TNodeEnumeratorWin32
 {
 public:
@@ -190,3 +193,5 @@ IFileEnumerator* TDirectoryInfo::EnumerateFiles()
 	TFileEnumeratorWin32* result = new TFileEnumeratorWin32(this);
 	return result;
 }
+
+#endif

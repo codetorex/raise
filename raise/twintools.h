@@ -4,6 +4,9 @@
 #include "tutf16encoding.h"
 #include "tstringformat.h"
 
+#ifdef WIN32
+
+
 class TWinTools
 {
 public:
@@ -64,5 +67,7 @@ public:
 		return TString::Format("(%) %",sfu(error),sfs(ErrorToString(error)));
 	}
 };
+
+#endif // WIN32
 
 #endif

@@ -16,7 +16,7 @@ public:
 		sb.Append(value.Count);
 		sb.Append(" , Items: ");
 
-		for (int i=0;i<value.Count;i++)
+		for (ui32 i=0;i<value.Count;i++)
 		{
 			sb.Append(value.Item[i]);
 			sb.AppendChar(' ');

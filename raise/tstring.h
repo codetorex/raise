@@ -6,12 +6,14 @@
 #include "tstringdriver.h"
 #include "tenumerator.h"
 #include "tmemorydriver.h"
-#include "tarray.h"
 #include "mmathdriver.h"
 
 
 class TStringFormatElementBase;
 typedef const TStringFormatElementBase&			sfp; // parameter version
+
+template <class T>
+class TArray;
 
 /**
  * UTF-8 based string class.

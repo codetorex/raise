@@ -1,10 +1,10 @@
-#ifndef TLOGTEXT_H
-#define TLOGTEXT_H
+#ifndef TLOGSTREAM_H
+#define TLOGSTREAM_H
 
 #include "tlog.h"
 #include "tstreamwriterutf8.h"
 
-class TLogText: public TLogOutput
+class TLogStream: public TLogOutput
 {
 public:
 	TStreamWriterUTF8 Writer;
@@ -13,14 +13,14 @@ public:
 	bool WriteGroupName;
 	bool WriteThreadId; // good for multi-threaded debug?
 
-	TLogText()
+	TLogStream()
 	{
 		
 	}
 
 	void Initialize(TStream* outputStream);
 
-	TLogText(TStream* outputStream)
+	TLogStream(TStream* outputStream)
 	{
 		Initialize(outputStream);
 	}

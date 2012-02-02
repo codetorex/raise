@@ -1,6 +1,8 @@
 #ifndef TSTREAMREADERUTF8_H
 #define TSTREAMREADERUTF8_H
 
+#include "ttextreader.h"
+
 /**
  * If source stream is UTF8 use this for faster operations.
  * So this is basicly UTF8 optimized stream reader.

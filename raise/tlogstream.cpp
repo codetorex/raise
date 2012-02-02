@@ -1,5 +1,5 @@
 #include "stdafx.h"
-#include "tlogtext.h"
+#include "tlogstream.h"
 #include "tapplication.h"
 #include "tthread.h"
 #include "tstringbuilder.h"
@@ -7,7 +7,7 @@
 #include "ttimedriver.h"
 
 
-void TLogText::Initialize(TStream* outputStream)
+void TLogStream::Initialize(TStream* outputStream)
 {
 	Writer.Initialize(outputStream);
 	WriteTicks = true;
@@ -39,7 +39,7 @@ void TLogText::Initialize(TStream* outputStream)
 	sb.UnbindByteArray();
 }
 
-void TLogText::Output(TLogEntry* entry)
+void TLogStream::Output(TLogEntry* entry)
 {
 	byte stackbuffer[512];
 
@@ -84,7 +84,7 @@ void TLogText::Output(TLogEntry* entry)
 	}
 }
 
-TString TLogText::GetLogFileName( const TString& prefix )
+TString TLogStream::GetLogFileName( const TString& prefix )
 {
 	byte stackbuffer[48];
 	TStringBuilder sb(stackbuffer,48);

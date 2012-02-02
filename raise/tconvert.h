@@ -4,6 +4,10 @@
 #include "tstring.h"
 #include "texception.h"
 
+#ifdef LINUX
+#define sprintf_s snprintf
+#endif
+
 class TConvert
 {
 public:

@@ -3,6 +3,9 @@
 
 #include "raisetypes.h"
 
+#ifdef LINUX
+#include <string.h>
+#endif
 
 class MemoryDriver
 {

@@ -92,9 +92,21 @@ void TRMLWriter::Close()
 
 void TRMLWriter::Serialize( TMemberInfo* minfo, void* object )
 {
-	TString* objectname = minfo->ObjectName->GetStringPtr(object);
-
-	WriteElementStart(*objectname);
+	if (minfo->ObjectName != 0)
+	{
+		TString* objectname;
+		if (minfo->ObjectName->MemberType == MT_NONE)
+		{
+			objectname = &(minfo->ObjectName->Name);
+		}
+		else
+		{
+			objectname = minfo->ObjectName->GetStringPtr(object);
+		}
+	
+		WriteElementStart(*objectname);
+	}
+	
 
 	for (ui32 i=0;i<minfo->Members.Count;i++)
 	{
@@ -133,7 +145,10 @@ void TRMLWriter::Serialize( TMemberInfo* minfo, void* object )
 		}
 	}
 
-	WriteElementEnd();
+	if (minfo->ObjectName != 0)
+	{
+		WriteElementEnd();
+	}
 }
 
 void TRMLWriter::SerializeArray( TMember* curMember, void* object )

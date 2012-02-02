@@ -99,3 +99,8 @@ void TRMLReader::Parse( bool closeStream )
 		TextStream->Close();
 	}
 }
+
+void TRMLNode::Deserialize( TMemberInfo* minfo, void* object )
+{
+
+}

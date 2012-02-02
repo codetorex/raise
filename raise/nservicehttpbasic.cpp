@@ -69,7 +69,7 @@ void NServiceHTTP::Received( NSocket* Client, NPacket* Packet )
 
 				NPacketBuilder npb( &Client->SendBuffer ); // we dont need another buffer to do this job
 
-				int fileLength = fs->Length();
+				ui32 fileLength = fs->Length();
 				bool appendfilecontent = false;
 
 				if (fileLength < (Client->SendBuffer.Capacity - 1024)) // small files goes in one shot

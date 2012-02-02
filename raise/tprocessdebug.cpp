@@ -1,6 +1,7 @@
 #include "stdafx.h"
 #include "tprocessdebug.h"
 
+#ifdef WIN32
 
 void TBreakpoint::SetBreakpoint()
 {
@@ -347,3 +348,5 @@ TProcessHack::TProcessHack()
 {
 	AllMemory.Initialize("All Memory",0x00400000,0x7FFFFFFF,this);
 }
+
+#endif

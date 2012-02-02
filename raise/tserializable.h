@@ -71,18 +71,64 @@ public:
 	TMember* ObjectName;
 	TArray< TMember* > Members;
 
+	TMemberInfo()
+	{
+		ObjectName = 0;
+	}
+};
+
+class TMemberInfoBuilder
+{
+public:
+	TMemberInfo*	TargetInfo;
+	void*			RelativeObject;
+
+	TMemberInfoBuilder(TMemberInfo* _Target)
+	{
+		TargetInfo = _Target;
+	}
+
+	TMemberInfoBuilder(TMemberInfo* _Target, void* _RelativeObject)
+	{
+		TargetInfo = _Target;
+		RelativeObject = _RelativeObject;
+	}
+
+	inline void SetRelativeObject(void* relObj)
+	{
+		RelativeObject = relObj;
+	}
+
+	inline int GetOffset(void* member)
+	{
+		return (int)((byte*)member - (byte*)RelativeObject);
+	}
+
+	TMember* SetObjectName(const TString& value)
+	{
+		TMember* nmember = new TMember();
+		nmember->ID = TargetInfo->Members.Count;
+		nmember->MemberType = MT_NONE;
+		nmember->MemberSubtype = MT_NONE;
+		nmember->Offset = -1;
+		nmember->Name = value;
+		nmember->ObjectInfo = 0;
+		TargetInfo->ObjectName = nmember;
+		return nmember;
+	}
+
 	/**
 	* Sets object name from offset. It should be TString.
 	*/
 	TMember* SetObjectName(int offset)
 	{
 		TMember* nmember = new TMember();
-		nmember->ID = Members.Count;
+		nmember->ID = TargetInfo->Members.Count;
 		nmember->MemberType = MT_STRING;
 		nmember->MemberSubtype = MT_NONE;
 		nmember->Offset = offset;
 		nmember->ObjectInfo = 0;
-		ObjectName = nmember;
+		TargetInfo->ObjectName = nmember;
 		return nmember;
 	}
 
@@ -92,14 +138,23 @@ public:
 	TMember* AddMember(const TString& name,int offset, MemberTypes typ, MemberTypes subtyp = MT_NONE,TMemberInfo* minfo = 0)
 	{
 		TMember* nmember = new TMember();
-		nmember->ID = Members.Count;
+		nmember->ID = TargetInfo->Members.Count;
 		nmember->MemberType = typ;
 		nmember->MemberSubtype = subtyp;
 		nmember->Name = name;
 		nmember->Offset = offset;
 		nmember->ObjectInfo = minfo;
-		Members.Add(nmember);
+		TargetInfo->Members.Add(nmember);
 		return nmember;
+	}
+
+	/**
+	* Adds a member with name and memberPtr.
+	*/
+	TMember* AddMember(const TString& name,void* MemberPtr, MemberTypes typ, MemberTypes subtyp = MT_NONE,TMemberInfo* minfo = 0)
+	{
+		int offset = GetOffset(MemberPtr);
+		AddMember(name,offset,typ,subtyp,minfo);
 	}
 
 	/**
@@ -108,18 +163,13 @@ public:
 	TMember* AddMember(int offset, MemberTypes typ, MemberTypes subtyp = MT_NONE,TMemberInfo* minfo = 0)
 	{
 		TMember* nmember = new TMember();
-		nmember->ID = Members.Count;
+		nmember->ID = TargetInfo->Members.Count;
 		nmember->MemberType = typ;
 		nmember->MemberSubtype = subtyp;
 		nmember->Offset = offset;
 		nmember->ObjectInfo = minfo;
-		Members.Add(nmember);
+		TargetInfo->Members.Add(nmember);
 		return nmember;
-	}
-
-	inline static int GetOffset(void* obj, void* member)
-	{
-		return (int)((byte*)member - (byte*)obj);
 	}
 };
 

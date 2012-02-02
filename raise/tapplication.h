@@ -3,6 +3,7 @@
 
 #include "tstring.h"
 
+
 class TCultureInfo;
 
 class TVersionPhase
@@ -123,7 +124,9 @@ public:
 	/**
 	 * Uses default company name while initializing application data.
 	 */
-	void Begin( TString _Name, TVersion& _Version ); 
+	void Begin( TString _Name, TVersion& _Version );
+
+	void PrintIdentifierToConsole();
 };
 
 extern TApplication Application;

@@ -3,6 +3,7 @@
 #include "tpath.h"
 #include "raiseversion.h"
 #include "tstringformat.h"
+#include "tconsole.h"
 
 TVersionPhase TVersionPhase::PreAlpha			(0, "Pre-alpha",		"pre");
 TVersionPhase TVersionPhase::Alpha				(1, "Alpha",			"alpha");
@@ -117,3 +118,8 @@ void TApplication::Begin( TString _Name, TVersion& _Version )
 	Begin( _Name,_Version, RAISE_DEFAULT_COMPANYNAME );
 }
 
+void TApplication::PrintIdentifierToConsole()
+{
+	TString str = TString::Format("% (R) % Version %", sfs(Company), sfs(Name), sfs(Version.VersionPhaseText));
+	Console.WriteLine(str);
+}

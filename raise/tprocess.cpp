@@ -1,7 +1,9 @@
 #include "stdafx.h"
+
+#ifdef WIN32
+
 #include "tprocess.h"
 #include "texception.h"
-
 
 void TProcess::OpenFromWindow( const TString& windowname )
 {
@@ -60,3 +62,5 @@ ui32 TProcessMemory::SearchPattern( ui32 start,ui32 end, const void* needle, con
 	}
 	return NFOUND;
 }
+
+#endif

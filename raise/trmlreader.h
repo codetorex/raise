@@ -4,8 +4,9 @@
 #include "tstring.h"
 #include "tdictionary.h"
 #include "tstreamreader.h"
+#include "tserializable.h"
 
-class TRMLNode
+class TRMLNode: public TDeserializer
 {
 public:
 	TString Name;
@@ -23,6 +24,8 @@ public:
 	{
 		Name = NodeName;
 	}
+
+	void Deserialize(TMemberInfo* minfo, void* object);
 };
 
 class TRMLReader

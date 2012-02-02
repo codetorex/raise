@@ -13,6 +13,12 @@
 #include <ws2tcpip.h>
 #include <mswsock.h>
 
+#else
+#define LINUX
+#endif
+
+#ifdef LINUX
+#include <pthread.h>
 #endif
 
 #include <stdlib.h>

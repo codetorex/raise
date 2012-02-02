@@ -1,6 +1,9 @@
 #ifndef NSERVERWINDOWS_H
 #define NSERVERWINDOWS_H
 
+#ifdef WIN32
+
+
 #include "nserver.h"
 #include "tarray.h"
 #include "tthread.h"
@@ -144,7 +147,7 @@ private:
 
 	bool Restart;
 	bool EndServer;
-	int	BestWorkerCount;
+	ui32 BestWorkerCount;
 
 	bool CreateListenSocket();
 
@@ -197,5 +200,7 @@ public:
 
 	void CreateListener( NIPAddress Device, ui16 Port, NProtocol Protocol, NService* Service);
 };
+
+#endif
 
 #endif

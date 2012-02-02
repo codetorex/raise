@@ -3,6 +3,9 @@
 #include "texception.h"
 #include "tlog.h"
 
+#ifdef WIN32
+
+
 void NServerWindows::Cleanup()
 {
 	if(CleanupEvent[0] != WSA_INVALID_EVENT) 
@@ -48,7 +51,7 @@ void NServerWindows::MainThreadFunction()
 	}
 	catch(int a)
 	{
-		Log.Output(LG_ERR,"InitializeCriticalSection raised an exception.");
+		Log.Output(LG_ERR,"InitializeCriticalSection raised an exception. %", sfi(a));
 		Cleanup();
 		return;
 	}
@@ -127,7 +130,7 @@ void NServerWindows::MainThreadFunction()
 		}
 
 		HANDLE tHandles[64];
-		for (int i=0;i<WorkerThreads.Count;i++)
+		for (ui32 i=0;i<WorkerThreads.Count;i++)
 		{
 			tHandles[i] = WorkerThreads.Item[i]->ThreadHandle;
 		}
@@ -438,13 +441,13 @@ void NServerWindows::WorkerThreadFunction()
 	NSocketWindows* lpPerSocketContext = NULL;
 	NSocketWindows* lpAcceptSocketContext = NULL;
 	NClientWindowsIO* lpIOContext = NULL; 
-	WSABUF buffRecv;
+	//WSABUF buffRecv;
 	WSABUF buffSend;
 	DWORD dwRecvNumBytes = 0;
 	DWORD dwSendNumBytes = 0;
 	DWORD dwFlags = 0;
 	DWORD dwIoSize = 0;
-	HRESULT hRet;
+	//HRESULT hRet;
 
 	ULONG_PTR Key;
 
@@ -787,3 +790,5 @@ void NServerWindows::CreateListener( NIPAddress Device, ui16 Port, NProtocol Pro
 
 	TaskQueue.Push(nsp);
 }
+
+#endif

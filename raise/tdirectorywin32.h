@@ -2,6 +2,9 @@
 #define TDIRECTORYWIN32_H
 
 #include "tdirectoryinfo.h"
+
+#ifdef WIN32
+
 #include "twintools.h"
 
 class TDirectoryInfo: public IDirectory
@@ -169,5 +172,6 @@ public:
 };
 
 
+#endif // WIN32
 
 #endif

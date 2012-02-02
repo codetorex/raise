@@ -4,6 +4,7 @@
 
 #include "raisetypes.h"
 #include "tmemorydriver.h"
+//#include "texception.h"
 
 #define TARRAYDEFSIZE	4
 
@@ -68,7 +69,7 @@ public:
 
 	void DeletePointers()
 	{
-		for (int i=0;i<Count;i++)
+		for (ui32 i=0;i<Count;i++)
 		{
 			delete Item[i];
 		}
@@ -259,7 +260,7 @@ public:
 	{
 		if ( index > Count )
 		{
-			throw Exception("Index out of bounds");
+			throw Exception(_RT("Index out of bounds"));
 		}
 		return Item[index];
 	}
@@ -277,7 +278,7 @@ public:
 	{
 		if (Count > 0)
 		{
-			T k = Item[Count-1]
+			T k = Item[Count-1];
 			Count--;
 			return k;
 		}
@@ -308,7 +309,7 @@ public:
 			Capacity = 0;
 			Item = 0;
 			Count = 0;
-			throw Exception("Tried to allocate 0, unnecessary");
+			throw Exception(_RT("Tried to allocate 0, unnecessary"));
 			return;
 		}
 

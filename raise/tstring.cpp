@@ -2,6 +2,7 @@
 #include "tstring.h"
 #include "tutf16encoding.h"
 #include "texception.h"
+#include "tarray.h"
 
 #include "tstringbuilder.h"
 #include "tstringformat.h"

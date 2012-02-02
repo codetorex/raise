@@ -11,6 +11,9 @@
 
 // Custom Types And Generic Macros Comes Here
 
+#define _RT(x)      TString( #x )
+#define _RW(x)		TString( L ## x )
+
 #define NIL			((void*)0)
 
 typedef unsigned long long	ui64;

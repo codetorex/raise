@@ -422,9 +422,6 @@
     <ClInclude Include="tcriticalsection.h">
       <Filter>Source Files\System</Filter>
     </ClInclude>
-    <ClInclude Include="tlogtext.h">
-      <Filter>Source Files\System\Log</Filter>
-    </ClInclude>
     <ClInclude Include="tapplication.h">
       <Filter>Source Files\System</Filter>
     </ClInclude>
@@ -462,6 +459,18 @@
       <Filter>Source Files\Collection</Filter>
     </ClInclude>
     <ClInclude Include="nservicehttpbasic.h">
+      <Filter>Source Files\Network</Filter>
+    </ClInclude>
+    <ClInclude Include="tlogstream.h">
+      <Filter>Source Files\System\Log</Filter>
+    </ClInclude>
+    <ClInclude Include="tlogconsole.h">
+      <Filter>Source Files\System\Log</Filter>
+    </ClInclude>
+    <ClInclude Include="tconsole.h">
+      <Filter>Source Files\System\Console</Filter>
+    </ClInclude>
+    <ClInclude Include="nserverlinux.h">
       <Filter>Source Files\Network</Filter>
     </ClInclude>
   </ItemGroup>
@@ -586,9 +595,6 @@
     <ClCompile Include="tapplication.cpp">
       <Filter>Source Files\System</Filter>
     </ClCompile>
-    <ClCompile Include="tlogtext.cpp">
-      <Filter>Source Files\System\Log</Filter>
-    </ClCompile>
     <ClCompile Include="nserver.cpp">
       <Filter>Source Files\Network</Filter>
     </ClCompile>
@@ -603,6 +609,15 @@
     </ClCompile>
     <ClCompile Include="nservicehttpbasic.cpp">
       <Filter>Source Files\Network</Filter>
+    </ClCompile>
+    <ClCompile Include="tlogstream.cpp">
+      <Filter>Source Files\System\Log</Filter>
+    </ClCompile>
+    <ClCompile Include="tlogconsole.cpp">
+      <Filter>Source Files\System\Log</Filter>
+    </ClCompile>
+    <ClCompile Include="tconsole.cpp">
+      <Filter>Source Files\System\Console</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

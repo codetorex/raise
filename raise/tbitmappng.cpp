@@ -192,7 +192,7 @@ void TBitmapPNG::WriteBitmap( TBitmap* bmp, Stream* dst )
 
 		if(ppbRowPointers)
 			delete [] ppbRowPointers;
-		throw Exception("Writing bmp failed");
+		throw ObjectException("Writing bmp failed",ms);
 	}
 }
 

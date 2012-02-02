@@ -3,6 +3,9 @@
 
 #include "tfileinfo.h"
 
+#ifdef WIN32
+
+
 /**
 * System file implementation of File interface.
 */
@@ -44,7 +47,7 @@ public:
 
 		FileAttributeCache = true;
 		
-		if ( GetFileAttributesExW(tmp,GET_FILEEX_INFO_LEVELS::GetFileExInfoStandard,&fileAttributes) != 0 )
+		if ( GetFileAttributesExW(tmp,GetFileExInfoStandard,&fileAttributes) != 0 )
 		{
 			FileExists = true;
 			Attributes = fileAttributes.dwFileAttributes;
@@ -181,5 +184,7 @@ public:
 	}
 
 };
+
+#endif // WIN32
 
 #endif

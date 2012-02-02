@@ -2,6 +2,9 @@
 #include "tprocessdebug.h"
 #include "tprocessmodule.h"
 
+#ifdef WIN32
+
+
 ui32 TProcessMemoryRegion::FindString( const TString& src )
 {
 	if (src.Length != src.ByteLength)
@@ -124,3 +127,5 @@ ui32 TProcessMemoryRegion::SearchPattern( const void* needle, const byte* patter
 {
 	return Parent->SearchPattern(StartAddress,EndAddress,needle,pattern,length);
 }
+
+#endif

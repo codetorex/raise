@@ -159,4 +159,10 @@ public:
 	}
 };
 
+#ifdef WIN32
+#include "nserverwindows.h"
+#else
+#include "nserverlinux.h"
+#endif
+
 #endif

@@ -76,7 +76,7 @@ public:
 #include "trmlwriter.h"
 #include "tfile.h"
 
-#include "tlogtext.h"
+#include "tlogstream.h"
 #include "nserverwindows.h"
 #include "nservicehttpbasic.h"
 
@@ -134,7 +134,7 @@ int main(int argc,char** argv)
 {
 	Application.Begin( "RaiseLib Test Suite", RaiseModule.Version );
 
-	/*TConsoleReport suite("RaiseLib Test Suite");
+	TConsoleReport suite("RaiseLib Test Suite");
 	suite.PrintApplicationInfo = true;
 	suite.PrintTestName = false;
 
@@ -144,27 +144,8 @@ int main(int argc,char** argv)
 	suite.AddTest(&TColorCheck);
 
 	//suite.PrintOutputs = true;
-	suite.RunSuite();*/
+	suite.RunSuite();
 	
-	TLogText textLog(new TFileStream("log.txt", fm_Write));
-	TLogConsole console;
-	Log.RegisterOutput(&textLog);
-	Log.RegisterOutput(&console);
-
-	NServerWindows winSrv;
-
-	NServiceHTTP http;
-
-	http.RootFolder = "F:\\Inetpub\\wwwroot\\11FenC";
-
-	//winSrv.Initialize();
-
-	winSrv.AddService(&http);
-	winSrv.CreateListener(NIPAddress("127.0.0.1"),31,NP_TCP,&http);
-
-
-	winSrv.MainThreadFunction();
-
 	getchar();
 
 

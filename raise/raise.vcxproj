@@ -141,6 +141,7 @@
     <ClInclude Include="npacketbuilder.h" />
     <ClInclude Include="npacketpool.h" />
     <ClInclude Include="nserver.h" />
+    <ClInclude Include="nserverlinux.h" />
     <ClInclude Include="nserverwindows.h" />
     <ClInclude Include="nservicehttpbasic.h" />
     <ClInclude Include="raisetypes.h" />
@@ -170,6 +171,7 @@
     <ClInclude Include="tcompositesimple.h" />
     <ClInclude Include="tcomposition.h" />
     <ClInclude Include="tcompositionprimitive.h" />
+    <ClInclude Include="tconsole.h" />
     <ClInclude Include="tconvert.h" />
     <ClInclude Include="tcriticalsection.h" />
     <ClInclude Include="tcultureinfo.h" />
@@ -198,8 +200,9 @@
     <ClInclude Include="tkeyvalue.h" />
     <ClInclude Include="tlatin1encoding.h" />
     <ClInclude Include="tlog.h" />
+    <ClInclude Include="tlogconsole.h" />
     <ClInclude Include="tloghtml.h" />
-    <ClInclude Include="tlogtext.h" />
+    <ClInclude Include="tlogstream.h" />
     <ClInclude Include="tmemorydriver.h" />
     <ClInclude Include="tmemorystream.h" />
     <ClInclude Include="tnumberformatinfo.h" />
@@ -271,6 +274,7 @@
     <ClCompile Include="tbytearray.cpp" />
     <ClCompile Include="tcolor.cpp" />
     <ClCompile Include="tcomposition.cpp" />
+    <ClCompile Include="tconsole.cpp" />
     <ClCompile Include="tconvert.cpp" />
     <ClCompile Include="tdatetime.cpp" />
     <ClCompile Include="tdirectorywin32.cpp" />
@@ -281,7 +285,8 @@
     <ClCompile Include="thashcodeprovider.cpp" />
     <ClCompile Include="tiniparser.cpp" />
     <ClCompile Include="tlog.cpp" />
-    <ClCompile Include="tlogtext.cpp" />
+    <ClCompile Include="tlogconsole.cpp" />
+    <ClCompile Include="tlogstream.cpp" />
     <ClCompile Include="tmemory.cpp" />
     <ClCompile Include="tpackedrectangle.cpp" />
     <ClCompile Include="tpath.cpp" />
