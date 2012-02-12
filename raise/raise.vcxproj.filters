@@ -87,6 +87,9 @@
     <Filter Include="Source Files\System\Console">
       <UniqueIdentifier>{4d5055e3-74f0-48d3-a5fb-88da115ae847}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Source Files\Drivers">
+      <UniqueIdentifier>{8de8c275-d9ac-46cd-81a2-07bafe951f18}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="tlinkedlist.h">
@@ -473,6 +476,12 @@
     <ClInclude Include="nserverlinux.h">
       <Filter>Source Files\Network</Filter>
     </ClInclude>
+    <ClInclude Include="tcommandline.h">
+      <Filter>Source Files\System\Console</Filter>
+    </ClInclude>
+    <ClInclude Include="texceptionlow.h">
+      <Filter>Source Files\System</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">
@@ -618,6 +627,12 @@
     </ClCompile>
     <ClCompile Include="tconsole.cpp">
       <Filter>Source Files\System\Console</Filter>
+    </ClCompile>
+    <ClCompile Include="tcommandline.cpp">
+      <Filter>Source Files\System\Console</Filter>
+    </ClCompile>
+    <ClCompile Include="texceptionlow.cpp">
+      <Filter>Source Files\System</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

@@ -52,7 +52,7 @@ public:
 #else
 
 	inline static void ShortCopy(void* _dst,void* _src,int _size)
-	{
+	{q
 		_asm
 		{
 			mov rsi,_src

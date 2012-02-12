@@ -4,6 +4,7 @@
 #include "tstring.h"
 #include "tconvert.h"
 #include "tstringformat.h"
+#include "texceptionlow.h"
 
 
 class TStringBuilder: private TByteArray
@@ -168,7 +169,7 @@ public:
 			Data[ByteLength] = 0;
 			return;
 		}
-		throw NotImplementedException();
+		LowLevelNotImplemented(SOURCENAME(4),__LINE__);
 	}
 
 	inline void Append(int value)

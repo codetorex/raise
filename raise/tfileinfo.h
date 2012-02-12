@@ -26,7 +26,7 @@ enum FileAttributes
 	fa_NOT_CONTENT_INDEXED  = 0x00002000, 
 	fa_ENCRYPTED            = 0x00004000, 
 	fa_VIRTUAL              = 0x00010000, 
-	fa_INVALID				= INVALID_FILE_ATTRIBUTES,
+	fa_INVALID				= 0xFFFFFFFF,
 };
 
 class IFileSystemNode

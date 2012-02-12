@@ -51,6 +51,10 @@ public:
 	int CursorX;
 	int CursorY;
 
+#ifdef WIN32
+
+
+
 	HANDLE ConsoleHandle;
 
 	inline void Initialize()
@@ -85,7 +89,8 @@ public:
 	{
 		if (value.IsASCII())
 		{
-			puts((char*)value.Data);
+			//puts((char*)value.Data);
+			fwrite(value.Data,1,value.ByteLength,stdout);
 		}
 		else
 		{
@@ -93,11 +98,52 @@ public:
 		}
 	}
 
+	inline int ReadKey(bool intercept = true)
+	{
+		return getchar();
+	}
+
 	inline void WriteLine()
 	{
 		printf("\n");
 	}
 
+#else
+
+	inline void Initialize()
+	{
+		
+	}
+
+	inline void GetPosition()
+	{
+		
+	}
+
+	inline void SetPosition(int x, int y)
+	{
+		
+	}
+
+	inline void SetColor(ConsoleColor BackColor, ConsoleColor ForeColor)
+	{
+		
+	}
+
+	inline void Write(const TString& value)
+	{
+		
+	}
+
+	inline void WriteLine()
+	{
+		
+	}
+
+
+#endif
+
+	
 	inline void WriteLine(const TString& value)
 	{
 		Write(value);

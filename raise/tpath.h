@@ -36,7 +36,8 @@ public:
 			ui32 errorId = GetLastError();
 			if (errorId != ERROR_ALREADY_EXISTS)
 			{
-				throw Exception("Creating directory failed. " + Convert::ToString(errorId));
+				throw OSException("Creating directory failed.", errorId);
+				//throw Exception("Creating directory failed. " + Convert::ToString(errorId));
 				//throw Exception(TString::FormatNew("Creating directory failed. Error: 0x%X",errorId));
 			}
 		}
@@ -45,22 +46,34 @@ public:
 
 #else
 
+#include <unistd.h>
+#include <sys/stat.h>
+#include <sys/types.h>
+
 class TPathDriver
 {
 public:
-	static void CurrentDirectory(TString& buffer)
+	static TString CurrentDirectory()
 	{
-		getcwd(buffer.Data,buffer.Capacity); // TODO: Not forget to set string length after loading.
+		TString result(1024);
+		char* opr = getcwd((char*)result.Data,result.Capacity); // TODO: Not forget to set string length after loading.
+		if (opr == NULL)
+		{
+			throw Exception(SOURCENAME(0),__LINE__,0,"getcwd encountered with an error");
+		}
+		result.UpdateLengths();
+		return result;
 	}
 
-	static void TempDirectory(TString& buffer)
+	static TString TempDirectory()
 	{
-		buffer = "/tmp/";
+		TString result = "/tmp/";
+		return result;
 	}
 
 	static void CreateFolder(TString& path)
 	{
-		if ( mkdir(path.Data,NULL) == 0 )
+		if ( mkdir((char*)path.Data,NULL) == 0 )
 		{
 			throw Exception("Creating directory failed");
 		}

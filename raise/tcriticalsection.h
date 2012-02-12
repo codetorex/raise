@@ -34,6 +34,8 @@ public:
 
 #else
 
+#include <pthread.h>
+
 class TCriticalSection
 {
 public:
@@ -41,12 +43,13 @@ public:
 
 	inline void Finalize()
 	{
-		cs_mutex = NULL; // is this correct?
+		pthread_mutex_destroy(&cs_mutex);
 	}
 
 	inline void Initialize()
 	{
 		cs_mutex = PTHREAD_MUTEX_INITIALIZER;
+		pthread_mutex_init(&cs_mutex,NULL);
 	}
 
 	inline void Lock()

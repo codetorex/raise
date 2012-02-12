@@ -6,6 +6,12 @@
 #include "tconvert.h"
 #include "tstringformat.h"
 
+#ifdef LINUX
+#include <sys/socket.h>
+#include <netinet/in.h>
+#include <arpa/inet.h>
+#endif
+
 class NIPAddress
 {
 public:

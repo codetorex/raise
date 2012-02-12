@@ -93,6 +93,7 @@ public:
 
 #else
 #include <sys/times.h>
+#include <sys/time.h>
 
 class TimeDriver
 {

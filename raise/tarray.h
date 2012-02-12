@@ -4,7 +4,7 @@
 
 #include "raisetypes.h"
 #include "tmemorydriver.h"
-//#include "texception.h"
+#include "texceptionlow.h"
 
 #define TARRAYDEFSIZE	4
 
@@ -147,7 +147,7 @@ public:
 			}
 			if (i == 1024)
 			{
-				throw -1; //Exception("Impossible"); // TODO: if it will be possible someday change this.
+				LowLevelException(SOURCENAME(0),__LINE__,0,"Impossible"); //Exception("Impossible"); // TODO: if it will be possible someday change this.
 			}
 		}
 	}
@@ -260,7 +260,7 @@ public:
 	{
 		if ( index > Count )
 		{
-			throw Exception(_RT("Index out of bounds"));
+			LowLevelException(SOURCENAME(0),__LINE__,1,"Index out of bounds");
 		}
 		return Item[index];
 	}
@@ -306,10 +306,17 @@ public:
 	{
 		if (newsize == 0)
 		{
+			if (Item)
+			{
+				delete [] Item;
+			}
+
 			Capacity = 0;
 			Item = 0;
 			Count = 0;
-			throw Exception(_RT("Tried to allocate 0, unnecessary"));
+			
+			LowLevelException(SOURCENAME(0),__LINE__,2,"Allocate 0 for array is unnecessary maybe bug?");
+			//throw Exception(0, __LINE__ ,3);//"Index out of bounds");
 			return;
 		}
 
@@ -323,7 +330,6 @@ public:
 		Capacity = newsize;
 	}
 };
-
 
 //TODO: implement tarray enumerator?
 

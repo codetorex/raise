@@ -11,10 +11,12 @@
 
 // Custom Types And Generic Macros Comes Here
 
-#define _RT(x)      TString( #x )
-#define _RW(x)		TString( L ## x )
+#define _RT(x)				TString( #x )
+#define _RW(x)				TString( L ## x )
 
-#define NIL			((void*)0)
+#define SOURCENAME(x)		x
+
+#define NIL					((void*)0)
 
 typedef unsigned long long	ui64;
 typedef unsigned int		ui32; // It was unsigned long before but in linux longs have 8 bytes. (64 bit stuff?)
@@ -26,16 +28,16 @@ typedef short				i16;
 typedef char				i8;
 typedef unsigned char		byte; // technically ui8
 
-#define DWORDSTR(x) (*(ui32*)x)
+#define DWORDSTR(x)			(*(ui32*)x)
 
-#define PI			3.1415926535897f
-#define HALFPI		1.5707963267948f
+#define PI					3.1415926535897f
+#define HALFPI				1.5707963267948f
 
 #define RADTODEG(rad)		((rad) * (180.0f / PI))
 #define DEGTORAD(deg)		((deg) * (PI / 180.0f))
 
-#define KB			(1024)
-#define MB			(1048576)
+#define KB					(1024)
+#define MB					(1048576)
 
 #define RDLL
 
@@ -61,7 +63,7 @@ typedef unsigned char		byte; // technically ui8
 #endif
 
 
-#define MXDWORD		0xFFFFFFFF
+#define MXDWORD				0xFFFFFFFF
 
 #define DIV2(x)				( (x) >> 1 )
 #define DIV4(x)				( (x) >> 2 )
@@ -82,10 +84,10 @@ typedef unsigned char		byte; // technically ui8
 #define MOD16(x)			( (x) & 15 )
 #define MOD32(x)			( (x) & 31 )
 
-#define DW1BYTE			0x000000FF
-#define DW2BYTE			0x0000FF00
-#define DW3BYTE			0x00FF0000
-#define DW4BYTE			0xFF000000
+#define DW1BYTE				0x000000FF
+#define DW2BYTE				0x0000FF00
+#define DW3BYTE				0x00FF0000
+#define DW4BYTE				0xFF000000
 
 //#define NOPNGLIB
 

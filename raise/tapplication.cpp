@@ -96,7 +96,7 @@ void TModule::SetIdentifyText()
 	IdentifyBuildText = TString::Format("% - % - %", sfs(Name), sfs(Version.BuildPhaseText), sfs(Company));
 }
 
-TModule RaiseModule("Raise",TVersion(RAISE_BUILD,RAISE_PHASE));
+TModule RaiseModule = TModule("Raise",TVersion(RAISE_BUILD,RAISE_PHASE));
 
 TApplication Application;
 

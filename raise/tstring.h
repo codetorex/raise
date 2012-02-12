@@ -7,7 +7,7 @@
 #include "tenumerator.h"
 #include "tmemorydriver.h"
 #include "mmathdriver.h"
-
+#include "texceptionlow.h"
 
 class TStringFormatElementBase;
 typedef const TStringFormatElementBase&			sfp; // parameter version
@@ -36,12 +36,17 @@ public:
 
 	TSharedByteArray* Ref; // internal reference for avoid unnecessary copying
 
-private:
 
-	inline void CountCharsAndBytesConst()
+	/**
+	 * This was private function until I am implementing Linux's current directory function.
+	 * Since most of the time it's not necessary. Only useful when you manually manipulate the data and need to update internal values.
+	 */
+	inline void UpdateLengths()
 	{
 		StringDriver::Length(Data,Length,ByteLength);
 	}
+
+private:
 
 	inline void StringAllocate(int charCap)
 	{
@@ -192,7 +197,7 @@ public:
 	TString(const char* value)
 	{
 		Data = (byte*)value;
-		CountCharsAndBytesConst();
+		UpdateLengths();
 		Capacity = 0;
 		Ref = 0;
 	}
@@ -384,7 +389,7 @@ public:
 		else
 		{
 			// TODO: find start index byte start if non ASCII
-			throw 0;
+			LowLevelNotImplemented(SOURCENAME(1),__LINE__);
 		}
 	}
 
@@ -410,7 +415,7 @@ public:
 		else
 		{
 			// TODO: find start index byte start and end if non ASCII
-			throw 0;
+			LowLevelNotImplemented(SOURCENAME(1),__LINE__);
 		}
 		
 	}
@@ -528,13 +533,34 @@ public:
 		Data[ByteLength] = 0;
 	}
 
+	/**
+	 * This function should be tested,
+	 * Implemented for usage of stack stored char* arrays to be correctly assigned to current string.
+	 */
+	inline TString& operator = (char* value)
+	{
+		LowLevelException("Used string assign with non constant char array");
+
+		DetachToDestroy();
+		Data = (byte*)value;
+		Capacity = 0;
+		Ref = 0;
+		CountCharsAndBytes();
+		StringAllocateCopy(ByteLength,(byte*)value,ByteLength);
+		CreateRef();
+		return *this;
+	}
+	
 	inline TString& operator = (const char* value)
 	{
 		DetachToDestroy();
 		Data = (byte*)value;
 		Capacity = 0;
 		Ref = 0;
-		CountCharsAndBytesConst();
+		UpdateLengths();
+
+		//throw Exception("Used string assign with constant char array");
+
 		return *this;
 	}
 

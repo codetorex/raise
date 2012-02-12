@@ -89,7 +89,7 @@ public:
 	}
 };
 
-template <class R, class AT1,class AT2,class AT3, R (*FNC)(AT1,AT2,AT3) >
+template <class R, class AT1,class AT2,class AT3 >
 class funcdelegate3: public delegate3<R,AT1,AT2,AT3>
 {
 public:
@@ -371,7 +371,7 @@ delegate2<R,AT1,AT2>* GetHandler( R (*fncptr)(AT1,AT2) )
 template <class R,class AT1,class AT2,class AT3>
 delegate3<R,AT1,AT2,AT3>* GetHandler( R (*fncptr)(AT1,AT2,AT3) )
 {
-	return new funcdelegate2<R,AT1,AT2,AT3>(fncptr);
+	return new funcdelegate3<R,AT1,AT2,AT3>(fncptr);
 }
 
 

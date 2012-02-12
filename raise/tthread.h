@@ -4,6 +4,10 @@
 #include "tstring.h"
 #include "tevent.h"
 
+#ifdef LINUX
+#include <sys/types.h>
+#endif
+
 class TThread
 {
 public:

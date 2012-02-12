@@ -60,6 +60,8 @@ public:
 	TFileStream(const TString& path, FileMode mode )
 	{
 		//TODO: use better string usage like OpenFile( converttowide( path ) )
+
+#ifdef WIN32
 		int result = fopen_s(&FileHandle,(char*)path.Data,FileModeConversion[mode]);
 		if (result != 0)
 		{
@@ -67,6 +69,13 @@ public:
 			/*CurrentMode = fm_NotOpened;
 			return;*/
 		}
+#else
+		FileHandle = fopen((char*)path.Data,FileModeConversion[mode]);
+		if (FileHandle == 0)
+		{
+			throw Exception("Can't open file");
+		}
+#endif
 		FilePath = path;
 		CurrentMode = mode;
 	}

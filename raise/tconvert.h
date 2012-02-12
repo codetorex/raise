@@ -2,10 +2,10 @@
 #define TCONVERT_H
 
 #include "tstring.h"
-#include "texception.h"
+#include "texceptionlow.h"
 
 #ifdef LINUX
-#define sprintf_s snprintf
+//#define sprintf_s snprintf
 #endif
 
 class TConvert
@@ -75,7 +75,7 @@ public:
 	
 	static TString ToString(int value, int base)
 	{
-		throw NotImplementedException();
+		LowLevelNotImplemented(SOURCENAME(2),__LINE__);
 	}
 
 	static int ToInt32(char* value);
