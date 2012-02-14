@@ -86,11 +86,15 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="mcmdlineparsers.h" />
+    <ClInclude Include="mgenelements.h" />
+    <ClInclude Include="mgensource.h" />
+    <ClInclude Include="mgensourceparser.h" />
     <ClInclude Include="mgenversion.h" />
     <ClInclude Include="stdafx.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="mgen.cpp" />
+    <ClCompile Include="mgensourceparser.cpp" />
     <ClCompile Include="stdafx.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Create</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Create</PrecompiledHeader>

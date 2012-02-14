@@ -27,12 +27,24 @@
     <ClInclude Include="mcmdlineparsers.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="mgenelements.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="mgensource.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="mgensourceparser.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="mgen.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="mgensourceparser.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
