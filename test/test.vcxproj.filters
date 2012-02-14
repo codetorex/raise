@@ -40,5 +40,8 @@
     <ClInclude Include="test_array.h">
       <Filter>Tests</Filter>
     </ClInclude>
+    <ClInclude Include="test_characterenumerator.h">
+      <Filter>Tests</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>

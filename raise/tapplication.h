@@ -126,7 +126,7 @@ public:
 	 */
 	void Begin( TString _Name, TVersion& _Version );
 
-	void PrintIdentifierToConsole();
+	void PrintIdentifierToConsole(bool printModules = false);
 };
 
 extern TApplication Application;

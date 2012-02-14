@@ -67,15 +67,25 @@ public:
 	TArray< TString* > Parameters;
 	
 	/// Current parameter index that being processing
-	int ParameterIndex;
+	ui32 ParameterIndex;
 
 	inline TString& GetCurrentParameter()
 	{
 		return *Parameters.Item[ParameterIndex];
 	}
 
+	inline TString& GetNextParameter()
+	{
+		MoveNextParameter();
+		return GetCurrentParameter();
+	}
+
 	inline void MoveNextParameter()
 	{
+		if (ParameterIndex >= Parameters.Count)
+		{
+			throw Exception("No more parameters in list");
+		}
 		ParameterIndex++;
 	}
 

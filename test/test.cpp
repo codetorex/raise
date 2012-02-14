@@ -8,11 +8,12 @@
 #include "test_datetime.h"
 #include "test_string.h"
 #include "test_array.h"
-
+#include "test_characterenumerator.h"
 
 #include "tcolor.h"
 #include "tapplication.h"
 #include "raiseversion.h"
+
 
 class TestTColor: public TTestCheck
 {
@@ -44,7 +45,7 @@ public:
 
 		//AddOutput(sb.ToString());
 
-		//AddResult( clr.r == 255 && clr.g == 0 && clr.b == 255 && clr.a == 255, "Color r,g,b constructor" );
+		AddResult( clr.r == 64 && clr.g == 128 && clr.b == 178 && clr.a == 255, "Color32 r,g,b,a constructor" );
 		
 /*		TColor32ARGB argb = clr;
 		
@@ -142,6 +143,7 @@ int main(int argc,char** argv)
 	suite.AddTest(&TDateTimeCheck);
 	suite.AddTest(&TArrayCheck);
 	suite.AddTest(&TColorCheck);
+	suite.AddTest(&TCharacterEnumeratorCheck);
 
 	//suite.PrintOutputs = true;
 	suite.RunSuite();

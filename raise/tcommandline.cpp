@@ -9,9 +9,9 @@ void TCommandLine::ParseCommandLine()
 	{
 		TCommandLineHandler::HandleResult Result = TCommandLineHandler::HR_Continue;
 
-		for (int h=0;h<Handlers.Count;h++)
+		for (ui32 h=0;h<Handlers.Count;h++)
 		{
-			Result = Handlers.Item[ParameterIndex]->HandleParameter(this);
+			Result = Handlers.Item[h]->HandleParameter(this);
 			if ( Result == TCommandLineHandler::HR_Handled )
 			{
 				MoveNextParameter();

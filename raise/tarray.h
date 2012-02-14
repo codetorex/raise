@@ -265,7 +265,7 @@ public:
 		return Item[index];
 	}
 
-	inline T& GetLast()
+	inline T GetLast()
 	{
 		if (Count > 0)
 		{

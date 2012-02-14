@@ -274,6 +274,37 @@ public:
 		return readed;
 	}
 
+	TString ReadWord(const TString& trimCharacters)
+	{
+		TString readed(512);
+		ch32 d = Read();
+
+		int mode = 0;
+
+		while(!EndOfStream)
+		{
+			if (trimCharacters.Have(d))
+			{
+				if (mode == 0)
+				{
+					continue;
+				}
+				else
+				{
+					break;
+				}
+			}
+
+			mode = 1;
+			readed += d;
+			d = Read();
+		}
+
+		return readed;
+	}
+
+	//void SkipUntil(const TString& )
+
 	/**
 	 * @brief Closes stream and commits suicide.
 	 */

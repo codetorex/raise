@@ -118,8 +118,19 @@ void TApplication::Begin( TString _Name, TVersion& _Version )
 	Begin( _Name,_Version, RAISE_DEFAULT_COMPANYNAME );
 }
 
-void TApplication::PrintIdentifierToConsole()
+void TApplication::PrintIdentifierToConsole(bool printModules)
 {
 	TString str = TString::Format("% (R) % Version %", sfs(Company), sfs(Name), sfs(Version.VersionPhaseText));
 	Console.WriteLine(str);
+
+	if (!printModules) return;
+
+	Console.WriteHeader("Modules");
+
+	for (ui32 i=0;i<Modules.Count;i++)
+	{
+		TModule* CurModule = Modules.Item[i];
+		TString str = TString::Format("% (R) % Version %", sfs(CurModule->Company), sfs(CurModule->Name), sfs(CurModule->Version.VersionPhaseText));
+		Console.WriteLine(str);
+	}
 }

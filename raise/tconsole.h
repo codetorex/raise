@@ -85,6 +85,11 @@ public:
 		SetConsoleTextAttribute(ConsoleHandle, resultColor);
 	}
 
+	inline void Write(char value)
+	{
+		fwrite(&value,1,1,stdout);
+	}
+
 	inline void Write(const TString& value)
 	{
 		if (value.IsASCII())
@@ -143,7 +148,65 @@ public:
 
 #endif
 
+	inline void RepeatChar(char value, ui32 amount = 50)
+	{
+		for (ui32 i=0;i<amount;i++)
+		{
+			Write(value);
+		}
+	}
+
+	inline void Write(const TString& fmt, sfp arg0)
+	{
+		Write(TString::Format(fmt,arg0));
+	}
 	
+	inline void Write(const TString& fmt, sfp arg0, sfp arg1)
+	{
+		Write(TString::Format(fmt,arg0,arg1));
+	}
+
+	inline void Write(const TString& fmt, sfp arg0, sfp arg1, sfp arg2)
+	{
+		Write(TString::Format(fmt,arg0,arg1,arg2));
+	}
+
+	inline void Write(const TString& fmt, sfp arg0, sfp arg1, sfp arg2,sfp arg3)
+	{
+		Write(TString::Format(fmt,arg0,arg1,arg2,arg3));
+	}
+
+	inline void WriteLine(const TString& fmt, sfp arg0)
+	{
+		WriteLine(TString::Format(fmt,arg0));
+	}
+
+	inline void WriteLine(const TString& fmt, sfp arg0, sfp arg1)
+	{
+		WriteLine(TString::Format(fmt,arg0,arg1));
+	}
+
+	inline void WriteLine(const TString& fmt, sfp arg0, sfp arg1, sfp arg2)
+	{
+		WriteLine(TString::Format(fmt,arg0,arg1,arg2));
+	}
+
+	inline void WriteLine(const TString& fmt, sfp arg0, sfp arg1, sfp arg2,sfp arg3)
+	{
+		WriteLine(TString::Format(fmt,arg0,arg1,arg2,arg3));
+	}
+
+	inline void WriteHeader(const TString& value, ui32 length = 50)
+	{
+		int toRepeat = ((length - 4) - value.Length) / 2;
+		RepeatChar('-',toRepeat);
+		RepeatChar(' ',2);
+		Write(value);
+		RepeatChar(' ',2);
+		RepeatChar('-',toRepeat);
+		WriteLine();
+	}
+
 	inline void WriteLine(const TString& value)
 	{
 		Write(value);

@@ -765,6 +765,19 @@ public:
 		return true;
 	}
 
+	inline bool MoveBack()
+	{
+		if (StrData <= SrcString->Data)
+		{
+			return false;
+		}
+		int lng;
+		Current = StringDriver::ReverseDecode(StrData,StrData - SrcString->Data, lng );
+		StrData -= lng;
+		CharIndex--;
+		return true;
+	}
+
 	inline void SkipChars(ui32 charsToSkip)
 	{
 		if (charsToSkip >= SrcString->Length - CharIndex)
@@ -783,16 +796,26 @@ public:
 		CharIndex += charsToSkip;
 	}
 
-	ch32 ReadChar()
+	inline ch32 ReadChar()
 	{
 		MoveNext();
 		return Current;
 	}
 
-	TCharacterEnumerator(const TString& src)
+	inline void Initialise(const TString& src)
 	{
 		SrcString = &src;
 		Reset();
+	}
+
+	TCharacterEnumerator()
+	{
+		Initialise(TString::Empty);
+	}
+
+	TCharacterEnumerator(const TString& src)
+	{
+		Initialise(src);
 	}
 
 	const TString* SrcString;
