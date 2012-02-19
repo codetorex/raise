@@ -90,6 +90,9 @@
     <Filter Include="Source Files\Drivers">
       <UniqueIdentifier>{8de8c275-d9ac-46cd-81a2-07bafe951f18}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Source Files\Collection\Sorting">
+      <UniqueIdentifier>{81ec9bca-4382-4cf9-a50c-429ba87d2fd0}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="tlinkedlist.h">
@@ -482,6 +485,24 @@
     <ClInclude Include="texceptionlow.h">
       <Filter>Source Files\System</Filter>
     </ClInclude>
+    <ClInclude Include="tlibrary.h">
+      <Filter>Source Files\System</Filter>
+    </ClInclude>
+    <ClInclude Include="tgrouparray.h">
+      <Filter>Source Files\Collection</Filter>
+    </ClInclude>
+    <ClInclude Include="tpalette.h">
+      <Filter>Source Files\Graphics</Filter>
+    </ClInclude>
+    <ClInclude Include="tconsolebuffer.h">
+      <Filter>Source Files\System\Console</Filter>
+    </ClInclude>
+    <ClInclude Include="tconsoleformats.h">
+      <Filter>Source Files\System\Console</Filter>
+    </ClInclude>
+    <ClInclude Include="tcompositionmanager.h">
+      <Filter>Source Files\IO\Buffer</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">
@@ -633,6 +654,12 @@
     </ClCompile>
     <ClCompile Include="texceptionlow.cpp">
       <Filter>Source Files\System</Filter>
+    </ClCompile>
+    <ClCompile Include="tlibrary.cpp">
+      <Filter>Source Files\System</Filter>
+    </ClCompile>
+    <ClCompile Include="tconsoleformats.cpp">
+      <Filter>Source Files\System\Console</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

@@ -5,6 +5,7 @@
 #include "raisetypes.h"
 #include "tmemorydriver.h"
 #include "texceptionlow.h"
+#include "tenumerator.h"
 
 #define TARRAYDEFSIZE	4
 
@@ -73,6 +74,7 @@ public:
 		{
 			delete Item[i];
 		}
+		Count = 0;
 	}
 
 	void RemoveBetween(ui32 startIndex, ui32 length)
@@ -186,6 +188,13 @@ public:
 		{
 			RemoveAt(i);
 		}
+	}
+
+	inline void Swap(ui32 srcIndex, ui32 dstIndex)
+	{
+		T tmp = Item[dstIndex];
+		Item[dstIndex] = Item[srcIndex];
+		Item[srcIndex] = tmp;
 	}
 
 	inline void RemoveAt(int index)
@@ -331,7 +340,61 @@ public:
 	}
 };
 
-//TODO: implement tarray enumerator?
+template <class T>
+class TArrayEnumerator: public TEnumerator<T>
+{
+public:
+	TArray<T>& CurrentArray;
+	ui32 Index;
 
+	TArrayEnumerator( TArray<T>& curArray ):CurrentArray(curArray)
+	{
+		Reset();
+	}
+
+	inline void Reset()
+	{
+		Index = 0;
+	}
+
+	inline bool MoveNext()
+	{
+		if (Index >= CurrentArray.Count)
+			return false;
+
+		Current = CurrentArray.Item[Index];
+		Index++;
+		return true;
+	}
+};
+
+template <class T>
+class TArrayEnumeratorReverse: public TEnumerator<T>
+{
+public:
+	TArray<T>& CurrentArray;
+	ui32 Index;
+
+	TArrayEnumeratorReverse( TArray<T>& curArray ):CurrentArray(curArray)
+	{
+		Reset();
+	}
+
+	inline void Reset()
+	{
+		Index = CurrentArray.Count - 1;
+	}
+
+	inline bool MoveNext()
+	{
+		if (Index == (ui32)-1)
+			return false;
+
+		Current = CurrentArray.Item[Index];
+		Index--;
+		return true;
+	}
+
+};
 
 #endif

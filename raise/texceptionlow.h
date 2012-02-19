@@ -13,4 +13,8 @@ void LowLevelNotImplemented();
 
 void LowLevelNotImplemented(ui16 _file, ui16 _line);
 
+void LowLevelLogWarn( const char* msg );
+
+void LowLevelLogError(const char* msg);
+
 #endif

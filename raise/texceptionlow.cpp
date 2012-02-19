@@ -1,6 +1,7 @@
 #include "stdafx.h"
 #include "texceptionlow.h"
 #include "texception.h"
+#include "tlog.h"
 
 
 
@@ -22,4 +23,14 @@ void LowLevelNotImplemented()
 void LowLevelNotImplemented( ui16 _file, ui16 _line )
 {
 	throw NotImplementedException(_file,_line);
+}
+
+void LowLevelLogWarn( const char* msg )
+{
+	Log.Output(LG_WRN,msg);
+}
+
+void LowLevelLogError( const char* msg )
+{
+	Log.Output(LG_ERR,msg);
 }

@@ -1,49 +1,41 @@
 #ifndef TBITMAPFORMATS_H
 #define TBITMAPFORMATS_H
 
-#include "tcompositebuffer.h"
+#include "tcompositionmanager.h"
 
-// Defines default Bitmap Channels
-class TBitmapChannels
+// TODO: make these like BÝtmapChannel manager, a singleton that manages better than static definitions?
+
+class TBitmapFormats: public TCompositionManager
 {
 public:
-	void CreateDefaultChannels();
 
-	virtual void Initialize()
-	{
-		CreateDefaultChannels();
-	}
+	TCompositionPrimitive cRed;
+	TCompositionPrimitive cGreen;
+	TCompositionPrimitive cBlue;
+	TCompositionPrimitive cAlpha;
 
-	static TCompositionPrimitive* cRed;
-	static TCompositionPrimitive* cGreen;
-	static TCompositionPrimitive* cBlue;
-	static TCompositionPrimitive* cAlpha;
 
-	static TArray<TCompositionPrimitive*>* BitmapChannelRegistry;
-};
+	TBufferFormat* fARGB;
+	TBufferFormat* fABGR;
+	TBufferFormat* fRGBA;
+	TBufferFormat* fBGRA;
+	TBufferFormat* fRGB;
+	TBufferFormat* fBGR;
 
-// Defines default Bitmap Formats
-class TBitmapFormats
-{
-public:
-	static TBufferFormat* fARGB;
-	static TBufferFormat* fABGR;
-	static TBufferFormat* fRGBA;
-	static TBufferFormat* fBGRA;
-	static TBufferFormat* fRGB;
-	static TBufferFormat* fBGR;
-
-	static TArray<TBufferFormat*>* BitmapFormatRegistry;
-
-	void CreateDefaultFormats();
+	void InitializeBitmapFormats();
 	void CreateDefaultConverters();
-
-	virtual void Initialize()
+	
+	TBitmapFormats(TCompositeFormatFactory* _factory = 0): TCompositionManager(_factory)
 	{
-		CreateDefaultFormats();
+		InitializeBitmapFormats();
 		CreateDefaultConverters();
 	}
 };
+
+/**
+ * This pointer should be initialized before using bitmap and graphics stuff.
+ */
+extern TBitmapFormats* BitmapFormats;
 
 #include "tbitmapbmp.h"
 #include "tbitmaptga.h"

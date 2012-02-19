@@ -30,7 +30,7 @@ private:
 	{
 		if ( ByteLength + length >= Capacity )
 		{
-			Grow(Capacity * 2);
+			Grow(((ByteLength + length) * 2));
 		}
 	}
 

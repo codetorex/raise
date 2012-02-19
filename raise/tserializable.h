@@ -132,6 +132,11 @@ public:
 		return nmember;
 	}
 
+	inline TMember* SetObjectName(TString* tstrptr)
+	{
+		return SetObjectName(GetOffset(tstrptr));
+	}
+
 	/**
 	* Adds a member with name.
 	*/
@@ -154,7 +159,7 @@ public:
 	TMember* AddMember(const TString& name,void* MemberPtr, MemberTypes typ, MemberTypes subtyp = MT_NONE,TMemberInfo* minfo = 0)
 	{
 		int offset = GetOffset(MemberPtr);
-		AddMember(name,offset,typ,subtyp,minfo);
+		return AddMember(name,offset,typ,subtyp,minfo);
 	}
 
 	/**

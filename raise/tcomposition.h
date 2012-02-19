@@ -4,6 +4,8 @@
 #include "tcompositionprimitive.h"
 #include "tcompositeconverter.h"
 
+typedef TArray<TCompositionPrimitive*> PrimitiveArray;
+
 /**
 * Holds multiple element information and unites as a group or format definition.
 */
@@ -31,6 +33,7 @@ public:
 		ElementCount = 0;
 		BytesPerItem = 0;
 		BitsPerItem = 0;
+		DataType = tc_group;
 	}
 
 	TComposition(const TString& _Name, const TString& _short,TCompositionPrimitive** _elements,int count): TCompositionPrimitive(_Name,_short, tc_group)
@@ -45,12 +48,12 @@ public:
 	* Like: TBufferFormat( "BGRA" , ptrToAllElements, 4 , "B8G8R8A8" )
 	* It automatically adds necessary elements by ordering that given.
 	*/
-	TComposition(const TString& _Name, const TString& _short,TArray<TCompositionPrimitive*>* _elements, const TString& elementNames): TCompositionPrimitive(_Name,_short,tc_group)
+	TComposition(const TString& _Name, const TString& _short,PrimitiveArray* _elements, const TString& elementNames): TCompositionPrimitive(_Name,_short,tc_group)
 	{
 		CreateElementList(_elements,elementNames);
 	}
 
-	TComposition(const TString& _Name,TArray<TCompositionPrimitive*>* _elements, const TString& elementNames): TCompositionPrimitive(_Name,_Name,tc_group)
+	TComposition(const TString& _Name,PrimitiveArray* _elements, const TString& elementNames): TCompositionPrimitive(_Name,_Name,tc_group)
 	{
 		CreateElementList(_elements,elementNames);
 	}

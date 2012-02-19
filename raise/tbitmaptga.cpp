@@ -241,12 +241,12 @@ void TBitmapTGA::ReadBitmap( TBitmap* bmp, Stream* src )
 
 	bmp->Release();
 
-	bmp->BufferFormat = TBitmapFormats::fBGR;
+	bmp->BufferFormat = BitmapFormats->fBGR;
 	if (Loader.IsColorMapped())
 	{
 		if (Loader.ColorMapEntrySize == 4)
 		{
-			bmp->BufferFormat = TBitmapFormats::fARGB;
+			bmp->BufferFormat = BitmapFormats->fARGB;
 		}
 	}
 	else
@@ -254,7 +254,7 @@ void TBitmapTGA::ReadBitmap( TBitmap* bmp, Stream* src )
 		if (Loader.AlphaBits > 0 || Loader.PixelDepth == 32) 
 		{
 			// I HOPE THERE IS NO OTHER USAGE OF 32 BIT TGA OTHER THAN ALPHA CHANNEL
-			bmp->BufferFormat = TBitmapFormats::fARGB;
+			bmp->BufferFormat = BitmapFormats->fARGB;
 		}
 	}
 

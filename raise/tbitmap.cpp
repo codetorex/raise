@@ -172,7 +172,7 @@ void TBitmap::FlipVertical()
 
 void TBitmap::ColorKey( const TColor24& clr,byte alpha /*= 0*/ )
 {
-	Convert(TBitmapFormats::fARGB);
+	Convert(BitmapFormats->fARGB);
 
 	TColor32* pix = (TColor32*)Data;
 

@@ -7,8 +7,8 @@ class TBitmapConverterBGRtoRGB: public TCompositeGenericConverter
 public:
 	TBitmapConverterBGRtoRGB()
 	{
-		SourceFormat = TBitmapFormats::fBGR;
-		DestinationFormat = TBitmapFormats::fRGB;
+		SourceFormat = BitmapFormats->fBGR;
+		DestinationFormat = BitmapFormats->fRGB;
 	}
 
 	void DoConversion(byte* src, byte* dst,int itemCount)
@@ -30,8 +30,8 @@ class TBitmapConverterARGBtoBGR: public TCompositeGenericConverter
 public:
 	TBitmapConverterARGBtoBGR()
 	{
-		SourceFormat = TBitmapFormats::fARGB;
-		DestinationFormat = TBitmapFormats::fBGR;
+		SourceFormat = BitmapFormats->fARGB;
+		DestinationFormat = BitmapFormats->fBGR;
 	}
 
 	void DoConversion(byte* src, byte* dst,int pixelCount)
@@ -50,14 +50,14 @@ public:
 void TBitmapFormats::CreateDefaultConverters()
 {
 	TBitmapConverterBGRtoRGB* BGRtoRGB = new TBitmapConverterBGRtoRGB();
-	TBitmapFormats::fBGR->Converters.Add(BGRtoRGB);
+	BitmapFormats->fBGR->Converters.Add(BGRtoRGB);
 
 	// use same converter for BGR to RGB conversion
 	TBitmapConverterBGRtoRGB* RGBtoBGR = new TBitmapConverterBGRtoRGB(); 
 	RGBtoBGR->SourceFormat = TBitmapFormats::fRGB;
 	RGBtoBGR->SourceFormat = TBitmapFormats::fBGR;
-	TBitmapFormats::fRGB->Converters.Add(RGBtoBGR);
+	BitmapFormats->fRGB->Converters.Add(RGBtoBGR);
 
 	TBitmapConverterARGBtoBGR* ARGBtoBGR = new TBitmapConverterARGBtoBGR();
-	TBitmapFormats::fARGB->Converters.Add(ARGBtoBGR);
+	BitmapFormats->fARGB->Converters.Add(ARGBtoBGR);
 }

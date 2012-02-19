@@ -171,8 +171,11 @@
     <ClInclude Include="tcompositegenericconverter.h" />
     <ClInclude Include="tcompositesimple.h" />
     <ClInclude Include="tcomposition.h" />
+    <ClInclude Include="tcompositionmanager.h" />
     <ClInclude Include="tcompositionprimitive.h" />
     <ClInclude Include="tconsole.h" />
+    <ClInclude Include="tconsolebuffer.h" />
+    <ClInclude Include="tconsoleformats.h" />
     <ClInclude Include="tconvert.h" />
     <ClInclude Include="tcriticalsection.h" />
     <ClInclude Include="tcultureinfo.h" />
@@ -195,12 +198,14 @@
     <ClInclude Include="tfilestream.h" />
     <ClInclude Include="tdirectoryinfo.h" />
     <ClInclude Include="tfilewin32.h" />
+    <ClInclude Include="tgrouparray.h" />
     <ClInclude Include="thashcodeprovider.h" />
     <ClInclude Include="thashmap.h" />
     <ClInclude Include="tindex.h" />
     <ClInclude Include="tiniparser.h" />
     <ClInclude Include="tkeyvalue.h" />
     <ClInclude Include="tlatin1encoding.h" />
+    <ClInclude Include="tlibrary.h" />
     <ClInclude Include="tlog.h" />
     <ClInclude Include="tlogconsole.h" />
     <ClInclude Include="tloghtml.h" />
@@ -210,6 +215,7 @@
     <ClInclude Include="tnumberformatinfo.h" />
     <ClInclude Include="tobjectpool.h" />
     <ClInclude Include="tpackedrectangle.h" />
+    <ClInclude Include="tpalette.h" />
     <ClInclude Include="tpath.h" />
     <ClInclude Include="tposition.h" />
     <ClInclude Include="tprocess.h" />
@@ -278,6 +284,7 @@
     <ClCompile Include="tcommandline.cpp" />
     <ClCompile Include="tcomposition.cpp" />
     <ClCompile Include="tconsole.cpp" />
+    <ClCompile Include="tconsoleformats.cpp" />
     <ClCompile Include="tconvert.cpp" />
     <ClCompile Include="tdatetime.cpp" />
     <ClCompile Include="tdirectorywin32.cpp" />
@@ -288,6 +295,7 @@
     <ClCompile Include="tfile.cpp" />
     <ClCompile Include="thashcodeprovider.cpp" />
     <ClCompile Include="tiniparser.cpp" />
+    <ClCompile Include="tlibrary.cpp" />
     <ClCompile Include="tlog.cpp" />
     <ClCompile Include="tlogconsole.cpp" />
     <ClCompile Include="tlogstream.cpp" />

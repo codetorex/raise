@@ -109,7 +109,7 @@ void TBitmapPNG::ReadBitmap( TBitmap* bmp, Stream* src )
 		alpha = true;
 	}
 
-	bmp->Create(piWidth,piHeight,alpha? TBitmapFormats::fARGB : TBitmapFormats::fRGB);
+	bmp->Create(piWidth,piHeight,alpha? BitmapFormats->fARGB : BitmapFormats->fRGB);
 
 
 	png_bytep* potr;
@@ -153,11 +153,11 @@ void TBitmapPNG::WriteBitmap( TBitmap* bmp, Stream* dst )
 
 		int colortype; //= bmp->BufferFormat == tbit & RL_ALPHA ? PNG_COLOR_TYPE_RGB_ALPHA : PNG_COLOR_TYPE_RGB;
 
-		if (bmp->BufferFormat == TBitmapFormats::fARGB)
+		if (bmp->BufferFormat == BitmapFormats->fARGB)
 		{
 			colortype = PNG_COLOR_TYPE_RGB_ALPHA;
 		}
-		else if(bmp->BufferFormat == TBitmapFormats::fRGB)
+		else if(bmp->BufferFormat == BitmapFormats->fRGB)
 		{
 			colortype = PNG_COLOR_TYPE_RGB;
 		}

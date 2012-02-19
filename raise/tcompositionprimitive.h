@@ -35,6 +35,14 @@ public:
 	TString ShortName;
 	int DataType;
 
+	
+	inline void Set(const TString& _name, const TString& _short, int _dataType)
+	{
+		Name = _name;
+		ShortName = _short;
+		DataType = _dataType;
+	}
+	
 	TCompositionPrimitive()
 	{
 		DataType = tc_notdefined;
@@ -42,9 +50,7 @@ public:
 
 	TCompositionPrimitive(const TString& _name, const TString& _short, int _dataType)
 	{
-		Name = _name;
-		ShortName = _short;
-		DataType = _dataType;
+		Set(_name,_short,_dataType);
 	}
 };
 

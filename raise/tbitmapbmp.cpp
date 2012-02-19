@@ -55,10 +55,10 @@ void TBitmapBMP::ReadBitmap( TBitmap* bmp, Stream* src )
 
 	bmp->Release();
 
-	bmp->BufferFormat = TBitmapFormats::fBGR;
+	bmp->BufferFormat = BitmapFormats->fBGR;
 	if(infoHeader.biBitCount == 32)
 	{
-		bmp->BufferFormat = TBitmapFormats::fRGBA;
+		bmp->BufferFormat = BitmapFormats->fRGBA;
 	}
 
 	bmp->Create(infoHeader.biWidth,infoHeader.biHeight,bmp->BufferFormat);
@@ -123,9 +123,9 @@ void TBitmapBMP::WriteBitmap( TBitmap* bmp, Stream* dst )
 
 	byte* rowstart;
 	TCompositeBuffer* newBuffer = 0;
-	if (bmp->BufferFormat != TBitmapFormats::fBGR)
+	if (bmp->BufferFormat != BitmapFormats->fBGR)
 	{
-		newBuffer = bmp->ConvertCopy(TBitmapFormats::fBGR);
+		newBuffer = bmp->ConvertCopy(BitmapFormats->fBGR);
 		if (newBuffer == NULL)
 		{
 			throw Exception("No converter for this format");

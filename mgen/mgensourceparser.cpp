@@ -178,11 +178,8 @@ void MGenSourceParser::Parse()
 			break;
 
 		Console.WriteLine("% = %",sfi(wordIndex,3,'0'), sfs(curWord));
+		//Console.WriteLine("% = %",sfs(curWord));
 		wordIndex++;
-		if (wordIndex == 354)
-		{
-			Console.WriteLine("Error");
-		}
 	}
 }
 

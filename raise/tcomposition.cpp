@@ -1,6 +1,9 @@
 #include "stdafx.h"
 #include "tcompositebuffer.h"
 #include "texception.h"
+#include "tcompositionmanager.h"
+
+TCompositeFormatFactoryGeneric TCompositeFormatFactoryGeneric::Instance;
 
 void TComposition::CreateElementList( TArray<TCompositionPrimitive*>* allElements, const TString& elementNames )
 {
