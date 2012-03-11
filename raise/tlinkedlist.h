@@ -3,6 +3,7 @@
 
 #include "raisetypes.h"
 #include "tenumerator.h"
+#include "texceptionlow.h"
 
 /*template <class T>
 class TSListNode // single linked list
@@ -92,6 +93,9 @@ public:
 	}
 };*/
 
+/**
+ * TODO: fix these shit. like use pointers instead of T and giving T as pointer because its pointless.
+ */
 
 template <class T>
 class TList;
@@ -168,7 +172,59 @@ public:
 		ItemCount--;
 	}
 
+	/**
+	 * Merges lists together.
+	 */
+	void Merge( TList<T>* other )
+	{
+		LowLevelNotImplemented();
+	}
+
+	/**
+	 * Deletes other list after merging.
+	 */
+	void MergeDelete(TList<T>* other)
+	{
+		LowLevelNotImplemented();
+	}
+
+	void InsertAfter(T baseItem , T itm)
+	{
+		if (baseItem->NextItem == 0)
+		{
+			Add(itm);
+			return;
+		}
+
+		itm->Parent = this;
+		itm->PrevItem = baseItem;
+		itm->NextItem = baseItem->NextItem;
+		baseItem->NextItem->PrevItem = itm;
+		baseItem->NextItem = itm;
+	}
+
+	void InsertBefore(T baseItem, T itm)
+	{
+		if (baseItem->PrevItem == 0) // insert before first item
+		{
+			if (baseItem != FirstItem)
+			{
+				throw Exception("Impposiblru error");
+			}
+
+			itm->Parent = this;
+			itm->PrevItem = 0;
+			itm->NextItem = baseItem;
+			baseItem->PrevItem = itm;
+			FirstItem = itm;
+		}
+
+		InsertAfter( baseItem->PrevItem, itm); // LOLZ
+	}
+
+	bool Contains( T itm );
 };
+
 
 template <class T>
 class TLinkedListEnumerator: public TEnumerator<T>
@@ -199,6 +255,20 @@ public:
 	}
 };
 
+template <class T>
+bool TList<T>::Contains( T itm )
+{
+	TLinkedListEnumerator<T> ll( this );
 
+	while(ll.MoveNext())
+	{
+		if (ll.Current == itm)
+		{
+			return true;
+		}
+	}
+
+	return false;
+}
 
 #endif

@@ -3,8 +3,6 @@
 
 #include "tconvert.h"
 
-class TString;
-
 /// I implemented two different system here...
 /// This is first one, one class holds all data necessary, and string builder takes care of
 /// Value to string conversion and appending operation

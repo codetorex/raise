@@ -381,5 +381,16 @@ delegate0<R>* GetHandler( M* obj, R (M::*fncptr)() )
 	return new TMemberDelegate0<M,R>(obj,fncptr);
 }
 
+template <class R,class M,class AT1>
+delegate1<R,AT1>* GetHandler( M* obj, R (M::*fncptr)(AT1) )
+{
+	return new TMemberDelegate1<M,R,AT1>(obj,fncptr);
+}
+
+template <class R,class M,class AT1,class AT2>
+delegate2<R,AT1,AT2>* GetHandler( M* obj, R (M::*fncptr)(AT1,AT2) )
+{
+	return new TMemberDelegate2<M,R,AT1,AT2>(obj,fncptr);
+}
 
 #endif

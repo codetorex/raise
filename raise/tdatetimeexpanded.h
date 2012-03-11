@@ -2,7 +2,7 @@
 #define TDATETIMEEXPANDED_H
 
 #include "raisetypes.h"
-#include "tstringbuilder.h"
+#include "tstring.h"
 #include "tconvert.h"
 
 class TDateTime;

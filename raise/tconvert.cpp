@@ -1,4 +1,5 @@
 #include "stdafx.h"
+#include "tstring.h"
 #include "tconvert.h"
 #include "texception.h"
 

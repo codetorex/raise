@@ -1,8 +1,6 @@
 #ifndef TSTRINGBUILDER_H
 #define TSTRINGBUILDER_H
 
-#include "tstring.h"
-#include "tconvert.h"
 #include "tstringformat.h"
 #include "texceptionlow.h"
 

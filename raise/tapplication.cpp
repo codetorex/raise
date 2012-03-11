@@ -2,7 +2,6 @@
 #include "tapplication.h"
 #include "tpath.h"
 #include "raiseversion.h"
-#include "tstringformat.h"
 #include "tconsole.h"
 
 TVersionPhase TVersionPhase::PreAlpha			(0, "Pre-alpha",		"pre");

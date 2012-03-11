@@ -4,7 +4,6 @@
 #include "tstring.h"
 #include "tcolor.h"
 #include "tcriticalsection.h"
-#include "tstringformat.h"
 
 class TLogEntry
 {

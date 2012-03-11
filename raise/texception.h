@@ -3,7 +3,6 @@
 
 //#include "raisetypes.h"
 #include "tstring.h"
-#include "tstringformat.h"
 
 class Exception
 {

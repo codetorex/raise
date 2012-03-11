@@ -1,7 +1,6 @@
 #ifndef TCONVERT_H
 #define TCONVERT_H
 
-#include "tstring.h"
 #include "texceptionlow.h"
 
 #ifdef LINUX

@@ -17,9 +17,11 @@ public:
 	TCompositionPrimitive pAttribute32;
 	TCompositionPrimitive pAttributeColor16;
 	TCompositionPrimitive pCharacter8;
+	TCompositionPrimitive pCharacter16;
 	TCompositionPrimitive pCharacter32;
 
 	TBufferFormat* ANSI;
+	TBufferFormat* EnoughColorUnicode;
 	TBufferFormat* TrueColorUnicode;
 	TBufferFormat* TrueColorUnicodeAttributes; // highest possible quality but 16 bytes per char wtf 100*300*16 = 500kb of memory on average
 
@@ -35,10 +37,12 @@ public:
 		SetPrimitive(pAttributeColor16, "16 bit color and attributes", "ATC16", tc_short);
 		
 		SetPrimitive(pCharacter8,"8 bit ASCII character","CH8", tc_byte);
+		SetPrimitive(pCharacter8,"16 bit Unicode character","CH16", tc_short);
 		SetPrimitive(pCharacter32,"32 bit unicode character","CH32", tc_dword);
 
 
 		ANSI = CreateFormat("ANSI", "A8C8","AT8CH8");
+		EnoughColorUnicode = CreateFormat("Enough Color Half Unicode", "AC16T16","ATC16CH16");
 		TrueColorUnicode = CreateFormat("TrueColor Unicode", "C32T32","BG32FG32CH32");
 		TrueColorUnicodeAttributes = CreateFormat("TrueColor Unicode Attributes","C32T32A32","BG32FG32AT32CH32");
 	}

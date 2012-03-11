@@ -93,6 +93,12 @@
     <Filter Include="Source Files\Collection\Sorting">
       <UniqueIdentifier>{81ec9bca-4382-4cf9-a50c-429ba87d2fd0}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Source Files\Network\SSH">
+      <UniqueIdentifier>{070caa88-d24b-4521-8ac4-a8090f2223b8}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\System\Input">
+      <UniqueIdentifier>{174df1e4-8c86-40a2-9c38-4aa42cbed43e}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="tlinkedlist.h">
@@ -503,6 +509,45 @@
     <ClInclude Include="tcompositionmanager.h">
       <Filter>Source Files\IO\Buffer</Filter>
     </ClInclude>
+    <ClInclude Include="tconsoledriver.h">
+      <Filter>Source Files\System\Console</Filter>
+    </ClInclude>
+    <ClInclude Include="tgraphics.h">
+      <Filter>Source Files\Graphics</Filter>
+    </ClInclude>
+    <ClInclude Include="tconsolevt100.h">
+      <Filter>Source Files\System\Console</Filter>
+    </ClInclude>
+    <ClInclude Include="tdatamap.h">
+      <Filter>Source Files\Collection</Filter>
+    </ClInclude>
+    <ClInclude Include="nsshinterfaces.h">
+      <Filter>Source Files\Network\SSH</Filter>
+    </ClInclude>
+    <ClInclude Include="nsshsession.h">
+      <Filter>Source Files\Network\SSH</Filter>
+    </ClInclude>
+    <ClInclude Include="tflag.h">
+      <Filter>Source Files\Collection</Filter>
+    </ClInclude>
+    <ClInclude Include="tkeyboard.h">
+      <Filter>Source Files\System\Input</Filter>
+    </ClInclude>
+    <ClInclude Include="tinputdevice.h">
+      <Filter>Source Files\System\Input</Filter>
+    </ClInclude>
+    <ClInclude Include="tmouse.h">
+      <Filter>Source Files\System\Input</Filter>
+    </ClInclude>
+    <ClInclude Include="tinputenum.h">
+      <Filter>Source Files\System\Input</Filter>
+    </ClInclude>
+    <ClInclude Include="tjoystick.h">
+      <Filter>Source Files\System\Input</Filter>
+    </ClInclude>
+    <ClInclude Include="tinputmap.h">
+      <Filter>Source Files\System\Input</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">
@@ -659,6 +704,12 @@
       <Filter>Source Files\System</Filter>
     </ClCompile>
     <ClCompile Include="tconsoleformats.cpp">
+      <Filter>Source Files\System\Console</Filter>
+    </ClCompile>
+    <ClCompile Include="tconsolebuffer.cpp">
+      <Filter>Source Files\System\Console</Filter>
+    </ClCompile>
+    <ClCompile Include="tconsoledriver.cpp">
       <Filter>Source Files\System\Console</Filter>
     </ClCompile>
   </ItemGroup>

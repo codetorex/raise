@@ -103,21 +103,19 @@ public:
 		ch16 tmp[1024];
 		TWinTools::SystemString16(path,tmp,1024);
 		FileAttribute fa = GetFileAttributesW(tmp);
-		if ( (fa & fa_DIRECTORY) != 0)
+		if (fa != INVALID_FILE_ATTRIBUTES)
 		{
-			return true;
+			if ( (fa & fa_DIRECTORY) != 0)
+			{
+				return true;
+			}
 		}
 		return false;
 	}
 
 	bool Exists()
 	{
-		FileAttribute fa = GetAttributes();
-		if ( (fa & fa_DIRECTORY) != 0)
-		{
-			return true;
-		}
-		return false;
+		return Exists(FullPath);
 	}
 
 	TDateTime GetLastAccessTime()

@@ -4,7 +4,6 @@
 #include "texception.h"
 #include "tarray.h"
 
-#include "tstringbuilder.h"
 #include "tstringformat.h"
 
 TString TString::Empty("");
@@ -176,14 +175,14 @@ TArray<TString*> TString::Split( const TArray<ch32>& seprators, bool removeEmpty
 				if (removeEmpty && seprationLength == 0)
 				{
 					LastSeprationByteIndex = schars.StrData - Data;
-					LastSeprationCharIndex = schars.CharIndex;
+					LastSeprationCharIndex = schars.CharIndex+1;
 				}
 				else
 				{
-					TString* sepration = new TString(Data + LastSeprationByteIndex, seprationLength, (schars.CharIndex - LastSeprationCharIndex)-1);
+					TString* sepration = new TString(Data + LastSeprationByteIndex, seprationLength, (schars.CharIndex - LastSeprationCharIndex));
 					result.Add(sepration);
 					LastSeprationByteIndex = schars.StrData - Data;
-					LastSeprationCharIndex = schars.CharIndex;
+					LastSeprationCharIndex = schars.CharIndex+1;
 				}
 				break;
 			}

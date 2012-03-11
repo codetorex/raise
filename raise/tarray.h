@@ -105,7 +105,7 @@ public:
 	{
 		if (Capacity <= Count) // TODO: make this a function named CheckCapacity
 		{
-			if (Capacity == 0) Capacity = 2;
+			if (Capacity == 0) Capacity = 4;
 			Allocate(Capacity<<1); // Multiply the cache
 		}
 
@@ -123,16 +123,6 @@ public:
 
 		Item[index] = value;
 		Count++;
-	}
-	
-	/**
-	* When no changes needed anymore, you can use this to create static array with length of count. (without additional capacity)
-	*/
-	inline T* ExtractItems()
-	{
-		T* nItems = new T [Count];
-		memcpy(nItems,Item,sizeof(T) * Count);
-		return nItems;
 	}
 
 	/**
@@ -179,6 +169,44 @@ public:
 		return -1;
 	}
 
+	inline void RemovePreserve(T value)
+	{
+		assert(Capacity != 0);
+
+		int i = LastIndexOf(value);
+		if (i != -1)
+		{
+			RemovePreserveAt(i);
+		}
+	}
+
+	/**
+	 * Removes and preserves the order.
+	 */
+	inline void RemovePreserveAt(int index)
+	{
+		assert(Capacity != 0);
+
+		if (index == Count -1)
+		{
+			Count--;
+			return;
+		}
+
+		int rem = Count - index;
+		while(rem--)
+		{
+			Item[index] = Item[index+1];
+			index++;
+		}
+		Count--;
+	}
+
+	/**
+	 * Removes item and uses last item to replace it.
+	 * WARNING: Breaks the order of items!
+	 * TODO: Rename this function as RemoveFast change name of preserving.
+	 */
 	inline void Remove(T value)
 	{
 		assert(Capacity != 0);
@@ -197,6 +225,10 @@ public:
 		Item[srcIndex] = tmp;
 	}
 
+	/**
+	 * Removes item and uses last item to replace it.
+	 * WARNING: Breaks the order of items!
+	 */
 	inline void RemoveAt(int index)
 	{
 		assert(Capacity != 0);
@@ -225,7 +257,7 @@ public:
 		memset(Item,NULL, sizeof(T) * Count);
 		Count = 0;
 	}
-	
+
 	inline void	Add(const T& value)
 	{
 		if (Capacity <= Count)
@@ -283,7 +315,10 @@ public:
 		return NULL;
 	}
 
-	inline T GetAndRemoveLast()
+	/**
+	 * Gets last item and removes it from array.
+	 */
+	inline T Pop()
 	{
 		if (Count > 0)
 		{
@@ -347,7 +382,7 @@ public:
 	TArray<T>& CurrentArray;
 	ui32 Index;
 
-	TArrayEnumerator( TArray<T>& curArray ):CurrentArray(curArray)
+	inline TArrayEnumerator( TArray<T>& curArray ):CurrentArray(curArray)
 	{
 		Reset();
 	}

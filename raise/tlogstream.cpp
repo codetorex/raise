@@ -2,7 +2,7 @@
 #include "tlogstream.h"
 #include "tapplication.h"
 #include "tthread.h"
-#include "tstringbuilder.h"
+#include "tstring.h"
 #include "tdatetime.h"
 #include "ttimedriver.h"
 

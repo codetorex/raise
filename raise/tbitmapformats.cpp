@@ -5,6 +5,8 @@ TBitmapFormats* BitmapFormats = 0;
 
 void TBitmapFormats::InitializeBitmapFormats()
 {
+	BitmapFormats = this;
+
 	SetPrimitive(cRed,"Red (byte)","R8",tc_byte);
 	SetPrimitive(cGreen,"Green (byte)","G8",tc_byte);
 	SetPrimitive(cBlue,"Blue (byte)","B8",tc_byte);

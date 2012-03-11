@@ -635,6 +635,11 @@ public:
 		{
 			return false;
 		}
+
+		if (value.Length != Length)
+		{
+			return false;
+		}
 		return MemoryDriver::Compare(Data,value.Data,ByteLength) == 0;
 	}
 
@@ -702,6 +707,12 @@ inline TString operator + (const TString& value, const TString& value2 )
 	return tmp;
 }
 
+typedef TString string;
+
+#include "tconvert.h"
+#include "tstringformat.h"
+#include "tstringbuilder.h"
+
 class TCharacterReverseEnumerator: public TEnumerator<ch32>
 {
 public:
@@ -749,10 +760,14 @@ class TCharacterEnumerator: public TEnumerator<ch32>
 public:
 	inline void Reset()
 	{
+		if (RealStart == 0)
+		{
+			LowLevelException("charenum used without data!");
+		}
 		Current = MXDWORD;
-		StrData = SrcString->Data;
-		EndData = StrData + SrcString->ByteLength;
-		CharIndex = 0;
+		StrData = (byte*)RealStart;
+		EndData = (byte*)RealStart + ByteLenth;
+		CharIndex = -1;
 	}
 
 	inline bool MoveNext()
@@ -803,15 +818,24 @@ public:
 		return Current;
 	}
 
+
+	inline void Initialise(const byte* _Data, ui32 _ByteLength)
+	{
+		SrcString = 0;
+		RealStart = _Data;
+		ByteLenth = _ByteLength;
+		Reset();
+	}
+
 	inline void Initialise(const TString& src)
 	{
+		Initialise(src.Data,src.ByteLength);
 		SrcString = &src;
-		Reset();
 	}
 
 	TCharacterEnumerator()
 	{
-		Initialise(TString::Empty);
+		RealStart = 0;
 	}
 
 	TCharacterEnumerator(const TString& src)
@@ -819,12 +843,25 @@ public:
 		Initialise(src);
 	}
 
+	TCharacterEnumerator(byte* _Data, ui32 _ByteLength)
+	{
+		Initialise(_Data,_ByteLength);
+	}
+
+	TCharacterEnumerator(const TStringBuilder& builder)
+	{
+		Initialise(builder.GetData(), builder.ByteLength);
+	}
+
+	const byte* RealStart;
+	ui32 ByteLenth;
+
 	const TString* SrcString;
 	byte* StrData;
 	byte* EndData;
-	int CharIndex;
+	int CharIndex; // first char will be 0 and so on, if no chars its -1
 };
 
-typedef TString string;
+
 
 #endif

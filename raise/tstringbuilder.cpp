@@ -1,5 +1,5 @@
 #include "stdafx.h"
-#include "tstringbuilder.h"
+#include "tstring.h"
 #include "texception.h"
 
 

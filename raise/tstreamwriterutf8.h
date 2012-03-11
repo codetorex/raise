@@ -29,6 +29,13 @@ public:
 		Initialize(output);
 	}
 
+	inline void WriteChar(ch32 chr)
+	{
+		byte encoded[8];
+		int len = StringDriver::Encode(encoded,chr);
+		BaseStream->Write(encoded,1,len);
+	}
+
 	inline void Write(const TString& value)
 	{
 		BaseStream->Write(value.Data,1,value.ByteLength);
@@ -41,17 +48,7 @@ public:
 
 	inline void WriteLine()
 	{
-		BaseStream->Write(NewLineBytes,1,NewLineByteCount);
-	}
-
-	void SetNewLine(const TString& value)
-	{
-		if (value.ByteLength > 16)
-		{
-			throw Exception("Wrong parameter");
-		}
-		value.CopyTo(NewLineBytes,value.ByteLength);
-		NewLineByteCount = value.ByteLength;	
+		Write(NewLine);
 	}
 
 	void Close()

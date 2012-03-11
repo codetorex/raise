@@ -12,17 +12,14 @@ typedef TArray<TCompositionPrimitive*> PrimitiveArray;
 class TComposition: public TCompositionPrimitive
 {
 public:
-	TCompositionPrimitive** Elements;
-	int ElementCount;
+	TArray<TCompositionPrimitive*>* Elements;
+	TArray<TCompositeConverter*> Converters;
 	int BytesPerItem;
 	int BitsPerItem;
 
-	TArray<TCompositeConverter*> Converters;
-
-	void UseElementList(TCompositionPrimitive** _elements, int count)
+	void UseElementList(TArray<TCompositionPrimitive*>* _elements)
 	{
 		Elements = _elements;
-		ElementCount = count;
 		BitsPerItem = CalculateBitsPerItem();
 		BytesPerItem = DIV8(BitsPerItem);
 	}
@@ -30,15 +27,24 @@ public:
 	TComposition()
 	{
 		Elements = 0;
-		ElementCount = 0;
 		BytesPerItem = 0;
 		BitsPerItem = 0;
 		DataType = tc_group;
 	}
 
-	TComposition(const TString& _Name, const TString& _short,TCompositionPrimitive** _elements,int count): TCompositionPrimitive(_Name,_short, tc_group)
+	TComposition(ui32 _bytePerItem)
 	{
-		UseElementList(_elements,count);
+		Name = "UNKNOWN";
+		ShortName = "UNKNOWN";
+		DataType = tc_group;
+		BytesPerItem = _bytePerItem;
+		Elements = 0;
+		BitsPerItem = BytesPerItem * 8;
+	}
+
+	TComposition(const TString& _Name, const TString& _short,TArray<TCompositionPrimitive*>* _elements): TCompositionPrimitive(_Name,_short, tc_group)
+	{
+		UseElementList(_elements);
 	}
 
 	void CreateElementList(TArray<TCompositionPrimitive*>* allElements, const TString& elementNames);

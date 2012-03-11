@@ -3,8 +3,6 @@
 
 #include "tstring.h"
 #include "texception.h"
-#include "tconvert.h"
-#include "tstringformat.h"
 
 #ifdef LINUX
 #include <sys/socket.h>

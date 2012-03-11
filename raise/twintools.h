@@ -2,7 +2,6 @@
 #define TWINTOOLS_H
 
 #include "tutf16encoding.h"
-#include "tstringformat.h"
 
 #ifdef WIN32
 

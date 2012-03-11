@@ -2,7 +2,7 @@
 #define TRMLWRITER_H
 
 #include "tstreamwriterutf8.h"
-#include "tstringbuilder.h"
+#include "tstring.h"
 #include "tserializable.h"
 
 class TRMLWriter: public TSerializer

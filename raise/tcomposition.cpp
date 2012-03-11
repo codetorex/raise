@@ -7,11 +7,9 @@ TCompositeFormatFactoryGeneric TCompositeFormatFactoryGeneric::Instance;
 
 void TComposition::CreateElementList( TArray<TCompositionPrimitive*>* allElements, const TString& elementNames )
 {
-	ElementCount = 0;
-
 	ui32 curPos = 0;
 
-	TArray<TCompositionPrimitive*> newList;
+	TArray<TCompositionPrimitive*>* newList = new TArray<TCompositionPrimitive*>();
 	while (curPos < elementNames.Length)
 	{
 		bool found = false;
@@ -20,9 +18,8 @@ void TComposition::CreateElementList( TArray<TCompositionPrimitive*>* allElement
 			TCompositionPrimitive* curElement = allElements->Item[i];
 			if (elementNames.StartsWith(curElement->ShortName,curPos))
 			{
-				newList.Add(curElement);
+				newList->Add(curElement);
 				curPos += curElement->ShortName.Length;
-				ElementCount++;
 				found = true;
 				break;
 			}
@@ -34,16 +31,17 @@ void TComposition::CreateElementList( TArray<TCompositionPrimitive*>* allElement
 		}
 	}
 
-	UseElementList(newList.ExtractItems(),ElementCount);
+	UseElementList(newList);
 }
 
 int TComposition::CalculateBitsPerItem()
 {
 	int result = 0;
-	int i = ElementCount;
-	while(i--)
+
+	TArrayEnumerator< TCompositionPrimitive* > ae(*Elements);
+	while(ae.MoveNext())
 	{
-		switch(Elements[i]->DataType)
+		switch(ae.Current->DataType)
 		{
 		case tc_bit1:
 			result += 1;
@@ -99,7 +97,7 @@ int TComposition::CalculateBitsPerItem()
 			break;
 
 		case tc_group:
-			TComposition* elemGroup = (TComposition*)Elements[i];
+			TComposition* elemGroup = (TComposition*)ae.Current;
 			result += elemGroup->BitsPerItem;
 			break;
 		}

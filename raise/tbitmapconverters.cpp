@@ -50,14 +50,14 @@ public:
 void TBitmapFormats::CreateDefaultConverters()
 {
 	TBitmapConverterBGRtoRGB* BGRtoRGB = new TBitmapConverterBGRtoRGB();
-	BitmapFormats->fBGR->Converters.Add(BGRtoRGB);
+	fBGR->Converters.Add(BGRtoRGB);
 
 	// use same converter for BGR to RGB conversion
 	TBitmapConverterBGRtoRGB* RGBtoBGR = new TBitmapConverterBGRtoRGB(); 
 	RGBtoBGR->SourceFormat = TBitmapFormats::fRGB;
 	RGBtoBGR->SourceFormat = TBitmapFormats::fBGR;
-	BitmapFormats->fRGB->Converters.Add(RGBtoBGR);
+	fRGB->Converters.Add(RGBtoBGR);
 
 	TBitmapConverterARGBtoBGR* ARGBtoBGR = new TBitmapConverterARGBtoBGR();
-	BitmapFormats->fARGB->Converters.Add(ARGBtoBGR);
+	fARGB->Converters.Add(ARGBtoBGR);
 }
