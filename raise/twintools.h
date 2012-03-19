@@ -1,7 +1,7 @@
 #ifndef TWINTOOLS_H
 #define TWINTOOLS_H
 
-#include "tutf16encoding.h"
+#include "tencodings.h"
 
 #ifdef WIN32
 
@@ -36,12 +36,12 @@ public:
 
 	inline static void SystemString16(const TString& raiseStr, ch16* output, int outputSize)
 	{
-		Encoding::UTF16.ConvertString(raiseStr,output,outputSize);
+		Encodings.UTF16.ConvertString(raiseStr,output,outputSize);
 	}
 
 	inline static TString RaiseString(const ch16* systemStr)
 	{
-		return Encoding::UTF16.GetString(systemStr);
+		return Encodings.UTF16.GetString(systemStr);
 	}
 
 	inline static TString ErrorToString(DWORD error)

@@ -5,7 +5,7 @@
 TRMLReader::TRMLReader( TStream* readStream )
 {
 	BaseStream = readStream;
-	TextStream = new TStreamReader ( readStream, (TEncoding&)TEncoding::Latin1 );
+	TextStream = new TStreamReader ( readStream, (TEncoding&)Encodings.Latin1 );
 }
 
 void TRMLReader::Parse( bool closeStream )

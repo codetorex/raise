@@ -5,17 +5,9 @@
 #include "tcharbuffer.h"
 //#include "tbuffer.h"
 
-class UTF8Encoding;
-class UTF16Encoding;
-class TLatin1Encoding;
-
 class TEncoding: public TEncodingInfo
 {
 public:
-	static UTF8Encoding& UTF8;
-	static UTF16Encoding& UTF16;
-	static TLatin1Encoding& Latin1;
-
 	static byte* Convert(TEncoding* srcEncoding, TEncoding* dstEncoding, byte* src,int srcLength);
 
 public:

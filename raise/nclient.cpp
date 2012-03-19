@@ -1,3 +1,3 @@
 #include "stdafx.h"
-#include "nserver.h"
+#include "nclient.h"
 

@@ -80,5 +80,12 @@ enum NProtocol
 	NP_UDP,
 };
 
+class NEndPoint
+{
+public:
+	NIPAddress	Address;
+	ui16		Port;
+};
+
 
 #endif

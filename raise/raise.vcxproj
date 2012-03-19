@@ -136,13 +136,15 @@
     <ClInclude Include="mtriangle.h" />
     <ClInclude Include="mvector3.h" />
     <ClInclude Include="mvector2.h" />
+    <ClInclude Include="nclient.h" />
+    <ClInclude Include="ndns.h" />
     <ClInclude Include="nipaddress.h" />
     <ClInclude Include="npacket.h" />
     <ClInclude Include="npacketbuilder.h" />
     <ClInclude Include="npacketpool.h" />
-    <ClInclude Include="nserver.h" />
+    <ClInclude Include="nasynchronous.h" />
     <ClInclude Include="nserverlinux.h" />
-    <ClInclude Include="nserverwindows.h" />
+    <ClInclude Include="nasynchronouswindows.h" />
     <ClInclude Include="nservicehttpbasic.h" />
     <ClInclude Include="nsshinterfaces.h" />
     <ClInclude Include="nsshsession.h" />
@@ -194,6 +196,7 @@
     <ClInclude Include="tdirectorywin32.h" />
     <ClInclude Include="tencoding.h" />
     <ClInclude Include="tencodinginfo.h" />
+    <ClInclude Include="tencodings.h" />
     <ClInclude Include="tenumerator.h" />
     <ClInclude Include="tevent.h" />
     <ClInclude Include="texception.h" />
@@ -275,9 +278,10 @@
     <ClInclude Include="twintools.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="nclient.cpp" />
     <ClCompile Include="npacketbuilder.cpp" />
-    <ClCompile Include="nserver.cpp" />
-    <ClCompile Include="nserverwindows.cpp" />
+    <ClCompile Include="nasynchronous.cpp" />
+    <ClCompile Include="nasynchronouswindows.cpp" />
     <ClCompile Include="nservicehttpbasic.cpp" />
     <ClCompile Include="stdafx.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Create</PrecompiledHeader>

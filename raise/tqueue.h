@@ -14,8 +14,8 @@ public:
 	ui32	Count;
 	ui32	Capacity;
 
-	int Head;
-	int Tail;
+	ui32 Head;
+	ui32 Tail;
 
 	TQueue()
 	{

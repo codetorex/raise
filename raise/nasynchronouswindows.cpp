@@ -1,12 +1,12 @@
 #include "stdafx.h"
-#include "nserverwindows.h"
+#include "nasynchronouswindows.h"
 #include "texception.h"
 #include "tlog.h"
 
 #ifdef WIN32
 
 
-void NServerWindows::Cleanup()
+void NAsynchronousWindows::Cleanup()
 {
 	if(CleanupEvent[0] != WSA_INVALID_EVENT) 
 	{
@@ -15,12 +15,13 @@ void NServerWindows::Cleanup()
 	}
 }
 
-void NServerWindows::StartServer()
+void NAsynchronousWindows::StartServer()
 {
-	MainThread = new TThread(GetHandler(this,&NServerWindows::MainThreadFunction));
+	MainThread = new TThread(GetHandler(this,&NAsynchronousWindows::MainThreadFunction));
+	MainThread->Start();
 }
 
-void NServerWindows::MainThreadFunction()
+void NAsynchronousWindows::MainThreadFunction()
 {
 	SYSTEM_INFO systemInfo;
 	WSADATA wsaData;
@@ -78,7 +79,7 @@ void NServerWindows::MainThreadFunction()
 
 			for( ui32 i=0; i< BestWorkerCount; i++ ) 
 			{
-				TThread* worker = new TThread(GetHandler(this,&NServerWindows::WorkerThreadFunction));
+				TThread* worker = new TThread(GetHandler(this,&NAsynchronousWindows::WorkerThreadFunction));
 				worker->Start();
 				WorkerThreads.Add(worker);
 			}
@@ -215,7 +216,7 @@ void NServerWindows::MainThreadFunction()
 }
 
 
-NSocketWindows* NServerWindows::AllocateNewSocket( SOCKET sd, PacketIO op )
+NSocketWindows* NAsynchronousWindows::AllocateNewSocket( SOCKET sd, PacketIO op )
 {
 	ContextListCS.Lock();
 
@@ -233,7 +234,7 @@ NSocketWindows::NSocketWindows()
 	IOContextRecv.UseRecvPacket(&ReceiveBuffer);
 }
 
-NSocketWindows* NServerWindows::UpdateCompletionPort( SOCKET sd, PacketIO op, bool addtoList )
+NSocketWindows* NAsynchronousWindows::UpdateCompletionPort( SOCKET sd, PacketIO op, bool addtoList )
 {
 	NSocketWindows* lpPerSocketContext;
 
@@ -261,7 +262,7 @@ NSocketWindows* NServerWindows::UpdateCompletionPort( SOCKET sd, PacketIO op, bo
 }
 
 
-bool NServerWindows::CreateAcceptSocket( NListenerWindows* Listener, bool UpdateIOCP )
+bool NAsynchronousWindows::CreateAcceptSocket( NListenerWindows* Listener, bool UpdateIOCP )
 {
 	int nRet = 0;
 	DWORD dwRecvNumBytes = 0;
@@ -336,8 +337,108 @@ bool NServerWindows::CreateAcceptSocket( NListenerWindows* Listener, bool Update
 
 }
 
+bool NAsynchronousWindows::Connect( NEndPoint EndPoint, NService* Service )
+{
+	int nRet = 0;
+	DWORD dwRecvNumBytes = 0;
+	DWORD bytes = 0;
 
-void NServerWindows::Disconnect( NSocket* Client, bool Graceful )
+	//
+	// GUID to Microsoft specific extensions
+	//
+	GUID connectex_guid = WSAID_CONNECTEX;
+
+	//
+	//The context for listening socket uses the SockAccept member to store the
+	//socket for client connection. 
+	//
+	// 
+
+	SOCKET connectSocket = CreateSocket();
+
+	if( connectSocket == INVALID_SOCKET) 
+	{
+		Log.Output(LG_ERR,"Failed to create new connect socket");
+		return false;
+	}
+
+	sockaddr_in sinp;
+	sinp.sin_addr.s_addr = INADDR_ANY;
+	sinp.sin_port = 0;
+	sinp.sin_family = AF_INET;
+
+	
+
+	int bre = bind(connectSocket,(sockaddr*)&sinp,sizeof(sinp));
+
+	if( bre != 0 )
+	{
+		Log.Output(LG_ERR,"Failed to bind connect socket");
+		return false;
+	}
+
+
+	NSocketWindows* winsck = UpdateCompletionPort(connectSocket, CIO_Connect, TRUE);
+
+	winsck->Service = Service;
+	winsck->Async = this;
+
+	LPFN_CONNECTEX cex;
+
+	// Load the AcceptEx extension function from the provider for this socket
+	nRet = WSAIoctl(
+		connectSocket,
+		SIO_GET_EXTENSION_FUNCTION_POINTER,
+		&connectex_guid,
+		sizeof(connectex_guid),
+		&cex,
+		sizeof(cex),
+		&bytes,
+		NULL,
+		NULL
+		);
+
+	if (nRet == SOCKET_ERROR)
+	{
+		Log.Output(LG_ERR,"Failed to load ConnectEx: %", sfu(WSAGetLastError()));
+		return false;
+	}
+
+	// TODO: check address.Address with inet_Addr of that string.
+	TString addrString = EndPoint.Address.ToString();
+
+	sockaddr_in addr;
+	addr.sin_family = AF_INET;
+	addr.sin_addr.s_addr = inet_addr((char*)addrString.Data);
+	addr.sin_port = htons(EndPoint.Port);
+
+	//Listener->ListenSocket.IOContextRecv.SocketAccept = acceptSocket;
+
+	winsck->IOContextSend.Operation = CIO_Connect;
+
+	//
+	// pay close attention to these parameters and buffer lengths
+	//
+	nRet = cex(connectSocket, (sockaddr*)&addr, sizeof(addr),
+		NULL,
+		NULL,
+		NULL, 
+		(LPOVERLAPPED) &(winsck->IOContextSend.Overlapped));
+
+
+	Log.Output(LG_INF, "AcceptEx result: %", sfu(nRet));
+	//if( nRet == SOCKET_ERROR && (ERROR_IO_PENDING != WSAGetLastError()) ) 
+	if (nRet != 0)
+	{
+		Log.Output(LG_ERR,"AcceptEx() failed: %", sfu(WSAGetLastError()));
+		return false;
+	}
+
+	return true;
+}
+
+
+void NAsynchronousWindows::Disconnect( NSocket* Client, bool Graceful )
 {
 	if( Client ) 
 	{
@@ -378,7 +479,7 @@ void NServerWindows::Disconnect( NSocket* Client, bool Graceful )
 	}
 }
 
-void NServerWindows::ReceiveFrom( NSocketWindows* sock )
+void NAsynchronousWindows::ReceiveFrom( NSocketWindows* sock )
 {
 	DWORD dwRecvNumBytes;
 	DWORD dwFlags = 0;
@@ -401,7 +502,8 @@ void NServerWindows::ReceiveFrom( NSocketWindows* sock )
 }
 
 
-void NServerWindows::Send( NSocket* Client, NPacket* Packet )
+
+void NAsynchronousWindows::Send( NSocket* Client, NPacket* Packet )
 {
 	DWORD dwFlags = 0;
 	int nRet = 0;
@@ -433,7 +535,7 @@ void NServerWindows::Send( NSocket* Client, NPacket* Packet )
 	//delete Packet; // TODO: use a pool return here.
 }
 
-void NServerWindows::WorkerThreadFunction()
+void NAsynchronousWindows::WorkerThreadFunction()
 {
 	BOOL bSuccess = FALSE;
 	int nRet = 0;
@@ -479,10 +581,22 @@ void NServerWindows::WorkerThreadFunction()
 		{
 			lpPerSocketContext = (NSocketWindows*)Key;
 
-			if( !bSuccess || (bSuccess && (0 == dwIoSize)) ) 
+			if ( lpIOContext->Operation != CIO_Connect )
 			{
-				Disconnect(lpPerSocketContext, FALSE); 
-				continue;
+				if( !bSuccess || (bSuccess && (0 == dwIoSize)) ) 
+				{
+					Disconnect(lpPerSocketContext, FALSE); 
+					continue;
+				}
+			}
+			else
+			{
+				if ( !bSuccess )
+				{
+					Log.Output(LG_INF,"WorkerThread %: Socket(%) ConnectEx failed: %",sfu(GetCurrentThreadId()),sfu(lpPerSocketContext->Socket),sfu(WSAGetLastError()));
+					Disconnect(lpPerSocketContext, FALSE);
+					continue;
+				}
 			}
 		}
 
@@ -492,6 +606,14 @@ void NServerWindows::WorkerThreadFunction()
 		//
 		switch( lpIOContext->Operation ) 
 		{
+		case  CIO_Connect:
+			{
+				lpPerSocketContext->Connected();
+				Log.Output(LG_INF,"WorkerThread %: Socket(%) ConnectEx completed (% bytes)",sfu(GetCurrentThreadId()),sfu(lpPerSocketContext->Socket),sfu(dwIoSize));
+				ReceiveFrom(lpPerSocketContext);
+			}
+			break;
+
 		case CIO_Accept:
 			{
 				NListenerWindows* Listener = (NListenerWindows*)Key;
@@ -508,7 +630,7 @@ void NServerWindows::WorkerThreadFunction()
 
 				lpAcceptSocketContext = UpdateCompletionPort(lpPerSocketContext->IOContextRecv.SocketAccept, CIO_Accept, TRUE);
 				lpAcceptSocketContext->Service = Listener->Service;
-				lpAcceptSocketContext->Server = Listener->Service->Server;
+				lpAcceptSocketContext->Async = Listener->Service->Async;
 				
 				//lpAcceptSocketContext->IOContextRecv.UseRecvPacket( Listener->Service->CreateReceiveBuffer() );
 
@@ -650,7 +772,7 @@ void NServerWindows::WorkerThreadFunction()
 	} //while
 }
 
-SOCKET NServerWindows::CreateSocket()
+SOCKET NAsynchronousWindows::CreateSocket()
 {
 	int nRet = 0;
 	int nZero = 0;
@@ -694,7 +816,7 @@ SOCKET NServerWindows::CreateSocket()
 
 #include "twintools.h"
 
-bool NServerWindows::CreateListenerTask( NIPAddress Device, ui16 Port, NProtocol Protocol, NService* Service )
+bool NAsynchronousWindows::CreateListenerTask( NIPAddress Device, ui16 Port, NProtocol Protocol, NService* Service )
 {
 	NListenerWindows* WinListener = new NListenerWindows();
 
@@ -766,17 +888,17 @@ bool NServerWindows::CreateListenerTask( NIPAddress Device, ui16 Port, NProtocol
 	return true;
 }
 
-void NServerWindows::StopServer()
+void NAsynchronousWindows::StopServer()
 {
 	EndServer = true;
 }
 
-void NServerWindows::RestartServer()
+void NAsynchronousWindows::RestartServer()
 {
 	Restart = true;
 }
 
-void NServerWindows::CreateListener( NIPAddress Device, ui16 Port, NProtocol Protocol, NService* Service )
+void NAsynchronousWindows::CreateListener( NIPAddress Device, ui16 Port, NProtocol Protocol, NService* Service )
 {
 	NServerOperation* nsp = new NServerOperation();
 	
@@ -790,5 +912,6 @@ void NServerWindows::CreateListener( NIPAddress Device, ui16 Port, NProtocol Pro
 
 	TaskQueue.Push(nsp);
 }
+
 
 #endif

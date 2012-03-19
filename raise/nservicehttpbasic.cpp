@@ -121,7 +121,7 @@ void NServiceHTTP::Received( NSocket* Client, NPacket* Packet )
 				npb.EndPacket();
 
 				Log.Output(LG_INF,"HTTP Client response sending...");
-				Server->Send(Client,&Client->SendBuffer);
+				Async->Send(Client,&Client->SendBuffer);
 
 				headerLines.DeletePointers();
 				return;
@@ -139,7 +139,7 @@ void NServiceHTTP::Received( NSocket* Client, NPacket* Packet )
 				npb.EndPacket();
 
 				Log.Output(LG_INF,"HTTP Client response of 404 sending...");
-				Server->Send(Client,&Client->SendBuffer);
+				Async->Send(Client,&Client->SendBuffer);
 				
 
 				headerLines.DeletePointers();
@@ -162,7 +162,7 @@ void NServiceHTTP::Received( NSocket* Client, NPacket* Packet )
 	npb.EndPacket();
 
 	Log.Output(LG_INF,"HTTP Client unsupported request, sending response");
-	Server->Send(Client,&Client->SendBuffer);
+	Async->Send(Client,&Client->SendBuffer);
 	
 
 
@@ -192,7 +192,7 @@ void NServiceHTTP::Sent( NSocket* Client, NPacket* Packet )
 
 		Log.Output(LG_INF,tests);*/
 		Log.Output(LG_INF,"HTTP Client response sent, disconnecting");
-		Server->Disconnect(Client,false);
+		Async->Disconnect(Client,false);
 	}
 	else
 	{
@@ -203,14 +203,14 @@ void NServiceHTTP::Sent( NSocket* Client, NPacket* Packet )
 			Log.Output(LG_INF,"HTTP sending content part");
 			int readed = fs->Read(Client->SendByteBuffer,1,Client->SendBuffer.Capacity);
 			Client->SendBuffer.Length = readed;
-			Server->Send(Client,&Client->SendBuffer);
+			Async->Send(Client,&Client->SendBuffer);
 		}
 		else
 		{
 			Log.Output(LG_INF,"HTTP content fully sent closing");
 			fs->Close();
 			Client->DataObject = 0;
-			Server->Disconnect(Client,false);
+			Async->Disconnect(Client,false);
 		}
 	}
 	

@@ -1,7 +1,7 @@
 #ifndef NSERVICEHTTPBASIC_H
 #define NSERVICEHTTPBASIC_H
 
-#include "nserver.h"
+#include "nasynchronous.h"
 
 class NServiceHTTP: public NService
 {

@@ -4,7 +4,7 @@
 #include "texceptionlow.h"
 
 #ifdef LINUX
-//#define sprintf_s snprintf
+#define sprintf_s snprintf
 #endif
 
 class TConvert

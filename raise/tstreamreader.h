@@ -5,7 +5,7 @@
 #include "tmemorystream.h"
 #include "ttextreader.h"
 #include "tfile.h"
-#include "tencoding.h"
+#include "tencodings.h"
 
 
 //TODO: bufferi char buffer olarak yap süper olur .net stayla, boylece TBufferedStreame felan gerek kalmaz.
@@ -27,7 +27,7 @@ private:
 			{
 				if (Cache.Data[2] == 0xBF)
 				{
-					CurrentEncoding = (TEncoding&)TEncoding::UTF8;
+					CurrentEncoding = (TEncoding&)Encodings.UTF8;
 					Cache.Data[0] = Cache.Data[3];
 					CacheStart = 1;
 				}
@@ -35,7 +35,7 @@ private:
 		}
 		else if ( utf16char == 0xFEFF )
 		{
-			CurrentEncoding = (TEncoding&)TEncoding::UTF16;
+			CurrentEncoding = (TEncoding&)Encodings.UTF16;
 			Cache.Data[0] = Cache.Data[2];
 			Cache.Data[1] = Cache.Data[3];
 			CacheStart = 2;
@@ -129,12 +129,12 @@ public:
 	 * @param [in] stream The stream to be readed.
 	 * @param bufferSize Size of the buffer.
 	 */
-	TStreamReader(TStream* stream,int bufferSize = 8192) : CurrentEncoding( (TEncoding&)TEncoding::Latin1 ) 
+	TStreamReader(TStream* stream,int bufferSize = 8192) : CurrentEncoding( (TEncoding&)Encodings.Latin1 ) 
 	{
 		LoadStream(stream,CurrentEncoding,true,bufferSize);
 	}
 
-	TStreamReader(TStream* stream,const TEncoding& encoding, bool detectBOM = true, int buffersize = 8192): CurrentEncoding( (TEncoding&)TEncoding::Latin1 ) 
+	TStreamReader(TStream* stream,const TEncoding& encoding, bool detectBOM = true, int buffersize = 8192): CurrentEncoding( (TEncoding&)Encodings.Latin1 ) 
 	{
 		LoadStream(stream,encoding,detectBOM,buffersize);
 	}
@@ -144,7 +144,7 @@ public:
 	 * @param path Full pathname of the file.
 	 * @param bufferSize Size of the buffer.
 	 */
-	TStreamReader(const TString& path,int bufferSize = 8192): CurrentEncoding( (TEncoding&)TEncoding::Latin1 ) 
+	TStreamReader(const TString& path,int bufferSize = 8192): CurrentEncoding( (TEncoding&)Encodings.Latin1 ) 
 	{
 		LoadStream(File::OpenRead(path),CurrentEncoding,true,bufferSize);
 	}

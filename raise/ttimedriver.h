@@ -6,9 +6,12 @@
 #include "m64bit.h"
 #include "tdatetime.h"
 
-#include "tutf16encoding.h"
+
 
 #ifdef WIN32 // move this def outside of class?
+
+#include "twintools.h"
+
 class TimeDriver
 {
 public:
@@ -85,8 +88,8 @@ public:
 			dtz.Bias += dtz.DaylightBias;
 		}
 
-		LocalStandartName = TEncoding::UTF16.GetString(dtz.StandardName);
-		LocalDaylightName = TEncoding::UTF16.GetString(dtz.DaylightName);
+		LocalStandartName = TWinTools::RaiseString(dtz.StandardName);
+		LocalDaylightName = TWinTools::RaiseString(dtz.DaylightName);
 		LocalDifference = dtz.Bias * -60; // in seconds
 	}
 };

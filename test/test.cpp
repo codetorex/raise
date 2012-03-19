@@ -74,11 +74,11 @@ public:
 // TODO: test rml reader
 // TODO: test string builder
 
-#include "trmlwriter.h"
+/*#include "trmlwriter.h"
 #include "tfile.h"
 
 #include "tlogstream.h"
-#include "nserverwindows.h"
+#include "nasynchronouswindows.h"
 #include "nservicehttpbasic.h"
 
 class TLogConsole: public TLogOutput
@@ -125,7 +125,7 @@ public:
 
 		sb.UnbindByteArray();
 	}
-};
+};*/
 
 #ifdef WIN32
 int _tmain(int argc, wchar_t* argv[])

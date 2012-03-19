@@ -37,6 +37,15 @@ public:
 
 	/************ BEGIN TCONSOLEDRIVER IMPLEMENTATION **************/
 
+	inline void GetSize()
+	{
+		CONSOLE_SCREEN_BUFFER_INFO bi;
+		GetConsoleScreenBufferInfo(ConsoleHandle, &bi);
+
+		Size.Width = bi.dwSize.X;
+		Size.Height = bi.dwSize.Y;
+	}
+
 	inline void GetPosition()
 	{
 		CONSOLE_SCREEN_BUFFER_INFO bi;

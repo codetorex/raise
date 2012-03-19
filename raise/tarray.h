@@ -397,7 +397,7 @@ public:
 		if (Index >= CurrentArray.Count)
 			return false;
 
-		Current = CurrentArray.Item[Index];
+		this->Current = CurrentArray.Item[Index];
 		Index++;
 		return true;
 	}
@@ -425,7 +425,7 @@ public:
 		if (Index == (ui32)-1)
 			return false;
 
-		Current = CurrentArray.Item[Index];
+		this->Current = CurrentArray.Item[Index];
 		Index--;
 		return true;
 	}

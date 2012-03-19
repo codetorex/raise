@@ -15,7 +15,7 @@ public:
 
 	TStreamWriterUTF8()
 	{
-		Encoding = (TEncoding&)TEncoding::UTF8;
+		Encoding = (TEncoding&)Encodings.UTF8;
 	}
 
 	inline void Initialize(TStream* output)

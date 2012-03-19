@@ -2,7 +2,7 @@
 #define TTEXTWRITER_H
 
 #include "tstring.h"
-#include "tencoding.h"
+#include "tencodings.h"
 
 //TODO: make this class converts its content to UTF-8 to UTF-16
 
@@ -11,7 +11,7 @@ class TTextWriter
 public:
 	TEncoding& Encoding;
 
-	TTextWriter(): Encoding( (TEncoding&)TEncoding::UTF8 ) 
+	TTextWriter(): Encoding( Encodings.UTF8 ) 
 	{	
 		set_NewLine("\r\n"); // windows standart
 	};

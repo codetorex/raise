@@ -7,7 +7,7 @@
 
 #define MAX_BUFF_SIZE		8192
 
-class NServer;
+class NAsynchronous;
 class NService;
 class NSocket;
 
@@ -40,7 +40,7 @@ public:
 };
 
 /**
- * Network service interface, that can be served on server.
+ * Network service interface, that can be served on server or can connect other servers.
  */
 class NService
 {
@@ -48,13 +48,28 @@ public:
 	TString					Name;
 
 	TArray< NListener* >	Listeners;
-	TArray< NSocket* >		Clients;
+	TArray< NSocket* >		Sockets;
 
-	NServer*				Server;
+	NAsynchronous*			Async;
 
+	/**
+	 * When a client connects to server.
+	 */
 	virtual void Connected		(NSocket* Client) = 0;
+
+	/**
+	 * When a client disconnects from server.
+	 */
 	virtual void Disconnected	(NSocket* Client) = 0;
+
+	/**
+	 * Data received from client.
+	 */
 	virtual void Received		(NSocket* Client, NPacket* Packet) = 0;
+
+	/**
+	 * Data sent to client.
+	 */
 	virtual void Sent			(NSocket* Client, NPacket* Packet) = 0;
 };
 
@@ -62,10 +77,10 @@ public:
 
 
 /**
- * Server interface for networking.
+ * Asynchronous Server/Client interface for networking.
  * Like a boss.
  */
-class NServer
+class NAsynchronous
 {
 public:
 	TString Name;
@@ -97,6 +112,7 @@ public:
 
 	virtual void CreateListener( NIPAddress Device, ui16 Port, NProtocol Protocol, NService* Service) = 0;
 
+	virtual bool Connect( NEndPoint EndPoint, NService* Service ) = 0;
 };
 
 
@@ -106,9 +122,16 @@ public:
 class NSocket
 {
 public:
+	enum NSocketStates
+	{
+		NS_TIMEOUT,
+
+	};
+
 	bool		ConnectionStatus;
+	ui32		State;
 	NService*	Service;
-	NServer*	Server;
+	NAsynchronous*	Async;
 
 	byte		ReceiveByteBuffer[MAX_BUFF_SIZE];
 	byte		SendByteBuffer[MAX_BUFF_SIZE];
@@ -142,6 +165,13 @@ public:
 		Service->Connected(this);
 	}
 
+	inline void ConnectionFailed()
+	{
+		ConnectionStatus = false;
+		State = NS_TIMEOUT;
+		Service->Connected(this);
+	}
+
 	inline void Disconnected()
 	{
 		ConnectionStatus = false;
@@ -150,17 +180,17 @@ public:
 
 	inline void Send(NPacket* Packet)
 	{
-		Server->Send(this,Packet);
+		Async->Send(this,Packet);
 	}
 
 	inline void Disconnect(bool Graceful = false)
 	{
-		Server->Disconnect(this,Graceful);
+		Async->Disconnect(this,Graceful);
 	}
 };
 
 #ifdef WIN32
-#include "nserverwindows.h"
+#include "nasynchronouswindows.h"
 #else
 #include "nserverlinux.h"
 #endif

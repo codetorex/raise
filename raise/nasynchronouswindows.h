@@ -4,7 +4,7 @@
 #ifdef WIN32
 
 
-#include "nserver.h"
+#include "nasynchronous.h"
 #include "tarray.h"
 #include "tthread.h"
 #include "tcriticalsection.h"
@@ -15,24 +15,12 @@
 
 // Bu sekilde olunca bridge pattern oluyo
 
-
-/**
- * Damned player :P
- */
-class DPlayer
-{
-public:
-	NSocket* Client;
-
-
-};
-
-
 enum PacketIO
 {
 	CIO_Accept,
 	CIO_Read,
 	CIO_Write,
+	CIO_Connect,
 };
 
 class NClientWindowsIO
@@ -136,7 +124,7 @@ struct CreateListenerParameters
  * IOCP based scalable windows server.
  * Everything needs to be scalable nowadays, who needs old techniques anyway?
  */
-class NServerWindows: public NServer
+class NAsynchronousWindows: public NAsynchronous
 {
 private:
 	WSAEVENT CleanupEvent[1];
@@ -182,7 +170,7 @@ public:
 	void AddService( NService* service )
 	{
 		Services.Add(service); // hmm
-		service->Server = this;
+		service->Async = this;
 	}
 
 	void Initialize();
@@ -197,6 +185,8 @@ public:
 
 	void Disconnect( NSocket* Client, bool Graceful = false);
 	void Send( NSocket* Client, NPacket* Packet);
+
+	bool Connect( NEndPoint EndPoint, NService* Service );
 
 	void CreateListener( NIPAddress Device, ui16 Port, NProtocol Protocol, NService* Service);
 };

@@ -3,8 +3,7 @@
 
 #include "tstring.h"
 #include "tarray.h"
-#include "tencoding.h"
-#include "tutf16encoding.h"
+#include "tencodings.h"
 
 // Command Line parameters will be handled with Chain of Responsiblity pattern
 
@@ -95,7 +94,7 @@ public:
 		for (int i=0;i<parameterCount;i++)
 		{
 			TString* nstring = new TString();
-			*nstring = TEncoding::UTF16.GetString(params[i]);
+			*nstring = Encodings.UTF16.GetString(params[i]);
 			Parameters.Add( nstring );
 		}
 	}
