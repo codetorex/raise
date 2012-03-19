@@ -75,7 +75,7 @@ public:
 	}
 };
 
-class NSocketWindows: public NSocket
+class NSocketWindows: public NSocketOLD
 {
 public:
 	NSocketWindows();
@@ -114,7 +114,7 @@ public:
 
 struct CreateListenerParameters
 {
-	NIPAddress	Device;
+	NAddress4	Device;
 	ui16		Port;
 	NProtocol	Protocol; 
 	NService*	Service;
@@ -159,7 +159,7 @@ private:
 	/// This stack holds the tasks need to be done after server started
 	TStack<NServerOperation*> TaskQueue;
 
-	bool CreateListenerTask( NIPAddress Device, ui16 Port, NProtocol Protocol, NService* Service);
+	bool CreateListenerTask( NAddress4 Device, ui16 Port, NProtocol Protocol, NService* Service);
 
 public:
 
@@ -183,12 +183,12 @@ public:
 	void WorkerThreadFunction();
 
 
-	void Disconnect( NSocket* Client, bool Graceful = false);
-	void Send( NSocket* Client, NPacket* Packet);
+	void Disconnect( NSocketOLD* Client, bool Graceful = false);
+	void Send( NSocketOLD* Client, NPacket* Packet);
 
 	bool Connect( NEndPoint EndPoint, NService* Service );
 
-	void CreateListener( NIPAddress Device, ui16 Port, NProtocol Protocol, NService* Service);
+	void CreateListener( NAddress4 Device, ui16 Port, NProtocol Protocol, NService* Service);
 };
 
 #endif

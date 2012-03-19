@@ -9,7 +9,7 @@
 
 class NAsynchronous;
 class NService;
-class NSocket;
+class NSocketOLD;
 
 
 //Platform in depend server interface classes
@@ -20,7 +20,7 @@ class NSocket;
 class NListener
 {
 public:
-	NIPAddress	Device;
+	NAddress4	Device;
 	ui16		Port;
 	NProtocol	Protocol;
 	NService*	Service;
@@ -30,7 +30,7 @@ public:
 
 	}
 
-	NListener( const NIPAddress& _ip, ui16 _port, NProtocol _protocol, NService* _service)
+	NListener( const NAddress4& _ip, ui16 _port, NProtocol _protocol, NService* _service)
 	{
 		Device = _ip;
 		Port = _port;
@@ -48,29 +48,29 @@ public:
 	TString					Name;
 
 	TArray< NListener* >	Listeners;
-	TArray< NSocket* >		Sockets;
+	TArray< NSocketOLD* >		Sockets;
 
 	NAsynchronous*			Async;
 
 	/**
 	 * When a client connects to server.
 	 */
-	virtual void Connected		(NSocket* Client) = 0;
+	virtual void Connected		(NSocketOLD* Client) = 0;
 
 	/**
 	 * When a client disconnects from server.
 	 */
-	virtual void Disconnected	(NSocket* Client) = 0;
+	virtual void Disconnected	(NSocketOLD* Client) = 0;
 
 	/**
 	 * Data received from client.
 	 */
-	virtual void Received		(NSocket* Client, NPacket* Packet) = 0;
+	virtual void Received		(NSocketOLD* Client, NPacket* Packet) = 0;
 
 	/**
 	 * Data sent to client.
 	 */
-	virtual void Sent			(NSocket* Client, NPacket* Packet) = 0;
+	virtual void Sent			(NSocketOLD* Client, NPacket* Packet) = 0;
 };
 
 
@@ -97,12 +97,12 @@ public:
 	virtual void StopServer() = 0;
 
 
-	virtual void Disconnect( NSocket* Client, bool Graceful = false) = 0;
+	virtual void Disconnect( NSocketOLD* Client, bool Graceful = false) = 0;
 	
 	/**
 	 * You have to take care of the Packet.
 	 */
-	virtual void Send( NSocket* Client, NPacket* Packet) = 0;
+	virtual void Send( NSocketOLD* Client, NPacket* Packet) = 0;
 
 
 	/**
@@ -110,7 +110,7 @@ public:
 	 */
 	virtual void RestartServer() = 0;
 
-	virtual void CreateListener( NIPAddress Device, ui16 Port, NProtocol Protocol, NService* Service) = 0;
+	virtual void CreateListener( NAddress4 Device, ui16 Port, NProtocol Protocol, NService* Service) = 0;
 
 	virtual bool Connect( NEndPoint EndPoint, NService* Service ) = 0;
 };
@@ -119,7 +119,7 @@ public:
 /// SOCKET POOL
 /// BUFFER POOL
 /// BYTE QUEUE
-class NSocket
+class NSocketOLD
 {
 public:
 	enum NSocketStates
@@ -142,7 +142,7 @@ public:
 	/// Object related to this socket can be hold in this variable
 	void*		DataObject;
 
-	NSocket()
+	NSocketOLD()
 	{
 		ReceiveBuffer.Use(ReceiveByteBuffer,MAX_BUFF_SIZE);
 		SendBuffer.Use(SendByteBuffer,MAX_BUFF_SIZE);

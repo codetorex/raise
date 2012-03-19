@@ -43,5 +43,8 @@
     <ClInclude Include="test_characterenumerator.h">
       <Filter>Tests</Filter>
     </ClInclude>
+    <ClInclude Include="test_network.h">
+      <Filter>Tests</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>

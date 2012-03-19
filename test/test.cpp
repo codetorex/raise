@@ -9,6 +9,7 @@
 #include "test_string.h"
 #include "test_array.h"
 #include "test_characterenumerator.h"
+#include "test_network.h"
 
 #include "tcolor.h"
 #include "tapplication.h"
@@ -144,6 +145,7 @@ int main(int argc,char** argv)
 	suite.AddTest(&TArrayCheck);
 	suite.AddTest(&TColorCheck);
 	suite.AddTest(&TCharacterEnumeratorCheck);
+	suite.AddTest(&NIPAddress4Check);
 
 	//suite.PrintOutputs = true;
 	suite.RunSuite();

@@ -16,6 +16,13 @@ template <class T>
 class TArray;
 
 /**
+ * I HAVE AN IDEA OF USING TARRAY<BYTE> instead of TByteArray
+ * And implementing Refcounted array.
+ * And discarding byteLength since Tarray<byte> has a count thing.
+ * Could be more useful than defining another class right?
+ */
+
+/**
  * UTF-8 based string class.
  * Uses copy on write technique to avoid unnecessary copies.
  */

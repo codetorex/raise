@@ -14,10 +14,10 @@ public:
 
 	NServiceHTTP();
 
-	void Connected		(NSocket* Client);
-	void Disconnected	(NSocket* Client);
-	void Received		(NSocket* Client, NPacket* Packet);
-	void Sent			(NSocket* Client, NPacket* Packet);
+	void Connected		(NSocketOLD* Client);
+	void Disconnected	(NSocketOLD* Client);
+	void Received		(NSocketOLD* Client, NPacket* Packet);
+	void Sent			(NSocketOLD* Client, NPacket* Packet);
 };
 
 

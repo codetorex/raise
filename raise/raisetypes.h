@@ -56,7 +56,7 @@ typedef unsigned char		byte; // technically ui8
 #define RDLL __attribute__ ((visibility("default")))
 #endif
 
-#define AttachFunctionPointer(a,b) *(long*)(&(a)) = (long)((void*)(*(long*)((long)&b)));
+#define AttachFunctionPointer(A,B) *(long*)(&(A)) = (long)((void*)(*(long*)((long)&B)));
 
 #ifndef WHEEL_DELTA
 #define WHEEL_DELTA			120

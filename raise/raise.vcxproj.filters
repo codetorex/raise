@@ -99,6 +99,9 @@
     <Filter Include="Source Files\System\Input">
       <UniqueIdentifier>{174df1e4-8c86-40a2-9c38-4aa42cbed43e}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Source Files\IO\Asynchronous">
+      <UniqueIdentifier>{ab3eb400-2642-4a8c-8993-546c477e54f6}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="tlinkedlist.h">
@@ -557,6 +560,12 @@
     <ClInclude Include="tencodings.h">
       <Filter>Source Files\String</Filter>
     </ClInclude>
+    <ClInclude Include="tioservice.h">
+      <Filter>Source Files\IO\Asynchronous</Filter>
+    </ClInclude>
+    <ClInclude Include="nsocket.h">
+      <Filter>Source Files\Network</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">
@@ -723,6 +732,9 @@
     </ClCompile>
     <ClCompile Include="nasynchronouswindows.cpp">
       <Filter>Source Files\Network</Filter>
+    </ClCompile>
+    <ClCompile Include="tioservicewindows.cpp">
+      <Filter>Source Files\IO\Asynchronous</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

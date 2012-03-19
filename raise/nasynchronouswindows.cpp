@@ -438,7 +438,7 @@ bool NAsynchronousWindows::Connect( NEndPoint EndPoint, NService* Service )
 }
 
 
-void NAsynchronousWindows::Disconnect( NSocket* Client, bool Graceful )
+void NAsynchronousWindows::Disconnect( NSocketOLD* Client, bool Graceful )
 {
 	if( Client ) 
 	{
@@ -503,7 +503,7 @@ void NAsynchronousWindows::ReceiveFrom( NSocketWindows* sock )
 
 
 
-void NAsynchronousWindows::Send( NSocket* Client, NPacket* Packet )
+void NAsynchronousWindows::Send( NSocketOLD* Client, NPacket* Packet )
 {
 	DWORD dwFlags = 0;
 	int nRet = 0;
@@ -816,7 +816,7 @@ SOCKET NAsynchronousWindows::CreateSocket()
 
 #include "twintools.h"
 
-bool NAsynchronousWindows::CreateListenerTask( NIPAddress Device, ui16 Port, NProtocol Protocol, NService* Service )
+bool NAsynchronousWindows::CreateListenerTask( NAddress4 Device, ui16 Port, NProtocol Protocol, NService* Service )
 {
 	NListenerWindows* WinListener = new NListenerWindows();
 
@@ -898,7 +898,7 @@ void NAsynchronousWindows::RestartServer()
 	Restart = true;
 }
 
-void NAsynchronousWindows::CreateListener( NIPAddress Device, ui16 Port, NProtocol Protocol, NService* Service )
+void NAsynchronousWindows::CreateListener( NAddress4 Device, ui16 Port, NProtocol Protocol, NService* Service )
 {
 	NServerOperation* nsp = new NServerOperation();
 	

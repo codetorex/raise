@@ -13,17 +13,17 @@ NServiceHTTP::NServiceHTTP()
 	ServerVersion = TString::Format("Server: raise/%", sfs(Application.Version.VersionText));
 }
 
-void NServiceHTTP::Connected( NSocket* Client )
+void NServiceHTTP::Connected( NSocketOLD* Client )
 {
 	Log.Output(LG_INF,"HTTP Client connected");
 }
 
-void NServiceHTTP::Disconnected( NSocket* Client )
+void NServiceHTTP::Disconnected( NSocketOLD* Client )
 {
 	Log.Output(LG_INF,"HTTP Client disconnected");
 }
 
-void NServiceHTTP::Received( NSocket* Client, NPacket* Packet )
+void NServiceHTTP::Received( NSocketOLD* Client, NPacket* Packet )
 {
 	Log.Output(LG_INF,"HTTP Client request");
 
@@ -184,7 +184,7 @@ void NServiceHTTP::Received( NSocket* Client, NPacket* Packet )
 	//Log.Output(LG_INF,"HTTP Client response sending...");
 }
 
-void NServiceHTTP::Sent( NSocket* Client, NPacket* Packet )
+void NServiceHTTP::Sent( NSocketOLD* Client, NPacket* Packet )
 {
 	if (Client->DataObject == 0)
 	{
