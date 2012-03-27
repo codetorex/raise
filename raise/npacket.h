@@ -4,6 +4,8 @@
 #include "raisetypes.h"
 #include "tbytearray.h"
 
+// TODO: use TArray<byte> here.
+
 /**
  * Simple structure for holding data pointer capacity and length.
  */

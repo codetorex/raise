@@ -18,9 +18,8 @@ public:
 		ui32 Codepoint;
 	};
 	
-
-	ui32		ErrorID;
 	TString		Message;
+	ui32		ErrorID;
 
 	Exception()
 	{
@@ -56,7 +55,7 @@ public:
 		Message = TString::Format(msg,arg0,arg1,arg2);
 	}
 
-	Exception(ui32 _error, const TString& _msg)
+	Exception(const TString& _msg, ui32 _error)
 	{
 		Codepoint = 0;
 		ErrorID = _error;
@@ -79,7 +78,10 @@ public:
 		Message = _msg;
 	}
 
-
+	/*virtual TString ToString()
+	{
+		return Message;
+	}*/
 };
 
 /*class ExceptionMessage: public Exception
@@ -137,6 +139,8 @@ public:
 	}
 };
 
+typedef OSException SystemError;
+typedef Exception	Error;
 
 
 #endif

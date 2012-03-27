@@ -1,5 +1,5 @@
-#ifndef NIPADDRESS_H
-#define NIPADDRESS_H
+#ifndef NADDRESS_H
+#define NADDRESS_H
 
 #include "tstring.h"
 #include "texception.h"
@@ -9,6 +9,15 @@
 #include <netinet/in.h>
 #include <arpa/inet.h>
 #endif
+
+/**
+ * TODO: make this. Address that supports ipV4 or ipV6
+ */
+class NAddress
+{
+public:
+
+};
 
 class NAddress4
 {
@@ -29,12 +38,12 @@ public:
 
 	inline void Set( const TString& value)
 	{
-		*this = value;
+		Address = Parse(value);
 	}
 
 	inline void Set( ui32 value )
 	{
-		*this = value;
+		Address = value;
 	}
 
 	inline void Set(byte partA, byte partB, byte partC, byte partD)
@@ -45,61 +54,57 @@ public:
 		D = partD;
 	}
 
-	NAddress4()
+	inline NAddress4()
 	{
 		Address = 0; // 0.0.0.0
 	}
 
-	NAddress4(ui32 value)
+	inline NAddress4(ui32 value)
 	{
 		Set(value);
 	}
 
-	inline NAddress4& operator = ( ui32 value )
-	{
-		Address = value;
-		return *this;
-	}
-
-	NAddress4(const TString& value)
+	inline NAddress4(const TString& value)
 	{
 		Set(value);
-
-		//Address = inet_addr((char*)value.Data); //linux have this function too so no need for re writing it ?
-		// TODO: write scan function... and fix this shit
-		/*int nStart = 0;
-		int nLength = 0;
-		a1 = (byte)Convert::ToInt32Ambiguous(value,nStart,&nLength); //val->ParseInt(nStart,&nLength);
-		if (nLength == 0)
-		{
-			throw Exception("Wrong ip string");
-		}
-		nStart += nLength+1;
-		a2 = (byte)Convert::ToInt32Ambiguous(value,nStart,&nLength); //val->ParseInt(nStart,&nLength);
-		if (nLength == 0)
-		{
-			throw Exception("Wrong ip string");
-		}
-		nStart += nLength+1;
-		a3 = (byte)Convert::ToInt32Ambiguous(value,nStart,&nLength); //val->ParseInt(nStart,&nLength);
-		if (nLength == 0)
-		{
-			throw Exception("Wrong ip string");
-		}
-		nStart += nLength+1;
-		a4 = (byte)Convert::ToInt32Ambiguous(value,nStart,&nLength); //val->ParseInt(nStart,&nLength);
-		if (nLength == 0)
-		{
-			throw Exception("Wrong ip string");
-		}*/
 	}
 
-
+	inline NAddress4(byte partA, byte partB, byte partC, byte partD)
+	{
+		Set(partA,partB,partC,partD);
+	}
 
 	/**
 	 * Parses given string to ip address.
 	 */
-	NAddress4& operator = ( const TString& value )
+	inline NAddress4& operator = ( const TString& value  )
+	{
+		Set(value);
+		return *this;
+	}
+
+	inline NAddress4& operator = ( ui32 value )
+	{
+		Set(value);
+		return *this;
+	}
+
+	inline NAddress4& operator = ( const NAddress4& value )
+	{
+		Address = value.Address;
+		return *this;
+	}
+
+	static ui32 SystemParse(const TString& value)
+	{
+		if (!value.IsASCII())
+		{
+			throw Exception("Unicode in ip address");
+		}
+		return inet_addr((char*)value.Data);
+	}
+
+	static ui32 Parse(const TString& value)
 	{
 		if (!value.IsASCII())
 		{
@@ -140,7 +145,7 @@ public:
 		{
 			throw Exception("Improper ip address");
 		}
-		
+
 		int ai = Convert::ToInt32(sparts[0]);
 		int bi = Convert::ToInt32(sparts[1]);
 		int ci = Convert::ToInt32(sparts[2]);
@@ -151,25 +156,21 @@ public:
 			throw Exception("Improper ip address");
 		}
 
-		A = ai;
-		B = bi;
-		C = ci;
-		D = di;
+		byte resultbytes[4];
+		resultbytes[0] = ai;
+		resultbytes[1] = bi;
+		resultbytes[2] = ci;
+		resultbytes[3] = di;
 
-		return *this;
+		ui32 result = *(ui32*)resultbytes;
+
+		return result;
 	}
 
-	TString ToString()
+	inline TString ToString()
 	{
 		return TString::Format("%.%.%.%",sfu(A),sfu(B),sfu(C),sfu(D));
 	}
-};
-
-
-enum NProtocol
-{
-	NP_TCP,
-	NP_UDP,
 };
 
 class NEndPoint
@@ -177,6 +178,30 @@ class NEndPoint
 public:
 	NAddress4	Address;
 	ui16		Port;
+
+	inline NEndPoint()
+	{
+		Address = 0; // AKA ANY
+		Port = 0; // AKA ANY
+	}
+
+	inline NEndPoint(const NAddress4& _address, ui16 _port)
+	{
+		Set(_address,_port);
+	}
+
+	inline void Set(const NAddress4& _address, ui16 _port)
+	{
+		Address = _address;
+		Port = _port;
+	}
+
+	inline NEndPoint& operator = ( const NEndPoint& value )
+	{
+		Address = value.Address;
+		Port = value.Port;
+		return *this;
+	}
 };
 
 

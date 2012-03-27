@@ -5,6 +5,26 @@
 
 #ifdef WIN32
 
+#include "texception.h"
+
+/*
+ *TODO: Abstractise platform specific functions in single file?
+ 
+ *
+ *class TPlatform
+{
+public:
+	virtual void  ShowMessageBox(const TString& message ) = 0;
+
+	virtual void RaiseToSystemString(const TString& message, byte* output, int capacity) = 0;
+
+	virtual TString SystemStringToRaise(byte* output, int length) = 0;
+
+	virtual TString GetErrorString(ui32 ErrorID);
+
+	virtual ui32 CreateThread();
+
+};*/
 
 class TWinTools
 {
@@ -46,19 +66,18 @@ public:
 
 	inline static TString ErrorToString(DWORD error)
 	{
-		LPVOID lpMsgBuf;
+		ch16 Temp[4096];
 
-		FormatMessageA(
-			FORMAT_MESSAGE_ALLOCATE_BUFFER | 
+		FormatMessageW( 
 			FORMAT_MESSAGE_FROM_SYSTEM |
 			FORMAT_MESSAGE_IGNORE_INSERTS,
 			NULL,
 			error,
 			MAKELANGID(LANG_NEUTRAL, SUBLANG_DEFAULT),
-			(LPSTR) &lpMsgBuf,
-			0, NULL );
+			Temp,
+			4096, NULL );
 
-		return TString((char*)lpMsgBuf);
+		return RaiseString(Temp);
 	}
 
 	inline static TString ErrorToStringWithCode(DWORD error)

@@ -2,7 +2,7 @@
 #define TEST_NETWORK_H
 
 #include "ttest.h"
-#include "nipaddress.h"
+#include "naddress.h"
 
 #ifdef WIN32
 #pragma warning( push )

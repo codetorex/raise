@@ -5,14 +5,14 @@
 // will result like 26: .....
 // so just substring 0 to indexof(':')
 
-#include "raiseversion.h"
+//#include "raiseversion.h"
 
 #define MGEN_BUILD					93
 #define MGEN_BUILD_STRING			"93"
 
 #define MGEN_PHASE					&TVersionPhase::PreAlpha
 
-#define MGEN_DEFAULT_COMPANYNAME	RAISE_DEFAULT_COMPANYNAME
+#define MGEN_DEFAULT_COMPANYNAME	"Doycka"
 
 #endif
 

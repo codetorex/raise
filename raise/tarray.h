@@ -263,7 +263,7 @@ public:
 		if (Capacity <= Count)
 		{
 			if (Capacity == 0) Capacity = 2;
-			Allocate(Capacity<<1); // Multiply the cache
+			Allocate(Capacity * 2); // Multiply the cache
 		}
 		Item[Count++] = value;
 	}
@@ -367,7 +367,7 @@ public:
 		T* NItem = new T [newsize];
 		if (Item)
 		{
-			memcpy(NItem,Item,sizeof(T) * Count);
+			MemoryDriver::Copy(NItem,Item,sizeof(T) * Count);
 			delete [] Item;
 		}
 		Item = NItem;

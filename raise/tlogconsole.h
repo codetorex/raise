@@ -8,6 +8,7 @@ class TLogConsole: public TLogOutput
 {
 public:
 	TConsoleDriver* ConsoleOutput;
+	
 
 	TLogConsole(TConsoleDriver* _ConsoleOutput)
 	{

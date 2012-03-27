@@ -1,8 +1,16 @@
 #include "stdafx.h"
 #include "tapplication.h"
 #include "tpath.h"
-#include "raiseversion.h"
+//#include "raiseversion.h"
 #include "tconsole.h"
+
+#define RAISE_BUILD					1000
+#define RAISE_BUILD_STRING			"1000"
+
+#define RAISE_PHASE					&TVersionPhase::PreAlpha
+
+#define RAISE_DEFAULT_COMPANYNAME	"Doychka"
+
 
 TVersionPhase TVersionPhase::PreAlpha			(0, "Pre-alpha",		"pre");
 TVersionPhase TVersionPhase::Alpha				(1, "Alpha",			"alpha");

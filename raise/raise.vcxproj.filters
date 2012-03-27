@@ -99,8 +99,8 @@
     <Filter Include="Source Files\System\Input">
       <UniqueIdentifier>{174df1e4-8c86-40a2-9c38-4aa42cbed43e}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Source Files\IO\Asynchronous">
-      <UniqueIdentifier>{ab3eb400-2642-4a8c-8993-546c477e54f6}</UniqueIdentifier>
+    <Filter Include="Source Files\System\Threading">
+      <UniqueIdentifier>{b49b2df6-99dd-4658-b0bd-a1267fdca01c}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -174,9 +174,6 @@
       <Filter>Source Files\System</Filter>
     </ClInclude>
     <ClInclude Include="texception.h">
-      <Filter>Source Files\System</Filter>
-    </ClInclude>
-    <ClInclude Include="tthread.h">
       <Filter>Source Files\System</Filter>
     </ClInclude>
     <ClInclude Include="tprocess.h">
@@ -452,23 +449,8 @@
     <ClInclude Include="tloghtml.h">
       <Filter>Source Files\System\Log</Filter>
     </ClInclude>
-    <ClInclude Include="nipaddress.h">
-      <Filter>Source Files\Network</Filter>
-    </ClInclude>
-    <ClInclude Include="npacket.h">
-      <Filter>Source Files\Network</Filter>
-    </ClInclude>
-    <ClInclude Include="npacketbuilder.h">
-      <Filter>Source Files\Network</Filter>
-    </ClInclude>
-    <ClInclude Include="npacketpool.h">
-      <Filter>Source Files\Network</Filter>
-    </ClInclude>
     <ClInclude Include="tobjectpool.h">
       <Filter>Source Files\Collection</Filter>
-    </ClInclude>
-    <ClInclude Include="nservicehttpbasic.h">
-      <Filter>Source Files\Network</Filter>
     </ClInclude>
     <ClInclude Include="tlogstream.h">
       <Filter>Source Files\System\Log</Filter>
@@ -478,9 +460,6 @@
     </ClInclude>
     <ClInclude Include="tconsole.h">
       <Filter>Source Files\System\Console</Filter>
-    </ClInclude>
-    <ClInclude Include="nserverlinux.h">
-      <Filter>Source Files\Network</Filter>
     </ClInclude>
     <ClInclude Include="tcommandline.h">
       <Filter>Source Files\System\Console</Filter>
@@ -545,25 +524,40 @@
     <ClInclude Include="tinputmap.h">
       <Filter>Source Files\System\Input</Filter>
     </ClInclude>
-    <ClInclude Include="nclient.h">
-      <Filter>Source Files\Network</Filter>
-    </ClInclude>
-    <ClInclude Include="ndns.h">
-      <Filter>Source Files\Network</Filter>
-    </ClInclude>
-    <ClInclude Include="nasynchronous.h">
-      <Filter>Source Files\Network</Filter>
-    </ClInclude>
-    <ClInclude Include="nasynchronouswindows.h">
-      <Filter>Source Files\Network</Filter>
-    </ClInclude>
     <ClInclude Include="tencodings.h">
       <Filter>Source Files\String</Filter>
     </ClInclude>
-    <ClInclude Include="tioservice.h">
-      <Filter>Source Files\IO\Asynchronous</Filter>
-    </ClInclude>
     <ClInclude Include="nsocket.h">
+      <Filter>Source Files\Network</Filter>
+    </ClInclude>
+    <ClInclude Include="tthread.h">
+      <Filter>Source Files\System\Threading</Filter>
+    </ClInclude>
+    <ClInclude Include="tresetevent.h">
+      <Filter>Source Files\System\Threading</Filter>
+    </ClInclude>
+    <ClInclude Include="naddress.h">
+      <Filter>Source Files\Network</Filter>
+    </ClInclude>
+    <ClInclude Include="npacket.h">
+      <Filter>Source Files\Network</Filter>
+    </ClInclude>
+    <ClInclude Include="npacketbuilder.h">
+      <Filter>Source Files\Network</Filter>
+    </ClInclude>
+    <ClInclude Include="tioserviceiocp.h">
+      <Filter>Source Files\Network</Filter>
+    </ClInclude>
+    <ClInclude Include="nsocketdefs.h">
+      <Filter>Source Files\Network</Filter>
+    </ClInclude>
+    <ClInclude Include="tioservice.h">
+      <Filter>Source Files\Network</Filter>
+    </ClInclude>
+    <ClInclude Include="nserverhttp.h">
+      <Filter>Source Files\Network</Filter>
+    </ClInclude>
+    <ClInclude Include="ndns.h">
       <Filter>Source Files\Network</Filter>
     </ClInclude>
   </ItemGroup>
@@ -585,9 +579,6 @@
     </ClCompile>
     <ClCompile Include="tbitmapformats.cpp">
       <Filter>Source Files\Graphics</Filter>
-    </ClCompile>
-    <ClCompile Include="tthread.cpp">
-      <Filter>Source Files\System</Filter>
     </ClCompile>
     <ClCompile Include="tprocess.cpp">
       <Filter>Source Files\Hacking</Filter>
@@ -688,14 +679,8 @@
     <ClCompile Include="tapplication.cpp">
       <Filter>Source Files\System</Filter>
     </ClCompile>
-    <ClCompile Include="npacketbuilder.cpp">
-      <Filter>Source Files\Network</Filter>
-    </ClCompile>
     <ClCompile Include="tfile.cpp">
       <Filter>Source Files\IO\File System</Filter>
-    </ClCompile>
-    <ClCompile Include="nservicehttpbasic.cpp">
-      <Filter>Source Files\Network</Filter>
     </ClCompile>
     <ClCompile Include="tlogstream.cpp">
       <Filter>Source Files\System\Log</Filter>
@@ -724,17 +709,20 @@
     <ClCompile Include="tconsoledriver.cpp">
       <Filter>Source Files\System\Console</Filter>
     </ClCompile>
-    <ClCompile Include="nclient.cpp">
+    <ClCompile Include="tthread.cpp">
+      <Filter>Source Files\System\Threading</Filter>
+    </ClCompile>
+    <ClCompile Include="npacketbuilder.cpp">
       <Filter>Source Files\Network</Filter>
     </ClCompile>
-    <ClCompile Include="nasynchronous.cpp">
+    <ClCompile Include="tioserviceiocp.cpp">
       <Filter>Source Files\Network</Filter>
     </ClCompile>
-    <ClCompile Include="nasynchronouswindows.cpp">
+    <ClCompile Include="nsocketiocpOLD.cpp">
       <Filter>Source Files\Network</Filter>
     </ClCompile>
-    <ClCompile Include="tioservicewindows.cpp">
-      <Filter>Source Files\IO\Asynchronous</Filter>
+    <ClCompile Include="nserverhttp.cpp">
+      <Filter>Source Files\Network</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

@@ -169,7 +169,7 @@ private:
 		}
 	}
 
-	inline void Append(const byte* src,int length, int charlength)
+	void Append(const byte* src,int length, int charlength)
 	{
 		ui32 newCap = length + ByteLength;
 		if ( newCap >= Capacity-1 )

@@ -1,268 +1,8 @@
 #include "stdafx.h"
-#include "nasynchronouswindows.h"
-#include "texception.h"
-#include "tlog.h"
 
-#ifdef WIN32
+#if 0
 
-
-void NAsynchronousWindows::Cleanup()
-{
-	if(CleanupEvent[0] != WSA_INVALID_EVENT) 
-	{
-		WSACloseEvent(CleanupEvent[0]);
-		CleanupEvent[0] = WSA_INVALID_EVENT;
-	}
-}
-
-void NAsynchronousWindows::StartServer()
-{
-	MainThread = new TThread(GetHandler(this,&NAsynchronousWindows::MainThreadFunction));
-	MainThread->Start();
-}
-
-void NAsynchronousWindows::MainThreadFunction()
-{
-	SYSTEM_INFO systemInfo;
-	WSADATA wsaData;
-	int nRet = 0;
-
-	IOCPHandle = INVALID_HANDLE_VALUE;
-	Restart = true;
-
-	GetSystemInfo(&systemInfo);
-	BestWorkerCount = systemInfo.dwNumberOfProcessors * 2;
-
-	if(WSA_INVALID_EVENT == (CleanupEvent[0] = WSACreateEvent()))
-	{
-		Log.Output(LG_ERR,"WSACreateEvent() failed: %", sfi(WSAGetLastError()));
-		return;
-	}
-
-	if( (nRet = WSAStartup(0x202, &wsaData)) != 0 ) 
-	{
-		Log.Output(LG_ERR,"WSAStartup() failed: %", sfi(nRet));
-		Cleanup();
-		return;
-	}
-
-	try
-	{
-		ContextListCS.Initialize();
-	}
-	catch(int a)
-	{
-		Log.Output(LG_ERR,"InitializeCriticalSection raised an exception. %", sfi(a));
-		Cleanup();
-		return;
-	}
-
-	while( Restart ) 
-	{
-		Restart = false;
-		EndServer = false;
-		WSAResetEvent(CleanupEvent[0]);
-
-		try	
-		{
-
-			//
-			// notice that we will create more worker threads (dwThreadCount) than 
-			// the thread concurrency limit on the IOCP.
-			//
-			IOCPHandle = CreateIoCompletionPort(INVALID_HANDLE_VALUE, NULL, 0, 0);
-			if( IOCPHandle == NULL ) 
-			{
-				Log.Output(LG_ERR,"CreateIoCompletionPort() failed to create I/O completion port: %", sfu(GetLastError()));
-				throw 0;
-			}
-
-			for( ui32 i=0; i< BestWorkerCount; i++ ) 
-			{
-				TThread* worker = new TThread(GetHandler(this,&NAsynchronousWindows::WorkerThreadFunction));
-				worker->Start();
-				WorkerThreads.Add(worker);
-			}
-
-			while(TaskQueue.Count)
-			{
-				NServerOperation* opr = TaskQueue.Pop();
-
-				switch (opr->Operation)
-				{
-				case NServerOperation::OT_CREATELISTENER:
-					CreateListenerParameters* prms = (CreateListenerParameters*)opr->Parameter;
-					CreateListenerTask(prms->Device,prms->Port,prms->Protocol,prms->Service);
-					break;
-				}
-
-				delete opr;
-			}
-
-			/*if( !CreateListenSocket() )
-			{
-				Log.Output(LG_ERR,"Creation of listen socket failed");
-			}
-
-			if( !CreateAcceptSocket(true) )
-			{
-				Log.Output(LG_ERR,"Creation of accept socket failed");
-			}*/
-
-			WSAWaitForMultipleEvents(1, CleanupEvent, TRUE, WSA_INFINITE, FALSE);
-		}
-		catch(Exception& exc)
-		{
-			Log.Output(LG_ERR,"Error occurred at server initialization: %", sfs(exc.Message));
-		}
-
-
-		EndServer = true;
-
-		//
-		// Cause worker threads to exit
-		//
-		if( IOCPHandle ) 
-		{
-			for( ui32 i = 0; i < WorkerThreads.Count; i++ )
-			{
-				PostQueuedCompletionStatus(IOCPHandle, 0, 0, NULL);
-			}
-		}
-
-		HANDLE tHandles[64];
-		for (ui32 i=0;i<WorkerThreads.Count;i++)
-		{
-			tHandles[i] = WorkerThreads.Item[i]->ThreadHandle;
-		}
-
-		//
-		// Make sure worker threads exits.
-		//
-		if( WAIT_OBJECT_0 != WaitForMultipleObjects(WorkerThreads.Count,  tHandles, TRUE, 1000) )
-		{
-			Log.Output(LG_ERR,"WaitForMultipleObjects() failed: %", sfu(GetLastError()));
-		}
-		else
-		{
-			for( ui32 i=0; i< WorkerThreads.Count ; i++ ) 
-			{
-				TThread* curThread = WorkerThreads.Item[i];
-				if( tHandles[i] != INVALID_HANDLE_VALUE )
-				{
-					CloseHandle(tHandles[i]);
-					
-				}
-				curThread->Abort();
-				curThread->ThreadHandle = INVALID_HANDLE_VALUE;
-				tHandles[i] = INVALID_HANDLE_VALUE;
-			}
-		}
-
-		/*
-		TODO: close all listener sockets
-		if( ListenSocket != INVALID_SOCKET ) 
-		{
-			closesocket(ListenSocket);                                
-			ListenSocket = INVALID_SOCKET;
-		}*/
-
-		/*
-		
-		TODO: fix all listener sockets
-		
-		if( g_pCtxtListenSocket ) 
-		{
-			while( !HasOverlappedIoCompleted((LPOVERLAPPED)&g_pCtxtListenSocket->pIOContext->Overlapped) )
-				Sleep(0);
-
-			if( g_pCtxtListenSocket->pIOContext->SocketAccept != INVALID_SOCKET )
-				closesocket(g_pCtxtListenSocket->pIOContext->SocketAccept);
-			g_pCtxtListenSocket->pIOContext->SocketAccept = INVALID_SOCKET;
-
-			//
-			// We know there is only one overlapped I/O on the listening socket
-			//
-			if( g_pCtxtListenSocket->pIOContext )
-				xfree(g_pCtxtListenSocket->pIOContext);
-
-			if( g_pCtxtListenSocket )
-				xfree(g_pCtxtListenSocket);
-			g_pCtxtListenSocket = NULL;
-		}
-
-		CtxtListFree();*/
-
-		if( IOCPHandle ) 
-		{
-			CloseHandle(IOCPHandle);
-			IOCPHandle = NULL;
-		}
-
-		if( Restart ) 
-		{
-			Log.Output(LG_INF,"Raise server is restarting...");
-		} 
-		else
-		{
-			Log.Output(LG_INF,"Raise server is exiting...");
-		}
-
-	} //while (g_bRestart)
-
-	ContextListCS.Finalize();
-	Cleanup();
-	WSACleanup();
-}
-
-
-NSocketWindows* NAsynchronousWindows::AllocateNewSocket( SOCKET sd, PacketIO op )
-{
-	ContextListCS.Lock();
-
-	NSocketWindows* newSocket = new NSocketWindows();
-
-	newSocket->Socket = sd;
-
-	ContextListCS.Unlock();
-
-	return newSocket;
-}
-
-NSocketWindows::NSocketWindows()
-{
-	IOContextRecv.UseRecvPacket(&ReceiveBuffer);
-}
-
-NSocketWindows* NAsynchronousWindows::UpdateCompletionPort( SOCKET sd, PacketIO op, bool addtoList )
-{
-	NSocketWindows* lpPerSocketContext;
-
-	lpPerSocketContext = AllocateNewSocket(sd, op);
-	if( lpPerSocketContext == NULL )
-		return NULL;
-
-	IOCPHandle = CreateIoCompletionPort((HANDLE)sd, IOCPHandle, (ULONG_PTR)lpPerSocketContext, 0);
-	if(IOCPHandle == NULL) 
-	{
-		Log.Output(LG_ERR,"CreateIoCompletionPort() failed: %", sfu(GetLastError()));
-		delete lpPerSocketContext;
-		return NULL;
-	}
-
-	//
-	//The listening socket context (bAddToList is FALSE) is not added to the list.
-	//All other socket contexts are added to the list.
-	//
-	//if( bAddToList ) CtxtListAddTo(lpPerSocketContext);
-
-	Log.Output(LG_INF,"UpdateCompletionPort: Socket(%) added to IOCP", sfu(lpPerSocketContext->Socket));
-
-	return lpPerSocketContext;
-}
-
-
-bool NAsynchronousWindows::CreateAcceptSocket( NListenerWindows* Listener, bool UpdateIOCP )
+bool TIOServiceIOCP::CreateAcceptSocket( NListenerWindows* Listener, bool UpdateIOCP )
 {
 	int nRet = 0;
 	DWORD dwRecvNumBytes = 0;
@@ -271,7 +11,7 @@ bool NAsynchronousWindows::CreateAcceptSocket( NListenerWindows* Listener, bool 
 	//
 	// GUID to Microsoft specific extensions
 	//
-	GUID acceptex_guid = WSAID_ACCEPTEX;
+	
 
 	//
 	//The context for listening socket uses the SockAccept member to store the
@@ -288,23 +28,7 @@ bool NAsynchronousWindows::CreateAcceptSocket( NListenerWindows* Listener, bool 
 		}
 
 		// Load the AcceptEx extension function from the provider for this socket
-		nRet = WSAIoctl(
-			Listener->ListenSocket.Socket,
-			SIO_GET_EXTENSION_FUNCTION_POINTER,
-			&acceptex_guid,
-			sizeof(acceptex_guid),
-			&Listener->ListenSocket.fnAcceptEx,
-			sizeof(Listener->ListenSocket.fnAcceptEx),
-			&bytes,
-			NULL,
-			NULL
-			);
 
-		if (nRet == SOCKET_ERROR)
-		{
-			Log.Output(LG_ERR,"Failed to load AcceptEx: %", sfu(WSAGetLastError()));
-			return NULL;
-		}
 	}
 
 	SOCKET acceptSocket = CreateSocket();
@@ -337,7 +61,7 @@ bool NAsynchronousWindows::CreateAcceptSocket( NListenerWindows* Listener, bool 
 
 }
 
-bool NAsynchronousWindows::Connect( NEndPoint EndPoint, NService* Service )
+bool TIOServiceIOCP::Connect( NEndPoint EndPoint, NService* Service )
 {
 	int nRet = 0;
 	DWORD dwRecvNumBytes = 0;
@@ -346,7 +70,6 @@ bool NAsynchronousWindows::Connect( NEndPoint EndPoint, NService* Service )
 	//
 	// GUID to Microsoft specific extensions
 	//
-	GUID connectex_guid = WSAID_CONNECTEX;
 
 	//
 	//The context for listening socket uses the SockAccept member to store the
@@ -378,31 +101,14 @@ bool NAsynchronousWindows::Connect( NEndPoint EndPoint, NService* Service )
 	}
 
 
-	NSocketWindows* winsck = UpdateCompletionPort(connectSocket, CIO_Connect, TRUE);
+	NSocketIOCP* winsck = UpdateCompletionPort(connectSocket, CIO_Connect, TRUE);
 
 	winsck->Service = Service;
 	winsck->Async = this;
 
-	LPFN_CONNECTEX cex;
 
 	// Load the AcceptEx extension function from the provider for this socket
-	nRet = WSAIoctl(
-		connectSocket,
-		SIO_GET_EXTENSION_FUNCTION_POINTER,
-		&connectex_guid,
-		sizeof(connectex_guid),
-		&cex,
-		sizeof(cex),
-		&bytes,
-		NULL,
-		NULL
-		);
 
-	if (nRet == SOCKET_ERROR)
-	{
-		Log.Output(LG_ERR,"Failed to load ConnectEx: %", sfu(WSAGetLastError()));
-		return false;
-	}
 
 	// TODO: check address.Address with inet_Addr of that string.
 	TString addrString = EndPoint.Address.ToString();
@@ -438,11 +144,11 @@ bool NAsynchronousWindows::Connect( NEndPoint EndPoint, NService* Service )
 }
 
 
-void NAsynchronousWindows::Disconnect( NSocketOLD* Client, bool Graceful )
+void TIOServiceIOCP::Disconnect( NSocket* Client, bool Graceful )
 {
 	if( Client ) 
 	{
-		NSocketWindows* sock = (NSocketWindows*)Client;
+		NSocketIOCP* sock = (NSocketIOCP*)Client;
 
 		Log.Output(LG_INF,"CloseClient: Socket(%) connection closing (graceful=%)", sfu(sock->Socket), (Graceful? sfs("TRUE"): sfs("FALSE")));
 		
@@ -479,7 +185,7 @@ void NAsynchronousWindows::Disconnect( NSocketOLD* Client, bool Graceful )
 	}
 }
 
-void NAsynchronousWindows::ReceiveFrom( NSocketWindows* sock )
+void TIOServiceIOCP::ReceiveFrom( NSocketIOCP* sock )
 {
 	DWORD dwRecvNumBytes;
 	DWORD dwFlags = 0;
@@ -503,13 +209,13 @@ void NAsynchronousWindows::ReceiveFrom( NSocketWindows* sock )
 
 
 
-void NAsynchronousWindows::Send( NSocketOLD* Client, NPacket* Packet )
+void TIOServiceIOCP::Send( NSocket* Client, NPacket* Packet )
 {
 	DWORD dwFlags = 0;
 	int nRet = 0;
 	DWORD dwSendNumBytes = 0;
 	
-	NSocketWindows* sock = (NSocketWindows*)Client;
+	NSocketIOCP* sock = (NSocketIOCP*)Client;
 
 	sock->IOContextSend.Operation = CIO_Write;
 	sock->IOContextSend.UseSendPacket(Packet);
@@ -535,14 +241,14 @@ void NAsynchronousWindows::Send( NSocketOLD* Client, NPacket* Packet )
 	//delete Packet; // TODO: use a pool return here.
 }
 
-void NAsynchronousWindows::WorkerThreadFunction()
+void TIOServiceIOCP::WorkerThreadFunction()
 {
 	BOOL bSuccess = FALSE;
 	int nRet = 0;
 	LPWSAOVERLAPPED lpOverlapped = NULL;
-	NSocketWindows* lpPerSocketContext = NULL;
-	NSocketWindows* lpAcceptSocketContext = NULL;
-	NClientWindowsIO* lpIOContext = NULL; 
+	NSocketIOCP* lpPerSocketContext = NULL;
+	NSocketIOCP* lpAcceptSocketContext = NULL;
+	NSocketIOCPOperation* lpIOContext = NULL; 
 	//WSABUF buffRecv;
 	WSABUF buffSend;
 	DWORD dwRecvNumBytes = 0;
@@ -575,11 +281,11 @@ void NAsynchronousWindows::WorkerThreadFunction()
 			return;
 		}
 
-		lpIOContext = (NClientWindowsIO*)((ULONG_PTR)lpOverlapped - ((ULONG_PTR)&lpIOContext->Overlapped - (ULONG_PTR)lpIOContext));
+		lpIOContext = (NSocketIOCPOperation*)((ULONG_PTR)lpOverlapped - ((ULONG_PTR)&lpIOContext->Overlapped - (ULONG_PTR)lpIOContext));
 
 		if( lpIOContext->Operation != CIO_Accept ) 
 		{
-			lpPerSocketContext = (NSocketWindows*)Key;
+			lpPerSocketContext = (NSocketIOCP*)Key;
 
 			if ( lpIOContext->Operation != CIO_Connect )
 			{
@@ -771,147 +477,5 @@ void NAsynchronousWindows::WorkerThreadFunction()
 		} //switch
 	} //while
 }
-
-SOCKET NAsynchronousWindows::CreateSocket()
-{
-	int nRet = 0;
-	int nZero = 0;
-	SOCKET sdSocket = INVALID_SOCKET;
-
-	sdSocket = WSASocket(AF_INET, SOCK_STREAM, IPPROTO_IP, NULL, 0, WSA_FLAG_OVERLAPPED); 
-	if( sdSocket == INVALID_SOCKET ) 
-	{
-		Log.Output(LG_ERR,"WSASocket(sdSocket) failed: %", sfi(WSAGetLastError()));
-		return(sdSocket);
-	}
-
-	nZero = 0;
-	nRet = setsockopt(sdSocket, SOL_SOCKET, SO_SNDBUF, (char *)&nZero, sizeof(nZero));
-	if( nRet == SOCKET_ERROR) 
-	{
-		Log.Output(LG_ERR,"setsockopt(SNDBUF) failed: %", sfi(WSAGetLastError()));
-		return(sdSocket);
-	}
-
-	return(sdSocket);
-}
-
-
-/*void Main()
-{
-	NServerWindows TheServer;
-	
-	NServiceHTTP HttpService;
-
-	TheServer.AddService(&HttpService);
-
-	HttpService.Configuration.Add()
-
-	TheServer.CreateListener("192.168.2.2",80, NP_TCP, &HttpService);
-	TheServer.CreateListener("127.0.0.1",31, NP_TCP, &HttpService);
-
-	TheServer.StartServer();
-
-}*/
-
-#include "twintools.h"
-
-bool NAsynchronousWindows::CreateListenerTask( NAddress4 Device, ui16 Port, NProtocol Protocol, NService* Service )
-{
-	NListenerWindows* WinListener = new NListenerWindows();
-
-	WinListener->Device = Device;
-	WinListener->Port = Port;
-	WinListener->Protocol = Protocol;
-	WinListener->Service = Service;
-
-	int nRet = 0;
-	LINGER lingerStruct;
-	struct addrinfo hints = {0};
-	struct addrinfo *addrlocal = NULL;
-
-	lingerStruct.l_onoff = 1;
-	lingerStruct.l_linger = 0;
-
-	//
-	// Resolve the interface
-	//
-	hints.ai_flags  = AI_PASSIVE;
-	hints.ai_family = AF_INET;
-	hints.ai_socktype = SOCK_STREAM;
-	hints.ai_protocol = IPPROTO_IP;
-
-	TString portstr = TConvert::ToString(Port);
-	TString addr = Device.ToString();
-
-	if( getaddrinfo((char*)addr.Data, (char*)portstr.Data, &hints, &addrlocal) != 0 ) 
-	{
-		Log.Output(LG_ERR,"getaddrinfo() failed with error %", sfs(TWinTools::ErrorToStringWithCode(WSAGetLastError())));
-		return(FALSE);
-	}
-
-	if( addrlocal == NULL ) 
-	{
-		Log.Output(LG_ERR,"getaddrinfo() failed to resolve/convert the interface");
-		return(FALSE);
-	}
-
-	WinListener->ListenSocket.Socket = CreateSocket();
-	if( WinListener->ListenSocket.Socket == INVALID_SOCKET) 
-	{
-		freeaddrinfo(addrlocal);
-		return(FALSE);
-	}
-
-	nRet = bind(WinListener->ListenSocket.Socket, addrlocal->ai_addr, (int) addrlocal->ai_addrlen);
-	if( nRet == SOCKET_ERROR) 
-	{
-		Log.Output(LG_ERR,"bind() failed: %", sfi(WSAGetLastError()));
-		freeaddrinfo(addrlocal);
-		return(FALSE);
-	}
-
-	nRet = listen(WinListener->ListenSocket.Socket, 5);
-	if( nRet == SOCKET_ERROR ) 
-	{
-		Log.Output(LG_ERR,"listen() failed: %", sfi(WSAGetLastError()));
-		freeaddrinfo(addrlocal);
-		return(FALSE);
-	}
-
-	freeaddrinfo(addrlocal);
-
-	Listeners.Add(WinListener);
-
-	CreateAcceptSocket(WinListener,true);
-
-	return true;
-}
-
-void NAsynchronousWindows::StopServer()
-{
-	EndServer = true;
-}
-
-void NAsynchronousWindows::RestartServer()
-{
-	Restart = true;
-}
-
-void NAsynchronousWindows::CreateListener( NAddress4 Device, ui16 Port, NProtocol Protocol, NService* Service )
-{
-	NServerOperation* nsp = new NServerOperation();
-	
-	nsp->Operation = NServerOperation::OT_CREATELISTENER;
-
-	CreateListenerParameters* clp = (CreateListenerParameters*)nsp->Parameter;
-	clp->Device = Device;
-	clp->Port = Port;
-	clp->Protocol = Protocol;
-	clp->Service = Service;
-
-	TaskQueue.Push(nsp);
-}
-
 
 #endif
