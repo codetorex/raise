@@ -20,3 +20,15 @@ void TBitmapFormats::InitializeBitmapFormats()
 	fRGB = CreateFormat ("RGB" ,"R8G8B8");
 	fBGR = CreateFormat ("BGR" ,"B8G8R8");
 }
+
+void TBitmapFormats::InitializeFileFormats()
+{
+	TBitmapBMP::Install();
+	TBitmapTGA::Install();
+	TBitmapPNG::Install();
+}
+
+void TBitmapFormats::CreateDefaultFormats()
+{
+	BitmapFormats = new TBitmapFormats(&TCompositeFormatFactoryGeneric::Instance);
+}

@@ -93,9 +93,9 @@ public:
 		TestType = TEST_PERFORMANCE;
 	}
 
-	void Test();
+	virtual void Test();
 
-	virtual void PerformanceTest() = 0;
+	virtual void PerformanceTest() {};
 };
 
 class TTestComparison: public TTest

@@ -123,13 +123,20 @@ void TIOServiceIOCP::WorkerMain()
 
 	int nRet;
 
+	SystemError tmpError;
+
 	while (1)
 	{
 		CmpStatus = GetQueuedCompletionStatus(IOCPHandle,&IOSize,&Key,(LPOVERLAPPED *)&Overlapped,INFINITE );
 
 		if (!CmpStatus)
 		{
-			Log.Output(LG_ERR,"GetQueuedCompletionStatus() failed: %",sfu(GetLastError()));
+			tmpError.SetErrorMessage(GetLastError());
+			Log.Output(LG_ERR,"GetQueuedCompletionStatus() failed: %",sfs(tmpError.Message));
+		}
+		else
+		{
+			tmpError.Unset();
 		}
 
 		if (Key == NULL)
@@ -144,42 +151,56 @@ void TIOServiceIOCP::WorkerMain()
 
 		CurrentSocket = (NSocketIOCP*)Key;
 		Operation = (NSocketIOCPOperation*)((ULONG_PTR)Overlapped - ((ULONG_PTR)&Operation->Overlapped - (ULONG_PTR)Operation));
+		Operation->Working = false;
 
 		switch(Operation->Operation)
 		{
 		case CIO_Connect:
 			{
-				Operation->Working = false;
-				Operation->ConnectCb->call( SystemError(ERROR_SUCCESS) );
-				Log.Output(LG_INF,"WorkerThread %: Socket(%) ConnectEx completed (% bytes)",sfu(GetCurrentThreadId()),sfu(CurrentSocket->Socket),sfu(IOSize));
+				if (!tmpError)
+				{
+					Log.Output(LG_INF,"WorkerThread %: Socket(%) ConnectEx completed (% bytes)",sfu(GetCurrentThreadId()),sfu(CurrentSocket->Socket),sfu(IOSize));
+				}
+				else
+				{
+					Log.Output(LG_ERR,"WorkerThread %: Socket(%) ConnectEx failed %",sfu(GetCurrentThreadId()),sfu(CurrentSocket->Socket),sfs(tmpError.Message));
+				}
+				Operation->ConnectCb->call( tmpError );
 				
 			}
 			break;
 
 		case CIO_Accept:
 			{
-				Operation->Working = false;
-				nRet = setsockopt(CurrentSocket->IOContextRecv.AcceptSocket->Socket, SOL_SOCKET,SO_UPDATE_ACCEPT_CONTEXT,(char *)&CurrentSocket->Socket,sizeof(CurrentSocket->Socket));
-
-				if( nRet == SOCKET_ERROR ) 
+				if (!tmpError)
 				{
-					Log.Output(LG_ERR,"setsockopt(SO_UPDATE_ACCEPT_CONTEXT) failed to update accept socket");
-					Stop();
-					return;
+					nRet = setsockopt(CurrentSocket->IOContextRecv.AcceptSocket->Socket, SOL_SOCKET,SO_UPDATE_ACCEPT_CONTEXT,(char *)&CurrentSocket->Socket,sizeof(CurrentSocket->Socket));
+
+					if( nRet == SOCKET_ERROR ) 
+					{
+						tmpError.SetErrorMessage(WSAGetLastError());
+						Log.Output(LG_ERR,"setsockopt(SO_UPDATE_ACCEPT_CONTEXT) failed to update accept socket");
+					}
+					else
+					{
+						NSocketIOCP* acceptedSocket = (NSocketIOCP*)CurrentSocket->IOContextRecv.AcceptSocket;
+						IntroduceIOCP(acceptedSocket);
+					}
 				}
-
-				NSocketIOCP* acceptedSocket = (NSocketIOCP*)CurrentSocket->IOContextRecv.AcceptSocket;
-				IntroduceIOCP(acceptedSocket);
-
-				Operation->AcceptCb->call(  CurrentSocket->IOContextRecv.AcceptObject,SystemError(ERROR_SUCCESS));
+				Operation->AcceptCb->call(  CurrentSocket->IOContextRecv.AcceptObject,tmpError);
 			}
 			break;
 
 		case CIO_Read:
 			{
+				if (IOSize == 0)
+				{
+					tmpError.SetErrorMessage(WSAECONNRESET);
+					Log.Output(LG_ERR,"WSARecv() thinks connection is closed %", sfs(tmpError.Message));
+				}
 				Operation->Working = false;
 				Operation->CurrentPacket->Length = IOSize;
-				Operation->RecvCb->call( SystemError(ERROR_SUCCESS), IOSize);
+				Operation->RecvCb->call( tmpError, IOSize);
 			}
 			break;
 
@@ -187,30 +208,35 @@ void TIOServiceIOCP::WorkerMain()
 			{
 				Operation->Working = false;
 				Operation->SentBytes += IOSize;
-				if (Operation->SentBytes < Operation->TotalBytes)
-				{
-					CurrentSocket->IOContextSend.wsabuf.buf += IOSize;
-					CurrentSocket->IOContextSend.wsabuf.len -= IOSize;
-					nRet = WSASend(CurrentSocket->Socket, &CurrentSocket->IOContextSend.wsabuf,1,&dwSendNumBytes,0,&(CurrentSocket->IOContextSend.Overlapped),NULL);
 
-					if( nRet == SOCKET_ERROR && (ERROR_IO_PENDING != WSAGetLastError()) ) 
+				if (!tmpError)
+				{
+					if (IOSize == 0)
 					{
-						ui32 errortype = WSAGetLastError();
-						Log.Output(LG_ERR,"WSASend() failed: %", sfs(TWinTools::ErrorToStringWithCode(errortype)));
-						CurrentSocket->IOContextSend.SendCb->call(SystemError(errortype));
+						tmpError.SetErrorMessage(WSAECONNRESET);
+					}
+					else
+					{
+						if (Operation->SentBytes < Operation->TotalBytes)
+						{
+							CurrentSocket->IOContextSend.wsabuf.buf += IOSize;
+							CurrentSocket->IOContextSend.wsabuf.len -= IOSize;
+							nRet = WSASend(CurrentSocket->Socket, &CurrentSocket->IOContextSend.wsabuf,1,&dwSendNumBytes,0,&(CurrentSocket->IOContextSend.Overlapped),NULL);
+
+							if( nRet == SOCKET_ERROR && (ERROR_IO_PENDING != WSAGetLastError()) ) 
+							{
+								tmpError.SetErrorMessage(WSAGetLastError());
+								Log.Output(LG_ERR,"WSASend() failed: %", sfs(tmpError.Message));
+							}
+						}
 					}
 				}
-				Operation->SendCb->call(SystemError(ERROR_SUCCESS));
+
+				
+				Operation->SendCb->call(tmpError);
 			}
 			break;
 		}
-		/*IOAsyncRequest* req = (IOAsyncRequest*)Key;
-
-		Result.Succeeded = CmpStatus == TRUE;
-		Result.IOSize = IOSize;
-		Result.Object = req->Object;
-
-		req->Callback->call(&Result);*/
 	}
 }
 
@@ -419,8 +445,10 @@ void TIOServiceIOCP::SendAsync( NSocket* sck, NPacket* packet , SendCallback* Ca
 
 	if( nRet == SOCKET_ERROR && (ERROR_IO_PENDING != WSAGetLastError()) ) 
 	{
-		Log.Output(LG_ERR,"WSASend() failed: %", sfs(TWinTools::ErrorToStringWithCode(WSAGetLastError())));
-		Disconnect(sck, FALSE);
+		SystemError err;
+		err.SetErrorMessage(WSAGetLastError());
+		Log.Output(LG_ERR,"WSASend() failed: %",  sfs(err.Message));
+		Callback->call(err);
 	}
 }
 
@@ -442,17 +470,15 @@ void TIOServiceIOCP::RecvAsync( NSocket* sck, NPacket* packet, ReceiveCallback* 
 	DWORD dwRecvNumBytes;
 	DWORD dwFlags = 0;
 	int nRet = 0;
-	WSABUF buffRecv;
 
-	buffRecv.buf = (char*)packet->Data;
-	buffRecv.len = packet->Capacity;
-
-	nRet = WSARecv(isock->Socket,&buffRecv, 1,&dwRecvNumBytes,&dwFlags,&(isock->IOContextRecv.Overlapped), NULL);
+	nRet = WSARecv(isock->Socket,&(isock->IOContextRecv.wsabuf), 1,&dwRecvNumBytes,&dwFlags,&(isock->IOContextRecv.Overlapped), NULL);
 
 	if( nRet == SOCKET_ERROR && (ERROR_IO_PENDING != WSAGetLastError()) ) 
 	{
-		Log.Output(LG_ERR,"WSARecv() failed: %", sfs(TWinTools::ErrorToStringWithCode(WSAGetLastError())));
-		Disconnect(isock, FALSE);
+		SystemError err;
+		err.SetErrorMessage(WSAGetLastError());
+		Log.Output(LG_ERR,"WSARecv() failed: %", sfs(err.Message));
+		Callback->call(err,0);
 	}
 }
 

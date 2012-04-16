@@ -10,8 +10,12 @@
 #include "test_array.h"
 #include "test_characterenumerator.h"
 #include "test_network.h"
+#include "test_queue.h"
+#include "test_graphics.h"
 
 #include "tcolor.h"
+#include "mmathcolor.h"
+
 #include "tapplication.h"
 #include "raiseversion.h"
 
@@ -23,6 +27,16 @@ public:
 
 	void Test()
 	{
+		TColor32 t1(255,0,0,128);
+		TColor32 t2(0,255,0,128);
+
+		TColor32 result = MathColor::BlendNormal(t1,t2);
+
+		TColorFloat res = MathColor::BlendNormal(TColorFloat(1,0,0,0.50f), TColorFloat(0,1,0,0.50));
+		
+		TColor32 res2 = res.ConvertToByteColor();
+
+
 		TColor32 clr(64,128,178,255);
 
 		TStringBuilder sb;
@@ -134,11 +148,15 @@ int _tmain(int argc, wchar_t* argv[])
 int main(int argc,char** argv)
 #endif
 {
-	Application.Begin( "RaiseLib Test Suite", RaiseModule.Version );
+	Application.Begin( "RaiseLib Test Suite", TVersion(RAISE_BUILD, RAISE_PHASE), RAISE_DEFAULT_COMPANYNAME );
+	USESRAISE;
+
+	TBitmapFormats::CreateDefaultFormats();
 
 	TConsoleReport suite("RaiseLib Test Suite");
 	suite.PrintApplicationInfo = true;
 	suite.PrintTestName = false;
+	//suite.PrintOutputs = true;
 
 	suite.AddTest(&TStringCheck);
 	suite.AddTest(&TDateTimeCheck);
@@ -146,8 +164,9 @@ int main(int argc,char** argv)
 	suite.AddTest(&TColorCheck);
 	suite.AddTest(&TCharacterEnumeratorCheck);
 	suite.AddTest(&NIPAddress4Check);
+	suite.AddTest(&TQueueCheck);
+	suite.AddTest(&TGraphicsBitmapCheck);
 
-	//suite.PrintOutputs = true;
 	suite.RunSuite();
 	
 	getchar();

@@ -17,6 +17,13 @@ public:
 	{
 		ch16 tmp[512];
 		int tmplength = GetCurrentDirectoryW(512,tmp);
+		ch16 lastChar = tmp[tmplength-1];
+		if ( lastChar != '/' && lastChar != '\\' )
+		{
+			tmp[tmplength] = '\\';
+			tmplength++;
+			tmp[tmplength] = 0;
+		}
 		return TWinTools::RaiseString(tmp);
 	}
 
@@ -245,6 +252,10 @@ public:
 		return TString::Empty;*/
 	}
 
+	/**
+	 * Strips filename from path.
+	 * Example: for given path "c:\windows\system32\test.dll" it will return "c:\windows\system32\"
+	 */
 	static TString StripFilename(const TString& path)
 	{
 		TCharacterReverseEnumerator schars(path);

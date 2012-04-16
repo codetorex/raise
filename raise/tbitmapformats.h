@@ -24,11 +24,15 @@ public:
 
 	void InitializeBitmapFormats();
 	void CreateDefaultConverters();
+	void InitializeFileFormats();
+
+	static void CreateDefaultFormats();
 	
 	TBitmapFormats(TCompositeFormatFactory* _factory = 0): TCompositionManager(_factory)
 	{
 		InitializeBitmapFormats();
 		CreateDefaultConverters();
+		InitializeFileFormats();
 	}
 };
 

@@ -112,7 +112,9 @@
     <ClInclude Include="test_array.h" />
     <ClInclude Include="test_characterenumerator.h" />
     <ClInclude Include="test_datetime.h" />
+    <ClInclude Include="test_graphics.h" />
     <ClInclude Include="test_network.h" />
+    <ClInclude Include="test_queue.h" />
     <ClInclude Include="test_string.h" />
     <ClInclude Include="toldtests.h" />
   </ItemGroup>

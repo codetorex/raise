@@ -79,8 +79,7 @@
     <Lib>
       <AdditionalLibraryDirectories>
       </AdditionalLibraryDirectories>
-      <AdditionalDependencies>
-      </AdditionalDependencies>
+      <AdditionalDependencies>libpng.lib;zlib.lib;</AdditionalDependencies>
       <LinkTimeCodeGeneration>true</LinkTimeCodeGeneration>
     </Lib>
     <CustomBuildStep>
@@ -128,20 +127,29 @@
     <ClInclude Include="mdecibel.h" />
     <ClInclude Include="mdecimal.h" />
     <ClInclude Include="mfixed.h" />
+    <ClInclude Include="mmathcolor.h" />
     <ClInclude Include="mmathdriver.h" />
     <ClInclude Include="mmatrix.h" />
     <ClInclude Include="mquaternion.h" />
+    <ClInclude Include="mrandom.h" />
     <ClInclude Include="mray.h" />
     <ClInclude Include="mtools.h" />
     <ClInclude Include="mtriangle.h" />
     <ClInclude Include="mvector3.h" />
     <ClInclude Include="mvector2.h" />
+    <ClInclude Include="nacceptor.h" />
     <ClInclude Include="ndns.h" />
     <ClInclude Include="naddress.h" />
+    <ClInclude Include="nhttprequest.h" />
     <ClInclude Include="npacket.h" />
     <ClInclude Include="npacketbuilder.h" />
+    <ClInclude Include="npacketwriter.h" />
+    <ClInclude Include="npacketreader.h" />
     <ClInclude Include="nserverhttp.h" />
     <ClInclude Include="nsocketdefs.h" />
+    <ClInclude Include="nuri.h" />
+    <ClInclude Include="tbinarywriter.h" />
+    <ClInclude Include="tbytequeue.h" />
     <ClInclude Include="tioservice.h" />
     <ClInclude Include="tioserviceiocp.h" />
     <ClInclude Include="nsocket.h" />
@@ -281,6 +289,9 @@
     <ClCompile Include="npacketbuilder.cpp" />
     <ClCompile Include="nserverhttp.cpp" />
     <ClCompile Include="nsocketiocpOLD.cpp" />
+    <ClCompile Include="nuri.cpp" />
+    <ClCompile Include="texception.cpp" />
+    <ClCompile Include="tgraphics.cpp" />
     <ClCompile Include="tioserviceiocp.cpp" />
     <ClCompile Include="stdafx.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Create</PrecompiledHeader>
@@ -337,7 +348,6 @@
     <ClCompile Include="twintools.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="design.cd" />
     <None Include="Rules.txt" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

@@ -2,6 +2,7 @@
 #define NSERVERHTTP_H
 
 #include "tioservice.h"
+#include "nacceptor.h"
 
 
 class NHTTPServer;
@@ -22,7 +23,12 @@ public:
 
 	TFileStream* ReadStream;
 
-	NHTTPSession(NHTTPServer* _Server, TIOService* _Service)
+	TMemberDelegate2<NHTTPSession,void, const SystemError&, ui32> MReceiveCallback;
+	TMemberDelegate1<NHTTPSession,void, const SystemError&> MSendCallback;
+
+	NHTTPSession(NHTTPServer* _Server, TIOService* _Service): 
+				MReceiveCallback(this, &NHTTPSession::HandleReceive),
+				MSendCallback(this, &NHTTPSession::HandleSend)
 	{
 		Server = _Server;
 		Service = _Service;
@@ -45,7 +51,7 @@ public:
 class NHTTPServer
 {
 public:
-	NSocket* Listener; // TODO: make acceptor class
+	NAcceptor Listener; // TODO: make acceptor class
 	TIOService* Service;
 	ui16 Port;
 
@@ -53,25 +59,20 @@ public:
 	TString ServerVersion;
 	TString RootFolder;
 
+	TMemberDelegate2<NHTTPServer,void, void*, const SystemError&> MyCallback;
+
 	NHTTPServer(TIOService* _Service, ui16 _Port);
 
-	void Start()
+	void Start( NEndPoint& endpoint )
 	{
-		NEndPoint endpoint;
-		endpoint.Address = "192.168.2.2";
-		endpoint.Port = 80;
-
-		Listener = Service->CreateSocketTCP();
-		Listener->Bind( endpoint );
-		Listener->Listen(16);
-
+		Listener.Initialize(Service, endpoint);
 		BeginAccepting();
 	}
 
 	void BeginAccepting()
 	{
 		NHTTPSession* new_client = new NHTTPSession(this,Service);
-		Listener->BeginAccept(new_client->Socket,new_client,&new_client->ReceivePacket, GetHandler(this,&NHTTPServer::HandleAccept));
+		Listener.BeginAccept(new_client->Socket,new_client,&new_client->ReceivePacket, &MyCallback );
 	}
 
 	void HandleAccept(void* object, const SystemError& err)

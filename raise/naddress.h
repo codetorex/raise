@@ -69,19 +69,25 @@ public:
 		Set(value);
 	}
 
+	inline NAddress4( const char* value )
+	{
+		TString tp = value;
+		Set(tp);
+	}
+
 	inline NAddress4(byte partA, byte partB, byte partC, byte partD)
 	{
 		Set(partA,partB,partC,partD);
 	}
 
 	/**
-	 * Parses given string to ip address.
+	 * Parses given string to ip address. NADDREESS& already does this?
 	 */
-	inline NAddress4& operator = ( const TString& value  )
+	/*inline NAddress4& operator = ( const TString& value  )
 	{
 		Set(value);
 		return *this;
-	}
+	}*/
 
 	inline NAddress4& operator = ( ui32 value )
 	{

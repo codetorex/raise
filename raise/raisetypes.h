@@ -65,17 +65,27 @@ typedef unsigned char		byte; // technically ui8
 
 #define MXDWORD				0xFFFFFFFF
 
-#define DIV2(x)				( (x) >> 1 )
-#define DIV4(x)				( (x) >> 2 )
-#define DIV8(x)				( (x) >> 3 )
-#define DIV16(x)			( (x) >> 4 )
-#define DIV32(x)			( (x) >> 5 )
+#define MAX_UI32			((ui32)~((ui32)0))
 
-#define MUL2(x)				( (x) << 1 )
-#define MUL4(x)				( (x) << 2 )
-#define MUL8(x)				( (x) << 3 )
-#define MUL16(x)			( (x) << 4 )
-#define MUL32(x)			( (x) << 5 )
+#define DIV2POWN(x,y)		( (x) >> y )
+
+#define DIV2(x)				( DIV2POWN(x,1) )
+#define DIV4(x)				( DIV2POWN(x,2) )
+#define DIV8(x)				( DIV2POWN(x,3) )
+#define DIV16(x)			( DIV2POWN(x,4) )
+#define DIV32(x)			( DIV2POWN(x,5) )
+
+/**
+ * This maybe different in big endian system.
+ */
+#define MUL2POWN(x,y)		( (x) << y )
+
+// TODO: test these in raise-test
+#define MUL2(x)				( MUL2POWN(x,1) )
+#define MUL4(x)				( MUL2POWN(x,2) )
+#define MUL8(x)				( MUL2POWN(x,3) )
+#define MUL16(x)			( MUL2POWN(x,4) )
+#define MUL32(x)			( MUL2POWN(x,5) )
 
 // and with ( 2^n - 1 )
 #define MOD2(x)				( (x) & 1  )

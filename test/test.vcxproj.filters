@@ -46,5 +46,11 @@
     <ClInclude Include="test_network.h">
       <Filter>Tests</Filter>
     </ClInclude>
+    <ClInclude Include="test_queue.h">
+      <Filter>Tests</Filter>
+    </ClInclude>
+    <ClInclude Include="test_graphics.h">
+      <Filter>Tests</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>

@@ -5,17 +5,15 @@
 // will result like 26: .....
 // so just substring 0 to indexof(':')
 
-#define RAISE_BUILD					317
-#define RAISE_BUILD_STRING			"317"
+#define RAISE_BUILD					375
+#define RAISE_BUILD_STRING			"375"
 
 #define RAISE_PHASE					&TVersionPhase::PreAlpha
 
 #define RAISE_DEFAULT_COMPANYNAME	"Doychka"
 
-#include "tapplication.h"
+#define RAISEMODULE					TModule("Raise",TVersion(RAISE_BUILD,RAISE_PHASE), RAISE_DEFAULT_COMPANYNAME)
 
-extern TModule RaiseModule;
-
+#define USESRAISE					Application.Modules.Add( new RAISEMODULE )
 
 #endif
-

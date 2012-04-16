@@ -273,8 +273,10 @@ void TBitmapTGA::ReadBitmap( TBitmap* bmp, Stream* src )
 		throw Exception("Unsupported format");
 	}
 
+	throw Exception("TROLLOL");
+
 	// Fix the origin.
-	switch(Loader.ImageOrigin)
+	/*switch(Loader.ImageOrigin)
 	{
 	case TO_BottomLeft:
 		bmp->FlipVertical();
@@ -291,7 +293,7 @@ void TBitmapTGA::ReadBitmap( TBitmap* bmp, Stream* src )
 	case TO_TopRight:
 		bmp->FlipHorizontal();
 		break;
-	}
+	}*/
 }
 
 void TBitmapTGA::Install()

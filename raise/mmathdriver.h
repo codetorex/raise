@@ -34,6 +34,14 @@ public:
 		return (int64) (value-0.5);
 	}
 
+	/**
+	 * A simple random number generator, that generates between 0 and 32767.
+	 */
+	inline static ui32 Random()
+	{
+		return rand();
+	}
+
 	inline static float Clamp(float minValue,float maxValue, float value)
 	{
 		return value < minValue ? minValue : (value > maxValue ? maxValue : value);
@@ -92,6 +100,7 @@ public:
 		return(a0*y1+a1*m0+a2*m1+a3*y2);
 	}
 };
+
 
 
 #endif

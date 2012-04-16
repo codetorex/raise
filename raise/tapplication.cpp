@@ -1,15 +1,7 @@
 #include "stdafx.h"
 #include "tapplication.h"
 #include "tpath.h"
-//#include "raiseversion.h"
 #include "tconsole.h"
-
-#define RAISE_BUILD					1000
-#define RAISE_BUILD_STRING			"1000"
-
-#define RAISE_PHASE					&TVersionPhase::PreAlpha
-
-#define RAISE_DEFAULT_COMPANYNAME	"Doychka"
 
 
 TVersionPhase TVersionPhase::PreAlpha			(0, "Pre-alpha",		"pre");
@@ -20,8 +12,8 @@ TVersionPhase TVersionPhase::Release			(4, "Release",			"r");
 
 void TVersion::SetBuildText()
 {
-	BuildText			= TString::Format("build %", sfi(SubMinor));
-	BuildPhaseText		= TString::Format("build % %", sfi(SubMinor), sfs(Phase->ShortName));
+	BuildText			= TString::Format("build %", sfi(Build));
+	BuildPhaseText		= TString::Format("build % %", sfi(Build), sfs(Phase->ShortName));
 }
 
 void TVersion::SetVersionText()
@@ -93,7 +85,7 @@ TModule::TModule( const TString& _Name, TVersion& _Version )
 {
 	Name = _Name;
 	Version = _Version;
-	Company = RAISE_DEFAULT_COMPANYNAME;
+	Company = TString::Empty;
 	SetIdentifyText();
 }
 
@@ -102,8 +94,6 @@ void TModule::SetIdentifyText()
 	IdentifyText = TString::Format("% - % - %", sfs(Name), sfs(Version.VersionPhaseText), sfs(Company));
 	IdentifyBuildText = TString::Format("% - % - %", sfs(Name), sfs(Version.BuildPhaseText), sfs(Company));
 }
-
-TModule RaiseModule = TModule("Raise",TVersion(RAISE_BUILD,RAISE_PHASE));
 
 TApplication Application;
 
@@ -116,13 +106,12 @@ void TApplication::Begin( TString _Name, TVersion& _Version, TString _Company )
 	Version = _Version;
 	Company = _Company;
 
-	Application.Modules.Add(&RaiseModule);
 	SetIdentifyText();
 }
 
 void TApplication::Begin( TString _Name, TVersion& _Version )
 {
-	Begin( _Name,_Version, RAISE_DEFAULT_COMPANYNAME );
+	Begin( _Name,_Version, TString::Empty );
 }
 
 void TApplication::PrintIdentifierToConsole(bool printModules)

@@ -5,64 +5,90 @@
 #include "tarray.h"
 
 // TODO: test tobject pool
-
-/**
- * Purpose of this class is having preallocated pool of objects.
- * Needed for networking stuff but can be used elsewhere when needed.
- * Objects have to be simple stuff. e.g. having no constructor
- */
-
 template <class T>
-class TObjectPool
+class TBasePool
 {
 public:
 	ui32 ObjectLength;
-	ui32 FreeCount;
-	ui32 AllocatedCount;
-	ui32 TotalCount;
+	ui32 TotalObjects;
 
 	TArray<T*> ObjectArray;
+	TArray<T*> Allocations;
 
-	TArray<void*> Allocations;
-
-	TObjectPool(ui32 initialSize = 0)
+	TBasePool()
 	{
-		ObjectLength = sizeof(T);
-		
-		if (initialSize > 0)
-		{
-			AllocateObjects(initialSize);
-		}
+		TotalObjects = 0;
 	}
 
-	~TObjectPool()
+	inline ui32 GetFreeObjects()
 	{
-		for (ui32 i=0;i<Allocations.Count;i++)
-		{
-			delete Allocations.Item[i];
-		}
-		Allocations.Clear();
+		return ObjectArray.Count;
+	}
+
+	inline ui32 GetAllocatedObjects()
+	{
+		return TotalObjects - ObjectArray.Count;
+	}
+
+	inline ui32 GetTotalObjects()
+	{
+		return TotalObjects;
+	}
+
+	
+	~TBasePool()
+	{
+		this->Allocations.DeletePointers();
 	}
 
 	/**
 	 * Gets an object from pool.
 	 */
-	inline T* PopObject()
+	inline T* AcquireObject()
 	{
-		T* objectToReturn = ObjectArray.GetLast();
-		if (objectToReturn)
+		if (this->ObjectArray.Count)
 		{
-			ObjectArray.RemoveLast();
+			return ObjectArray.Item[--ObjectArray.Count];
 		}
-		return objectToReturn;
+		
+		DoubleObjectCount(); // LOG this situation?
+		return AcquireObject();
 	}
 
 	/**
 	 * Returns the object to the pool.
 	 */
-	inline void PushObject(T* Object)
+	inline void ReleaseObject(T* Object)
 	{
-		ObjectArray.UnsafeAdd(Object);
+		this->ObjectArray.UnsafeAdd(Object);
+	}
+
+	/**
+	 * Doubles allocated object count.
+	 */
+	inline void DoubleObjectCount()
+	{
+		AllocateObjects(TotalObjects);
+	}
+
+	virtual void AllocateObjects(ui32 Count) = 0;
+};
+
+/**
+ * Purpose of this class is having preallocated pool of objects.
+ */
+template <class T>
+class TObjectPool: public TBasePool<T>
+{
+public:
+	TObjectPool(ui32 initialSize = 0)
+	{
+		this->ObjectLength = sizeof(T);
+
+		if (initialSize > 0)
+		{
+			AllocateObjects(initialSize);
+		}
 	}
 
 	/**
@@ -70,21 +96,70 @@ public:
 	 */
 	void AllocateObjects(ui32 Count)
 	{
-		ui32 requiredMemory = Count * ObjectLength;
-		void* currentAllocation = new byte [ requiredMemory ];
-
+		T* currentAllocation = new T [ Count ];
 		Allocations.Add(currentAllocation);
-		ObjectArray.Allocate(Count + ObjectArray.Count + 8);
 
-		void* currentObject = currentAllocation;
+		this->ObjectArray.Allocate(Count + TotalObjects);
 
 		for (ui32 i = 0;i<Count;i++)
 		{
-			PushObject((T*)currentObject);
-			currentObject += ObjectLength;
+			ReleaseObject( &currentAllocation[i] );
+		}
+
+		TotalObjects += Count;
+	}
+};
+
+class TMemoryPool: public TBasePool<byte>
+{
+public:
+
+	TMemoryPool( ui32 chunkLength , ui32 initialSize)
+	{
+		this->ObjectLength = chunkLength;
+
+		if (initialSize > 0)
+		{
+			AllocateObjects(initialSize);
 		}
 	}
 
+	/**
+	 * Use this function to import memory location of a stack location or object location.
+	 */
+	void ImportStaticMemory(byte* pMemory, int length)
+	{
+		ui32 objectCount = length / ObjectLength;
+
+		if (objectCount <= 0) return;
+
+		int i = objectCount;
+		while(i--)
+		{
+			ReleaseObject(pMemory);
+			pMemory += ObjectLength;
+		}
+
+		TotalObjects += objectCount;
+	}
+
+	void AllocateObjects(ui32 Count)
+	{
+		ui32 requiredMemory = Count * ObjectLength;
+		byte* currentAllocation = new byte [ requiredMemory ];
+		
+		Allocations.Add(currentAllocation);
+		ObjectArray.Allocate( TotalObjects + Count );
+
+		byte* currentObject = currentAllocation;
+		for ( ui32 i=0; i<Count ; i++)
+		{
+			ReleaseObject(currentObject);
+			currentObject += ObjectLength;
+		}
+
+		TotalObjects += Count;
+	}
 };
 
 

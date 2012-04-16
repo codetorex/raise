@@ -560,6 +560,33 @@
     <ClInclude Include="ndns.h">
       <Filter>Source Files\Network</Filter>
     </ClInclude>
+    <ClInclude Include="nhttprequest.h">
+      <Filter>Source Files\Network</Filter>
+    </ClInclude>
+    <ClInclude Include="nacceptor.h">
+      <Filter>Source Files\Network</Filter>
+    </ClInclude>
+    <ClInclude Include="nuri.h">
+      <Filter>Source Files\Network</Filter>
+    </ClInclude>
+    <ClInclude Include="tbinarywriter.h">
+      <Filter>Source Files\IO\Literacy\Binary</Filter>
+    </ClInclude>
+    <ClInclude Include="npacketreader.h">
+      <Filter>Source Files\Network</Filter>
+    </ClInclude>
+    <ClInclude Include="npacketwriter.h">
+      <Filter>Source Files\Network</Filter>
+    </ClInclude>
+    <ClInclude Include="tbytequeue.h">
+      <Filter>Source Files\Collection</Filter>
+    </ClInclude>
+    <ClInclude Include="mrandom.h">
+      <Filter>Source Files\Mathematics</Filter>
+    </ClInclude>
+    <ClInclude Include="mmathcolor.h">
+      <Filter>Source Files\Mathematics</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">
@@ -724,9 +751,17 @@
     <ClCompile Include="nserverhttp.cpp">
       <Filter>Source Files\Network</Filter>
     </ClCompile>
+    <ClCompile Include="texception.cpp">
+      <Filter>Source Files\System</Filter>
+    </ClCompile>
+    <ClCompile Include="nuri.cpp">
+      <Filter>Source Files\Network</Filter>
+    </ClCompile>
+    <ClCompile Include="tgraphics.cpp">
+      <Filter>Source Files\Graphics</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <None Include="design.cd" />
     <None Include="Rules.txt" />
   </ItemGroup>
 </Project>

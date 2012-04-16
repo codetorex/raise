@@ -10,6 +10,15 @@
 
 void NHTTPSession::HandleReceive( const SystemError& err, ui32 dataReaded )
 {
+
+
+	if (err.OSErrorID != 0)
+	{
+		Log.Output(LG_ERR,"HTTP read error, disconnecting client");
+		delete this;
+		return;
+	}
+
 	Log.Output(LG_INF,"HTTP Client request");
 
 	TString header(ReceivePacket.Data,ReceivePacket.Length);
@@ -105,7 +114,7 @@ void NHTTPSession::HandleReceive( const SystemError& err, ui32 dataReaded )
 				npb.EndPacket();
 
 				Log.Output(LG_INF,"HTTP Client response sending...");
-				Socket->BeginSend(&SendPacket, GetHandler(this, &NHTTPSession::HandleSend));
+				Socket->BeginSend(&SendPacket, &MSendCallback);
 
 				headerLines.DeletePointers();
 				return;
@@ -124,7 +133,7 @@ void NHTTPSession::HandleReceive( const SystemError& err, ui32 dataReaded )
 
 				Log.Output(LG_INF,"HTTP Client response of 404 sending...");
 
-				Socket->BeginSend(&SendPacket, GetHandler(this, &NHTTPSession::HandleSend));
+				Socket->BeginSend(&SendPacket, &MSendCallback);
 
 				headerLines.DeletePointers();
 				return;
@@ -146,11 +155,18 @@ void NHTTPSession::HandleReceive( const SystemError& err, ui32 dataReaded )
 	npb.EndPacket();
 
 	Log.Output(LG_INF,"HTTP Client unsupported request, sending response");
-	Socket->BeginSend(&SendPacket, GetHandler(this, &NHTTPSession::HandleSend));
+	Socket->BeginSend(&SendPacket, &MSendCallback);
 }
 
 void NHTTPSession::HandleSend( const SystemError& err )
 {
+	if (err.OSErrorID != 0)
+	{
+		Log.Output(LG_ERR,"HTTP write error, disconnecting client");
+		delete this;
+		return;
+	}
+
 	// TODO: test if error, and implement error checking stuff
 
 	if (ReadStream == 0)
@@ -160,13 +176,17 @@ void NHTTPSession::HandleSend( const SystemError& err )
 	}
 	else
 	{
-		if (ReadStream->Position() < ReadStream->Length())
+		ui32 Pos = ReadStream->Position();
+		ui32 Len = ReadStream->Length();
+		if ( Pos < Len)
 		{
-			Log.Output(LG_INF,"HTTP sending content part");
-			int readed = ReadStream->Read(SendBuffer,1,SendPacket.Length);
+			double perc = ((double)Pos / (double)Len) * 100.0f;
+
+			Log.Output(LG_INF,"HTTP sending content part %% % % / %" , sff(perc,2),sfu(Pos),sfu(Len));
+			int readed = ReadStream->Read(SendBuffer,1,SendPacket.Capacity);
 			SendPacket.Length = readed;
 
-			Socket->BeginSend(&SendPacket, GetHandler(this, &NHTTPSession::HandleSend));
+			Socket->BeginSend(&SendPacket, &MSendCallback);
 		}
 		else
 		{
@@ -175,6 +195,7 @@ void NHTTPSession::HandleSend( const SystemError& err )
 			ReadStream = 0;
 
 			delete this;
+			return;
 		}
 	}
 }
@@ -194,10 +215,10 @@ NHTTPSession::~NHTTPSession()
 void NHTTPSession::BeginReceiving()
 {
 	Log.Output(LG_INF,"HTTP Client connected");
-	Socket->BeginReceive(&ReceivePacket, GetHandler(this,&NHTTPSession::HandleReceive)  );
+	Socket->BeginReceive(&ReceivePacket, &MReceiveCallback  );
 }
 
-NHTTPServer::NHTTPServer( TIOService* _Service, ui16 _Port )
+NHTTPServer::NHTTPServer( TIOService* _Service, ui16 _Port ): MyCallback(this, &NHTTPServer::HandleAccept)
 {
 	Service = _Service;
 	Port = _Port;

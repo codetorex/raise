@@ -274,8 +274,8 @@ public:
 };
 
 /**
-* 32 bit color class with RGBA ordering.
-* In sequential reading it appears like BGRA but when it read as DWORD its RGBA
+* 32 bit color class with ARGB ordering
+* In sequential reading it appears like BGRA but when it read as DWORD its ARGB
 * bclr 0=b, 1=g, 2=r,3=a
 */
 class TColor32
@@ -404,6 +404,36 @@ public:
 		return false;
 	}
 
+	TColor32 BlendNormal(const TColor32& Destination)
+	{
+		
+	}
+
+	TColor32 BlendMultiply(const TColor32& Destination)
+	{
+
+	}
+
+	TColor32 BlendScreen(const TColor32& Destination)
+	{
+
+	}
+
+	TColor32 BlendOverlay(const TColor32& Destination)
+	{
+
+	}
+
+	TColor32 BlendSoftLight(const TColor32& Destination)
+	{
+
+	}
+
+	TColor32 BlendHardLight(const TColor32& Destination)
+	{
+
+	}
+
 	inline TColor32& operator += (const TColor32& value)
 	{
 		r = caddb(value.r,r);
@@ -430,6 +460,11 @@ public:
 		return color;
 	}
 
+	inline operator byte* (void)
+	{
+		return bclr;
+	}
+
 	inline ui32 GetARGB() const
 	{
 		ui32 res = (((byte)(b)|((ui16)((byte)(g))<<8))|(((ui32)(byte)(r))<<16)|(((ui32)(byte)(a))<<24));
@@ -443,6 +478,40 @@ public:
 		r = (byte)ts;
 		g = r;
 		b = r;
+	}
+};
+
+class TColorFloat
+{
+public:
+	float R;
+	float G;
+	float B;
+	float A;
+
+	TColorFloat(float _r,float _g, float _b, float _a)
+	{
+		R = _r;
+		G = _g;
+		B = _b;
+		A = _a;
+	}
+
+	TColorFloat(const TColor32& clr)
+	{
+		R = (float)clr.r / 255.0f;
+		G = (float)clr.g / 255.0f;
+		B = (float)clr.b / 255.0f;
+		A = (float)clr.a / 255.0f;
+	}
+
+	inline TColor32 ConvertToByteColor()
+	{
+		byte br = (byte)(R * 255.0f);
+		byte bg = (byte)(G * 255.0f);
+		byte bb = (byte)(B * 255.0f);
+		byte ba = (byte)(A * 255.0f);
+		return TColor32(br,bg,bb,ba);
 	}
 };
 

@@ -170,7 +170,7 @@ void TBitmapPNG::WriteBitmap( TBitmap* bmp, Stream* dst )
 		png_set_IHDR(png_ptr, info_ptr, bmp->Width, bmp->Height, ciBitDepth,colortype, PNG_INTERLACE_NONE, PNG_COMPRESSION_TYPE_BASE,PNG_FILTER_TYPE_BASE);
 		png_write_info(png_ptr, info_ptr);
 
-		int rowbytes = bmp->Height * bmp->BufferFormat->BytesPerItem;
+		int rowbytes = bmp->Width * bmp->BufferFormat->BytesPerItem;
 		ppbRowPointers = new png_byte* [bmp->Height];
 
 		for (int i=0;i<bmp->Height;i++)

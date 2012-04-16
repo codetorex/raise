@@ -114,6 +114,11 @@ class OSException: public Exception
 public:
 	ui32 OSErrorID;
 
+	OSException()
+	{
+		ErrorID = 2;
+	}
+	
 	OSException(ui32 _oserr)
 	{
 		ErrorID = 2;
@@ -125,6 +130,8 @@ public:
 		ErrorID = 2;
 		OSErrorID = _oserr;
 	}
+
+
 };
 
 class ObjectException: public Exception
@@ -139,7 +146,37 @@ public:
 	}
 };
 
-typedef OSException SystemError;
+class SystemErrorWindows: public OSException
+{
+public:
+	bool Set;
+
+	SystemErrorWindows()
+	{
+		Set = false;
+	}
+
+	inline void Unset()
+	{
+		Set = false;
+	}
+	
+	inline void SetError(ui32 _oserr)
+	{
+		Set = true;
+		OSErrorID = _oserr;
+	}
+
+	void SetErrorMessage(ui32 _oserr);
+
+	inline operator bool (void)
+	{
+		return Set;
+	}
+};
+
+
+typedef SystemErrorWindows SystemError;
 typedef Exception	Error;
 
 
