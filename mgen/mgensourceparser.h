@@ -44,7 +44,7 @@ public:
 			//throw Exception("LoadLine out of bounds Source: % Request: %", sfs(Source->SourcePath), sfi(index));
 		}
 		Line = Source->Lines.Item[index];
-		Column.Initialise(Line->Line);
+		Column.Initialize(Line->Line);
 
 		return true;
 	}

@@ -10,7 +10,7 @@ public:
 	TColor32 Color;
 	float Width;
 
-	TPen( TColor32 _color, float _width = 1.0f)
+	TPen( const TColor32& _color, float _width = 1.0f)
 	{
 		Color = _color;
 		Width = _width;
@@ -29,7 +29,7 @@ public:
 
 	TColor32 Color;
 
-	TBrush( TColor32 _color )
+	TBrush( const TColor32& _color )
 	{
 		Color = _color;
 	}
@@ -68,6 +68,22 @@ public:
 
 	virtual void DrawRectangle(TPen& pen, int x, int y, int width, int height) = 0;
 
+	virtual void DrawImage( TBitmap& bmp, int dstX, int dstY, int srcX, int srcY, int width = -1, int height = -1 ) = 0;
+
+	virtual void FlipHorizontal() = 0;
+
+	virtual void FlipVertical() = 0;
+
+	inline void DrawImage(TBitmap& bmp, int x , int y)
+	{
+		DrawImage(bmp,x,y,0,0);
+	}
+
+	inline void DrawImage(TBitmap& bmp, TPosition* pos)
+	{
+		DrawImage(bmp,pos->X,pos->Y,0,0);
+	}
+
 	//virtual void DrawString(const TString& s, TFont& font, TBrush& brush, float x, float y) = 0;
 
 
@@ -97,7 +113,7 @@ public:
 
 
 /**
- * only ARGB bitmaps supported
+ * only BGRA bitmaps supported
  */
 class TBitmapGraphics: public TGraphics
 {
@@ -127,7 +143,17 @@ public:
 	TBitmap* Bitmap;
 	vec2i Translation;
 
+	TBitmapGraphics()
+	{
+
+	}
+
 	TBitmapGraphics(TBitmap* _bitmap)
+	{
+		Initialize(_bitmap);
+	}
+
+	inline void Initialize(TBitmap* _bitmap)
 	{
 		Bitmap = _bitmap;
 		ResetTransform();
@@ -204,6 +230,12 @@ public:
 		DrawHorizontalLine(pen,x,y+height,width);
 		DrawVerticalLine(pen,x+width,y,height);
 	}
+
+	void DrawImage(TBitmap& bmp, int dstX, int dstY, int srcX, int srcY, int width = -1, int height = -1);
+
+	void FlipHorizontal();
+
+	void FlipVertical();
 };
 
 

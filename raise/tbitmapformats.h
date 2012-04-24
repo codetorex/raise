@@ -24,7 +24,6 @@ public:
 
 	void InitializeBitmapFormats();
 	void CreateDefaultConverters();
-	void InitializeFileFormats();
 
 	static void CreateDefaultFormats();
 	
@@ -32,7 +31,6 @@ public:
 	{
 		InitializeBitmapFormats();
 		CreateDefaultConverters();
-		InitializeFileFormats();
 	}
 };
 
@@ -40,9 +38,5 @@ public:
  * This pointer should be initialized before using bitmap and graphics stuff.
  */
 extern TBitmapFormats* BitmapFormats;
-
-#include "tbitmapbmp.h"
-#include "tbitmaptga.h"
-#include "tbitmappng.h"
 
 #endif

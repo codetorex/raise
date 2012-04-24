@@ -5,7 +5,7 @@
 #include "mtools.h"
 #include <string.h>
 
-class TColor32;
+class TColor32BGRA;
 class TColorHSL;
 
 class TColors
@@ -14,6 +14,7 @@ public:
 
 	enum colorss
 	{
+		testcolor = 0xff4080b2,
 		aliceblue = 0xfff0f8ff,
 		antiquewhite = 0xfffaebd7,
 		aqua = 0xff00ffff,
@@ -193,7 +194,7 @@ public:
 		b = _b;
 	}
 
-	inline TColor24& operator = (const TColor32& value);
+	inline TColor24& operator = (const TColor32BGRA& value);
 
 	inline TColor24& operator = (const byte* value)
 	{
@@ -252,7 +253,7 @@ public:
 		ToHSL(value.bclr,bclr);
 	}
 
-	inline TColorHSL ( const TColor32& value);
+	inline TColorHSL ( const TColor32BGRA& value);
 
 	inline TColorHSL& operator = (const TColor24& value)
 	{
@@ -260,7 +261,7 @@ public:
 		return *this;
 	}
 
-	inline TColorHSL& operator = (const TColor32& value);
+	inline TColorHSL& operator = (const TColor32BGRA& value);
 
 	/**
 	* This function converts RGB byte array to HSL byte array.
@@ -278,7 +279,7 @@ public:
 * In sequential reading it appears like BGRA but when it read as DWORD its ARGB
 * bclr 0=b, 1=g, 2=r,3=a
 */
-class TColor32
+class TColor32BGRA
 {
 public:
 	union
@@ -295,17 +296,17 @@ public:
 		};
 	};
 
-	inline TColor32()
+	inline TColor32BGRA()
 	{
 		color = 0xFF000000;
 	}
 
-	inline TColor32(ui32 _color)
+	inline TColor32BGRA(ui32 _color)
 	{
 		color = _color;
 	}
 
-	inline TColor32( byte _r, byte _g, byte _b, byte _a)
+	inline TColor32BGRA( byte _r, byte _g, byte _b, byte _a = 255)
 	{
 		r = _r;
 		g = _g;
@@ -313,19 +314,12 @@ public:
 		a = _a;
 	}
 
-	inline TColor32(byte _r, byte _g, byte _b)
-	{
-		r = _r;
-		g = _g;
-		b = _b;
-		a = 255;
-	}
-
-	inline TColor32( const TColor24& value)
+	inline TColor32BGRA( const TColor24& value)
 	{
 		r = value.r;
 		g = value.g;
 		b = value.b;
+		a = 255;
 	}
 
 	inline void Set(byte _r, byte _g, byte _b, byte _a)
@@ -359,82 +353,54 @@ public:
 		a = _a;
 	}
 
-	inline TColor32& operator = (const TColor32& value)
+	inline TColor32BGRA& operator = (const TColor32BGRA& value)
 	{
 		color = value.color;
 		return *this;
 	}
 
-	inline TColor32& operator = (ui32 value)
+	inline TColor32BGRA& operator = (ui32 value)
 	{
 		color = value;
 		return *this;
 	}
 
-	inline TColor32& operator = (const TColorHSL& value)
+	inline TColor32BGRA& operator = (const TColorHSL& value)
 	{
 		TColorHSL::ToRGB(value.bclr,bclr);
 		return *this;
 	}
 
-	inline bool operator == (ui32 value)
+	/* EQUALITY OPERATORS ARE SUPPLIED BY C++ DWORD == DWORD
+	 *
+	 *inline bool operator == (ui32 value)
 	{
 		if (color == value)
 		{
 			return true;
 		}
 		return false;
-	}
+	}*/
 
-	inline bool operator == (const TColor24& value)
+	/*inline bool operator == (const TColor24& value)
 	{
 		if ( ((value.r - r) + (value.g - g) + (value.b - b)) == 0 ) // or different implementation
 		{
 			return true;
 		}
 		return false;
-	}
+	}*/
 
-	inline bool operator == (const TColor32& value)
+	/*inline bool operator == (const TColor32& value)
 	{
 		if (value.color == color)
 		{
 			return true;
 		}
 		return false;
-	}
+	}*/
 
-	TColor32 BlendNormal(const TColor32& Destination)
-	{
-		
-	}
-
-	TColor32 BlendMultiply(const TColor32& Destination)
-	{
-
-	}
-
-	TColor32 BlendScreen(const TColor32& Destination)
-	{
-
-	}
-
-	TColor32 BlendOverlay(const TColor32& Destination)
-	{
-
-	}
-
-	TColor32 BlendSoftLight(const TColor32& Destination)
-	{
-
-	}
-
-	TColor32 BlendHardLight(const TColor32& Destination)
-	{
-
-	}
-
-	inline TColor32& operator += (const TColor32& value)
+	inline TColor32BGRA& operator += (const TColor32BGRA& value)
 	{
 		r = caddb(value.r,r);
 		g = caddb(value.g,g);
@@ -443,15 +409,15 @@ public:
 		return *this;
 	}
 
-	inline TColor32 operator + (const TColor32& value)
+	inline TColor32BGRA operator + (const TColor32BGRA& value)
 	{
-		TColor32 kp(caddb(value.r,r),caddb(value.g,g),caddb(value.b,b),caddb(value.a,a));
+		TColor32BGRA kp(caddb(value.r,r),caddb(value.g,g),caddb(value.b,b),caddb(value.a,a));
 		return kp;
 	}
 
-	inline TColor32 operator + (const TColor24& value)
+	inline TColor32BGRA operator + (const TColor24& value)
 	{
-		TColor32 kp(caddb(value.r,r),caddb(value.g,g),caddb(value.b,b),a);
+		TColor32BGRA kp(caddb(value.r,r),caddb(value.g,g),caddb(value.b,b),a);
 		return kp;
 	}
 
@@ -481,6 +447,8 @@ public:
 	}
 };
 
+typedef TColor32BGRA TColor32;
+
 class TColorFloat
 {
 public:
@@ -497,7 +465,7 @@ public:
 		A = _a;
 	}
 
-	TColorFloat(const TColor32& clr)
+	TColorFloat(const TColor32BGRA& clr)
 	{
 		R = (float)clr.r / 255.0f;
 		G = (float)clr.g / 255.0f;
@@ -505,13 +473,13 @@ public:
 		A = (float)clr.a / 255.0f;
 	}
 
-	inline TColor32 ConvertToByteColor()
+	inline TColor32BGRA ConvertToByteColor()
 	{
 		byte br = (byte)(R * 255.0f);
 		byte bg = (byte)(G * 255.0f);
 		byte bb = (byte)(B * 255.0f);
 		byte ba = (byte)(A * 255.0f);
-		return TColor32(br,bg,bb,ba);
+		return TColor32BGRA(br,bg,bb,ba);
 	}
 };
 
@@ -576,7 +544,7 @@ public:
 };
 */
 
-inline TColorHSL::TColorHSL(const TColor32& value)
+inline TColorHSL::TColorHSL(const TColor32BGRA& value)
 {
 	ToHSL(value.bclr,bclr);
 }
@@ -586,14 +554,14 @@ inline TColorHSL::TColorHSL(const TColor32& value)
 	ToHSL(value.bclr,bclr);
 }*/
 
-inline TColorHSL& TColorHSL::operator = (const TColor32& value)
+inline TColorHSL& TColorHSL::operator = (const TColor32BGRA& value)
 {
 	ToHSL(value.bclr,bclr);
 	return *this;
 }
 
 
-inline TColor24& TColor24::operator = (const TColor32& value)
+inline TColor24& TColor24::operator = (const TColor32BGRA& value)
 {
 	r = value.r;
 	g = value.g;

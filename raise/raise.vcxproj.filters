@@ -578,14 +578,29 @@
     <ClInclude Include="npacketwriter.h">
       <Filter>Source Files\Network</Filter>
     </ClInclude>
-    <ClInclude Include="tbytequeue.h">
-      <Filter>Source Files\Collection</Filter>
-    </ClInclude>
     <ClInclude Include="mrandom.h">
       <Filter>Source Files\Mathematics</Filter>
     </ClInclude>
     <ClInclude Include="mmathcolor.h">
       <Filter>Source Files\Mathematics</Filter>
+    </ClInclude>
+    <ClInclude Include="tbitmapcodecs.h">
+      <Filter>Source Files\Graphics</Filter>
+    </ClInclude>
+    <ClInclude Include="tbitmapwriterparameters.h">
+      <Filter>Source Files\Graphics</Filter>
+    </ClInclude>
+    <ClInclude Include="thexdump.h">
+      <Filter>Source Files\System</Filter>
+    </ClInclude>
+    <ClInclude Include="tstringwriter.h">
+      <Filter>Source Files\IO\Literacy</Filter>
+    </ClInclude>
+    <ClInclude Include="nnetworkedvariables.h">
+      <Filter>Source Files\Network</Filter>
+    </ClInclude>
+    <ClInclude Include="nhttpclient.h">
+      <Filter>Source Files\Network</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -758,6 +773,9 @@
       <Filter>Source Files\Network</Filter>
     </ClCompile>
     <ClCompile Include="tgraphics.cpp">
+      <Filter>Source Files\Graphics</Filter>
+    </ClCompile>
+    <ClCompile Include="tbitmapcodecs.cpp">
       <Filter>Source Files\Graphics</Filter>
     </ClCompile>
   </ItemGroup>

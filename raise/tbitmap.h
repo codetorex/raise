@@ -1,14 +1,15 @@
 #ifndef TBITMAP_H
 #define TBITMAP_H
 
-#include "raisetypes.h"
 #include "tstream.h"
 #include "mtools.h"
-#include "tbinary.h"
-#include "tbitstack.h"
 #include "tbitmapformats.h"
 #include "tcolor.h"
 #include "tregion.h"
+
+class TBitmapWriter;
+class TBitmapReader;
+class TBitmapWriterParameters;
 
 /**
 * Initial bitmap class.
@@ -23,6 +24,16 @@ public:
 	TBitmap();
 	TBitmap(int _width,int _height, TBufferFormat* _format);
 	TBitmap(int _width, int _height);
+	
+	/**
+	 * Creates bitmap out of stream.
+	 */
+	TBitmap(TStream* s, TBitmapReader& format);
+
+	/**
+	 * Create bitmap out of file given in paramater 'path'.
+	 */
+	TBitmap(const TString& path);
 
 
 	/**
@@ -53,9 +64,6 @@ public:
 		byte* ldata = GetPixel(x,y);
 		MemoryDriver::ShortCopy(ldata,clr,BufferFormat->BytesPerItem);
 	}
-
-
-
 
 	/**
 	* Generic clearing function.
@@ -92,18 +100,19 @@ public:
 		return newBitmap;
 	}
 
-	// Load Save functions
-
+	/**
+	 * Saves bitmap into a stream with given format and parameters.
+	 */
+	void Save(Stream* s, TBitmapWriter& format, TBitmapWriterParameters* params = 0);
 
 	/**
-	* Loading bitmap files from stream.
-	* @param bmpstream stream to read files
-	* @param toRGB bmp files are stored in BGR format, if set true automatically converted to RGB
-	* @param closestream closes the stream after reading done
-	*/
-	void ReadBMP(Stream* bmpstream,bool closestream = true);
+	 * Path length should be bigger than 4.
+	 */
+	void Save(const TString& path );
 
-	void WriteBMP(Stream* bmpstream,bool closestream = true);
+	void Load(Stream* s, TBitmapReader& format);
+
+	void Load(const TString& path);
 };
 
 #endif

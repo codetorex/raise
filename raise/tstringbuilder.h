@@ -5,15 +5,16 @@
 #include "texceptionlow.h"
 
 
-class TStringBuilder: private TByteArray
+class TStringBuilder: protected TByteArray
 {
 public:
 	ui32 Length;
 	ui32 ByteLength;
 
 	friend class TString;
+	friend class TStringWriter;
 
-private:
+protected:
 	inline void AppendCharFaster(char c)
 	{
 		Data[ByteLength++] = c;
@@ -189,57 +190,6 @@ public:
 		}
 	}
 
-	/*void Append(const TStringFormatElement& fmt)
-	{
-		char tmp[32];
-		int blength = 0;
-		int clength = 0;
-		
-		byte* src = (byte*)tmp;
-
-		if (fmt.Type == F_STRING)
-		{
-			blength = fmt.string_value->ByteLength;
-			clength = fmt.string_value->Length;
-			src = fmt.string_value->Data;
-		}
-		else
-		{	
-			switch(fmt.Type)
-			{
-			case F_INT:
-				blength = TConvert::ToCharArrayInt(fmt.int_value,tmp,32);
-				break;
-
-			case F_UINT:
-				blength = TConvert::ToCharArrayUInt(fmt.ui32_value,tmp,32);
-				break;
-
-			case F_FLOAT:
-				blength = TConvert::ToCharArrayFloat(fmt.float_value,tmp,32,fmt.Precision);
-				break;
-
-			case F_HEX:
-				blength = TConvert::ToCharArrayUIntHex(fmt.ui32_value,tmp,32);
-				break;
-
-			case F_HEXCAPITAL:
-				blength = TConvert::ToCharArrayUIntHexCapital(fmt.ui32_value,tmp,32);
-				break;
-			}
-			clength = blength;
-		}
-		
-		if (fmt.PadWidth == 0)
-		{
-			InternalAppend(src,blength,clength);
-		}
-		else
-		{
-			InternalAppendPadded(src,blength,clength,fmt.PadWidth,fmt.PadChar);
-		}
-	}*/
-
 	/**
 	 * Appends int value with left padded.
 	 */
@@ -263,6 +213,19 @@ public:
 		Length++;
 	}
 
+	inline void AppendUnicode( ch32 c )
+	{
+		if ( StringDriver::IsASCII(c) )
+		{
+			AppendChar(c);
+			return;
+		}
+
+		byte tmp[8];
+		int ln = StringDriver::Encode(tmp,c);
+		InternalAppend(tmp,ln,1); // already detaches
+	}
+
 	inline void AppendChar(char c, int repeatCount)
 	{
 		if (repeatCount == 0) return;
@@ -272,6 +235,30 @@ public:
 	inline void Append(const TString& value)
 	{
 		InternalAppend(value.Data,value.ByteLength,value.Length);
+	}
+
+	inline void Append(const TString& fmt, sfp arg0)
+	{
+		TString result = TString::Format(fmt,arg0);
+		Append(result);
+	}
+
+	inline void Append(const TString& fmt, sfp arg0, sfp arg1)
+	{
+		TString result = TString::Format(fmt,arg0,arg1);
+		Append(result);
+	}
+
+	inline void Append(const TString& fmt, sfp arg0, sfp arg1,sfp arg2)
+	{
+		TString result = TString::Format(fmt,arg0,arg1,arg2);
+		Append(result);
+	}
+
+	inline void Append(const TString& fmt, sfp arg0, sfp arg1,sfp arg2,sfp arg3)
+	{
+		TString result = TString::Format(fmt,arg0,arg1,arg2,arg3);
+		Append(result);
 	}
 
 	/**
@@ -291,6 +278,30 @@ public:
 	{
 		InternalAppend(value.Data,value.ByteLength,value.Length);
 		AppendLine();
+	}
+
+	inline void AppendLine(const TString& fmt, sfp arg0)
+	{
+		TString result = TString::Format(fmt,arg0);
+		AppendLine(result);
+	}
+
+	inline void AppendLine(const TString& fmt, sfp arg0, sfp arg1)
+	{
+		TString result = TString::Format(fmt,arg0,arg1);
+		AppendLine(result);
+	}
+
+	inline void AppendLine(const TString& fmt, sfp arg0, sfp arg1,sfp arg2)
+	{
+		TString result = TString::Format(fmt,arg0,arg1,arg2);
+		AppendLine(result);
+	}
+
+	inline void AppendLine(const TString& fmt, sfp arg0, sfp arg1,sfp arg2,sfp arg3)
+	{
+		TString result = TString::Format(fmt,arg0,arg1,arg2,arg3);
+		AppendLine(result);
 	}
 
 	inline void Clear()

@@ -1,31 +1,9 @@
 #include "stdafx.h"
 #include "tbitmap.h"
-
-TArray<TBitmapReader*> TBitmapReader::Readers;
-TArray<TBitmapWriter*> TBitmapWriter::Writers;
-
-
-/*static int fieldstart[] =
-{
-	0,
-	8,
-	12,
-	16,
-	20,
-};
-
-static int fieldlength[] =
-{
-	8, // channels included
-	4, // channel data types
-	4, // channel ordering
-	4, // optimization flags
-};
-
-#define BFCHANNEL		0
-#define BFCHNTYPE		1
-#define BFCHNORDR		2
-#define BFOPFLAGS		3*/
+#include "tbitmapreader.h"
+#include "tbitmapwriter.h"
+#include "tpath.h"
+#include "tfilestream.h"
 
 
 
@@ -43,7 +21,12 @@ TBitmap::TBitmap(int _width,int _height, TBufferFormat* _format)
 
 TBitmap::TBitmap( int _width, int _height )
 {
-	Create(_width,_height, BitmapFormats->fARGB);
+	Create(_width,_height, BitmapFormats->fRGBA);
+}
+
+TBitmap::TBitmap( const TString& path ): TCompositeBuffer()
+{
+	Load(path);
 }
 
 void TBitmap::Create(int _width,int _height, TBufferFormat* _format)
@@ -64,19 +47,44 @@ void TBitmap::Release()
 	Width = Height = PixelCount =  0;
 }
 
-
-
-
-void TBitmap::ReadBMP( Stream* bmpstream,bool closestream /*= true*/ )
+void TBitmap::Save( Stream* s, TBitmapWriter& format, TBitmapWriterParameters* params /*= 0*/ )
 {
-	TBitmapReader* bmpReader = TBitmapReader::GetReader(DWORDSTR(".BMP"));
-	bmpReader->ReadBitmap(this,bmpstream);
-	if (closestream) bmpstream->Close();
+	format.WriteBitmap(this,s, params);
 }
 
-void TBitmap::WriteBMP( Stream* bmpstream,bool closestream /*= true*/ )
+void TBitmap::Save( const TString& path )
 {
-	TBitmapWriter* bmpWriter = TBitmapWriter::GetWriter(DWORDSTR(".BMP"));
-	bmpWriter->WriteBitmap(this,bmpstream);
-	if (closestream) bmpstream->Close();
+	ui32 ext = TPath::GetExtensionAsDword(path);
+	TBitmapWriter* bw = TBitmapWriter::GetWriter(ext);
+	if (bw == 0)
+	{
+		throw Exception("Unknown file format or extension");
+	}
+
+	TFileStream* fs = new TFileStream(path, fm_Write);
+
+	Save(fs,*bw);
+
+	fs->Close();
+}
+
+void TBitmap::Load( Stream* s, TBitmapReader& format )
+{
+	format.ReadBitmap(this,s);
+}
+
+void TBitmap::Load( const TString& path )
+{
+	ui32 ext = TPath::GetExtensionAsDword(path);
+	TBitmapReader* br = TBitmapReader::GetReader(ext);
+	if (br == 0)
+	{
+		throw Exception("Unknown file format or extension");
+	}
+
+	TFileStream* fs = new TFileStream(path, fm_Read);
+
+	Load(fs,*br);
+
+	fs->Close();
 }

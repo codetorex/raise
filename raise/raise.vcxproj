@@ -140,7 +140,9 @@
     <ClInclude Include="nacceptor.h" />
     <ClInclude Include="ndns.h" />
     <ClInclude Include="naddress.h" />
+    <ClInclude Include="nhttpclient.h" />
     <ClInclude Include="nhttprequest.h" />
+    <ClInclude Include="nnetworkedvariables.h" />
     <ClInclude Include="npacket.h" />
     <ClInclude Include="npacketbuilder.h" />
     <ClInclude Include="npacketwriter.h" />
@@ -149,7 +151,9 @@
     <ClInclude Include="nsocketdefs.h" />
     <ClInclude Include="nuri.h" />
     <ClInclude Include="tbinarywriter.h" />
-    <ClInclude Include="tbytequeue.h" />
+    <ClInclude Include="tbitmapcodecs.h" />
+    <ClInclude Include="tbitmapwriterparameters.h" />
+    <ClInclude Include="thexdump.h" />
     <ClInclude Include="tioservice.h" />
     <ClInclude Include="tioserviceiocp.h" />
     <ClInclude Include="nsocket.h" />
@@ -273,6 +277,7 @@
     <ClInclude Include="tcompositebuffer.h" />
     <ClInclude Include="tstringdriverfixedwidth.h" />
     <ClInclude Include="tstringformat.h" />
+    <ClInclude Include="tstringwriter.h" />
     <ClInclude Include="ttest.h" />
     <ClInclude Include="ttestsuitereporting.h" />
     <ClInclude Include="ttextreader.h" />
@@ -290,6 +295,7 @@
     <ClCompile Include="nserverhttp.cpp" />
     <ClCompile Include="nsocketiocpOLD.cpp" />
     <ClCompile Include="nuri.cpp" />
+    <ClCompile Include="tbitmapcodecs.cpp" />
     <ClCompile Include="texception.cpp" />
     <ClCompile Include="tgraphics.cpp" />
     <ClCompile Include="tioserviceiocp.cpp" />

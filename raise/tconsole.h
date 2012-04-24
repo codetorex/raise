@@ -30,6 +30,8 @@ public:
 
 	HANDLE ConsoleHandle;
 
+	void CreateConsole(const TString& title);
+
 	inline void Initialize()
 	{
 		ConsoleHandle = GetStdHandle(STD_OUTPUT_HANDLE);

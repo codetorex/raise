@@ -53,7 +53,91 @@ void TBitmapGraphics::DrawLine( TPen& pen, int x1, int y1, int x2, int y2 )
 	}
 }
 
+void TBitmapGraphics::DrawImage( TBitmap& bmp, int dstX, int dstY, int srcX, int srcY, int width /*= -1*/, int height /*= -1*/ )
+{
+	if (width == -1)
+	{
+		width = bmp.Width;
+	}
 
+	if (height == -1)
+	{
+		height = bmp.Height;
+	}
+
+	if (Bitmap->BufferFormat != bmp.BufferFormat)
+	{
+		throw Exception("Incompatible formats");
+	}
+
+	int dx,dy = dstY;
+
+	for (int y = srcY; y < height; y++)
+	{
+		dx = dstX;
+		for (int x = srcX; x < width; x++)
+		{
+			byte* pix = bmp.GetPixel(x,y);
+			Bitmap->SetPixel(dx,dy,pix);
+			dx++;
+		}
+		dy++;
+	}
+}
+
+void TBitmapGraphics::FlipHorizontal()
+{
+	// This function should be fixed like flipvertical. which is about only exchange halfs
+	// not continue to exchange after passed half part
+	throw Exception("Call of incomplete function");
+
+	int x1 = Bitmap->Width;
+	int x2 = 0;
+
+	int rowwidth = Bitmap->Width * Bitmap->BufferFormat->BytesPerItem; // dont worry this is correct
+	int pixelSize = Bitmap->BufferFormat->BytesPerItem;
+
+	byte tmp[64];
+
+	while(x1--)
+	{
+		byte* column1 = GetPixel(x1,0);
+		byte* column2 = GetPixel(x2,0);
+
+		int i = Bitmap->Height;
+		while(i--)
+		{
+			MemoryDriver::ShortCopy(tmp,column2,pixelSize);
+			MemoryDriver::ShortCopy(column2,column1,pixelSize);
+			MemoryDriver::ShortCopy(column1,tmp,pixelSize);
+
+			column1 += rowwidth; // advance memory pointer
+			column2 += rowwidth; // advance memory pointer
+		}
+	}
+}
+
+void TBitmapGraphics::FlipVertical()
+{
+	// algorithm is exchanges data between vertical half of image
+	// so if image's height is even then all rows will be exchanged
+	// if its odd then only 1 row will be left to be not exchanged
+
+	int rows = Bitmap->Height / 2; // div to 2 makes this. so if first bit is set, which means its odd it will be gone
+	int y1 = Bitmap->Height - 1; 
+	int y2 = 0;
+	int rowwidth = Bitmap->Width * Bitmap->BufferFormat->BytesPerItem;
+
+	while(rows--)
+	{
+		byte* row1 = GetPixel(0,y1);
+		byte* row2 = GetPixel(0,y2);
+
+		MemoryDriver::Exchange(row1,row2,rowwidth);
+		y2++;
+		y1--;
+	}
+}
 TGraphics* TGraphics::FromBitmap( TBitmap* bitmap )
 {
 	if (bitmap->BufferFormat->BytesPerItem != 4)
@@ -83,60 +167,7 @@ TGraphics* TGraphics::FromBitmap( TBitmap* bitmap )
 	return 0;*/
 }
 
-/*void TBitmap::FlipHorizontal()
-{
-	// This function should be fixed like flipvertical. which is about only exchange halfs
-	// not continue to exchange after passed half part
-	throw Exception("Call of incomplete function");
-
-	int x1 = Width;
-	int x2 = 0;
-
-	int rowwidth = Width * BufferFormat->BytesPerItem; // dont worry this is correct
-	int pixelSize = BufferFormat->BytesPerItem;
-
-	byte tmp[64];
-
-	while(x1--)
-	{
-		byte* column1 = GetPixel(x1,0);
-		byte* column2 = GetPixel(x2,0);
-
-		int i = Height;
-		while(i--)
-		{
-			MemoryDriver::ShortCopy(tmp,column2,pixelSize);
-			MemoryDriver::ShortCopy(column2,column1,pixelSize);
-			MemoryDriver::ShortCopy(column1,tmp,pixelSize);
-
-			column1 += rowwidth; // advance memory pointer
-			column2 += rowwidth; // advance memory pointer
-		}
-	}
-}
-
-void TBitmap::FlipVertical()
-{
-	// algorithm is exchanges data between vertical half of image
-	// so if image's height is even then all rows will be exchanged
-	// if its odd then only 1 row will be left to be not exchanged
-
-	int rows = DIV2(Height); // div to 2 makes this. so if first bit is set, which means its odd it will be gone
-	int y1 = Height-1; 
-	int y2 = 0;
-	int rowwidth = Width * BufferFormat->BytesPerItem;
-
-	while(rows--)
-	{
-		byte* row1 = GetPixel(0,y1);
-		byte* row2 = GetPixel(0,y2);
-
-		MemoryDriver::Exchange(row1,row2,rowwidth);
-		y2++;
-		y1--;
-	}
-}
-
+/*
 void TBitmap::ColorKey( const TColor24& clr,byte alpha )
 {
 	Convert(BitmapFormats->fARGB);

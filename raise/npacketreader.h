@@ -44,6 +44,11 @@ public:
 		return *(Data++);
 	}
 
+	inline byte PeekByte()
+	{
+		return *(Data);
+	}
+
 	inline void ReadByteArray(byte* dst, int length)
 	{
 		while(length--)

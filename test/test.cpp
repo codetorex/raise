@@ -3,7 +3,7 @@
 
 #include "stdafx.h"
 
-#include "tconsolereport.h"
+#include "ttestsuitereporting.h"
 
 #include "test_datetime.h"
 #include "test_string.h"
@@ -12,64 +12,14 @@
 #include "test_network.h"
 #include "test_queue.h"
 #include "test_graphics.h"
-
-#include "tcolor.h"
-#include "mmathcolor.h"
+#include "test_color.h"
+#include "test_bitmap.h"
 
 #include "tapplication.h"
 #include "raiseversion.h"
+#include "tconsole.h"
 
 
-class TestTColor: public TTestCheck
-{
-public:
-	TestTColor(): TTestCheck("TColor check") {};
-
-	void Test()
-	{
-		TColor32 t1(255,0,0,128);
-		TColor32 t2(0,255,0,128);
-
-		TColor32 result = MathColor::BlendNormal(t1,t2);
-
-		TColorFloat res = MathColor::BlendNormal(TColorFloat(1,0,0,0.50f), TColorFloat(0,1,0,0.50));
-		
-		TColor32 res2 = res.ConvertToByteColor();
-
-
-		TColor32 clr(64,128,178,255);
-
-		TStringBuilder sb;
-		sb.Append("R: ");
-		sb.AppendPadded(clr.r,3,' ');
-		sb.Append("G: ");
-		sb.AppendPadded(clr.g,3,' ');
-		sb.Append("B: ");
-		sb.AppendPadded(clr.b,3,' ');
-		sb.Append("A: ");
-		sb.AppendPadded(clr.a,3,' ');
-
-		sb.Append("clr[0] = ");
-		sb.AppendPadded(clr.bclr[0],3,' ');
-		sb.Append("clr[1] = ");
-		sb.AppendPadded(clr.bclr[1],3,' ');
-		sb.Append("clr[2] = ");
-		sb.AppendPadded(clr.bclr[2],3,' ');
-		sb.Append("clr[3] = ");
-		sb.AppendPadded(clr.bclr[3],3,' ');
-
-		//AddOutput(sb.ToString());
-
-		AddResult( clr.r == 64 && clr.g == 128 && clr.b == 178 && clr.a == 255, "Color32 r,g,b,a constructor" );
-		
-/*		TColor32ARGB argb = clr;
-		
-		AddResult( argb.r == 255 && argb.g == 0 && argb.b == 255 && argb.a == 255, "Color r,g,b constructor" );*/
-	
-		//TStringBuilder sb;
-		
-	}
-} TColorCheck;
 
 // TODO: test utf 16 encoding class
 // TODO: test buffered stream
@@ -81,7 +31,6 @@ public:
 // TODO: test dictionary class
 // TODO: implement and test index class
 // TODO: test linked list
-// TODO: test queue
 // TODO: test stack
 // TODO: test tstreamreader
 
@@ -153,14 +102,15 @@ int main(int argc,char** argv)
 
 	TBitmapFormats::CreateDefaultFormats();
 
-	TConsoleReport suite("RaiseLib Test Suite");
+	TTestSuiteReport suite("RaiseLib Test Suite", &Console);
 	suite.PrintApplicationInfo = true;
 	suite.PrintTestName = false;
-	//suite.PrintOutputs = true;
+	suite.PrintOutputs = true;
 
 	suite.AddTest(&TStringCheck);
 	suite.AddTest(&TDateTimeCheck);
 	suite.AddTest(&TArrayCheck);
+	suite.AddTest(&TBitmapCheck);
 	suite.AddTest(&TColorCheck);
 	suite.AddTest(&TCharacterEnumeratorCheck);
 	suite.AddTest(&NIPAddress4Check);

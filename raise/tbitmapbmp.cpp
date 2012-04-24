@@ -90,7 +90,7 @@ void TBitmapBMP::ReadBitmap( TBitmap* bmp, Stream* src )
 	}
 }
 
-void TBitmapBMP::WriteBitmap( TBitmap* bmp, Stream* dst )
+void TBitmapBMP::WriteBitmap( TBitmap* bmp, Stream* dst, TBitmapWriterParameters* params )
 {
 	int y;
 	BITMAPFILEHEADER fileHeader;
@@ -154,11 +154,4 @@ void TBitmapBMP::WriteBitmap( TBitmap* bmp, Stream* dst )
 	{
 		delete newBuffer;
 	}
-}
-
-void TBitmapBMP::Install()
-{
-	TBitmapBMP* bmp = new TBitmapBMP();
-	Readers.Add(bmp);
-	Writers.Add(bmp);
 }

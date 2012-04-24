@@ -109,7 +109,7 @@ void TBitmapPNG::ReadBitmap( TBitmap* bmp, Stream* src )
 		alpha = true;
 	}
 
-	bmp->Create(piWidth,piHeight,alpha? BitmapFormats->fARGB : BitmapFormats->fRGB);
+	bmp->Create(piWidth,piHeight,alpha? BitmapFormats->fRGBA : BitmapFormats->fRGB);
 
 
 	png_bytep* potr;
@@ -126,7 +126,7 @@ void TBitmapPNG::ReadBitmap( TBitmap* bmp, Stream* src )
 	delete [] potr;
 }
 
-void TBitmapPNG::WriteBitmap( TBitmap* bmp, Stream* dst )
+void TBitmapPNG::WriteBitmap( TBitmap* bmp, Stream* dst, TBitmapWriterParameters* params )
 {
 	int ciBitDepth = 8;
 	png_structp png_ptr = NULL;
@@ -153,7 +153,7 @@ void TBitmapPNG::WriteBitmap( TBitmap* bmp, Stream* dst )
 
 		int colortype; //= bmp->BufferFormat == tbit & RL_ALPHA ? PNG_COLOR_TYPE_RGB_ALPHA : PNG_COLOR_TYPE_RGB;
 
-		if (bmp->BufferFormat == BitmapFormats->fARGB)
+		if (bmp->BufferFormat == BitmapFormats->fRGBA)
 		{
 			colortype = PNG_COLOR_TYPE_RGB_ALPHA;
 		}
@@ -194,13 +194,6 @@ void TBitmapPNG::WriteBitmap( TBitmap* bmp, Stream* dst )
 			delete [] ppbRowPointers;
 		throw ObjectException("Writing bmp failed",ms);
 	}
-}
-
-void TBitmapPNG::Install()
-{
-	TBitmapPNG* png = new TBitmapPNG();
-	Readers.Add(png);
-	Writers.Add(png);
 }
 
 #endif

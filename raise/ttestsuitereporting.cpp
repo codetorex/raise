@@ -6,8 +6,6 @@
 
 void TTestSuiteReport::RunSuite( ui32 tests /*= TEST_CHECK*/ )
 {
-	Initialize();
-
 	AppendDashLine();
 	if (PrintTestName)
 	{

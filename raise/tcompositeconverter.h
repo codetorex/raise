@@ -25,6 +25,22 @@ public:
 	* Uses new buffer for conversion result.
 	*/
 	virtual void Convert(TCompositeBuffer* srcBuffer,TCompositeBuffer* dstBuffer) = 0;
+
+	inline void SetSource(TBufferFormat* src)
+	{
+		SourceFormat = src;
+	}
+
+	inline void SetDestination(TBufferFormat* dst)
+	{
+		DestinationFormat = dst;
+	}
+
+	inline void SetDirection(TBufferFormat* src, TBufferFormat* dst)
+	{
+		SourceFormat = src;
+		DestinationFormat = dst;
+	}
 };
 
 

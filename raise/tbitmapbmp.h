@@ -11,12 +11,14 @@ public:
 	TBitmapBMP()
 	{
 		WriteExtension = ReadExtension = DWORDSTR(".BMP");
+		Readers.Add(this);
+		Writers.Add(this);
 	}
 
 	void ReadBitmap(TBitmap* bmp, Stream* src);
-	void WriteBitmap(TBitmap* bmp, Stream* dst);
 
-	static void Install();
+	void WriteBitmap(TBitmap* bmp, Stream* dst, TBitmapWriterParameters* params = 0);
+
 };
 
 #endif

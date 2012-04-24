@@ -3,6 +3,7 @@
 
 #include "ttest.h"
 #include "tconvert.h"
+#include "ttextwriter.h"
 
 /**
  * Not just tests, reports too.
@@ -10,32 +11,20 @@
 class TTestSuiteReport: public TTestSuite
 {
 private:
-	char* curptr;
-
 	/**
 	 * This function can be overridden for getting text data to another place.
 	 */
-	virtual void AppendChar(char c)
+	inline void AppendChar(char c)
 	{
-		*(curptr++) = c;
+		Output->WriteChar(c);
 	}
 
 	/**
 	 * This function can be overridden for getting text data to another place.
 	 */
-	virtual void Append(const string& value)
+	inline void Append(const string& value)
 	{
-		MemoryDriver::Copy(curptr,value.Data,value.ByteLength);
-		curptr += value.ByteLength;
-	}
-
-	/**
-	 * This function can be overridden for getting text data to another place.
-	 */
-	virtual void Initialize()
-	{
-		Result = new char [1 * MB]; // BUFFER
-		curptr = Result;
+		Output->Write(value);
 	}
 
 	inline void AppendNewLine()
@@ -69,21 +58,17 @@ private:
 	}
 
 public:
-	char* Result;
 	bool PrintOutputs;
 	bool PrintApplicationInfo;
 	bool PrintTestName;
 
-	TTestSuiteReport(const string& _testName): TTestSuite(_testName)
+	TTextWriter* Output;
+
+	TTestSuiteReport(const string& _testName, TTextWriter* _output): TTestSuite(_testName), Output(_output)
 	{
 		PrintOutputs = false;
 		PrintApplicationInfo = false;
 		PrintTestName = true;
-	}
-
-	inline int Length()
-	{
-		return (int)(curptr - Result);
 	}
 
 	void RunSuite(ui32 tests = TEST_CHECK);

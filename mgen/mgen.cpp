@@ -102,9 +102,11 @@ int _tmain(int argc, _TCHAR* argv[])
 	}
 
 
-
+	
 
 	// PROCESS FILES HERE
+
+	Console.ReadKey();
 
 	//Console.ReadKey();
 

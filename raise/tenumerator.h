@@ -18,6 +18,7 @@ public:
 	 */
 	virtual bool MoveNext() = 0;
 
+	// TODO: this could be reference righT?
 	/// Current item
 	T Current;
 };

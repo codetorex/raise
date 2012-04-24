@@ -1,7 +1,7 @@
 #ifndef TBITMAPWRITER_H
 #define TBITMAPWRITER_H
 
-#include "tarray.h"
+#include "tbitmapwriterparameters.h"
 
 class TBitmap;
 typedef class TStream Stream;
@@ -10,7 +10,7 @@ class TBitmapWriter
 {
 public:
 	ui32 WriteExtension;
-	virtual void WriteBitmap(TBitmap* bmp, Stream* dst) = 0;
+	virtual void WriteBitmap(TBitmap* bmp, Stream* dst, TBitmapWriterParameters* prm = 0) = 0;
 
 	static TArray< TBitmapWriter* > Writers;
 
@@ -27,6 +27,8 @@ public:
 		return 0;
 	}
 };
+
+
 
 #endif
 

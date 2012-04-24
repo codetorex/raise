@@ -47,6 +47,40 @@ public:
 		}
 	}
 
+	inline TBufferFormat* GetFormat(const TString& shortname)
+	{
+		TArrayEnumerator< TBufferFormat* > bf(Formats);
+		while(bf.MoveNext())
+		{
+			if (bf.Current->ShortName == shortname)
+			{
+				return bf.Current;
+			}
+		}
+
+		return 0;
+	}
+
+	inline void AddConverter(TCompositeConverter* conv)
+	{
+		conv->SourceFormat->Converters.Add(conv);
+	}
+
+	void AddConverter(const TString& src, const TString& dst, TCompositeConverter* conv)
+	{
+		TBufferFormat* srcFormat = GetFormat(src);
+		TBufferFormat* dstFormat = GetFormat(dst);
+
+		if (srcFormat == 0 || dstFormat == 0)
+		{
+			throw Exception("No format found");
+		}
+
+		conv->SetDirection(srcFormat,dstFormat);
+
+		AddConverter(conv);
+	}
+
 	inline void AddPrimitive(TCompositionPrimitive* prm)
 	{
 		Primitives.Add(prm);

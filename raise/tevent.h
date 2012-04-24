@@ -47,6 +47,13 @@ public:
 		fncptr = _ptr;
 	}
 
+	funcdelegate0() {};
+
+	inline void Initialize( FNC _ptr)
+	{
+		fncptr = _ptr;
+	}
+
 	R call ()
 	{
 		return fncptr();
@@ -61,6 +68,13 @@ public:
 	FNC fncptr;
 
 	funcdelegate1( FNC _ptr)
+	{
+		fncptr = _ptr;
+	}
+
+	funcdelegate1() {};
+
+	inline void Initialize( FNC _ptr)
 	{
 		fncptr = _ptr;
 	}
@@ -83,6 +97,13 @@ public:
 		fncptr = _ptr;
 	}
 
+	funcdelegate2() {};
+
+	inline void Initialize( FNC _ptr)
+	{
+		fncptr = _ptr;
+	}
+
 	inline R call (AT1 prm1,AT2 prm2)
 	{
 		return fncptr(prm1,prm2);
@@ -97,7 +118,14 @@ public:
 	typedef R (*FNC)(AT1,AT2,AT3);
 	FNC fncptr;
 
-	funcdelegate3( FNC _ptr)
+	funcdelegate3( FNC _ptr )
+	{
+		fncptr = _ptr;
+	}
+
+	funcdelegate3() {};
+
+	inline void Initialize( FNC _ptr )
 	{
 		fncptr = _ptr;
 	}
@@ -114,6 +142,14 @@ class TMemberDelegate0: public delegate0<R>
 public:
 	typedef R (T::*mfunc)();
 	TMemberDelegate0(T* obje,mfunc memfn) : mobj(obje), mobjfnc(memfn) {};
+
+	TMemberDelegate0() {};
+
+	inline void Initialize(T* obje,mfunc memfn)
+	{
+		mobj = obje;
+		mobjfnc = memfn;
+	}
 
 	R call()
 	{ 
@@ -132,6 +168,14 @@ public:
 	typedef R (T::*mfunc)(AT1);
 	TMemberDelegate1(T* obje,mfunc memfn) : mobj(obje), mobjfnc(memfn) {};
 
+	TMemberDelegate1() {};
+
+	inline void Initialize(T* obje,mfunc memfn)
+	{
+		mobj = obje;
+		mobjfnc = memfn;
+	}
+
 	R call(AT1 prm1)
 	{ 
 		return ((mobj)->*mobjfnc)(prm1);
@@ -149,6 +193,14 @@ public:
 	typedef R (T::*mfunc)(AT1,AT2);
 	TMemberDelegate2(T* obje,mfunc memfn) : mobj(obje), mobjfnc(memfn) {};
 
+	TMemberDelegate2() {};
+
+	inline void Initialize(T* obje,mfunc memfn)
+	{
+		mobj = obje;
+		mobjfnc = memfn;
+	}
+
 	R call(AT1 prm1,AT2 prm2)
 	{ 
 		return ((mobj)->*mobjfnc)(prm1,prm2);
@@ -165,6 +217,14 @@ class TMemberDelegate3: public delegate3<R,AT1,AT2,AT3>
 public:
 	typedef R (T::*mfunc)(AT1,AT2,AT3);
 	TMemberDelegate3(T* obje,mfunc memfn) : mobj(obje), mobjfnc(memfn) {};
+
+	TMemberDelegate3() {};
+
+	inline void Initialize(T* obje,mfunc memfn)
+	{
+		mobj = obje;
+		mobjfnc = memfn;
+	}
 
 	R call(AT1 prm1,AT2 prm2,AT3 prm3)
 	{ 

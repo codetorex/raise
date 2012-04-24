@@ -4,6 +4,8 @@
 #include "tlog.h"
 #include "tstreamwriterutf8.h"
 
+/// TODO: TLogTextWriter which will be created from TextWriter based class.
+
 class TLogStream: public TLogOutput
 {
 public:

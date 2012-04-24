@@ -152,6 +152,12 @@ public:
 		{
 			throw NotImplementedException();
 		}
+
+		if (path.Length < 4)
+		{
+			throw Exception("Path length cant be smaller than 4");
+		}
+
 		ch8 dw[4];
 		for (ui32 i= path.Length-4,k=0;i<path.Length;i++,k++)
 		{

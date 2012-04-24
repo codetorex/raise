@@ -46,6 +46,11 @@ public:
 		SetLeft(Left + _leftDifference);
 	}
 
+	inline void SetTopRelative(int _topDifference)
+	{
+		SetTop(Top + _topDifference);
+	}
+
 	inline void SetTop(int _top)
 	{
 		Top = _top;

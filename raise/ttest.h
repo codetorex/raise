@@ -51,7 +51,7 @@ public:
 		TestType = TEST_BASE;
 	}
 
-	virtual void Test() = 0;
+	virtual void Test() {};
 };
 
 class TTestCheck: public TTest

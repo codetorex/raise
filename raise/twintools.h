@@ -41,6 +41,14 @@ public:
 		MessageBoxA(0,Temp,"Message",MB_OK);
 	}
 
+	static void ShowMessage(const TString& str)
+	{
+		ch16 Temp[4096];
+		SystemString16(str,Temp,4096);
+
+		MessageBoxW(0,Temp,L"Message", MB_OK);
+	}
+
 	static ch16 TempSystemString[1024];
 
 	/**

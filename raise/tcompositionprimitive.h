@@ -25,6 +25,8 @@ enum TPrimitiveTypes
 	tc_notdefined,
 };
 
+extern char* PrimitiveNames[];
+
 /**
 * Single element of a format definition.
 */

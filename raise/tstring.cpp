@@ -350,7 +350,19 @@ void TString::ToLowerInplace()
 
 void TString::ToUpperInplace()
 {
-	throw NotImplementedException();
+	DetachToEdit();
+	byte* src = Data;
+	byte* dst = Data;
+	byte* end = src + ByteLength;
+
+	TChar curChar;
+
+	while(src <= end)
+	{
+		curChar = StringDriver::DecodeAdv(src);
+		curChar = curChar.ToUpper();
+		StringDriver::EncodeAdv(dst,curChar.Character);
+	}
 }
 
 TString TString::Format( const TString& format,int argc , const TStringFormatElementBase** args )

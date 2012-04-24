@@ -169,7 +169,7 @@ public:
 
 	void SetErrorMessage(ui32 _oserr);
 
-	inline operator bool (void)
+	inline operator bool (void) const
 	{
 		return Set;
 	}

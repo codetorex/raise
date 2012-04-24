@@ -194,16 +194,18 @@ public:
 		state = false;
 	}
 
-	inline void Down()
+	inline bool Down()
 	{
-		if ( Action == 0 ) return;
+		if ( Action == 0 ) return false;
 		Action->Trigger(true);
+		return true;
 	}
 
-	inline void Up()
+	inline bool Up()
 	{
-		if ( Action == 0 ) return;
+		if ( Action == 0 ) return false;
 		Action->Trigger(false);
+		return true;
 	}
 };
 
@@ -258,7 +260,19 @@ public:
 class TMappedKeyboard: public IKeyboardObserver
 {
 public:
+	// TODO: could be made and implemented by Keyboard class?
+	// so functions return if the event handled or not if its handled
+	// keyboard will stop dispatching event to observers if not handled
+	// it will continue
+
+	TMappedKeyboard* Parent;
+
 	TButtonSensor Keys[256];
+
+	TMappedKeyboard()
+	{
+		Parent = 0;
+	}
 
 	void BindKey(int KeyID, TTriggerAction* Action)
 	{
@@ -272,12 +286,26 @@ public:
 
 	void KeyDown(int keyID)
 	{
-		Keys[keyID].Down();
+		if( Keys[keyID].Action != 0)
+		{
+			Keys[keyID].Down();
+		}
+		else
+		{
+			if (Parent) Parent->KeyDown(keyID);
+		}
 	}
 
 	void KeyUp(int keyID)
 	{
-		Keys[keyID].Up();
+		if (Keys[keyID].Action != 0)
+		{
+			Keys[keyID].Up();
+		}
+		else
+		{
+			if (Parent) Parent->KeyUp(keyID);
+		}
 	}
 
 	void KeyUnicode(ch16 keyChar)

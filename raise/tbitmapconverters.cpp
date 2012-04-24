@@ -36,28 +36,80 @@ public:
 
 	void DoConversion(byte* src, byte* dst,int pixelCount)
 	{
+		// src 0 is alpha, 1 is r , 2 is g, 3 is b
+		// dst 0 is b, dst 1 is g , dst 2 is r
 		while(pixelCount--)
 		{
-			dst[0] = src[0];
-			dst[1] = src[1];
-			dst[2] = src[2];
+
+			dst[0] = src[3];
+			dst[1] = src[2];
+			dst[2] = src[1];
 			src += 4;
 			dst += 3;
 		}
 	}
 };
 
+class TBitmapConverterRGBAtoBGR: public TCompositeGenericConverter
+{
+public:
+	TBitmapConverterRGBAtoBGR()
+	{
+		SourceFormat = BitmapFormats->fRGBA;
+		DestinationFormat = BitmapFormats->fBGR;
+	}
+
+	void DoConversion(byte* src, byte* dst,int pixelCount)
+	{
+		while(pixelCount--)
+		{
+			dst[0] = src[2];
+			dst[1] = src[1];
+			dst[2] = src[0];
+			src += 4;
+			dst += 3;
+		}
+	}
+};
+
+class TBitmapConverterRGBAtoBGRA: public TCompositeGenericConverter
+{
+public:
+	TBitmapConverterRGBAtoBGRA()
+	{
+		SourceFormat = BitmapFormats->fRGBA;
+		DestinationFormat = BitmapFormats->fBGRA;
+	}
+
+	void DoConversion(byte* src, byte* dst,int pixelCount)
+	{
+		while(pixelCount--)
+		{
+			byte tmp = src[0]; // so this will make it support inplace exchange
+			dst[0] = src[2];
+			dst[1] = src[1];
+			dst[2] = tmp;
+			dst[3] = src[3];
+			dst += 4;
+			src += 4;
+		}
+	}
+};
+
 void TBitmapFormats::CreateDefaultConverters()
 {
-	TBitmapConverterBGRtoRGB* BGRtoRGB = new TBitmapConverterBGRtoRGB();
-	fBGR->Converters.Add(BGRtoRGB);
+	// 3 to 3 swapping
+	AddConverter(new TBitmapConverterBGRtoRGB());
 
-	// use same converter for BGR to RGB conversion
-	TBitmapConverterBGRtoRGB* RGBtoBGR = new TBitmapConverterBGRtoRGB(); 
-	RGBtoBGR->SourceFormat = TBitmapFormats::fRGB;
-	RGBtoBGR->SourceFormat = TBitmapFormats::fBGR;
-	fRGB->Converters.Add(RGBtoBGR);
+	AddConverter("RGB","BGR",new TBitmapConverterBGRtoRGB());
 
-	TBitmapConverterARGBtoBGR* ARGBtoBGR = new TBitmapConverterARGBtoBGR();
-	fARGB->Converters.Add(ARGBtoBGR);
+	// 4 to 3 swapping
+	AddConverter( new TBitmapConverterARGBtoBGR() );
+
+	AddConverter( new TBitmapConverterRGBAtoBGR() );
+
+	// 4 to 4 swapping
+	AddConverter( new TBitmapConverterRGBAtoBGRA() );
+
+	AddConverter("BGRA","RGBA",new TBitmapConverterRGBAtoBGRA() );
 }

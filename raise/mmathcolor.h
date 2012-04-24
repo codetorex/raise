@@ -23,6 +23,40 @@ public:
 		float bx = pc.B * pc.A / ax + bg.B * bg.A * (1 - pc.A) / ax;
 		return TColorFloat(rx,gx,bx,ax);
 	}
+
+	inline static TString ChannelOrder(byte* data, int length)
+	{
+		TString result;
+
+		for (int i=0;i<length;i++)
+		{
+			byte ch = data[i];
+			switch(ch)
+			{
+			case 64:
+				result += 'R';
+				break;
+
+			case 128:
+				result += 'G';
+				break;
+
+			case 178:
+				result += 'B';
+				break;
+
+			case 255:
+				result += 'A';
+				break;
+
+			default:
+				result += '?';
+				break;
+			}
+		}
+
+		return result;
+	}
 };
 
 

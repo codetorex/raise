@@ -826,7 +826,7 @@ public:
 	}
 
 
-	inline void Initialise(const byte* _Data, ui32 _ByteLength)
+	inline void Initialize(const byte* _Data, ui32 _ByteLength)
 	{
 		SrcString = 0;
 		RealStart = _Data;
@@ -834,9 +834,9 @@ public:
 		Reset();
 	}
 
-	inline void Initialise(const TString& src)
+	inline void Initialize(const TString& src)
 	{
-		Initialise(src.Data,src.ByteLength);
+		Initialize(src.Data,src.ByteLength);
 		SrcString = &src;
 	}
 
@@ -847,17 +847,25 @@ public:
 
 	TCharacterEnumerator(const TString& src)
 	{
-		Initialise(src);
+		Initialize(src);
+	}
+
+	TCharacterEnumerator(const char* value)
+	{
+		ui32 cLength;
+		ui32 bLength;
+		StringDriver::Length((byte*)value,cLength,bLength);
+		Initialize((byte*)value,bLength);
 	}
 
 	TCharacterEnumerator(byte* _Data, ui32 _ByteLength)
 	{
-		Initialise(_Data,_ByteLength);
+		Initialize(_Data,_ByteLength);
 	}
 
 	TCharacterEnumerator(const TStringBuilder& builder)
 	{
-		Initialise(builder.GetData(), builder.ByteLength);
+		Initialize(builder.GetData(), builder.ByteLength);
 	}
 
 	const byte* RealStart;

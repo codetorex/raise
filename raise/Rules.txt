@@ -21,3 +21,12 @@ Another component might also acquire the shared_ptr during the same time.
 When the component enters a period of no usage, it releases the shared_ptr, but keeps a weak_ptr. 
 When the component needs the resource again, it first checks if the weak_ptr is still valid. 
 If not, it has to reload the resource from disk.
+
+
+Static and Tool Stuff (17.04.2012)
+___________________________________________________
+For stuff like MathDriver and MemoryDriver we are going to define functions as statics
+and extern a base class with better name like extern MemoryDriver Memory;
+So we can use these tool functions as Memory.Copy();
+Will be awesome!
+

@@ -39,6 +39,11 @@ public:
 
 	static ch32 DecodeOnlyUnicode(const byte* charptr, int& byteLength);
 
+	static inline bool IsASCII(ch32 c)
+	{
+		return (c < 0x80 );
+	}
+
 	/**
 	 * @brief Encodes one character to target byte array without safety.
 	 * @param [out] charptr Pointer to byte array where encoded character to be written.

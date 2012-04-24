@@ -26,7 +26,7 @@ public:
 	
 	virtual ui32	Length()
 	{
-		throw new Exception("Not Supported");
+		throw Exception("Not Supported");
 	}
 	
 	virtual void	Close() = 0;
@@ -41,11 +41,6 @@ public:
 	virtual bool	CanWrite() = 0;
 	virtual bool	CanSeek() = 0;
 
-	/*virtual String&	ReadLine();
-	virtual String& ReadToEnd();
-
-	//TODO: put write line codes
-	virtual void WriteLine(String& value);*/
 };
 
 typedef TStream Stream;

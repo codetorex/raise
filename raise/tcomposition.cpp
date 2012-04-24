@@ -3,6 +3,26 @@
 #include "texception.h"
 #include "tcompositionmanager.h"
 
+char* PrimitiveNames[] = 
+{
+		"tc_byte",
+		"tc_short",
+		"tc_dword",
+		"tc_float",
+		"tc_double",
+		"tc_bit1",
+		"tc_bit2",
+		"tc_bit3",
+		"tc_bit4",
+		"tc_bit5",
+		"tc_bit6",
+		"tc_bit7",
+		"tc_bit8",
+		"tc_group",
+		"tc_float24",
+		"tc_notdefined",
+};
+
 TCompositeFormatFactoryGeneric TCompositeFormatFactoryGeneric::Instance;
 
 void TComposition::CreateElementList( TArray<TCompositionPrimitive*>* allElements, const TString& elementNames )

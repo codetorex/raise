@@ -108,9 +108,10 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClInclude Include="stdafx.h" />
-    <ClInclude Include="tconsolereport.h" />
     <ClInclude Include="test_array.h" />
+    <ClInclude Include="test_bitmap.h" />
     <ClInclude Include="test_characterenumerator.h" />
+    <ClInclude Include="test_color.h" />
     <ClInclude Include="test_datetime.h" />
     <ClInclude Include="test_graphics.h" />
     <ClInclude Include="test_network.h" />

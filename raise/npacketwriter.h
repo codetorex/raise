@@ -4,6 +4,7 @@
 #include "npacket.h"
 #include "texception.h"
 #include "mdecimal.h"
+#include "tqueue.h"
 
 /**
  * Advanced and improved version of npacketbuilder, and this will going to replace it?
@@ -27,7 +28,7 @@ public:
 
 	NPacketWriter(NPacket* pck,int index = 0)
 	{
-		InitializePacketWriter(pck,index);
+		InitializePacketWriter(pck,index);							 
 	}
 
 	inline void InitializePacketWriter(NPacket* pck,int index = 0)
@@ -38,6 +39,13 @@ public:
 			throw Exception("Index out of bounds");
 		}
 		Data = Packet->Data + index;
+		Start = Data;
+	}
+
+	inline void InitializePacketWriter(byte* pData)
+	{
+		Packet = 0;
+		Data = pData;
 		Start = Data;
 	}
 
@@ -123,6 +131,20 @@ public:
 	{
 		WriteUInt32(value.ByteLength);
 		WriteByteArray(value.Data,value.ByteLength);
+	}
+
+	/**
+	 * Enqueues data to a bytequeue and resets pointers.
+	 */
+	inline void ToByteQueue(TByteQueue& queue)
+	{
+		queue.Enqueue(Start, GetWrittenByteCount());
+		Reset();
+	}
+
+	inline void Reset()
+	{
+		Data = Start;
 	}
 
 	inline void Finalize()

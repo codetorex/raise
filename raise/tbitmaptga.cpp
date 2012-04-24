@@ -5,7 +5,7 @@
 #include "tbinaryreader.h"
 #include "mmathdriver.h"
 #include "tmemorydriver.h"
-
+#include "tgraphics.h"
 // TODO: currently color indexed ones is not working. implement it if needed...
 
 
@@ -231,6 +231,7 @@ private:
 };
 
 
+
 void TBitmapTGA::ReadBitmap( TBitmap* bmp, Stream* src )
 {
 	TBinaryReader* binaryReader = new TBinaryReader(src);
@@ -246,7 +247,7 @@ void TBitmapTGA::ReadBitmap( TBitmap* bmp, Stream* src )
 	{
 		if (Loader.ColorMapEntrySize == 4)
 		{
-			bmp->BufferFormat = BitmapFormats->fARGB;
+			bmp->BufferFormat = BitmapFormats->fBGRA;
 		}
 	}
 	else
@@ -254,7 +255,7 @@ void TBitmapTGA::ReadBitmap( TBitmap* bmp, Stream* src )
 		if (Loader.AlphaBits > 0 || Loader.PixelDepth == 32) 
 		{
 			// I HOPE THERE IS NO OTHER USAGE OF 32 BIT TGA OTHER THAN ALPHA CHANNEL
-			bmp->BufferFormat = BitmapFormats->fARGB;
+			bmp->BufferFormat = BitmapFormats->fBGRA;
 		}
 	}
 
@@ -273,37 +274,31 @@ void TBitmapTGA::ReadBitmap( TBitmap* bmp, Stream* src )
 		throw Exception("Unsupported format");
 	}
 
-	throw Exception("TROLLOL");
-
 	// Fix the origin.
-	/*switch(Loader.ImageOrigin)
+	
+	TBitmapGraphics bg(bmp);
+	
+	switch(Loader.ImageOrigin)
 	{
 	case TO_BottomLeft:
-		bmp->FlipVertical();
+		bg.FlipVertical();
 		break;
 
 	case TO_BottomRight:
-		bmp->FlipVertical();
-		bmp->FlipHorizontal();
+		bg.FlipVertical();
+		bg.FlipHorizontal();
 		break;
 
 	case TO_TopLeft:
 		break;
 
 	case TO_TopRight:
-		bmp->FlipHorizontal();
+		bg.FlipHorizontal();
 		break;
-	}*/
+	}
 }
 
-void TBitmapTGA::Install()
-{
-	TBitmapTGA* tga = new TBitmapTGA();
-	Readers.Add(tga);
-	Writers.Add(tga);
-}
-
-void TBitmapTGA::WriteBitmap( TBitmap* bmp, Stream* dst )
+void TBitmapTGA::WriteBitmap( TBitmap* bmp, Stream* dst, TBitmapWriterParameters* params )
 {
 	throw Exception("Not Implemented");
 }
