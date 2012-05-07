@@ -4,6 +4,10 @@
 
 #include <assert.h>
 
+#define CPU_LITTLE_ENDIAN
+
+// #define CPU_BIG_ENDIAN
+
 // NOTE: Maybe needed  -std=c++0x for linux compilations
 
 //////////////////////////////////////////////////////////////////////////
@@ -33,8 +37,7 @@ typedef unsigned char		byte; // technically ui8
 #define PI					3.1415926535897f
 #define HALFPI				1.5707963267948f
 
-#define RADTODEG(rad)		((rad) * (180.0f / PI))
-#define DEGTORAD(deg)		((deg) * (PI / 180.0f))
+
 
 #define KB					(1024)
 #define MB					(1048576)

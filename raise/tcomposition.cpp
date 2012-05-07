@@ -2,6 +2,8 @@
 #include "tcompositebuffer.h"
 #include "texception.h"
 #include "tcompositionmanager.h"
+#include "tcompositeconverter.h"
+#include "tcomposition.h"
 
 char* PrimitiveNames[] = 
 {
@@ -141,4 +143,48 @@ TCompositeConverter* TComposition::GetConverter( TBufferFormat* TargetFormat )
 TCompositeBuffer* TComposition::CreateBuffer( int _itemCapacity )
 {
 	return new TCompositeBuffer(this, _itemCapacity );
+}
+
+TString TComposition::ToString()
+{
+	TStringBuilder sb;
+	sb.AppendLine("TComposition: %", sfs(Name));
+	sb.AppendLine("Short Name: %", sfs(ShortName));
+	sb.AppendLine("Item Size: % (% bits)", sfu(BytesPerItem), sfu(BitsPerItem));
+	sb.AppendLine(" - Elements [%]", sfu(Elements->Count));
+
+	TArrayEnumerator< TCompositionPrimitive* > el(*Elements);
+	while( el.MoveNext() )
+	{
+		sb.AppendLine("   + % % %",sfs(el.Current->Name,-20), sfs(el.Current->ShortName,-6), sfs(PrimitiveNames[el.Current->DataType]));
+	}
+
+	sb.AppendLine(" - Converters [%]", sfu(Converters.Count));
+
+	TArrayEnumerator< TCompositeConverter* > cc(Converters);
+	while( cc.MoveNext() )
+	{
+		sb.AppendLine("   + % -> %",sfs(cc.Current->SourceFormat->ShortName,8), sfs(cc.Current->DestinationFormat->ShortName));
+	}
+
+	return sb.ToString();
+}
+
+void TCompositeConverter::Convert(TCompositeBuffer* srcBuffer)
+{
+	int itemCount = srcBuffer->CapacityItem;
+	TCompositeBuffer* tmpBuffer = DestinationFormat->CreateBuffer(itemCount);
+
+	Convert(srcBuffer->Data,tmpBuffer->Data,itemCount);
+
+	srcBuffer->ExchangeBuffer(tmpBuffer);
+	delete tmpBuffer;
+}
+
+void TCompositeConverter::Convert(TCompositeBuffer* srcBuffer,TCompositeBuffer* dstBuffer)
+{
+	int itemCount = srcBuffer->CapacityItem;
+	dstBuffer->AllocateItemCapacity(DestinationFormat,itemCount);
+
+	Convert(srcBuffer->Data,dstBuffer->Data,itemCount);
 }

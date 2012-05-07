@@ -14,6 +14,7 @@
 #include "test_graphics.h"
 #include "test_color.h"
 #include "test_bitmap.h"
+#include "test_xml.h"
 
 #include "tapplication.h"
 #include "raiseversion.h"
@@ -105,7 +106,7 @@ int main(int argc,char** argv)
 	TTestSuiteReport suite("RaiseLib Test Suite", &Console);
 	suite.PrintApplicationInfo = true;
 	suite.PrintTestName = false;
-	suite.PrintOutputs = true;
+	//suite.PrintOutputs = true;
 
 	suite.AddTest(&TStringCheck);
 	suite.AddTest(&TDateTimeCheck);
@@ -116,6 +117,7 @@ int main(int argc,char** argv)
 	suite.AddTest(&NIPAddress4Check);
 	suite.AddTest(&TQueueCheck);
 	suite.AddTest(&TGraphicsBitmapCheck);
+	suite.AddTest(&TXMLCheck);
 
 	suite.RunSuite();
 	

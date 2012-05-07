@@ -65,7 +65,10 @@ void TBitmapBMP::ReadBitmap( TBitmap* bmp, Stream* src )
 
 	int rowWidth = infoHeader.biWidth * bmp->BufferFormat->BytesPerItem; // row width for file, has padding
 	int realRowWidth = rowWidth; // row width for bitmap, doesnt has padding
-	rowWidth += MOD4(rowWidth);
+	if (MOD4(rowWidth))
+	{
+		rowWidth += 4 - MOD4(rowWidth);
+	}
 	byte* row = new byte[rowWidth];
 
 

@@ -59,7 +59,7 @@ public:
 	* Generic setpixel function that works for all implementations.
 	* Its faster but unsafe.
 	*/
-	inline void SetPixel(int x,int y,byte* clr)
+	inline void SetPixel(int x,int y,const byte* clr)
 	{
 		byte* ldata = GetPixel(x,y);
 		MemoryDriver::ShortCopy(ldata,clr,BufferFormat->BytesPerItem);

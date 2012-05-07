@@ -1,8 +1,13 @@
 #ifndef TCOMPOSITION_H
 #define TCOMPOSITION_H
 
+
 #include "tcompositionprimitive.h"
-#include "tcompositeconverter.h"
+
+class TCompositeBuffer;
+class TCompositeConverter;
+class TComposition;
+typedef TComposition TBufferFormat;
 
 typedef TArray<TCompositionPrimitive*> PrimitiveArray;
 
@@ -77,8 +82,6 @@ public:
 		return true;
 	}
 
-
-
 	int CalculateBitsPerItem();
 
 	inline int ByteCapacity(int ItemCount)
@@ -98,30 +101,7 @@ public:
 
 	TCompositeBuffer* CreateBuffer(int _itemCapacity);
 
-	TString ToString()
-	{
-		TStringBuilder sb;
-		sb.AppendLine("TComposition: %", sfs(Name));
-		sb.AppendLine("Short Name: %", sfs(ShortName));
-		sb.AppendLine("Item Size: % (% bits)", sfu(BytesPerItem), sfu(BitsPerItem));
-		sb.AppendLine(" - Elements [%]", sfu(Elements->Count));
-
-		TArrayEnumerator< TCompositionPrimitive* > el(*Elements);
-		while( el.MoveNext() )
-		{
-			sb.AppendLine("   + % % %",sfs(el.Current->Name,-20), sfs(el.Current->ShortName,-6), sfs(PrimitiveNames[el.Current->DataType]));
-		}
-
-		sb.AppendLine(" - Converters [%]", sfu(Converters.Count));
-	
-		TArrayEnumerator< TCompositeConverter* > cc(Converters);
-		while( cc.MoveNext() )
-		{
-			sb.AppendLine("   + % -> %",sfs(cc.Current->SourceFormat->ShortName,8), sfs(cc.Current->DestinationFormat->ShortName));
-		}
-
-		return sb.ToString();
-	}
+	TString ToString();
 };
 
 #endif

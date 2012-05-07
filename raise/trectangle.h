@@ -11,6 +11,17 @@
 class TRectangle: public TPosition, public TRange
 {
 public:
+
+	TRectangle()
+	{
+
+	}
+
+	TRectangle(int _x,int _y,int _width, int _height)
+	{
+		SetRectangle(_x,_y,_width,_height);
+	}
+
 	inline void SetRectangle(int _x,int _y,int _width, int _height)
 	{
 		X = _x;

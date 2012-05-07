@@ -117,6 +117,7 @@
     <ClInclude Include="test_network.h" />
     <ClInclude Include="test_queue.h" />
     <ClInclude Include="test_string.h" />
+    <ClInclude Include="test_xml.h" />
     <ClInclude Include="toldtests.h" />
   </ItemGroup>
   <ItemGroup>

@@ -14,6 +14,7 @@ public:
 	TCompositionPrimitive cBlue;
 	TCompositionPrimitive cAlpha;
 
+	// TODO: move float stuff here
 
 	TBufferFormat* fARGB;
 	TBufferFormat* fABGR;

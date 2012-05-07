@@ -55,5 +55,8 @@
     <ClInclude Include="test_bitmap.h">
       <Filter>Tests</Filter>
     </ClInclude>
+    <ClInclude Include="test_xml.h">
+      <Filter>Tests</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>

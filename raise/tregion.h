@@ -57,6 +57,12 @@ public:
 		Bottom = Top + Height;
 	}
 
+	inline void SetLeftTop(int _left, int _top)
+	{
+		SetLeft(_left); // x
+		SetTop(_top); // y
+	}
+
 	inline void SetRight(int _right)
 	{
 		Right = _right;

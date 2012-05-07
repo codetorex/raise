@@ -5,165 +5,175 @@
 #include "mtools.h"
 #include <string.h>
 
-class TColor32BGRA;
+class TColor32RGBA;
 class TColorHSL;
 
+#ifdef CPU_LITTLE_ENDIAN
+
+
+/**
+ * Little endian RGBA formatted colors
+ */
 class TColors
 {
 public:
 
 	enum colorss
 	{
-		testcolor = 0xff4080b2,
-		aliceblue = 0xfff0f8ff,
-		antiquewhite = 0xfffaebd7,
-		aqua = 0xff00ffff,
-		aquamarine = 0xff7fffd4,
-		azure = 0xfff0ffff,
-		beige = 0xfff5f5dc,
-		bisque = 0xffffe4c4,
-		black = 0xff000000,
-		blanchedalmond = 0xffffebcd,
-		blue = 0xff0000ff,
-		blueviolet = 0xff8a2be2,
-		brown = 0xffa52a2a,
-		burlywood = 0xffdeb887,
-		cadetblue = 0xff5f9ea0,
-		chartreuse = 0xff7fff00,
-		chocolate = 0xffd2691e,
-		coral = 0xffff7f50,
-		cornflowerblue = 0xff6495ed,
-		cornsilk = 0xfffff8dc,
-		crimson = 0xffdc143c,
-		cyan = 0xff00ffff,
-		darkblue = 0xff00008b,
-		darkcyan = 0xff008b8b,
-		darkgoldenrod = 0xffb8860b,
-		darkgray = 0xffa9a9a9,
-		darkgreen = 0xff006400,
-		darkgrey = 0xffa9a9a9,
-		darkkhaki = 0xffbdb76b,
-		darkmagenta = 0xff8b008b,
-		darkolivegreen = 0xff556b2f,
-		darkorange = 0xffff8c00,
-		darkorchid = 0xff9932cc,
-		darkred = 0xff8b0000,
-		darksalmon = 0xffe9967a,
-		darkseagreen = 0xff8fbc8f,
-		darkslateblue = 0xff483d8b,
-		darkslategray = 0xff2f4f4f,
-		darkslategrey = 0xff2f4f4f,
-		darkturquoise = 0xff00ced1,
-		darkviolet = 0xff9400d3,
-		deeppink = 0xffff1493,
-		deepskyblue = 0xff00bfff,
-		dimgray = 0xff696969,
-		dimgrey = 0xff696969,
-		dodgerblue = 0xff1e90ff,
-		firebrick = 0xffb22222,
-		floralwhite = 0xfffffaf0,
-		forestgreen = 0xff228b22,
-		fuchsia = 0xffff00ff,
-		gainsboro = 0xffdcdcdc,
-		ghostwhite = 0xfff8f8ff,
-		gold = 0xffffd700,
-		goldenrod = 0xffdaa520,
-		gray = 0xff808080,
-		green = 0xff008000,
-		greenyellow = 0xffadff2f,
-		grey = 0xff808080,
-		honeydew = 0xfff0fff0,
-		hotpink = 0xffff69b4,
-		indianred = 0xffcd5c5c,
-		indigo = 0xff4b0082,
-		ivory = 0xfffffff0,
-		khaki = 0xfff0e68c,
-		lavender = 0xffe6e6fa,
-		lavenderblush = 0xfffff0f5,
-		lawngreen = 0xff7cfc00,
-		lemonchiffon = 0xfffffacd,
-		lightblue = 0xffadd8e6,
-		lightcoral = 0xfff08080,
-		lightcyan = 0xffe0ffff,
-		lightgoldenrodyellow = 0xfffafad2,
-		lightgray = 0xffd3d3d3,
-		lightgreen = 0xff90ee90,
-		lightgrey = 0xffd3d3d3,
-		lightpink = 0xffffb6c1,
-		lightsalmon = 0xffffa07a,
-		lightseagreen = 0xff20b2aa,
-		lightskyblue = 0xff87cefa,
-		lightslategray = 0xff778899,
-		lightslategrey = 0xff778899,
-		lightsteelblue = 0xffb0c4de,
-		lightyellow = 0xffffffe0,
-		lime = 0xff00ff00,
-		limegreen = 0xff32cd32,
-		linen = 0xfffaf0e6,
-		magenta = 0xffff00ff,
-		maroon = 0xff800000,
-		mediumaquamarine = 0xff66cdaa,
-		mediumblue = 0xff0000cd,
-		mediumorchid = 0xffba55d3,
-		mediumpurple = 0xff9370db,
-		mediumseagreen = 0xff3cb371,
-		mediumslateblue = 0xff7b68ee,
-		mediumspringgreen = 0xff00fa9a,
-		mediumturquoise = 0xff48d1cc,
-		mediumvioletred = 0xffc71585,
-		midnightblue = 0xff191970,
-		mintcream = 0xfff5fffa,
-		mistyrose = 0xffffe4e1,
-		moccasin = 0xffffe4b5,
-		navajowhite = 0xffffdead,
-		navy = 0xff000080,
-		oldlace = 0xfffdf5e6,
-		olive = 0xff808000,
-		olivedrab = 0xff6b8e23,
-		orange = 0xffffa500,
-		orangered = 0xffff4500,
-		orchid = 0xffda70d6,
-		palegoldenrod = 0xffeee8aa,
-		palegreen = 0xff98fb98,
-		paleturquoise = 0xffafeeee,
-		palevioletred = 0xffdb7093,
-		papayawhip = 0xffffefd5,
-		peachpuff = 0xffffdab9,
-		peru = 0xffcd853f,
-		pink = 0xffffc0cb,
-		plum = 0xffdda0dd,
-		powderblue = 0xffb0e0e6,
-		purple = 0xff800080,
-		red = 0xffff0000,
-		rosybrown = 0xffbc8f8f,
-		royalblue = 0xff4169e1,
-		saddlebrown = 0xff8b4513,
-		salmon = 0xfffa8072,
-		sandybrown = 0xfff4a460,
-		seagreen = 0xff2e8b57,
-		seashell = 0xfffff5ee,
-		sienna = 0xffa0522d,
-		silver = 0xffc0c0c0,
-		skyblue = 0xff87ceeb,
-		slateblue = 0xff6a5acd,
-		slategray = 0xff708090,
-		slategrey = 0xff708090,
-		snow = 0xfffffafa,
-		springgreen = 0xff00ff7f,
-		steelblue = 0xff4682b4,
-		tan = 0xffd2b48c,
-		teal = 0xff008080,
-		thistle = 0xffd8bfd8,
-		tomato = 0xffff6347,
-		turquoise = 0xff40e0d0,
-		violet = 0xffee82ee,
-		wheat = 0xfff5deb3,
-		white = 0xffffffff,
-		whitesmoke = 0xfff5f5f5,
-		yellow = 0xffffff00,
-		yellowgreen = 0xff9acd32,
+		TestColor = 0xFFB28040,
+		AliceBlue = 0xFFFFF8F0,
+		AntiqueWhite = 0xFFD7EBFA,
+		Aqua = 0xFFFFFF00,
+		Aquamarine = 0xFFD4FF7F,
+		Azure = 0xFFFFFFF0,
+		Beige = 0xFFDCF5F5,
+		Bisque = 0xFFC4E4FF,
+		Black = 0xFF000000,
+		BlanchedAlmond = 0xFFCDEBFF,
+		Blue = 0xFFFF0000,
+		BlueViolet = 0xFFE22B8A,
+		Brown = 0xFF2A2AA5,
+		BurlyWood = 0xFF87B8DE,
+		CadetBlue = 0xFFA09E5F,
+		Chartreuse = 0xFF00FF7F,
+		Chocolate = 0xFF1E69D2,
+		Coral = 0xFF507FFF,
+		CornflowerBlue = 0xFFED9564,
+		Cornsilk = 0xFFDCF8FF,
+		Crimson = 0xFF3C14DC,
+		Cyan = 0xFFFFFF00,
+		DarkBlue = 0xFF8B0000,
+		DarkCyan = 0xFF8B8B00,
+		DarkGoldenRod = 0xFF0B86B8,
+		DarkGray = 0xFFA9A9A9,
+		DarkGrey = 0xFFA9A9A9,
+		DarkGreen = 0xFF006400,
+		DarkKhaki = 0xFF6BB7BD,
+		DarkMagenta = 0xFF8B008B,
+		DarkOliveGreen = 0xFF2F6B55,
+		Darkorange = 0xFF008CFF,
+		DarkOrchid = 0xFFCC3299,
+		DarkRed = 0xFF00008B,
+		DarkSalmon = 0xFF7A96E9,
+		DarkSeaGreen = 0xFF8FBC8F,
+		DarkSlateBlue = 0xFF8B3D48,
+		DarkSlateGray = 0xFF4F4F2F,
+		DarkSlateGrey = 0xFF4F4F2F,
+		DarkTurquoise = 0xFFD1CE00,
+		DarkViolet = 0xFFD30094,
+		DeepPink = 0xFF9314FF,
+		DeepSkyBlue = 0xFFFFBF00,
+		DimGray = 0xFF696969,
+		DimGrey = 0xFF696969,
+		DodgerBlue = 0xFFFF901E,
+		FireBrick = 0xFF2222B2,
+		FloralWhite = 0xFFF0FAFF,
+		ForestGreen = 0xFF228B22,
+		Fuchsia = 0xFFFF00FF,
+		Gainsboro = 0xFFDCDCDC,
+		GhostWhite = 0xFFFFF8F8,
+		Gold = 0xFF00D7FF,
+		GoldenRod = 0xFF20A5DA,
+		Gray = 0xFF808080,
+		Grey = 0xFF808080,
+		Green = 0xFF008000,
+		GreenYellow = 0xFF2FFFAD,
+		HoneyDew = 0xFFF0FFF0,
+		HotPink = 0xFFB469FF,
+		IndianRed  = 0xFF5C5CCD,
+		Indigo  = 0xFF82004B,
+		Ivory = 0xFFF0FFFF,
+		Khaki = 0xFF8CE6F0,
+		Lavender = 0xFFFAE6E6,
+		LavenderBlush = 0xFFF5F0FF,
+		LawnGreen = 0xFF00FC7C,
+		LemonChiffon = 0xFFCDFAFF,
+		LightBlue = 0xFFE6D8AD,
+		LightCoral = 0xFF8080F0,
+		LightCyan = 0xFFFFFFE0,
+		LightGoldenRodYellow = 0xFFD2FAFA,
+		LightGray = 0xFFD3D3D3,
+		LightGrey = 0xFFD3D3D3,
+		LightGreen = 0xFF90EE90,
+		LightPink = 0xFFC1B6FF,
+		LightSalmon = 0xFF7AA0FF,
+		LightSeaGreen = 0xFFAAB220,
+		LightSkyBlue = 0xFFFACE87,
+		LightSlateGray = 0xFF998877,
+		LightSlateGrey = 0xFF998877,
+		LightSteelBlue = 0xFFDEC4B0,
+		LightYellow = 0xFFE0FFFF,
+		Lime = 0xFF00FF00,
+		LimeGreen = 0xFF32CD32,
+		Linen = 0xFFE6F0FA,
+		Magenta = 0xFFFF00FF,
+		Maroon = 0xFF000080,
+		MediumAquaMarine = 0xFFAACD66,
+		MediumBlue = 0xFFCD0000,
+		MediumOrchid = 0xFFD355BA,
+		MediumPurple = 0xFFD87093,
+		MediumSeaGreen = 0xFF71B33C,
+		MediumSlateBlue = 0xFFEE687B,
+		MediumSpringGreen = 0xFF9AFA00,
+		MediumTurquoise = 0xFFCCD148,
+		MediumVioletRed = 0xFF8515C7,
+		MidnightBlue = 0xFF701919,
+		MintCream = 0xFFFAFFF5,
+		MistyRose = 0xFFE1E4FF,
+		Moccasin = 0xFFB5E4FF,
+		NavajoWhite = 0xFFADDEFF,
+		Navy = 0xFF800000,
+		OldLace = 0xFFE6F5FD,
+		Olive = 0xFF008080,
+		OliveDrab = 0xFF238E6B,
+		Orange = 0xFF00A5FF,
+		OrangeRed = 0xFF0045FF,
+		Orchid = 0xFFD670DA,
+		PaleGoldenRod = 0xFFAAE8EE,
+		PaleGreen = 0xFF98FB98,
+		PaleTurquoise = 0xFFEEEEAF,
+		PaleVioletRed = 0xFF9370D8,
+		PapayaWhip = 0xFFD5EFFF,
+		PeachPuff = 0xFFB9DAFF,
+		Peru = 0xFF3F85CD,
+		Pink = 0xFFCBC0FF,
+		Plum = 0xFFDDA0DD,
+		PowderBlue = 0xFFE6E0B0,
+		Purple = 0xFF800080,
+		Red = 0xFF0000FF,
+		RosyBrown = 0xFF8F8FBC,
+		RoyalBlue = 0xFFE16941,
+		SaddleBrown = 0xFF13458B,
+		Salmon = 0xFF7280FA,
+		SandyBrown = 0xFF60A4F4,
+		SeaGreen = 0xFF578B2E,
+		SeaShell = 0xFFEEF5FF,
+		Sienna = 0xFF2D52A0,
+		Silver = 0xFFC0C0C0,
+		SkyBlue = 0xFFEBCE87,
+		SlateBlue = 0xFFCD5A6A,
+		SlateGray = 0xFF908070,
+		SlateGrey = 0xFF908070,
+		Snow = 0xFFFAFAFF,
+		SpringGreen = 0xFF7FFF00,
+		SteelBlue = 0xFFB48246,
+		Tan = 0xFF8CB4D2,
+		Teal = 0xFF808000,
+		Thistle = 0xFFD8BFD8,
+		Tomato = 0xFF4763FF,
+		Turquoise = 0xFFD0E040,
+		Violet = 0xFFEE82EE,
+		Wheat = 0xFFB3DEF5,
+		White = 0xFFFFFFFF,
+		WhiteSmoke = 0xFFF5F5F5,
+		Yellow = 0xFF00FFFF,
+		YellowGreen = 0xFF32CD9A,
+
+
 	};
 };
+
+#endif
 
 class TColor24
 {
@@ -194,7 +204,7 @@ public:
 		b = _b;
 	}
 
-	inline TColor24& operator = (const TColor32BGRA& value);
+	inline TColor24& operator = (const TColor32RGBA& value);
 
 	inline TColor24& operator = (const byte* value)
 	{
@@ -253,7 +263,7 @@ public:
 		ToHSL(value.bclr,bclr);
 	}
 
-	inline TColorHSL ( const TColor32BGRA& value);
+	inline TColorHSL ( const TColor32RGBA& value);
 
 	inline TColorHSL& operator = (const TColor24& value)
 	{
@@ -261,7 +271,7 @@ public:
 		return *this;
 	}
 
-	inline TColorHSL& operator = (const TColor32BGRA& value);
+	inline TColorHSL& operator = (const TColor32RGBA& value);
 
 	/**
 	* This function converts RGB byte array to HSL byte array.
@@ -274,12 +284,13 @@ public:
 	static void ToRGB(const byte* hsl,byte* rgb);
 };
 
+
 /**
-* 32 bit color class with ARGB ordering
-* In sequential reading it appears like BGRA but when it read as DWORD its ARGB
-* bclr 0=b, 1=g, 2=r,3=a
+* 32 bit color class with RGBA ordering
+* In sequential reading it appears like RGBA but when it read as DWORD its ABGR cuz its little endian
+* bclr 0=r, 1=g, 2=b,3=a
 */
-class TColor32BGRA
+class TColor32RGBA
 {
 public:
 	union
@@ -289,24 +300,24 @@ public:
 
 		struct
 		{
-			byte b;
-			byte g;
 			byte r;
+			byte g;
+			byte b;
 			byte a;
 		};
 	};
 
-	inline TColor32BGRA()
+	inline TColor32RGBA()
 	{
-		color = 0xFF000000;
+		color = TColors::Black;
 	}
 
-	inline TColor32BGRA(ui32 _color)
+	inline TColor32RGBA(ui32 _color)
 	{
 		color = _color;
 	}
 
-	inline TColor32BGRA( byte _r, byte _g, byte _b, byte _a = 255)
+	inline TColor32RGBA( byte _r, byte _g, byte _b, byte _a = 255)
 	{
 		r = _r;
 		g = _g;
@@ -314,7 +325,7 @@ public:
 		a = _a;
 	}
 
-	inline TColor32BGRA( const TColor24& value)
+	inline TColor32RGBA( const TColor24& value)
 	{
 		r = value.r;
 		g = value.g;
@@ -353,19 +364,19 @@ public:
 		a = _a;
 	}
 
-	inline TColor32BGRA& operator = (const TColor32BGRA& value)
+	inline TColor32RGBA& operator = (const TColor32RGBA& value)
 	{
 		color = value.color;
 		return *this;
 	}
 
-	inline TColor32BGRA& operator = (ui32 value)
+	inline TColor32RGBA& operator = (ui32 value)
 	{
 		color = value;
 		return *this;
 	}
 
-	inline TColor32BGRA& operator = (const TColorHSL& value)
+	inline TColor32RGBA& operator = (const TColorHSL& value)
 	{
 		TColorHSL::ToRGB(value.bclr,bclr);
 		return *this;
@@ -391,7 +402,9 @@ public:
 		return false;
 	}*/
 
-	/*inline bool operator == (const TColor32& value)
+	/**/
+
+	/*inline bool operator == (const TColor32RGBA& value)
 	{
 		if (value.color == color)
 		{
@@ -400,7 +413,7 @@ public:
 		return false;
 	}*/
 
-	inline TColor32BGRA& operator += (const TColor32BGRA& value)
+	inline TColor32RGBA& operator += (const TColor32RGBA& value)
 	{
 		r = caddb(value.r,r);
 		g = caddb(value.g,g);
@@ -409,15 +422,15 @@ public:
 		return *this;
 	}
 
-	inline TColor32BGRA operator + (const TColor32BGRA& value)
+	inline TColor32RGBA operator + (const TColor32RGBA& value)
 	{
-		TColor32BGRA kp(caddb(value.r,r),caddb(value.g,g),caddb(value.b,b),caddb(value.a,a));
+		TColor32RGBA kp(caddb(value.r,r),caddb(value.g,g),caddb(value.b,b),caddb(value.a,a));
 		return kp;
 	}
 
-	inline TColor32BGRA operator + (const TColor24& value)
+	inline TColor32RGBA operator + (const TColor24& value)
 	{
-		TColor32BGRA kp(caddb(value.r,r),caddb(value.g,g),caddb(value.b,b),a);
+		TColor32RGBA kp(caddb(value.r,r),caddb(value.g,g),caddb(value.b,b),a);
 		return kp;
 	}
 
@@ -426,19 +439,22 @@ public:
 		return color;
 	}
 
-	inline operator byte* (void)
+	/*inline operator byte* (void)
 	{
 		return bclr;
-	}
+	}*/
 
-	inline ui32 GetARGB() const
+	/*inline TString ToWebColor()
 	{
-		ui32 res = (((byte)(b)|((ui16)((byte)(g))<<8))|(((ui32)(byte)(r))<<16)|(((ui32)(byte)(a))<<24));
-		return res;
+		return TString::Format("#%%%",sfx(r,2,'0'),sfx(g,2,'0'),sfx(b,2,'0'));
 	}
 
+	static TColor32RGBA FromWebColor(const TString& value)
+	{
 
-	inline void mono()
+	}*/
+
+	inline void Monochrome()
 	{
 		int ts = ((int)r + (int)g + (int)b) / 3;
 		r = (byte)ts;
@@ -447,7 +463,55 @@ public:
 	}
 };
 
-typedef TColor32BGRA TColor32;
+typedef TColor32RGBA TColor32;
+
+/**
+* 32 bit color class with BGRA ordering
+* In sequential reading it appears like BGRA but when it read as DWORD its ARGB cuz its little endian
+* bclr 0=b, 1=g, 2=r,3=a
+*/
+/*class TColor32BGRA
+{
+public:
+	union
+	{
+		ui32 color;
+		byte bclr[4];
+
+		struct
+		{
+			byte b;
+			byte g;
+			byte r;
+			byte a;
+		};
+	};
+
+	inline TColor32BGRA()
+	{
+		color = 0;
+		a = 255;
+	}
+
+	inline TColor32BGRA(const TColor32RGBA& clr)
+	{
+		b = clr.b;
+		g = clr.g;
+		r = clr.r;
+		a = clr.a;
+	}
+
+	inline bool operator == (const TColor32RGBA& value)
+	{
+		if (value.r == r && value.g == g && value.b == b && value.a == a)
+		{
+			return true;
+		}
+		return false;
+	}
+};*/
+
+
 
 class TColorFloat
 {
@@ -465,7 +529,7 @@ public:
 		A = _a;
 	}
 
-	TColorFloat(const TColor32BGRA& clr)
+	TColorFloat(const TColor32RGBA& clr)
 	{
 		R = (float)clr.r / 255.0f;
 		G = (float)clr.g / 255.0f;
@@ -473,78 +537,17 @@ public:
 		A = (float)clr.a / 255.0f;
 	}
 
-	inline TColor32BGRA ConvertToByteColor()
+	inline TColor32RGBA ConvertToByteColor()
 	{
 		byte br = (byte)(R * 255.0f);
 		byte bg = (byte)(G * 255.0f);
 		byte bb = (byte)(B * 255.0f);
 		byte ba = (byte)(A * 255.0f);
-		return TColor32BGRA(br,bg,bb,ba);
+		return TColor32RGBA(br,bg,bb,ba);
 	}
 };
 
-/**
-* 32 bit color class with ARGB ordering.
-*/
-/*
-class TColor32ARGB
-{
-public:
-	union
-	{
-		dword color;
-		byte bclr[4];
-
-		struct
-		{
-			byte a;
-			byte r;
-			byte g;
-			byte b;
-		};
-	};
-
-	inline TColor32ARGB()
-	{
-		color = (((byte)(0)|((word)((byte)(0))<<8))|(((dword)(byte)(0))<<16)|(((dword)(byte)(255))<<24));
-	}
-
-	inline TColor32ARGB(dword _color)
-	{
-		color = _color;
-	}
-
-	inline TColor32ARGB( byte _r, byte _g, byte _b, byte _a)
-	{
-		color = (((byte)(_b)|((word)((byte)(_g))<<8))|(((dword)(byte)(_r))<<16)|(((dword)(byte)(_a))<<24));
-	}
-
-	inline TColor32ARGB(byte _r, byte _g, byte _b)
-	{
-		color = (((byte)(_b)|((word)((byte)(_g))<<8))|(((dword)(byte)(_r))<<16)|(((dword)(byte)(0xFF))<<24));
-	}
-
-	inline TColor32ARGB(const TColor32& othr)
-	{
-		//color = (othr.color << 8) | (othr.color >> 24);
-		color = (((byte)(othr.b)|((word)((byte)(othr.g))<<8))|(((dword)(byte)(othr.r))<<16)|(((dword)(byte)(othr.a))<<24));
-	}
-
-	inline TColor32ARGB& operator = (const TColor32& othr)
-	{
-		color = (((byte)(othr.b)|((word)((byte)(othr.g))<<8))|(((dword)(byte)(othr.r))<<16)|(((dword)(byte)(othr.a))<<24));
-		return *this;
-	}
-
-
-	inline operator dword (void) const
-	{
-		return color;
-	}
-};
-*/
-
-inline TColorHSL::TColorHSL(const TColor32BGRA& value)
+inline TColorHSL::TColorHSL(const TColor32RGBA& value)
 {
 	ToHSL(value.bclr,bclr);
 }
@@ -554,14 +557,14 @@ inline TColorHSL::TColorHSL(const TColor32BGRA& value)
 	ToHSL(value.bclr,bclr);
 }*/
 
-inline TColorHSL& TColorHSL::operator = (const TColor32BGRA& value)
+inline TColorHSL& TColorHSL::operator = (const TColor32RGBA& value)
 {
 	ToHSL(value.bclr,bclr);
 	return *this;
 }
 
 
-inline TColor24& TColor24::operator = (const TColor32BGRA& value)
+inline TColor24& TColor24::operator = (const TColor32RGBA& value)
 {
 	r = value.r;
 	g = value.g;

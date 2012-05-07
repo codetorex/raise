@@ -308,9 +308,6 @@
     <ClInclude Include="tcompositeconverter.h">
       <Filter>Source Files\IO\Buffer</Filter>
     </ClInclude>
-    <ClInclude Include="tcompositegenericconverter.h">
-      <Filter>Source Files\IO\Buffer</Filter>
-    </ClInclude>
     <ClInclude Include="tserializable.h">
       <Filter>Source Files\IO\Literacy</Filter>
     </ClInclude>
@@ -602,6 +599,18 @@
     <ClInclude Include="nhttpclient.h">
       <Filter>Source Files\Network</Filter>
     </ClInclude>
+    <ClInclude Include="mcircle.h">
+      <Filter>Source Files\Mathematics</Filter>
+    </ClInclude>
+    <ClInclude Include="mangle.h">
+      <Filter>Source Files\Mathematics</Filter>
+    </ClInclude>
+    <ClInclude Include="mline.h">
+      <Filter>Source Files\Mathematics</Filter>
+    </ClInclude>
+    <ClInclude Include="txmlwriter.h">
+      <Filter>Source Files\IO\Literacy\XML</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">
@@ -777,6 +786,9 @@
     </ClCompile>
     <ClCompile Include="tbitmapcodecs.cpp">
       <Filter>Source Files\Graphics</Filter>
+    </ClCompile>
+    <ClCompile Include="txmlwriter.cpp">
+      <Filter>Source Files\IO\Literacy\XML</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

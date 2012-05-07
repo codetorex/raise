@@ -20,7 +20,7 @@ void TBitmapGraphics::DrawLine( TPen& pen, int x1, int y1, int x2, int y2 )
 	dy <<= 1;                                                  // dy is now 2*dy
 	dx <<= 1;                                                  // dx is now 2*dx
 
-	Bitmap->SetPixel(x1,y1, pen.Color);
+	Bitmap->SetPixel(x1,y1, pen.Color.bclr);
 	if (dx > dy) 
 	{
 		int fraction = dy - (dx >> 1);                         // same as 2*dy - dx
@@ -33,7 +33,7 @@ void TBitmapGraphics::DrawLine( TPen& pen, int x1, int y1, int x2, int y2 )
 			}
 			x1 += stepx;
 			fraction += dy;                                    // same as fraction -= 2*dy
-			Bitmap->SetPixel(x1,y1,pen.Color);
+			Bitmap->SetPixel(x1,y1,pen.Color.bclr);
 		}
 	} 
 	else
@@ -48,10 +48,12 @@ void TBitmapGraphics::DrawLine( TPen& pen, int x1, int y1, int x2, int y2 )
 			}
 			y1 += stepy;
 			fraction += dx;
-			Bitmap->SetPixel(x1,y1,pen.Color);
+			Bitmap->SetPixel(x1,y1,pen.Color.bclr);
 		}
 	}
 }
+
+#include "TCompositeConverter.h"
 
 void TBitmapGraphics::DrawImage( TBitmap& bmp, int dstX, int dstY, int srcX, int srcY, int width /*= -1*/, int height /*= -1*/ )
 {
@@ -65,23 +67,40 @@ void TBitmapGraphics::DrawImage( TBitmap& bmp, int dstX, int dstY, int srcX, int
 		height = bmp.Height;
 	}
 
-	if (Bitmap->BufferFormat != bmp.BufferFormat)
+	if (dstX + width > Bitmap->Width)
 	{
-		throw Exception("Incompatible formats");
+		width = bmp.Width - dstX;
 	}
 
-	int dx,dy = dstY;
-
-	for (int y = srcY; y < height; y++)
+	if (dstY + height > Bitmap->Height)
 	{
-		dx = dstX;
-		for (int x = srcX; x < width; x++)
+		height = bmp.Height - dstY;
+	}
+
+	if (Bitmap->BufferFormat != bmp.BufferFormat)
+	{
+		TCompositeConverter* Converter = bmp.BufferFormat->GetConverter(Bitmap->BufferFormat);
+		if (Converter == 0)
 		{
-			byte* pix = bmp.GetPixel(x,y);
-			Bitmap->SetPixel(dx,dy,pix);
-			dx++;
+			throw Exception("Incompatible formats and no converter");
 		}
-		dy++;
+
+		for (int l = 0; l < height; l++)
+		{
+			byte* srcLine = bmp.GetPixel(srcX,srcY + l);
+			byte* dstLine = Bitmap->GetPixel(dstX,dstY + l);
+			Converter->Convert(srcLine,dstLine,width);
+		}
+	}
+	else
+	{
+		ui32 lineLength = Bitmap->BufferFormat->BytesPerItem * width;
+		for (int l = 0; l < height; l++)
+		{
+			byte* srcLine = bmp.GetPixel(srcX,srcY + l);
+			byte* dstLine = Bitmap->GetPixel(dstX,dstY + l);
+			MemoryDriver::Copy(dstLine,srcLine, lineLength);
+		}
 	}
 }
 
@@ -101,8 +120,8 @@ void TBitmapGraphics::FlipHorizontal()
 
 	while(x1--)
 	{
-		byte* column1 = GetPixel(x1,0);
-		byte* column2 = GetPixel(x2,0);
+		byte* column1 = Bitmap->GetPixel(x1,0);
+		byte* column2 = Bitmap->GetPixel(x2,0);
 
 		int i = Bitmap->Height;
 		while(i--)
@@ -130,14 +149,43 @@ void TBitmapGraphics::FlipVertical()
 
 	while(rows--)
 	{
-		byte* row1 = GetPixel(0,y1);
-		byte* row2 = GetPixel(0,y2);
+		byte* row1 = Bitmap->GetPixel(0,y1);
+		byte* row2 = Bitmap->GetPixel(0,y2);
 
 		MemoryDriver::Exchange(row1,row2,rowwidth);
 		y2++;
 		y1--;
 	}
 }
+
+#include "mangle.h"
+
+void TBitmapGraphics::DrawEllipse( TPen& pen, int x, int y, int width, int height )
+{
+	/*int lastAngX = width / 2;
+	int lastAngY = 0;
+	float lastAngle = 15.0f;
+
+	float xwidth = width / 2;
+	float yheight = height / 2;
+
+	for (int i=0;i<6;i++)
+	{
+		MDegree<float> angl(lastAngle);
+
+		int angX = xwidth * angl.Sine();
+		int angY = yheight * angl.Cosine();
+
+		DrawLine(pen, x + lastAngX , y + lastAngY,)
+
+	}*/
+}
+
+void TBitmapGraphics::Clear( const TColor32& color )
+{
+	MemoryDriver::Repeat4Byte(Bitmap->Data,color.bclr,Bitmap->PixelCount);
+}
+
 TGraphics* TGraphics::FromBitmap( TBitmap* bitmap )
 {
 	if (bitmap->BufferFormat->BytesPerItem != 4)

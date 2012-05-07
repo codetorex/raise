@@ -1,5 +1,6 @@
 #include "stdafx.h"
 #include "tcompositebuffer.h"
+#include "tcompositeconverter.h"
 
 void TCompositeBuffer::AllocateItemCapacity( int _newItemCapacity )
 {

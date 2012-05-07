@@ -306,13 +306,14 @@ public:
 		return Item[index];
 	}
 
-	inline T GetLast()
+	inline T& GetLast()
 	{
 		if (Count > 0)
 		{
 			return Item[Count-1];
 		}
-		return NULL;
+		
+		LowLevelException(SOURCENAME(0),__LINE__,1,"Index out of bounds");
 	}
 
 	/**

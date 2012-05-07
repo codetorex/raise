@@ -15,10 +15,18 @@ public:
 
 	void Test()
 	{
+		// TODO: do more testing
+
 		TColor32 clr(64,128,178,255);
 
+		TColor32 testcolor ( TColors::TestColor );
 
 		TStringBuilder sb;
+		sb.Append("Test color hex:");
+		sb.Append(sfx(clr.color));
+		AddOutput(sb.ToString());
+		
+		sb.Clear();
 		sb.Append("Input:");
 		sb.Append(" R: ");
 		sb.AppendPadded(64,3,' ');
@@ -73,7 +81,9 @@ public:
 
 		AddResult( clr.r == 64 && clr.g == 128 && clr.b == 178 && clr.a == 255, "Color32 r,g,b,a constructor" );
 		
-		clr = TColors::red;
+		AddResult( clr == testcolor, "Color32 r,g,b,a constructor == TColors::TestColor");
+
+		clr = TColors::Red;
 		AddResult( clr.r == 255 && clr.g == 0 && clr.b == 0 && clr.a == 255, "Color32 = ui32 operator for red" );
 
 		sb.Clear();
@@ -88,15 +98,14 @@ public:
 		sb.AppendPadded(clr.a,3,' ');
 		AddOutput(sb.ToString());
 
-		clr = TColors::aqua;
+		clr = TColors::Aqua;
 		AddResult( clr.r == 0 && clr.g == 255 && clr.b == 255 && clr.a == 255, "Color32 = ui32 operator for aqua" );
 
-		clr = TColors::testcolor;
+		clr = TColors::TestColor;
 		sb.Clear();
 		sb.Append("Byte Order: ");
 		sb.Append(MathColor::ChannelOrder(clr.bclr,4));
 		AddOutput(sb.ToString());
-		
 	}
 } TColorCheck;
 

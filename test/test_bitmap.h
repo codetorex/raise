@@ -43,9 +43,9 @@ public:
 
 		TestFormat("color-test.bmp");
 
-		TestFormat("color-test.tga");
+		TestFormat("color-test.tga"); // 24 bit written tga
 
-		TestFormat("color-test2.tga");
+		//TestFormat("color-test2.tga"); 32 bit written one
 	}
 
 } TBitmapCheck;

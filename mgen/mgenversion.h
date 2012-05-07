@@ -7,8 +7,8 @@
 
 //#include "raiseversion.h"
 
-#define MGEN_BUILD					97
-#define MGEN_BUILD_STRING			"97"
+#define MGEN_BUILD					100
+#define MGEN_BUILD_STRING			"100"
 
 #define MGEN_PHASE					&TVersionPhase::PreAlpha
 

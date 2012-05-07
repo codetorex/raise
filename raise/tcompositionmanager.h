@@ -2,6 +2,7 @@
 #define TCOMPOSITIONMANAGER_H
 
 #include "tcompositebuffer.h"
+#include "tcompositeconverter.h"
 
 class TCompositeFormatFactory
 {

@@ -1,8 +1,8 @@
 #include "stdafx.h"
 #include "tbitmap.h"
-#include "tcompositegenericconverter.h"
+#include "tcompositeconverter.h"
 
-class TBitmapConverterBGRtoRGB: public TCompositeGenericConverter
+class TBitmapConverterBGRtoRGB: public TCompositeConverter
 {
 public:
 	TBitmapConverterBGRtoRGB()
@@ -11,7 +11,7 @@ public:
 		DestinationFormat = BitmapFormats->fRGB;
 	}
 
-	void DoConversion(byte* src, byte* dst,int itemCount)
+	void Convert(byte* src, byte* dst,int itemCount)
 	{
 		while(itemCount--)
 		{
@@ -25,7 +25,7 @@ public:
 	}
 };
 
-class TBitmapConverterARGBtoBGR: public TCompositeGenericConverter
+class TBitmapConverterARGBtoBGR: public TCompositeConverter
 {
 public:
 	TBitmapConverterARGBtoBGR()
@@ -34,7 +34,7 @@ public:
 		DestinationFormat = BitmapFormats->fBGR;
 	}
 
-	void DoConversion(byte* src, byte* dst,int pixelCount)
+	void Convert(byte* src, byte* dst,int pixelCount)
 	{
 		// src 0 is alpha, 1 is r , 2 is g, 3 is b
 		// dst 0 is b, dst 1 is g , dst 2 is r
@@ -50,7 +50,7 @@ public:
 	}
 };
 
-class TBitmapConverterRGBAtoBGR: public TCompositeGenericConverter
+class TBitmapConverterRGBAtoBGR: public TCompositeConverter
 {
 public:
 	TBitmapConverterRGBAtoBGR()
@@ -59,7 +59,7 @@ public:
 		DestinationFormat = BitmapFormats->fBGR;
 	}
 
-	void DoConversion(byte* src, byte* dst,int pixelCount)
+	void Convert(byte* src, byte* dst,int pixelCount)
 	{
 		while(pixelCount--)
 		{
@@ -72,7 +72,7 @@ public:
 	}
 };
 
-class TBitmapConverterRGBAtoBGRA: public TCompositeGenericConverter
+class TBitmapConverterRGBAtoBGRA: public TCompositeConverter
 {
 public:
 	TBitmapConverterRGBAtoBGRA()
@@ -81,7 +81,7 @@ public:
 		DestinationFormat = BitmapFormats->fBGRA;
 	}
 
-	void DoConversion(byte* src, byte* dst,int pixelCount)
+	void Convert(byte* src, byte* dst,int pixelCount)
 	{
 		while(pixelCount--)
 		{
@@ -95,6 +95,53 @@ public:
 		}
 	}
 };
+
+class TBitmapConverterBGRtoBGRA: public TCompositeConverter
+{
+public:
+	TBitmapConverterBGRtoBGRA()
+	{
+		SourceFormat = BitmapFormats->fBGR;
+		DestinationFormat = BitmapFormats->fBGRA;
+	}
+
+	void Convert(byte* src, byte* dst,int pixelCount)
+	{
+		while(pixelCount--)
+		{
+			dst[0] = src[0];
+			dst[1] = src[1];
+			dst[2] = src[2];
+			dst[3] = 255;
+			dst += 4;
+			src += 3;
+		}
+	}
+};
+
+class TBitmapConverteRGBtoBGRA: public TCompositeConverter
+{
+public:
+	TBitmapConverteRGBtoBGRA()
+	{
+		SourceFormat = BitmapFormats->fRGB;
+		DestinationFormat = BitmapFormats->fBGRA;
+	}
+
+	void Convert(byte* src, byte* dst,int pixelCount)
+	{
+		while(pixelCount--)
+		{
+			dst[0] = src[2];
+			dst[1] = src[1];
+			dst[2] = src[0];
+			dst[3] = 255;
+			dst += 4;
+			src += 3;
+		}
+	}
+};
+
 
 void TBitmapFormats::CreateDefaultConverters()
 {
@@ -112,4 +159,20 @@ void TBitmapFormats::CreateDefaultConverters()
 	AddConverter( new TBitmapConverterRGBAtoBGRA() );
 
 	AddConverter("BGRA","RGBA",new TBitmapConverterRGBAtoBGRA() );
+
+
+	// 3 to 4 no swapping
+	AddConverter(new TBitmapConverterBGRtoBGRA());
+
+	//AddConverter("BGR", "BGRX", new TBitmapConverterBGRtoBGRA() );
+
+	// 3 to 4 swapping
+
+	AddConverter(new TBitmapConverteRGBtoBGRA());
+
+	//AddConverter("RGB", "BGRX", new TBitmapConverteRGBtoBGRA() );
+
+	AddConverter("BGR", "RGBA", new TBitmapConverteRGBtoBGRA() );
+
+	//AddConverter("BGR", "RGBX", new TBitmapConverteRGBtoBGRA() );
 }

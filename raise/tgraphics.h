@@ -38,7 +38,8 @@ public:
 class TFont
 {
 public:
-
+	TString FamilyName;
+	int Size;
 };
 
 /**
@@ -68,6 +69,8 @@ public:
 
 	virtual void DrawRectangle(TPen& pen, int x, int y, int width, int height) = 0;
 
+	virtual void DrawEllipse(TPen& pen, int x, int y, int width, int height) = 0;
+
 	virtual void DrawImage( TBitmap& bmp, int dstX, int dstY, int srcX, int srcY, int width = -1, int height = -1 ) = 0;
 
 	virtual void FlipHorizontal() = 0;
@@ -79,9 +82,9 @@ public:
 		DrawImage(bmp,x,y,0,0);
 	}
 
-	inline void DrawImage(TBitmap& bmp, TPosition* pos)
+	void DrawImage(TBitmap& bmp, TPosition& pos)
 	{
-		DrawImage(bmp,pos->X,pos->Y,0,0);
+		DrawImage(bmp,pos.X,pos.Y,0,0);
 	}
 
 	//virtual void DrawString(const TString& s, TFont& font, TBrush& brush, float x, float y) = 0;
@@ -113,7 +116,7 @@ public:
 
 
 /**
- * only BGRA bitmaps supported
+ * only RGBA bitmaps supported
  */
 class TBitmapGraphics: public TGraphics
 {
@@ -137,6 +140,42 @@ private:
 	{
 		x += Translation.x;
 		y += Translation.y;
+	}
+
+	inline void ClampCoord(int& x, int& y)
+	{
+		if ( x < 0 )
+		{
+				x = 0;
+		}
+		else if (x > Bitmap->Width)
+		{
+			x = Bitmap->Width;
+		}
+
+		if ( y < 0 )
+		{
+			y = 0;
+		}
+		else if (y > Bitmap->Height )
+		{
+			y = Bitmap->Height;
+		}
+	}
+
+	inline void TranslateClampCoord(int& x , int& y)
+	{
+		TranslateCoord(x,y);
+		ClampCoord(x,y);
+	}
+
+	inline void SetPixelDiscarding(int x,int y, const TColor32& c )
+	{
+		if (x < 0 || y < 0) return;
+		if (x > (Bitmap->Width-1) || y > (Bitmap->Height-1)) return;
+
+		byte* p = Bitmap->GetPixel(x,y);
+		*(ui32*)p = c.color;
 	}
 
 public:
@@ -165,7 +204,7 @@ public:
 	 */
 	inline void SetPixel(int x, int y, TColor32 c)
 	{
-		Bitmap->SetPixel(x,y,c);
+		Bitmap->SetPixel(x,y,c.bclr);
 	}
 
 	inline TColor32 GetPixel(int x, int y)
@@ -187,7 +226,12 @@ public:
 
 	inline void DrawHorizontalLine(TPen& pen, int x, int y, int width)
 	{
-		TranslateCoord(x,y);
+		TranslateClampCoord(x,y);
+
+		if (width > Bitmap->Width)
+		{
+			width = Bitmap->Width;
+		}
 
 		ui32* dst = (ui32*)Bitmap->GetPixel(x,y);
 
@@ -211,7 +255,12 @@ public:
 
 	inline void DrawVerticalLine(TPen& pen, int x, int y, int height)
 	{
-		TranslateCoord(x,y);
+		TranslateClampCoord(x,y);
+
+		if (height > Bitmap->Height)
+		{
+			height = Bitmap->Height;
+		}
 
 		ui32* dst = (ui32*)Bitmap->GetPixel(x,y);
 		for (int i=0;i<height;i++)
@@ -231,11 +280,20 @@ public:
 		DrawVerticalLine(pen,x+width,y,height);
 	}
 
+	void DrawImage(TBitmap& bmp, TPosition& pos)
+	{
+		DrawImage(bmp,pos.X,pos.Y,0,0);
+	}
+
+	void DrawEllipse(TPen& pen, int x, int y, int width, int height);
+
 	void DrawImage(TBitmap& bmp, int dstX, int dstY, int srcX, int srcY, int width = -1, int height = -1);
 
 	void FlipHorizontal();
 
 	void FlipVertical();
+
+	void Clear(const TColor32& color);
 };
 
 

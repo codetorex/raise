@@ -124,9 +124,12 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClInclude Include="m64bit.h" />
+    <ClInclude Include="mangle.h" />
+    <ClInclude Include="mcircle.h" />
     <ClInclude Include="mdecibel.h" />
     <ClInclude Include="mdecimal.h" />
     <ClInclude Include="mfixed.h" />
+    <ClInclude Include="mline.h" />
     <ClInclude Include="mmathcolor.h" />
     <ClInclude Include="mmathdriver.h" />
     <ClInclude Include="mmatrix.h" />
@@ -183,7 +186,6 @@
     <ClInclude Include="tcharbuffer.h" />
     <ClInclude Include="tcommandline.h" />
     <ClInclude Include="tcompositeconverter.h" />
-    <ClInclude Include="tcompositegenericconverter.h" />
     <ClInclude Include="tcompositesimple.h" />
     <ClInclude Include="tcomposition.h" />
     <ClInclude Include="tcompositionmanager.h" />
@@ -289,6 +291,7 @@
     <ClInclude Include="tutf16encoding.h" />
     <ClInclude Include="tutf8encoding.h" />
     <ClInclude Include="twintools.h" />
+    <ClInclude Include="txmlwriter.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="npacketbuilder.cpp" />
@@ -352,6 +355,7 @@
     <ClCompile Include="tthread.cpp" />
     <ClCompile Include="ttimedriver.cpp" />
     <ClCompile Include="twintools.cpp" />
+    <ClCompile Include="txmlwriter.cpp" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Rules.txt" />

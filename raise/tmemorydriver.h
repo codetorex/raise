@@ -38,7 +38,7 @@ public:
 
 #ifndef LINUX
 #ifndef M64
-	inline static void ShortCopy(void* _dst,void* _src,int _size)
+	inline static void ShortCopy(void* _dst,const void* _src,int _size)
 	{
 		_asm
 		{
@@ -51,7 +51,7 @@ public:
 
 #else
 
-	inline static void ShortCopy(void* _dst,void* _src,int _size)
+	inline static void ShortCopy(void* _dst,const void* _src,int _size)
 	{q
 		_asm
 		{
@@ -64,7 +64,7 @@ public:
 #endif
 
 #else
-	inline static void ShortCopy(void* _dst,void* _src,int _size)
+	inline static void ShortCopy(void* _dst,const void* _src,int _size)
 	{
 		asm
 			(
@@ -78,6 +78,24 @@ public:
 #endif
 
 	/**
+	* Repeats a data in memory that fits 4 bytes per item.
+	* @param dst destination memory
+	* @param src source memory
+	* @param count how much times source repeated
+	* @return written bytes
+	*/
+	inline static int Repeat4Byte(void* dst, const void* src, int count)
+	{
+		ui32 nsrc = *(ui32*)src;
+		ui32* ndst = (ui32*)dst;
+		while(count--)
+		{
+			*(ndst++) = nsrc;
+		}
+		return (int)((byte*)ndst - (byte*)dst);
+	}
+
+	/**
 	* Repeats a data in memory.
 	* @param dst destination memory
 	* @param src source memory
@@ -87,6 +105,11 @@ public:
 	*/
 	inline static int Repeat(void* dst, const void* src,int length, int count)
 	{
+		if (length == 4)
+		{
+			return Repeat4Byte((ui32*)dst,(ui32*)src,count);
+		}
+
 		// TODO: maybe asm one can be written?
 		byte* ndst = (byte*)dst;
 		byte* nsrc = (byte*)src;

@@ -43,6 +43,8 @@ void TLogStream::Output(TLogEntry* entry)
 {
 	byte stackbuffer[512];
 
+	// TODO: make TStringBuilderStack<512>
+
 	TStringBuilder sb(stackbuffer,512);
 	bool UsingStack = true;
 	if (entry->Content.ByteLength > 384)
@@ -82,6 +84,8 @@ void TLogStream::Output(TLogEntry* entry)
 	{
 		sb.UnbindByteArray();
 	}
+
+	Writer.BaseStream->Flush();
 }
 
 TString TLogStream::GetLogFileName( const TString& prefix )

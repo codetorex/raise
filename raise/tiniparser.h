@@ -42,14 +42,29 @@ public:
 	TString* GetValue(const TString& className, const TString& key);
 
 	/**
-	* @return TINIClass if available, null if not.
+	* @return TINIClass if available, throws if not.
 	*/
-	TINIClass* GetClass(const TString& className)
+	inline TINIClass* GetClass(const TString& className)
 	{
 		return Classes.GetValue(className);
 	}
 
-	bool ContainsClass(const TString& className)
+	TINIClass* FindClass(const TString& className)
+	{
+		TINIClass* result;
+		if (LowerCaseKeys)
+		{
+			TString lowered = className.ToLower();
+			result = Classes.GetValue(lowered);
+		}
+		else
+		{
+			result = Classes.GetValue(className);
+		}
+		return result;
+	}
+
+	inline bool ContainsClass(const TString& className)
 	{
 		return Classes.ContainsKey(className);	
 	}
