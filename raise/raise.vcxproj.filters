@@ -611,6 +611,9 @@
     <ClInclude Include="txmlwriter.h">
       <Filter>Source Files\IO\Literacy\XML</Filter>
     </ClInclude>
+    <ClInclude Include="tsort.h">
+      <Filter>Source Files\Collection</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">
@@ -789,6 +792,9 @@
     </ClCompile>
     <ClCompile Include="txmlwriter.cpp">
       <Filter>Source Files\IO\Literacy\XML</Filter>
+    </ClCompile>
+    <ClCompile Include="tsort.cpp">
+      <Filter>Source Files\Collection</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

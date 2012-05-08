@@ -133,6 +133,7 @@ public:
 	*/
 	inline static int Exchange(void* dst, void* src, int length)
 	{
+		// TODO: optimize this function by utilizing dword copying
 		byte tmp;
 		byte* row1 = (byte*)dst;
 		byte* row2 = (byte*)src;
@@ -148,6 +149,22 @@ public:
 		return length;
 	}
 
+	inline static void Exchange4Byte(void* dst, void* src, int count)
+	{
+		// TODO: test this algorithm?
+		ui32* dsti = (ui32*)dst;
+		ui32* srci = (ui32*)src;
+
+		while(count--)
+		{
+			ui32 tmp = *dsti;
+			*dsti = *srci;
+			*srci = tmp;
+			dsti++;
+			srci++;
+		}
+	}
+
 	inline static int ComparePattern(const void* src, const void* dst, const void* pattern, int length)
 	{
 		while(length--)
@@ -158,7 +175,6 @@ public:
 				{
 					return 1;
 				}
-				
 			}
 		}
 		return 0;
