@@ -6,7 +6,7 @@
 class MathColor
 {
 public:
-	inline static TColor32 BlendNormal(TColor32& pc, TColor32& bg) 
+	/*inline static TColor32 BlendNormal(TColor32& pc, TColor32& bg) 
 	{
 		int ax = (65025 - (255 - pc.a) * (255 - bg.a)) / 255;
 		int rx = ((pc.r * pc.a) / ax) + ((bg.r * bg.a * (255 - pc.a)) / ax);
@@ -24,6 +24,29 @@ public:
 		return TColorFloat(rx,gx,bx,ax);
 	}
 
+	inline static TColorFloat BlendAlpha(TColorFloat& src, TColorFloat& dst)
+	{
+		float outa = src.A + dst.A * ( 1.0f - src.A);
+		float outr = (src.R * src.A + dst.R * dst.A * (1.0f - src.A)) /  outa;
+		float outg = (src.G * src.A + dst.G * dst.A * (1.0f - src.A)) /  outa;
+		float outb = (src.B * src.A + dst.B * dst.A * (1.0f - src.A)) /  outa;
+
+	}*/
+
+	/*inline static TColor32 Blend(TColor32& src, TColor32& dst)
+	{
+		TColor32 result;
+		float a1 = src.A / 255.0;
+		float a2 = dst.A / 255.0;
+
+		result.R = (int) (a1 * src.r + a2 * (1 - a1) * dst.r);
+		result.G = (int) (a1 * src.g + a2 * (1 - a1) * dst.g);
+		result.B = (int) (a1 * src.b + a2 * (1 - a1) * dst.b);
+		result.A = (int) (255 * (a1 + a2 * (1 - a1)));
+		return result;
+	}*/
+
+	// TODO: move this to TColors as static function and delete this file?
 	inline static TString ChannelOrder(byte* data, int length)
 	{
 		TString result;

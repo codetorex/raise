@@ -28,7 +28,7 @@ public:
 	/**
 	 * Copies data that aligns to 32 bits.
 	 */
-	inline void CopyDword(ui32* dst,ui32* src,int cnt)
+	inline static void CopyDword(ui32* dst,ui32* src,int cnt)
 	{
 		while(cnt--)
 		{

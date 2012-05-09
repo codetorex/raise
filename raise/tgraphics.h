@@ -3,6 +3,7 @@
 
 #include "tcolor.h"
 #include "tbitmap.h"
+#include "tblend.h"
 
 class TPen
 {
@@ -50,6 +51,9 @@ public:
 class TGraphics
 {
 public:
+	virtual void SetBlending(TBlendMode* op) = 0;
+
+	virtual TBlendMode* GetBlending() = 0;
 
 	virtual void Translate(int x, int y) = 0;
 
@@ -71,20 +75,25 @@ public:
 
 	virtual void DrawEllipse(TPen& pen, int x, int y, int width, int height) = 0;
 
-	virtual void DrawImage( TBitmap& bmp, int dstX, int dstY, int srcX, int srcY, int width = -1, int height = -1 ) = 0;
+	virtual void DrawImage( TBitmap& bmp, int dstX, int dstY, int srcX, int srcY, int width, int height ) = 0;
 
 	virtual void FlipHorizontal() = 0;
 
 	virtual void FlipVertical() = 0;
 
-	inline void DrawImage(TBitmap& bmp, int x , int y)
+	inline void DrawImage2(TBitmap& bmp, int dstX, int dstY, int srcX, int srcY)
 	{
-		DrawImage(bmp,x,y,0,0);
+		DrawImage(bmp,dstX,dstY,srcX,srcY,bmp.Width,bmp.Height);
 	}
 
-	void DrawImage(TBitmap& bmp, TPosition& pos)
+	inline void DrawImage2(TBitmap& bmp, int x , int y)
 	{
-		DrawImage(bmp,pos.X,pos.Y,0,0);
+		DrawImage2(bmp,x,y,0,0);
+	}
+
+	inline void DrawImage2(TBitmap& bmp, TPosition& pos)
+	{
+		DrawImage2(bmp,pos.X,pos.Y,0,0);
 	}
 
 	//virtual void DrawString(const TString& s, TFont& font, TBrush& brush, float x, float y) = 0;
@@ -121,21 +130,6 @@ public:
 class TBitmapGraphics: public TGraphics
 {
 private:
-	void DrawHorizontalLineAdditive(TPen& pen, int x, int y, int width)
-	{
-		throw NotImplementedException();
-	}
-
-	void DrawVerticalLineAdditive(TPen& pen, int x, int y, int height)
-	{
-
-	}
-
-	void DrawLineAdditive(TPen& pen, int x1, int y1, int x2, int y2)
-	{
-
-	}
-
 	inline void TranslateCoord(int& x, int& y)
 	{
 		x += Translation.x;
@@ -181,15 +175,28 @@ private:
 public:
 	TBitmap* Bitmap;
 	vec2i Translation;
+	TBlendMode* BlendMode;
+
 
 	TBitmapGraphics()
 	{
-
+		SetBlending( &TBlendModes::Copy );
 	}
 
 	TBitmapGraphics(TBitmap* _bitmap)
 	{
 		Initialize(_bitmap);
+		SetBlending(&TBlendModes::Copy);
+	}
+
+	inline void SetBlending(TBlendMode* op)
+	{
+		BlendMode = op;
+	}
+
+	inline TBlendMode* GetBlending()
+	{
+		return BlendMode;
 	}
 
 	inline void Initialize(TBitmap* _bitmap)
@@ -204,7 +211,7 @@ public:
 	 */
 	inline void SetPixel(int x, int y, TColor32 c)
 	{
-		Bitmap->SetPixel(x,y,c.bclr);
+		BlendMode->Blend(c,*(TColor32*)Bitmap->GetPixel(x,y));
 	}
 
 	inline TColor32 GetPixel(int x, int y)
@@ -243,8 +250,6 @@ public:
 
 	inline void FillRectangle(TBrush& brush, int x, int y, int width, int height)
 	{
-		TranslateCoord(x,y);
-
 		int limit = y + height;
 		TPen pn(brush.Color); // other modes are not implemented yet
 		for (int my = y; my < limit; my++)
@@ -272,22 +277,20 @@ public:
 
 	inline void DrawRectangle(TPen& pen, int x, int y, int width, int height)
 	{
-		TranslateCoord(x,y);
-
 		DrawHorizontalLine(pen,x,y,width);
 		DrawVerticalLine(pen,x,y,height);
 		DrawHorizontalLine(pen,x,y+height,width);
 		DrawVerticalLine(pen,x+width,y,height);
 	}
 
-	void DrawImage(TBitmap& bmp, TPosition& pos)
+	/*void DrawImage(TBitmap& bmp, TPosition& pos)
 	{
 		DrawImage(bmp,pos.X,pos.Y,0,0);
-	}
+	}*/
 
 	void DrawEllipse(TPen& pen, int x, int y, int width, int height);
 
-	void DrawImage(TBitmap& bmp, int dstX, int dstY, int srcX, int srcY, int width = -1, int height = -1);
+	void DrawImage(TBitmap& bmp, int dstX, int dstY, int srcX, int srcY, int width, int height );
 
 	void FlipHorizontal();
 
@@ -295,7 +298,6 @@ public:
 
 	void Clear(const TColor32& color);
 };
-
 
 /*class TBitmap32Bpp2nGraphics: public TBitmapGraphics
 {

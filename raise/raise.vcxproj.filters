@@ -614,6 +614,9 @@
     <ClInclude Include="tsort.h">
       <Filter>Source Files\Collection</Filter>
     </ClInclude>
+    <ClInclude Include="tblend.h">
+      <Filter>Source Files\Graphics</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">
@@ -795,6 +798,9 @@
     </ClCompile>
     <ClCompile Include="tsort.cpp">
       <Filter>Source Files\Collection</Filter>
+    </ClCompile>
+    <ClCompile Include="tblend.cpp">
+      <Filter>Source Files\Graphics</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

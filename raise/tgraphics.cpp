@@ -55,31 +55,25 @@ void TBitmapGraphics::DrawLine( TPen& pen, int x1, int y1, int x2, int y2 )
 
 #include "TCompositeConverter.h"
 
-void TBitmapGraphics::DrawImage( TBitmap& bmp, int dstX, int dstY, int srcX, int srcY, int width /*= -1*/, int height /*= -1*/ )
+
+void TBitmapGraphics::DrawImage( TBitmap& srcBmp, int dstX, int dstY, int srcX, int srcY, int width , int height )
 {
-	if (width == -1)
-	{
-		width = bmp.Width;
-	}
-
-	if (height == -1)
-	{
-		height = bmp.Height;
-	}
-
 	if (dstX + width > Bitmap->Width)
 	{
-		width = bmp.Width - dstX;
+		width = srcBmp.Width - dstX;
 	}
 
 	if (dstY + height > Bitmap->Height)
 	{
-		height = bmp.Height - dstY;
+		height = srcBmp.Height - dstY;
 	}
 
-	if (Bitmap->BufferFormat != bmp.BufferFormat)
+	TBitmap& dstBmp = *Bitmap;
+
+
+	if (dstBmp.BufferFormat != srcBmp.BufferFormat)
 	{
-		TCompositeConverter* Converter = bmp.BufferFormat->GetConverter(Bitmap->BufferFormat);
+		TCompositeConverter* Converter = srcBmp.BufferFormat->GetConverter(dstBmp.BufferFormat);
 		if (Converter == 0)
 		{
 			throw Exception("Incompatible formats and no converter");
@@ -87,19 +81,43 @@ void TBitmapGraphics::DrawImage( TBitmap& bmp, int dstX, int dstY, int srcX, int
 
 		for (int l = 0; l < height; l++)
 		{
-			byte* srcLine = bmp.GetPixel(srcX,srcY + l);
-			byte* dstLine = Bitmap->GetPixel(dstX,dstY + l);
-			Converter->Convert(srcLine,dstLine,width);
+			byte* srcLine = srcBmp.GetPixel(srcX,srcY + l);
+			byte* dstLine = dstBmp.GetPixel(dstX,dstY + l);
+
+			if (BlendMode == &TBlendModes::Copy)
+			{
+				Converter->Convert(srcLine,dstLine,width);
+			}
+			else
+			{
+				int srcItemLength = srcBmp.BufferFormat->BytesPerItem;
+				for (int x = 0 ; x < width ; x++)
+				{
+					TColor32 srcColor;
+					Converter->Convert(srcLine,srcColor.bclr,1); // convert 1 pixel
+					BlendMode->Blend(srcColor, *(TColor32*)dstLine);
+
+					srcLine += srcItemLength;
+					dstLine += 4;
+				}
+			}
 		}
 	}
 	else
 	{
-		ui32 lineLength = Bitmap->BufferFormat->BytesPerItem * width;
+		ui32 lineLength = dstBmp.BufferFormat->BytesPerItem * width;
 		for (int l = 0; l < height; l++)
 		{
-			byte* srcLine = bmp.GetPixel(srcX,srcY + l);
-			byte* dstLine = Bitmap->GetPixel(dstX,dstY + l);
-			MemoryDriver::Copy(dstLine,srcLine, lineLength);
+			byte* srcLine = srcBmp.GetPixel(srcX,srcY + l);
+			byte* dstLine = dstBmp.GetPixel(dstX,dstY + l);
+			if (BlendMode == &TBlendModes::Copy)
+			{
+				MemoryDriver::Copy(dstLine,srcLine, lineLength);
+			}
+			else
+			{
+				BlendMode->BlendArray((TColor32*)srcLine,(TColor32*)dstLine,lineLength);
+			}
 		}
 	}
 }

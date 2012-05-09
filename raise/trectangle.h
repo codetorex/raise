@@ -30,12 +30,12 @@ public:
 		Height = _height;
 	}
 
-	inline void SetRectangleFrom(TRectangle* othr)
+	inline void SetRectangleFrom(const TRectangle& othr)
 	{
-		X = othr->X;
-		Y = othr->Y;
-		Width = othr->Width;
-		Height = othr->Height;
+		X = othr.X;
+		Y = othr.Y;
+		Width = othr.Width;
+		Height = othr.Height;
 	}
 };
 
