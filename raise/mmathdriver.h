@@ -85,7 +85,8 @@ public:
 		return rand();
 	}
 
-	inline static float Clamp(float minValue,float maxValue, float value)
+	template<class T>
+	inline static T Clamp(T minValue,T maxValue, T value)
 	{
 		return value < minValue ? minValue : (value > maxValue ? maxValue : value);
 	}
