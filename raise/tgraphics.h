@@ -223,7 +223,7 @@ public:
 
 	inline void Translate(int x, int y)
 	{
-		Translation.set(x,y);
+		Translation.Set(x,y);
 	}
 
 	inline void ResetTransform()

@@ -36,20 +36,27 @@ public:
 		y = y_;
 	}
 
-	inline void set( T x_,T y_ )
+	inline void Set( T x_,T y_ )
 	{
 		x = x_;
 		y = y_;
 	}
 
-	MVector2<T>& operator += ( const MVector2<T>& value)
+	inline MVector2<T>& operator += ( const MVector2<T>& value)
 	{
 		x += value.x;
 		y += value.y;
 		return *this;
 	}
 
-	MVector2<T> operator + ( const MVector2<T>& value) const
+	inline MVector2<T>& operator -= ( const MVector2<T>& value)
+	{
+		x -= value.x;
+		y -= value.y;
+		return *this;
+	}
+
+	inline MVector2<T> operator + ( const MVector2<T>& value) const
 	{
 		MVector2<T> result(*this);
 		result.x += value.x;
@@ -57,7 +64,7 @@ public:
 		return result;
 	}
 
-	T Distance( const MVector2<T>& other) const
+	inline T Distance( const MVector2<T>& other) const
 	{
 		T dx = other.x - x;
 		T dy = other.y - y;

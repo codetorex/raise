@@ -18,13 +18,13 @@ public:
 
 	MCircle2()
 	{
-		set(0,0);
+		Set(0,0);
 		Radius = 0;
 	}
 
 	MCircle2(T x, T y, T rad)
 	{
-		set(x,y);
+		Set(x,y);
 		Radius = rad;
 	}
 
