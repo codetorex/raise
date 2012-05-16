@@ -114,6 +114,22 @@ public:
 		SetBottom(_bottom);
 	}
 
+	inline void RegionInflate(int size)
+	{
+		X -= size;
+		Y -= size;
+		SetWidth(Width+  (size * 2));
+		SetHeight(Height + (size * 2));
+	}
+
+	inline void RegionInflate(int infWidth, int infHeight)
+	{
+		X -= infWidth;
+		Y -= infHeight;
+		SetWidth(Width+  (infWidth * 2));
+		SetHeight(Height + (infHeight * 2));
+	}
+
 	inline bool IsInside(int x,int y)
 	{
 		if (x >= Left && x <= Right)

@@ -16,6 +16,9 @@
 #include "test_bitmap.h"
 #include "test_xml.h"
 
+// TODO: test string builder
+// there is an error in string builder, when you pass sfu(4245,-3) it crashes
+
 #include "tapplication.h"
 #include "raiseversion.h"
 #include "tconsole.h"

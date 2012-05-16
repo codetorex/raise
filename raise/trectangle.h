@@ -37,6 +37,14 @@ public:
 		Width = othr.Width;
 		Height = othr.Height;
 	}
+
+	void RectangleShrink(int amount)
+	{
+		X += amount;
+		Y += amount;
+		Width -= amount * 2;
+		Height -= amount * 2;
+	}
 };
 
 #endif

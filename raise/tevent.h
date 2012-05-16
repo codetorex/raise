@@ -453,4 +453,8 @@ delegate2<R,AT1,AT2>* GetHandler( M* obj, R (M::*fncptr)(AT1,AT2) )
 	return new TMemberDelegate2<M,R,AT1,AT2>(obj,fncptr);
 }
 
+// TODO: make these return full classes instead pointers...
+// pointers are root of all evil, and root of heaven too it just stands between them
+// you should be careful to not cross it, when you cross it no turning back :(
+
 #endif

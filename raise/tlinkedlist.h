@@ -173,6 +173,24 @@ public:
 	}
 
 	/**
+	 * Clears all sub items, warning POINTERS STILL REMAINS
+	 */
+	void Clear()
+	{
+		FirstItem = 0;
+		LastItem = 0;
+		ItemCount = 0;
+	}
+
+	/**
+	 * DELETES items before clearance
+	 */
+	void ClearDelete()
+	{
+		throw NotImplementedException();
+	}
+
+	/**
 	 * Merges lists together.
 	 */
 	void Merge( TList<T>* other )

@@ -617,6 +617,9 @@
     <ClInclude Include="tblend.h">
       <Filter>Source Files\Graphics</Filter>
     </ClInclude>
+    <ClInclude Include="tsmartptr.h">
+      <Filter>Source Files\Collection</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">

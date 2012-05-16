@@ -60,12 +60,12 @@ protected:
 			{
 				if (srclength == charlength)
 				{
-					InternalAppend(src,padcount,padcount);
+					InternalAppend(src,abspad,abspad);
 				}
 				else
 				{
-					int blen = StringDriver::Count((byte*)src,padcount) - (byte*)src;
-					InternalAppend(src,blen,padcount);
+					int blen = StringDriver::Count((byte*)src,abspad) - (byte*)src;
+					InternalAppend(src,blen,abspad);
 				}
 			}
 			else

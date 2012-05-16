@@ -263,6 +263,7 @@
     <ClInclude Include="trmlwriter.h" />
     <ClInclude Include="tserializable.h" />
     <ClInclude Include="tsharedpointer.h" />
+    <ClInclude Include="tsmartptr.h" />
     <ClInclude Include="tsort.h" />
     <ClInclude Include="tstack.h" />
     <ClInclude Include="tstream.h" />
