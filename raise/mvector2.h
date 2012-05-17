@@ -74,8 +74,8 @@ public:
 	// TODO: do the rest
 };
 
-typedef MVector2<float>		vec2;
-typedef vec2				point2;
-typedef MVector2<int>		vec2i;
+typedef MVector2<float>		Vector2;
+typedef Vector2				Point2;
+typedef MVector2<int>		Vector2i;
 
 #endif

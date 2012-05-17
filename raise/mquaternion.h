@@ -18,7 +18,7 @@ public:
 
 	MQuaternionf	();
 	MQuaternionf	(float fx,float fy,float fz,float fw);
-	MQuaternionf	(float angle, const vec3 &axis);		//axis angle quat constructor
+	MQuaternionf	(float angle, const Vector3 &axis);		//axis angle quat constructor
 
 	float	magnitude();
 
@@ -36,13 +36,13 @@ public:
 	MQuaternionf	operator/	(float s) const;
 
 	float	getangle();
-	vec3	getaxis();
+	Vector3	getaxis();
 	int		normalize();
 	void	tomatrix( float * mat );
 	void	setaxis(float fX,float fY,float fZ,float deg); // set axis-angle quat
 	void	reset();
 
-	vec3	getvector();
+	Vector3	getvector();
 };
 
 typedef MQuaternionf	quat;
@@ -51,9 +51,9 @@ typedef MQuaternionf	quat;
 // TODO: move these functions inside if we use quats...
 
 RDLL quat		qrotate		(const quat &q1,const quat &q2);
-RDLL quat		qvrotate	(const quat &q,const vec3 &v);
+RDLL quat		qvrotate	(const quat &q,const Vector3 &v);
 RDLL quat		qfromeuler	(float x,float y,float z);
-RDLL vec3		eulerfromq	(const quat &q);
+RDLL Vector3		eulerfromq	(const quat &q);
 RDLL float		qdot		(const quat &q1,const quat &q2);
 RDLL quat		qslerp		(const quat &q1,const quat &q2,float t); // spherical linear interpolation
 RDLL quat		qlerp		(const quat &q1,const quat &q2,float t); // linear interpolation
@@ -75,7 +75,7 @@ MQuaternionf::MQuaternionf(float fx,float fy,float fz,float fw)
 	w = fw;
 }
 
-MQuaternionf::MQuaternionf(float angle, const vec3 &axis)
+MQuaternionf::MQuaternionf(float angle, const Vector3 &axis)
 {
 	setaxis(axis.x,axis.y,axis.z,angle);
 }
@@ -207,9 +207,9 @@ float MQuaternionf::getangle()
 	return (float) (2*acos(w));
 }
 
-vec3 MQuaternionf::getaxis()
+Vector3 MQuaternionf::getaxis()
 {
-	vec3 v;
+	Vector3 v;
 	float m;
 
 	v = getvector();
@@ -217,7 +217,7 @@ vec3 MQuaternionf::getaxis()
 
 	if ( m <= 0.00001f)
 	{
-		return vec3();
+		return Vector3();
 	}
 	else
 	{
@@ -225,9 +225,9 @@ vec3 MQuaternionf::getaxis()
 	}
 }
 
-vec3 MQuaternionf::getvector()
+Vector3 MQuaternionf::getvector()
 {
-	vec3 vresult;
+	Vector3 vresult;
 	vresult.x = x;
 	vresult.y = y;
 	vresult.z = z;
@@ -288,7 +288,7 @@ MQuaternionf qrotate(const MQuaternionf &q1,const MQuaternionf &q2)
 	return q1 * q2 * (~q1);
 }
 
-MQuaternionf qvrotate(const MQuaternionf &q,const vec3 &v)
+MQuaternionf qvrotate(const MQuaternionf &q,const Vector3 &v)
 {
 	MQuaternionf t;
 	//t = q*v*(~q); todo: maybe it will needed someday fix this
@@ -334,12 +334,12 @@ MQuaternionf qfromeuler(float x,float y,float z)
 	*this = qx * qz;*/
 }
 
-vec3 eulerfromq(const MQuaternionf &q)
+Vector3 eulerfromq(const MQuaternionf &q)
 {
 	double		r11,r21,r31,r32,r33,r12,r13;
 	double		q00,q11,q22,q33;
 	double		tmp;
-	vec3		u;
+	Vector3		u;
 
 	q00 = q.w * q.w;
 	q11 = q.x * q.x;

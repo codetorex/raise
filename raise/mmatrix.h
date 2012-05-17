@@ -36,7 +36,7 @@ public:
 	* Changes translation values of matrix.
 	* May need to Identity() first, if it was dirty.
 	*/
-	inline void Translate(const vec3& value)
+	inline void Translate(const Vector3& value)
 	{
 		_41 = value.x;
 		_42 = value.y;
@@ -70,7 +70,7 @@ public:
 	* Changes scale values of matrix.
 	* May need to Identity() first, if it was dirty.
 	*/
-	inline void Scale(const vec3& value)
+	inline void Scale(const Vector3& value)
 	{
 		_11 = value.x;
 		_22 = value.y;

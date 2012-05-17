@@ -174,7 +174,7 @@ private:
 
 public:
 	TBitmap* Bitmap;
-	vec2i Translation;
+	Vector2i Translation;
 	TBlendMode* BlendMode;
 
 

@@ -95,7 +95,7 @@ public:
 		return (x * v2.x) + (y * v2.y) + (z * v2.z);
 	}
 
-	inline MVector3& cross(const MVector3& v2) const
+	inline MVector3 cross(const MVector3& v2) const
 	{
 		MVector3 vCrossProduct;
 
@@ -285,9 +285,9 @@ public:
 };
 
 
-typedef MVector3<float>		vec3;
-typedef vec3 vector3;
-typedef vec3 point3;
-typedef MVector3<double>	vecd3;
+typedef MVector3<float>		Vector3;
+typedef Vector3				vec3;
+typedef Vector3				Point3;
+typedef MVector3<double>	Vector3d;
 
 #endif

@@ -7,8 +7,8 @@
 class MRay3
 {
 public:
-	vec3 Point; // point
-	vec3 Direction; // direction
+	Vector3 Point; // point
+	Vector3 Direction; // direction
 	/*void extend(float mult); // extend it
 	float dist(); // distance*/
 };

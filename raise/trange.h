@@ -41,14 +41,14 @@ public:
 		return (int)(y * (float)Height);
 	}
 
-	inline vec2 GetRatio(int x, int y)
+	inline Vector2 GetRatio(int x, int y)
 	{
-		return vec2(GetXRatio(x),GetYRatio(y));
+		return Vector2(GetXRatio(x),GetYRatio(y));
 	}
 
-	inline vec2i GetPositionFromRatio(float x, float y)
+	inline Vector2i GetPositionFromRatio(float x, float y)
 	{
-		return vec2i(GetXFromRatio(x),GetYFromRatio(y));
+		return Vector2i(GetXFromRatio(x),GetYFromRatio(y));
 	}
 
 	inline int GetArea()
