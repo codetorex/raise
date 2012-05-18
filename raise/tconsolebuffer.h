@@ -19,10 +19,10 @@ private:
 	}
 
 public:
-	TRange ScreenSize;
+	ISize ScreenSize;
 
 	/// Position in buffer
-	TPosition Cursor;
+	IPosition Cursor;
 
 	/// Screen last line index. Rendering will be done backwards to head.
 	int Head;
@@ -34,7 +34,7 @@ public:
 		Create(_BufferWidth,_BufferHeight,_format);
 		Head = 0;
 		Cursor.SetPosition(0,0);
-		ScreenSize.SetRange(_ScreenWidth,_ScreenHeight);
+		ScreenSize.SetRegion(_ScreenWidth,_ScreenHeight);
 		WritePos = Data;
 	}
 
@@ -134,7 +134,7 @@ public:
 	TConsoleDisplay* Buffer;
 	bool WrapMode;
 	bool Escaped;
-	TPosition SavedPosition;
+	IPosition SavedPosition;
 
 	TString EscapeSequence;
 

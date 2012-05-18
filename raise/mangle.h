@@ -45,8 +45,8 @@ public:
 	inline MVector2<T> GetVector (T radius) const
 	{
 		MVector2<T> result;
-		result.x = radius * Cosine();
-		result.y = radius * Sine();
+		result.X = radius * Cosine();
+		result.Y = radius * Sine();
 		return result;
 	}
 };

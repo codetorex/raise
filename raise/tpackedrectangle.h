@@ -1,12 +1,12 @@
 #ifndef TPACKEDTRIANGLE_H
 #define TPACKEDTRIANGLE_H
 
-#include "tregion.h"
+#include "mrectangle.h"
 
 class TPackedRectangle;
 typedef TPackedRectangle TRectangleNode;
 
-class TPackedRectangle: public TRegion
+class TPackedRectangle: public IRectangle
 {
 public:
 	bool			LeftEmpty;
@@ -21,7 +21,7 @@ public:
 
 	TRectangleNode* Insert( int rwidth,int rheight );
 
-	inline TRectangleNode* Insert( TRange* range )
+	inline TRectangleNode* Insert( ISize* range )
 	{
 		return Insert(range->Width,range->Height);
 	}

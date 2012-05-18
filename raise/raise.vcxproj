@@ -136,6 +136,9 @@
     <ClInclude Include="mquaternion.h" />
     <ClInclude Include="mrandom.h" />
     <ClInclude Include="mray.h" />
+    <ClInclude Include="mrectangle.h" />
+    <ClInclude Include="mregion2.h" />
+    <ClInclude Include="msize2.h" />
     <ClInclude Include="mtools.h" />
     <ClInclude Include="mtriangle.h" />
     <ClInclude Include="mvector3.h" />
@@ -157,6 +160,7 @@
     <ClInclude Include="tbitmapcodecs.h" />
     <ClInclude Include="tbitmapwriterparameters.h" />
     <ClInclude Include="tblend.h" />
+    <ClInclude Include="tboxmodel.h" />
     <ClInclude Include="thexdump.h" />
     <ClInclude Include="tioservice.h" />
     <ClInclude Include="tioserviceiocp.h" />
@@ -239,6 +243,7 @@
     <ClInclude Include="tlogconsole.h" />
     <ClInclude Include="tloghtml.h" />
     <ClInclude Include="tlogstream.h" />
+    <ClInclude Include="mpadding2.h" />
     <ClInclude Include="tresetevent.h" />
     <ClInclude Include="tmemorydriver.h" />
     <ClInclude Include="tmemorystream.h" />
@@ -248,16 +253,12 @@
     <ClInclude Include="tpackedrectangle.h" />
     <ClInclude Include="tpalette.h" />
     <ClInclude Include="tpath.h" />
-    <ClInclude Include="tposition.h" />
     <ClInclude Include="tprocess.h" />
     <ClInclude Include="tprocessdebug.h" />
     <ClInclude Include="tprocessmodule.h" />
     <ClInclude Include="tprofiler.h" />
     <ClInclude Include="tproperty.h" />
     <ClInclude Include="tqueue.h" />
-    <ClInclude Include="trange.h" />
-    <ClInclude Include="trectangle.h" />
-    <ClInclude Include="tregion.h" />
     <ClInclude Include="tregistry.h" />
     <ClInclude Include="trmlreader.h" />
     <ClInclude Include="trmlwriter.h" />

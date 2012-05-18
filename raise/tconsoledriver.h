@@ -3,10 +3,11 @@
 
 #include "tstring.h"
 #include "ttextwriter.h"
-#include "tposition.h"
 #include "tpalette.h"
 #include "tevent.h"
-#include "trange.h"
+#include "mvector2.h"
+#include "msize2.h"
+
 
 // LETS DEFINE THE STANDARTS HERE
 // Rules:
@@ -59,10 +60,10 @@ public:
 	byte CurrentForeColor;
 
 	/// Current cursor position of console
-	TPosition Cursor;
+	IPosition Cursor;
 
 	/// Size of console
-	TRange Size;
+	ISize Size;
 
 	virtual void SaveState() {};
 
@@ -88,7 +89,7 @@ public:
 	/**
 	 * Sets current cursor position as in given parameter.
 	 */
-	virtual void SetPosition(TPosition& pos) = 0;
+	virtual void SetPosition(IPosition& pos) = 0;
 
 	/**
 	 * Sets current back color.
@@ -110,7 +111,7 @@ public:
 	/**
 	 * Gets current position and writes to given referenced parameter.
 	 */
-	inline void GetPosition(TPosition& pos)
+	inline void GetPosition(IPosition& pos)
 	{
 		GetPosition();
 		pos.X = Cursor.X;
@@ -131,7 +132,7 @@ public:
 	 */
 	inline void SetPosition(int x,int y)
 	{
-		TPosition pos(x,y);
+		IPosition pos(x,y);
 		SetPosition(pos);
 	}
 

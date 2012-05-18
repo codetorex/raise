@@ -5,7 +5,7 @@
 #include "mtools.h"
 #include "tbitmapformats.h"
 #include "tcolor.h"
-#include "tregion.h"
+#include "mregion2.h"
 
 class TBitmapWriter;
 class TBitmapReader;
@@ -14,7 +14,7 @@ class TBitmapWriterParameters;
 /**
 * Initial bitmap class.
 */
-class RDLL TBitmap: public TCompositeBuffer, public TRange
+class RDLL TBitmap: public TCompositeBuffer, public ISize
 {
 public:
 	int PixelCount; // width * height means total pixel count

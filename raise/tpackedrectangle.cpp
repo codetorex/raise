@@ -16,7 +16,7 @@ TPackedRectangle::TPackedRectangle(int _width, int _height)
 	LeftBranch = NULL;
 	RightBranch = NULL;
 	
-	SetSize(0,0,_width,_height);
+	SetRectangle(0,0,_width,_height);
 }
 
 TPackedRectangle::~TPackedRectangle()
@@ -71,13 +71,13 @@ TRectangleNode* TPackedRectangle::Insert( int rwidth,int rheight )
 
 		if ( dw > dh)
 		{
-			LeftBranch->SetSize(X,Y,rwidth,Height);
-			RightBranch->SetSize(X+rwidth,Y,Width - rwidth,Height);
+			LeftBranch->SetRectangle(X,Y,rwidth,Height);
+			RightBranch->SetRectangle(X+rwidth,Y,Width - rwidth,Height);
 		}
 		else
 		{
-			LeftBranch->SetSize(X,Y,Width,rheight);	
-			RightBranch->SetSize(X,Y+rheight,Width,Height - rheight);
+			LeftBranch->SetRectangle(X,Y,Width,rheight);	
+			RightBranch->SetRectangle(X,Y+rheight,Width,Height - rheight);
 		}
 
 		return LeftBranch->Insert(rwidth,rheight);

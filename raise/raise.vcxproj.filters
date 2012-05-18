@@ -188,26 +188,11 @@
     <ClInclude Include="tqueue.h">
       <Filter>Source Files\Collection</Filter>
     </ClInclude>
-    <ClInclude Include="tpackedrectangle.h">
-      <Filter>Source Files\Graphics</Filter>
-    </ClInclude>
     <ClInclude Include="mvector2.h">
       <Filter>Source Files\Mathematics</Filter>
     </ClInclude>
     <ClInclude Include="mvector3.h">
       <Filter>Source Files\Mathematics</Filter>
-    </ClInclude>
-    <ClInclude Include="tregion.h">
-      <Filter>Source Files\Graphics</Filter>
-    </ClInclude>
-    <ClInclude Include="trange.h">
-      <Filter>Source Files\Graphics</Filter>
-    </ClInclude>
-    <ClInclude Include="tposition.h">
-      <Filter>Source Files\Graphics</Filter>
-    </ClInclude>
-    <ClInclude Include="trectangle.h">
-      <Filter>Source Files\Graphics</Filter>
     </ClInclude>
     <ClInclude Include="tindex.h">
       <Filter>Source Files\Collection</Filter>
@@ -620,6 +605,24 @@
     <ClInclude Include="tsmartptr.h">
       <Filter>Source Files\Collection</Filter>
     </ClInclude>
+    <ClInclude Include="msize2.h">
+      <Filter>Source Files\Mathematics</Filter>
+    </ClInclude>
+    <ClInclude Include="mrectangle.h">
+      <Filter>Source Files\Mathematics</Filter>
+    </ClInclude>
+    <ClInclude Include="mregion2.h">
+      <Filter>Source Files\Mathematics</Filter>
+    </ClInclude>
+    <ClInclude Include="mpadding2.h">
+      <Filter>Source Files\Mathematics</Filter>
+    </ClInclude>
+    <ClInclude Include="tboxmodel.h">
+      <Filter>Source Files\Graphics</Filter>
+    </ClInclude>
+    <ClInclude Include="tpackedrectangle.h">
+      <Filter>Source Files\Graphics</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">
@@ -650,9 +653,6 @@
       <Filter>Source Files\Hacking</Filter>
     </ClCompile>
     <ClCompile Include="tbitmapconverters.cpp">
-      <Filter>Source Files\Graphics</Filter>
-    </ClCompile>
-    <ClCompile Include="tpackedrectangle.cpp">
       <Filter>Source Files\Graphics</Filter>
     </ClCompile>
     <ClCompile Include="tbitmapbmp.cpp">
@@ -803,6 +803,9 @@
       <Filter>Source Files\Collection</Filter>
     </ClCompile>
     <ClCompile Include="tblend.cpp">
+      <Filter>Source Files\Graphics</Filter>
+    </ClCompile>
+    <ClCompile Include="tpackedrectangle.cpp">
       <Filter>Source Files\Graphics</Filter>
     </ClCompile>
   </ItemGroup>

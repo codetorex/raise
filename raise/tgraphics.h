@@ -91,7 +91,7 @@ public:
 		DrawImage2(bmp,x,y,0,0);
 	}
 
-	inline void DrawImage2(TBitmap& bmp, TPosition& pos)
+	inline void DrawImage2(TBitmap& bmp, IPosition& pos)
 	{
 		DrawImage2(bmp,pos.X,pos.Y,0,0);
 	}
@@ -132,8 +132,8 @@ class TBitmapGraphics: public TGraphics
 private:
 	inline void TranslateCoord(int& x, int& y)
 	{
-		x += Translation.x;
-		y += Translation.y;
+		x += Translation.X;
+		y += Translation.Y;
 	}
 
 	inline void ClampCoord(int& x, int& y)
@@ -174,7 +174,7 @@ private:
 
 public:
 	TBitmap* Bitmap;
-	Vector2i Translation;
+	IPosition Translation;
 	TBlendMode* BlendMode;
 
 
@@ -223,7 +223,7 @@ public:
 
 	inline void Translate(int x, int y)
 	{
-		Translation.Set(x,y);
+		Translation.SetVector(x,y);
 	}
 
 	inline void ResetTransform()

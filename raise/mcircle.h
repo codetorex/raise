@@ -18,13 +18,13 @@ public:
 
 	MCircle2()
 	{
-		Set(0,0);
+		SetVector(0,0);
 		Radius = 0;
 	}
 
 	MCircle2(T x, T y, T rad)
 	{
-		Set(x,y);
+		SetVector(x,y);
 		Radius = rad;
 	}
 
@@ -52,7 +52,7 @@ public:
 	{
 		if (rangle.Radian == 0)
 		{
-			return MVector2<T>(x + Radius, y);
+			return MVector2<T>(X + Radius, Y);
 		}
 
 		MVector2<T> v ( rangle.GetVector(this->Radius) );

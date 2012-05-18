@@ -11,8 +11,8 @@ public:
 	{
 		struct
 		{
-			T x;
-			T y;
+			T X;
+			T Y;
 		};
 
 		T v[2];
@@ -20,54 +20,66 @@ public:
 
 	inline MVector2( const MVector2<T>& other)
 	{
-		x = other.x;
-		y = other.y;
+		X = other.X;
+		Y = other.Y;
 	}
 
 	inline MVector2()
 	{
-		x = 0;
-		y = 0;
+		X = 0;
+		Y = 0;
 	}
 
 	inline MVector2(T x_,T y_)
 	{
-		x = x_;
-		y = y_;
+		X = x_;
+		Y = y_;
 	}
 
-	inline void Set( T x_,T y_ )
+	inline void SetVector( T x_,T y_ )
 	{
-		x = x_;
-		y = y_;
+		X = x_;
+		Y = y_;
+	}
+
+	inline void AddVector( T x_, T y_)
+	{
+		X += x_;
+		Y += y_;
+	}
+
+	inline void SubtractVector(T x_, T y_)
+	{
+		X -= x_;
+		Y -= y_;
 	}
 
 	inline MVector2<T>& operator += ( const MVector2<T>& value)
 	{
-		x += value.x;
-		y += value.y;
+		X += value.X;
+		Y += value.Y;
 		return *this;
 	}
 
 	inline MVector2<T>& operator -= ( const MVector2<T>& value)
 	{
-		x -= value.x;
-		y -= value.y;
+		X -= value.X;
+		Y -= value.Y;
 		return *this;
 	}
 
 	inline MVector2<T> operator + ( const MVector2<T>& value) const
 	{
 		MVector2<T> result(*this);
-		result.x += value.x;
-		result.y += value.y;
+		result.X += value.X;
+		result.Y += value.Y;
 		return result;
 	}
 
 	inline T Distance( const MVector2<T>& other) const
 	{
-		T dx = other.x - x;
-		T dy = other.y - y;
+		T dx = other.X - X;
+		T dy = other.Y - Y;
 		return MathDriver::SquareRoot( ( dx * dx ) + ( dy * dy ) );
 	}
 
@@ -76,6 +88,7 @@ public:
 
 typedef MVector2<float>		Vector2;
 typedef Vector2				Point2;
-typedef MVector2<int>		Vector2i;
+typedef MVector2<int>		IPosition;
+typedef IPosition			IVector2;
 
 #endif

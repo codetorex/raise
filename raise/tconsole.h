@@ -57,7 +57,7 @@ public:
 		Cursor.Y = bi.dwCursorPosition.Y;
 	}
 
-	inline void SetPosition(TPosition& pos)
+	inline void SetPosition(IPosition& pos)
 	{
 		COORD spos;
 		spos.X = pos.X;
