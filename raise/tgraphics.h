@@ -138,23 +138,8 @@ private:
 
 	inline void ClampCoord(int& x, int& y)
 	{
-		if ( x < 0 )
-		{
-				x = 0;
-		}
-		else if (x > Bitmap->Width)
-		{
-			x = Bitmap->Width;
-		}
-
-		if ( y < 0 )
-		{
-			y = 0;
-		}
-		else if (y > Bitmap->Height )
-		{
-			y = Bitmap->Height;
-		}
+		x = MathDriver::Clamp<int>(0, Bitmap->Width-1, x);
+		y = MathDriver::Clamp<int>(0, Bitmap->Height-1,y);
 	}
 
 	inline void TranslateClampCoord(int& x , int& y)

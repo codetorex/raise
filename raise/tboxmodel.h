@@ -41,6 +41,37 @@ public:
 		int nY = parent.DrawRegion.Y() + parent.Content.Y + Y;
 		DrawRegion.SetRegion(nX,nY,Width,Height);
 	}
+
+	/**
+	 * Which is like in css width
+	 */
+	inline void SetContentWidth(int newWidth)
+	{
+		IPadding sum = Padding;
+		sum += Border;
+
+		ChangeWidth( newWidth + (sum.Left + sum.Right));
+	}
+
+	/**
+	 * Which is like in css height
+	 */
+	inline void SetContentHeight(int newHeight)
+	{
+		IPadding sum = Padding;
+		sum += Border;
+
+		ChangeHeight( newHeight +( sum.Top + sum.Bottom));
+	}
+
+	/**
+	 * Like in css width and height
+	 */
+	inline void SetContentSize( int newWidth, int newHeight)
+	{
+		SetContentWidth(newWidth);
+		SetContentHeight(newHeight);
+	}
 };
 
 

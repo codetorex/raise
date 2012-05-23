@@ -367,7 +367,7 @@ void TString::ToUpperInplace()
 
 TString TString::Format( const TString& format,int argc , const TStringFormatElementBase** args )
 {
-	TStringBuilder sb(format.ByteLength*8);
+	TStringBuilderStack<512> sb;
 
 	int curarg = 0;
 	for (ui32 i=0;i<format.ByteLength;i++)

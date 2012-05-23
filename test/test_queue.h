@@ -119,7 +119,7 @@ public:
 			passed = false;
 		}
 
-		TStringBuilder sb;
+		TStringBuilderStack<512> sb;
 		sb.Append("EnI: ");
 		sb.Append(enindex);
 		sb.Append(" DeIx: ");

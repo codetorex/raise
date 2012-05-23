@@ -19,7 +19,7 @@ public:
 		TString fext = TPath::GetExtension(path).Substring(1);
 		fext.ToUpperInplace();
 
-		TStringBuilder sb;
+		TStringBuilderStack<512> sb;
 		sb.Append( fext );
 		sb.Append(" byte order and buffer order comparison");
 

@@ -55,9 +55,8 @@ public:
 
 	TString ToString() const
 	{
-		byte result[20];
+		TStringBuilderStack<20> str;
 
-		TStringBuilder str(result,20);
 		str.AppendPadded(Month,2);
 		str.AppendChar('/');
 		str.AppendPadded(Day,2);
@@ -71,15 +70,14 @@ public:
 		str.AppendPadded(Second,2);
 
 		TString strresult = str.ToString();
-		str.UnbindByteArray();
 
 		return strresult;
 	}
 
 	TString ToStringFileName() const
 	{
-		byte result[20];
-		TStringBuilder str(result,20);
+		TStringBuilderStack<20> str;
+		
 		str.AppendPadded(Year,4);
 		str.AppendPadded(Month,2);
 		str.AppendPadded(Day,2);
@@ -88,15 +86,12 @@ public:
 		str.AppendPadded(Second,2);
 		
 		TString strresult = str.ToString();
-		str.UnbindByteArray();
 		return strresult;
 	}
 
 	TString ToStringUniversal() const
 	{
-		byte result[20];
-
-		TStringBuilder str(result,20);
+		TStringBuilderStack<20> str;
 		str.AppendPadded(Year,4);
 		str.AppendChar('-');
 		str.AppendPadded(Month,2);
@@ -110,8 +105,6 @@ public:
 		str.AppendPadded(Second,2);
 
 		TString strresult = str.ToString();
-		str.UnbindByteArray();
-
 		return strresult;
 	}
 

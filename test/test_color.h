@@ -21,7 +21,7 @@ public:
 
 		TColor32 testcolor ( TColors::TestColor );
 
-		TStringBuilder sb;
+		TStringBuilderStack<512> sb;
 		sb.Append("Test color hex:");
 		sb.Append(sfx(clr.color));
 		AddOutput(sb.ToString());

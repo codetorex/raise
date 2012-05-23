@@ -878,5 +878,36 @@ public:
 };
 
 
+/**
+ * WARNING:
+ * MAJOR ARCHITECTURAL FAILURE!
+ * I made the Ref stuff in TString but didn't used it!
+ * TODO: fix this by removing String stuff in it and use only ref stuff.
+ */
+
+/*template <int K>
+class TStackString: public TString
+{
+public:
+	byte StackData[K];
+
+	TStackString()
+	{
+		Data = StackData;
+		Capacity = K;
+		Length = 0;
+		ByteLength = 0;
+		CreateRef();
+	}
+
+	~TStackString()
+	{
+		if (Ref->RefCount > 1)
+		{
+
+		}
+	}
+};*/
+
 
 #endif

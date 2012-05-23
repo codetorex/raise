@@ -36,7 +36,7 @@ class TXMLWriter: public TSerializer
 {
 private:
 	int IndentLevel;
-	TStringBuilder Buffer;
+	TStringBuilderStack<512> Buffer;
 	bool ElementCap;
 	bool ElementWritten;
 	bool AttributeMode;

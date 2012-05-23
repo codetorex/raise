@@ -14,8 +14,8 @@ void TLogStream::Initialize(TStream* outputStream)
 	WriteGroupName = true;
 	WriteThreadId = true;
 
-	byte stackbuffer[512];
-	TStringBuilder sb(stackbuffer,512);
+	TStringBuilderStack<512> sb;
+
 	sb.AppendChar('-',50);
 	sb.AppendLine();
 
@@ -36,23 +36,12 @@ void TLogStream::Initialize(TStream* outputStream)
 	sb.AppendLine();
 
 	Writer.Write(sb);
-	sb.UnbindByteArray();
 }
 
 void TLogStream::Output(TLogEntry* entry)
 {
-	byte stackbuffer[512];
+	TStringBuilderStack<512> sb;
 
-	// TODO: make TStringBuilderStack<512>
-
-	TStringBuilder sb(stackbuffer,512);
-	bool UsingStack = true;
-	if (entry->Content.ByteLength > 384)
-	{
-		UsingStack = false;
-		sb.UnbindByteArray();
-		sb.InitializeCapacity(entry->Content.ByteLength+128);
-	}
 
 	if (WriteGroupName)
 	{
@@ -80,18 +69,12 @@ void TLogStream::Output(TLogEntry* entry)
 
 	Writer.Write(sb);
 
-	if (UsingStack)
-	{
-		sb.UnbindByteArray();
-	}
-
 	Writer.BaseStream->Flush();
 }
 
 TString TLogStream::GetLogFileName( const TString& prefix )
 {
-	byte stackbuffer[48];
-	TStringBuilder sb(stackbuffer,48);
+	TStringBuilderStack<48> sb;
 
 	sb.Append(prefix);
 	TDateTimeExpanded now = TimeDriver::Now();
@@ -99,7 +82,5 @@ TString TLogStream::GetLogFileName( const TString& prefix )
 	sb.Append(".txt");
 
 	TString resultstr = sb.ToString();
-	sb.UnbindByteArray();
-
 	return resultstr;
 }

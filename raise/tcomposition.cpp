@@ -147,7 +147,7 @@ TCompositeBuffer* TComposition::CreateBuffer( int _itemCapacity )
 
 TString TComposition::ToString()
 {
-	TStringBuilder sb;
+	TStringBuilderStack<512> sb;
 	sb.AppendLine("TComposition: %", sfs(Name));
 	sb.AppendLine("Short Name: %", sfs(ShortName));
 	sb.AppendLine("Item Size: % (% bits)", sfu(BytesPerItem), sfu(BitsPerItem));

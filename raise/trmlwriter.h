@@ -8,10 +8,11 @@
 class TRMLWriter: public TSerializer
 {
 private:
+	TStringBuilderStack<512> LineBuilder;
+
 	int IndentLevel;
 	bool JustClosedCurl;
-	TStringBuilder LineBuilder;
-
+	
 	void WriteKeyPart(const TString& key);
 	void FinishKeyValueLine();
 

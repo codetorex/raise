@@ -11,7 +11,7 @@ public:
 
 	void OutputArrayItems(const TArray<int>& value)
 	{
-		TStringBuilder sb;
+		TStringBuilderStack<512> sb;
 		sb.Append("Array Count: ");
 		sb.Append(value.Count);
 		sb.Append(" , Items: ");
