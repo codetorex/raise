@@ -63,6 +63,15 @@ public:
 		
 		tsf->Close();
 
+
+		TXMLReader xr2( File::OpenRead("son-of-obsidian.htm"));
+		xr2.Parse();
+
+		TFileStream* tsf2 = File::OpenWrite("output.txt");
+		TStreamWriterUTF8* ts2 = new TStreamWriterUTF8(tsf2);
+		currentLevel = 0;
+		DumpNode(ts2,xr2.RootNode);
+		tsf2->Close();
 	}
 
 	int currentLevel;

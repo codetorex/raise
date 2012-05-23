@@ -92,6 +92,7 @@ public:
 				curMap = 31; // in case of some idiot continue looping this will prevent crashing
 				return false;
 			}
+			curItem = 0;
 			goto sfunc;
 		}
 
