@@ -295,6 +295,7 @@
     <ClInclude Include="tutf16encoding.h" />
     <ClInclude Include="tutf8encoding.h" />
     <ClInclude Include="twintools.h" />
+    <ClInclude Include="txmlreader.h" />
     <ClInclude Include="txmlwriter.h" />
   </ItemGroup>
   <ItemGroup>
@@ -361,6 +362,7 @@
     <ClCompile Include="tthread.cpp" />
     <ClCompile Include="ttimedriver.cpp" />
     <ClCompile Include="twintools.cpp" />
+    <ClCompile Include="txmlreader.cpp" />
     <ClCompile Include="txmlwriter.cpp" />
   </ItemGroup>
   <ItemGroup>

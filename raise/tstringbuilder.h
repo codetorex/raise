@@ -327,7 +327,7 @@ class TStringBuilderStack: public TStringBuilder
 public:
 	byte Temp[K];
 
-	inline TStringBuilderStack(): TStringBuilder(Temp,K);
+	inline TStringBuilderStack(): TStringBuilder(Temp,K)
 	{
 
 	}

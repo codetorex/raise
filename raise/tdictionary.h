@@ -55,4 +55,48 @@ public:
 	}
 };
 
+template <class T>
+class TDictionaryEnumerator: public TEnumerator< TKeyValue<TString,T>* >
+{
+public:
+
+	TDictionary<T>* d;
+	int curMap;
+	int curItem;
+
+	inline TDictionaryEnumerator( TDictionary<T>* dict ) 
+	{
+		d = dict;
+		Reset();
+	}
+
+	inline void Reset()
+	{
+		curMap = 0;
+		curItem = 0;
+	}
+
+	inline bool MoveNext()
+	{
+		sfunc:
+		if ( d->Map[curMap].Values.Count > curItem )
+		{
+			Current = d->Map[curMap].Values.Item[curItem];
+			curItem++;
+		}
+		else
+		{
+			curMap++;
+			if (curMap > 31)
+			{
+				curMap = 31; // in case of some idiot continue looping this will prevent crashing
+				return false;
+			}
+			goto sfunc;
+		}
+
+		return true;
+	}
+};
+
 #endif

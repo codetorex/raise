@@ -623,6 +623,9 @@
     <ClInclude Include="tpackedrectangle.h">
       <Filter>Source Files\Graphics</Filter>
     </ClInclude>
+    <ClInclude Include="txmlreader.h">
+      <Filter>Source Files\IO\Literacy\XML</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">
@@ -807,6 +810,9 @@
     </ClCompile>
     <ClCompile Include="tpackedrectangle.cpp">
       <Filter>Source Files\Graphics</Filter>
+    </ClCompile>
+    <ClCompile Include="txmlreader.cpp">
+      <Filter>Source Files\IO\Literacy\XML</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
