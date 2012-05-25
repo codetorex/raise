@@ -315,6 +315,43 @@ public:
 		Data[ByteLength] = 0;
 	}
 
+	inline bool IsASCII()
+	{
+		return (ByteLength == Length);
+	}
+
+	void ToLower()
+	{
+		if (!IsASCII())
+		{
+			// call ToLowerUnicode
+			LowLevelNotImplemented();
+			return;
+		}
+
+		for (ui32 i=0;i<ByteLength;i++)
+		{
+			TChar ch = Data[i];
+			Data[i] = ch.ToLower();
+		}
+	}
+
+	void ToUpper()
+	{
+		if (!IsASCII())
+		{
+			// call ToLowerUnicode
+			LowLevelNotImplemented();
+			return;
+		}
+
+		for (ui32 i=0;i<ByteLength;i++)
+		{
+			TChar ch = Data[i];
+			Data[i] = ch.ToUpper();
+		}
+	}
+
 	string ToString();
 
 	string ToString(int startIndex, int length);

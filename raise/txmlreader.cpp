@@ -12,6 +12,11 @@ void TXMLReader::Parse( bool closeStream /*= true*/ )
 {
 	SkipToNodeStart();
 	ParseNode(RootNode);
+
+	if (closeStream)
+	{
+		TextStream->Close();
+	}
 }
 
 int TXMLReader::ParseAttributes( TXMLNode& node )
@@ -125,6 +130,43 @@ TString TXMLReader::SkipToNodeStart()
 	TString mainInterrupt = "<";
 	int interrupt;
 	return TextStream->ReadInterrupted(mainInterrupt,TString::Empty,interrupt);
+}
+
+TXMLNode* TXMLNode::SelectSingleNode( const TString& xpath )
+{
+	if (xpath.IndexOf("/") > -1)
+	{
+		// split it and find it
+		ch32 delim = '/';
+		TArray<ch32> delimeter(&delim,1);
+		TArray< TString* > splitResult =  xpath.Split(delimeter);
+
+		TXMLNode* curNode = this;
+		for (int i=0;i<splitResult.Count;i++)
+		{
+			curNode = curNode->SelectSingleNode(*splitResult.Item[i]);
+			if (curNode == 0)
+			{
+				return 0; // not found
+			}
+		}
+		return curNode;
+	}
+
+	TString find = xpath;
+	TXMLNode* result = 0;
+
+	TArrayEnumerator<TXMLNode*> ae(Nodes);
+	while(ae.MoveNext())
+	{
+		if (ae.Current->Name == find)
+		{
+			result = ae.Current;
+			break;
+		}
+	}
+
+	return result;
 }
 
 void TXMLNode::Deserialize( TMemberInfo* minfo, void* object )

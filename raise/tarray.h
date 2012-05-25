@@ -297,7 +297,7 @@ public:
 		}
 	}
 
-	inline T& operator [] (ui32 index)
+	inline T& operator[] (ui32 index)
 	{
 		if ( index > Count )
 		{

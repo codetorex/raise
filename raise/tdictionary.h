@@ -30,7 +30,7 @@ public:
 	T Get(const TString& key)
 	{
 		int page = MOD32(key.Data[0]);
-		for (int i=0;i<Map[page].values.Count;i++)
+		for (int i=0;i<Map[page].Values.Count;i++)
 		{
 			TKeyValue<TString,T>* curKV = Map[page].Values.Item[i];
 			if (curKV->Key == key)
@@ -53,6 +53,11 @@ public:
 		Map[Page].Values.Add(newKV);
 		totalValues++;
 	}
+
+	inline T operator[] (const TString& key)
+	{
+		return Get(key);
+	}
 };
 
 template <class T>
@@ -61,8 +66,8 @@ class TDictionaryEnumerator: public TEnumerator< TKeyValue<TString,T>* >
 public:
 
 	TDictionary<T>* d;
-	int curMap;
-	int curItem;
+	ui32 curMap;
+	ui32 curItem;
 
 	inline TDictionaryEnumerator( TDictionary<T>* dict ) 
 	{

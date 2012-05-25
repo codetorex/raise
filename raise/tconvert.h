@@ -81,7 +81,11 @@ public:
 
 	static int ToInt32(const TString& value);
 
-	static int  ToInt32Ambiguous(const TString& value, int startIndex, int* numLength = 0, bool skipBegin = true);
+	static ui32 DecodeHexChar(char val);
+
+	static ui32 ToUInt32Hex(const TString& value);
+
+	static int ToInt32Ambiguous(const TString& value, int startIndex, int* numLength = 0, bool skipBegin = true);
 };
 
 typedef TConvert Convert;

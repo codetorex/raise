@@ -58,5 +58,8 @@
     <ClInclude Include="test_xml.h">
       <Filter>Tests</Filter>
     </ClInclude>
+    <ClInclude Include="test_convert.h">
+      <Filter>Tests</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>

@@ -24,6 +24,11 @@ public:
 	}
 
 	void Deserialize(TMemberInfo* minfo, void* object);
+
+	/**
+	 * Currently only supports simple node stuff like y/x/z
+	 */
+	TXMLNode* SelectSingleNode(const TString& xpath);
 };
 
 class TXMLReader

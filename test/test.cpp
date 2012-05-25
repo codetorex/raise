@@ -15,6 +15,7 @@
 #include "test_color.h"
 #include "test_bitmap.h"
 #include "test_xml.h"
+#include "test_convert.h"
 
 // TODO: test string builder
 // there is an error in string builder, when you pass sfu(4245,-3) it crashes
@@ -121,6 +122,7 @@ int main(int argc,char** argv)
 	suite.AddTest(&TQueueCheck);
 	suite.AddTest(&TGraphicsBitmapCheck);
 	suite.AddTest(&TXMLCheck);
+	suite.AddTest(&TConvertCheck);
 
 	suite.RunSuite();
 	

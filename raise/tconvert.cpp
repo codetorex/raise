@@ -99,3 +99,49 @@ int TConvert::ToInt32( const TString& value )
 	}
 	throw Exception("Problem in int");
 }
+
+ui32 TConvert::ToUInt32Hex( const TString& value )
+{
+	if (!value.IsASCII())
+	{
+		throw Exception("Problem in hex");
+	}
+
+	TStringBuilderStack<32> sb;
+	sb.Append(value);
+	const byte* sbData = sb.GetData();
+
+	int rem = value.Length;
+	if (sbData[1] == 'x' || sbData[1] == 'X')
+	{
+		sbData += 2;
+		rem -= 2;
+	}
+
+	ui32 result = 0;
+	for (int i=0;i<rem;i++)
+	{
+		result <<= 4; // it gives us 4 bits
+		ui32 val = DecodeHexChar(sbData[i]);
+		result |= val;
+	}
+
+	return result;
+}
+
+ui32 TConvert::DecodeHexChar( char val )
+{
+	if (val >= '0' && val <= '9')
+	{
+		return val - '0';
+	}
+	else if (val >= 'a' && val <= 'f')
+	{
+		return (val - 'a') + 10;
+	}
+	else if (val >= 'A' && val <= 'F')
+	{
+		return (val - 'A') + 10;
+	}
+	throw Exception("Wrong hex value");
+}

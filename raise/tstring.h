@@ -636,6 +636,11 @@ public:
 		return result;
 	}*/
 
+	inline bool operator != (const TString& value) const
+	{
+		return !(*this == value);
+	}
+
 	inline bool operator == (const TString& value) const
 	{
 		if (value.ByteLength != ByteLength)
