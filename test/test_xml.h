@@ -55,7 +55,20 @@ public:
 		AddResult(xr.RootNode.Name == "xmlbase", "Xml writer/reader root node name");
 		AddResult(xr.RootNode.Nodes.Count == 15, "Xml writer/reader root's child node count");
 
-		TFileStream* tsf = File::OpenWrite("output.txt");
+		TXMLNode* singleNode = xr.RootNode.SelectSingleNode("host");
+
+		AddResult(singleNode != 0, "Select single node existing node");
+
+		AddResult(singleNode && singleNode->Nodes.Count == 2, "Selected node child count");
+		AddResult(singleNode && singleNode->Nodes.GetLast()->Name == "FakeID", "Selected node last child");
+
+
+
+		singleNode = xr.RootNode.SelectSingleNode("dafaf");
+
+		AddResult(singleNode == 0, "Select single node not existing node");
+
+		/*TFileStream* tsf = File::OpenWrite("output.txt");
 		TStreamWriterUTF8* ts = new TStreamWriterUTF8(tsf);
 
 		currentLevel = 0;
@@ -71,10 +84,10 @@ public:
 		TStreamWriterUTF8* ts2 = new TStreamWriterUTF8(tsf2);
 		currentLevel = 0;
 		DumpNode(ts2,xr2.RootNode);
-		tsf2->Close();
+		tsf2->Close();*/
 	}
 
-	int currentLevel;
+	/*int currentLevel;
 	void DumpNode(TStreamWriterUTF8* ts, TXMLNode& xn)
 	{
 		TStringBuilderStack<512> sb;
@@ -122,7 +135,7 @@ public:
 		}
 
 		currentLevel--;
-	}
+	}*/
 
 } TXMLCheck;
 

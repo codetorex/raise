@@ -19,6 +19,16 @@ public:
 	/// Where actual draw and event handling occurs
 	IRegion DrawRegion;
 
+	void AlignBox(TBoxModel& srcBox, Alignment alignment)
+	{
+		int tempWidth = srcBox.Width;
+		int tempHeight = srcBox.Height;
+		srcBox.Inflate(srcBox.Margin); // we should count the margin of the item
+		Align(srcBox,alignment);
+		srcBox.Width = tempWidth;
+		srcBox.Height = tempHeight;
+	}
+
 	/**
 	 * Call this after Margin, Padding , Border Width or Height changes.
 	 */

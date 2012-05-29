@@ -11,9 +11,19 @@ public:
 	T Right;
 	T Bottom;
 
-	MPadding2()
+	inline MPadding2()
 	{
 		SetPadding(0);
+	}
+
+	inline MPadding2(T pad)
+	{
+		SetPadding(pad);
+	}
+
+	inline MPadding2(T pLeft, T pTop, T pRight, T pBottom)
+	{
+		SetPadding(pLeft,pTop,pRight,pBottom);
 	}
 
 	MPadding2<T>& operator += (const MPadding2<T>& other)
@@ -47,6 +57,14 @@ public:
 		Top = pTop;
 		Right = pRight;
 		Bottom = pBottom;
+	}
+
+	inline void SetPadding( const MPadding2<T>& other)
+	{
+		Left = other.Left;
+		Right = other.Right;
+		Top = other.Top;
+		Bottom = other.Bottom;
 	}
 
 	inline T RemainingWidth(T totalWidth) const

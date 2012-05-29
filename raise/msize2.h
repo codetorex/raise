@@ -36,19 +36,19 @@ public:
 		return result;
 	}
 
-	inline T XFromRatio(float xratio) const
+	inline T GetXFromRatio(float xratio) const
 	{
 		return (T)(xratio * (float)Width);
 	}
 
-	inline T YFromRatio(float yratio) const
+	inline T GetYFromRatio(float yratio) const
 	{
 		return (T)(yratio * (float)Height);
 	}
 
 	inline MVector2<T> VectorFromRatio(float xratio, float yratio) const
 	{
-		return MVector2<T>(XFromRatio(xratio),YFromRatio(yratio));
+		return MVector2<T>(GetXFromRatio(xratio),GetYFromRatio(yratio));
 	}
 
 	inline T Area() const

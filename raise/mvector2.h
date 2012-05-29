@@ -42,7 +42,7 @@ public:
 		Y = y_;
 	}
 
-	inline void AddVector( T x_, T y_)
+	inline void TranslateVector( T x_, T y_)
 	{
 		X += x_;
 		Y += y_;

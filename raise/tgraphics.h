@@ -43,6 +43,12 @@ public:
 	int Size;
 };
 
+
+/**
+ * Create a class named Drawable or something with draw function that takes a TGraphics as input
+ * so we can abstractise TBitmap usage in here and can use this TGraphics interface as VDraw
+ */
+
 /**
  * Somewhat TBitmapBuilder lol or TCanvas?
  * http://msdn.microsoft.com/en-us/library/system.drawing.graphics.aspx
@@ -81,6 +87,12 @@ public:
 
 	virtual void FlipVertical() = 0;
 
+	virtual void SetClip(const IRectangle& rect) = 0;
+
+	virtual void TranslateClip(int x, int y) = 0;
+
+	virtual void ResetClip() = 0;
+
 	inline void DrawImage2(TBitmap& bmp, int dstX, int dstY, int srcX, int srcY)
 	{
 		DrawImage(bmp,dstX,dstY,srcX,srcY,bmp.Width,bmp.Height);
@@ -94,6 +106,11 @@ public:
 	inline void DrawImage2(TBitmap& bmp, IPosition& pos)
 	{
 		DrawImage2(bmp,pos.X,pos.Y,0,0);
+	}
+
+	inline void FillRectangle2( TBrush& brush, const IRectangle& rect)
+	{
+		FillRectangle(brush,rect.X,rect.Y,rect.Width,rect.Height);
 	}
 
 	//virtual void DrawString(const TString& s, TFont& font, TBrush& brush, float x, float y) = 0;
@@ -162,6 +179,8 @@ public:
 	IPosition Translation;
 	TBlendMode* BlendMode;
 
+	IRectangle ClipRect;
+
 
 	TBitmapGraphics()
 	{
@@ -172,6 +191,31 @@ public:
 	{
 		Initialize(_bitmap);
 		SetBlending(&TBlendModes::Copy);
+	}
+
+	void SetClip(const IRectangle& rect)
+	{
+		ClipRect = rect;
+	}
+
+	void ResetClip()
+	{
+		ClipRect.SetRectangle(0,0,Bitmap->Width,Bitmap->Height);
+	}
+
+	void TranslateClip(int x, int y)
+	{
+		ClipRect.TranslateVector(x,y);
+
+		if (ClipRect.Right() > Bitmap->Width)
+		{
+			ClipRect.Width = Bitmap->Width - ClipRect.X;
+		}
+
+		if (ClipRect.Bottom() > Bitmap->Height)
+		{
+			ClipRect.Height = Bitmap->Height - ClipRect.Y;
+		}
 	}
 
 	inline void SetBlending(TBlendMode* op)
@@ -240,6 +284,27 @@ public:
 		for (int my = y; my < limit; my++)
 		{
 			DrawHorizontalLine(pn,x,my,width);
+		}
+	}
+
+	void DrawDottedVerticalLine(const TColor32& color, int x, int y, int height)
+	{
+		TranslateClampCoord(x,y);
+		int ender = y + height;
+		for(y++;y<ender;y+=2)
+		{
+			SetPixel(x,y,color);
+		}
+	}
+
+	void DrawDottedHorizontalLine(const TColor32& color, int x, int y, int width)
+	{
+		TranslateClampCoord(x,y);
+		int ender = x + width;
+
+		for(x++;x<ender;x+=2)
+		{
+			SetPixel(x,y,color);
 		}
 	}
 

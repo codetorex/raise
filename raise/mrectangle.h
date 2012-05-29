@@ -5,6 +5,20 @@
 #include "msize2.h"
 #include "mpadding2.h"
 
+
+enum Alignment
+{
+	CA_TopLeft,
+	CA_TopCenter,
+	CA_TopRight,
+	CA_MiddleLeft,
+	CA_MiddleCenter,
+	CA_MiddleRight,
+	CA_BottomLeft,
+	CA_BottomCenter,
+	CA_BottomRight,
+};
+
 /**
  * Rectangle is something already 2d. NO need to append 2 to its name right?
  */
@@ -28,6 +42,68 @@ public:
 		Y = ry;
 		Width = rw;
 		Height = rh;
+	}
+
+	/**
+	 * Aligns a rectangle inside this rectangle
+	 */
+	void Align(MRectangle<T>& srcRect, Alignment alignment) const
+	{
+		switch(alignment)
+		{
+		case CA_TopLeft:
+			srcRect.X = 0;
+			srcRect.Y = 0;
+			return;
+
+		case CA_TopCenter:
+			srcRect.X = (Width - srcRect.Width) / 2;
+			srcRect.Y = 0;
+
+		case CA_TopRight:
+			srcRect.X = Width - srcRect.Width;
+			srcRect.Y = 0;
+			return;
+
+		case CA_MiddleLeft:
+			srcRect.X = 0;
+			srcRect.Y = (( Height - srcRect.Height ) / 2);
+			return;
+
+		case CA_MiddleCenter:
+			srcRect.X = ((Width - srcRect.Width) / 2);
+			srcRect.Y = (( Height - srcRect.Height ) / 2);
+			return;
+
+		case CA_MiddleRight:
+			srcRect.X = Width - srcRect.Width;
+			srcRect.Y = (( Height - srcRect.Height ) / 2);
+			return;
+
+		case CA_BottomLeft:
+			srcRect.X = 0;
+			srcRect.Y = ( Height ) - srcRect.Height;
+			return;
+
+		case CA_BottomCenter:
+			srcRect.X = ((Width - srcRect.Width) / 2);
+			srcRect.Y = Height - srcRect.Height;
+			return;
+
+		case CA_BottomRight:
+			srcRect.X = Width - srcRect.Width;
+			srcRect.Y = Height - srcRect.Height;
+			return;
+		}
+	}
+
+	/**
+	 * Aligns a rectangle outside of this rectangle
+	 */
+	void AlignOutside(MRectangle<T>& srcRect, Alignment alignment) const
+	{
+		Align(srcRect,alignment);
+		srcRect.TranslateVector(X,Y);
 	}
 
 	inline void MoveX( T x_)
@@ -128,6 +204,34 @@ public:
 		Y -= infHeight;
 		Width += infWidth * 2;
 		Height += infHeight * 2;
+	}
+
+	inline T CenterX()
+	{
+		return X + (Width / 2);
+	}
+
+	inline T CenterY()
+	{
+		return Y + (Height / 2);
+	}
+
+	inline bool IsInside(T pX, T pY) const
+	{
+		if (pX >= X && pX < Right())
+		{
+			if (pY >= Y && pY < Bottom())
+			{
+				return true;
+			}
+		}
+
+		return false;
+	}
+
+	inline bool IsColliding(const MRectangle<T>& r2)
+	{
+		return ! ( r2.X > Right() || r2.Right() < X || r2.Y > Bottom() || r2.Bottom() < Y );
 	}
 };
 

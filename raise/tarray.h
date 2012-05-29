@@ -20,21 +20,21 @@ public:
 	ui32	Count;
 	ui32	Capacity;
 
-	TArray()
+	inline TArray()
 	{
 		Item = 0;
 		Capacity = 0;
 		Count = 0;
 	}
 
-	TArray(int size)
+	inline TArray(int size)
 	{
 		Item = 0;
 		Allocate(size);
 		Count = 0;
 	}
 
-	TArray( const T* data )
+	inline TArray( const T* data )
 	{
 		Item = (T*)data;
 		Count = CountOfZeroEnding(data);
@@ -44,14 +44,14 @@ public:
 	/**
 	 * Constructs a static array.
 	 */
-	TArray( T* data, int dataCount)
+	inline TArray( T* data, int dataCount)
 	{
 		Item = data;
 		Count = dataCount;
 		Capacity = 0;
 	}
 
-	TArray( const TArray<T>& cpy )
+	inline TArray( const TArray<T>& cpy )
 	{
 		Item = 0;
 		Count = 0;
@@ -60,7 +60,7 @@ public:
 		Count = cpy.Count;
 	}
 
-	~TArray()
+	inline ~TArray()
 	{
 		Free();
 		Item = 0;
@@ -68,7 +68,7 @@ public:
 		Capacity = 0;
 	}
 
-	void DeletePointers()
+	inline void DeletePointers()
 	{
 		for (ui32 i=0;i<Count;i++)
 		{
@@ -250,11 +250,13 @@ public:
 		return;
 	}
 
-	void Clear()
+	inline void Clear()
 	{
-		assert(Capacity != 0);
-
-		memset(Item,NULL, sizeof(T) * Count);
+		//assert(Capacity != 0);
+		if (Capacity)
+		{
+			memset(Item,NULL, sizeof(T) * Count);
+		}
 		Count = 0;
 	}
 
@@ -276,7 +278,7 @@ public:
 		Item[Count++] = value;
 	}
 
-	bool Contains(T value)
+	inline bool Contains(T value)
 	{
 		int i = LastIndexOf(value);
 		if (i != -1)

@@ -28,6 +28,22 @@ protected:
 
 public:
 
+	/**
+	 * Aligns a rectangle inside this rectangle
+	 */
+	inline void Align(MRectangle<T>& srcRect, Alignment alignm) const
+	{
+		Rect.Align(srcRect,alignm);
+	}
+
+	/**
+	 * Aligns a rectangle outside of this rectangle
+	 */
+	inline void AlignOutside(MRectangle<T>& srcRect, Alignment alignm) const
+	{
+		Rect.AlignOutside(srcRect,alignm);
+	}
+
 	inline T Width() const
 	{
 		return Rect.Width;
