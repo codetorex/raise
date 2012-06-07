@@ -178,13 +178,25 @@ public:
 	}
 };
 
+class TSerializable
+{
+public:
+	virtual TMemberInfo* GetMemberInfo() = 0;
+};
+
 /**
 * Serialize interface that serializes the objects.
 */
 class TSerializer
 {
 public:
-	virtual void Serialize(TMemberInfo* minfo, void* object) = 0;
+	virtual void SerializeObject(TMemberInfo* minfo, void* object) = 0;
+
+	inline void Serialize(TSerializable* obj)
+	{
+		TMemberInfo* minfo = obj->GetMemberInfo();
+		SerializeObject(minfo,obj);
+	}
 };
 
 /**
@@ -193,7 +205,13 @@ public:
 class TDeserializer
 {
 public:
-	virtual void Deserialize(TMemberInfo* minfo, void* object) = 0;
+	virtual void DeserializeObject(TMemberInfo* minfo, void* object) = 0;
+	
+	inline void Deserialize(TSerializable* obj)
+	{
+		TMemberInfo* minfo = obj->GetMemberInfo();
+		DeserializeObject(minfo,obj);
+	}
 };
 
 

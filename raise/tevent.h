@@ -253,7 +253,6 @@ public:
 		HandlerCount = 0;
 	}
 
-
 	event& operator += (T* handler)
 	{
 		Handlers[HandlerCount++] = handler;

@@ -269,6 +269,14 @@ public:
 		InternalAppendPadded(value.Data,value.ByteLength,value.Length,padlength,padchar,truncate);
 	}
 
+	/**
+	 * Appends stringBUilder value left padded.
+	 */
+	inline void AppendPadded(const TStringBuilder& value,int padlength, char padchar = ' ', bool truncate = false)
+	{
+		InternalAppendPadded(value.Data,value.ByteLength,value.Length,padlength,padchar,truncate);
+	}
+
 	inline void AppendLine()
 	{
 		AppendChar('\n');

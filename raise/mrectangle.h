@@ -72,7 +72,7 @@ public:
 
 		case CA_MiddleCenter:
 			srcRect.X = ((Width - srcRect.Width) / 2);
-			srcRect.Y = (( Height - srcRect.Height ) / 2);
+			srcRect.Y = ((Height - srcRect.Height ) / 2);
 			return;
 
 		case CA_MiddleRight:

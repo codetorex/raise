@@ -90,7 +90,7 @@ void TRMLWriter::Close()
 	UTF8Writer->Close();
 }
 
-void TRMLWriter::Serialize( TMemberInfo* minfo, void* object )
+void TRMLWriter::SerializeObject( TMemberInfo* minfo, void* object )
 {
 	if (minfo->ObjectName != 0)
 	{
@@ -161,7 +161,7 @@ void TRMLWriter::SerializeArray( TMember* curMember, void* object )
 		TArray< void* >* arrayMember = (TArray< void* >*)object;
 		for (ui32 i=0;i<arrayMember->Count;i++)
 		{
-			Serialize(curMember->ObjectInfo, arrayMember->Item[i]);
+			SerializeObject(curMember->ObjectInfo, arrayMember->Item[i]);
 		}
 		break;
 	}

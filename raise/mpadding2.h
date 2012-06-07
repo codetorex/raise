@@ -76,6 +76,16 @@ public:
 	{
 		return totalHeight - (Top + Bottom);
 	}
+
+	inline T TotalVerticalPad() const
+	{
+		return Top + Bottom;
+	}
+
+	inline T TotalHorizontalPad() const
+	{
+		return Left + Right;
+	}
 };
 
 typedef MPadding2<int> IPadding;

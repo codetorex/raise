@@ -102,6 +102,9 @@
     <Filter Include="Source Files\System\Threading">
       <UniqueIdentifier>{b49b2df6-99dd-4658-b0bd-a1267fdca01c}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Source Files\IO\Literacy\CSS">
+      <UniqueIdentifier>{10208ff8-483d-408e-962f-1443d3f33f65}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="tlinkedlist.h">
@@ -626,6 +629,9 @@
     <ClInclude Include="txmlreader.h">
       <Filter>Source Files\IO\Literacy\XML</Filter>
     </ClInclude>
+    <ClInclude Include="tcssreader.h">
+      <Filter>Source Files\IO\Literacy\CSS</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">
@@ -813,6 +819,9 @@
     </ClCompile>
     <ClCompile Include="txmlreader.cpp">
       <Filter>Source Files\IO\Literacy\XML</Filter>
+    </ClCompile>
+    <ClCompile Include="tcssreader.cpp">
+      <Filter>Source Files\IO\Literacy\CSS</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

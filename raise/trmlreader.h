@@ -25,7 +25,7 @@ public:
 		Name = NodeName;
 	}
 
-	void Deserialize(TMemberInfo* minfo, void* object);
+	void DeserializeObject(TMemberInfo* minfo, void* object);
 };
 
 class TRMLReader

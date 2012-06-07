@@ -23,7 +23,7 @@ public:
 		newChild->Parent = this;
 	}
 
-	void Deserialize(TMemberInfo* minfo, void* object);
+	void DeserializeObject(TMemberInfo* minfo, void* object);
 
 	/**
 	 * Currently only supports simple node stuff like y/x/z

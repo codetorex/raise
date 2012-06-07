@@ -161,6 +161,7 @@
     <ClInclude Include="tbitmapwriterparameters.h" />
     <ClInclude Include="tblend.h" />
     <ClInclude Include="tboxmodel.h" />
+    <ClInclude Include="tcssreader.h" />
     <ClInclude Include="thexdump.h" />
     <ClInclude Include="tioservice.h" />
     <ClInclude Include="tioserviceiocp.h" />
@@ -305,6 +306,7 @@
     <ClCompile Include="nuri.cpp" />
     <ClCompile Include="tbitmapcodecs.cpp" />
     <ClCompile Include="tblend.cpp" />
+    <ClCompile Include="tcssreader.cpp" />
     <ClCompile Include="texception.cpp" />
     <ClCompile Include="tgraphics.cpp" />
     <ClCompile Include="tioserviceiocp.cpp" />

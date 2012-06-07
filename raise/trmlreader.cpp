@@ -100,7 +100,7 @@ void TRMLReader::Parse( bool closeStream )
 	}
 }
 
-void TRMLNode::Deserialize( TMemberInfo* minfo, void* object )
+void TRMLNode::DeserializeObject( TMemberInfo* minfo, void* object )
 {
 
 }

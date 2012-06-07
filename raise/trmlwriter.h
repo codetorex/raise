@@ -30,7 +30,7 @@ public:
 	void Close();
 
 	void SerializeArray(TMember* curMember, void* object);
-	void Serialize(TMemberInfo* minfo, void* object);
+	void SerializeObject(TMemberInfo* minfo, void* object);
 };
 
 #endif

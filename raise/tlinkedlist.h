@@ -175,7 +175,7 @@ public:
 	/**
 	 * Clears all sub items, warning POINTERS STILL REMAINS
 	 */
-	void Clear()
+	void ClearSubItems()
 	{
 		FirstItem = 0;
 		LastItem = 0;
