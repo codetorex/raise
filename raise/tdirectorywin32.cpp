@@ -103,8 +103,25 @@ nextfile:
 			}
 			else
 			{
+				// SKIP . and .. Folders, isn't this dumb to have these in first place Microsoft?
+				if (ffd.cFileName[0] == '.')
+				{
+					if (ffd.cFileName[1] == '.')
+					{
+						if (ffd.cFileName[2] == 0)
+						{
+							return MoveNext();
+						}
+					}
+					else if (ffd.cFileName[1] == 0)
+					{
+						return MoveNext();
+					}
+				}
+
 				CurDirectory.FullPath.TruncateDerived(ParentInfo->FullPath);
 				CurDirectory.FullPath += ffd.cFileName;
+				CurDirectory.FullPath.AppendASCII(TPath::DirectorySeprator);
 				return true;
 			}
 		}

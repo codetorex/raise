@@ -7,6 +7,7 @@
 
 #include "texception.h"
 
+
 /*
  *TODO: Abstractise platform specific functions in single file?
  
@@ -92,6 +93,8 @@ public:
 	{
 		return TString::Format("(%) %",sfu(error),sfs(ErrorToString(error)));
 	}
+
+	static bool BrowseFolder(const TString& startPath, TString& OUT selectedPath);
 };
 
 #endif // WIN32

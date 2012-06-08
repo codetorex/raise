@@ -285,12 +285,14 @@ public:
 	static TString GetDirectoryName(TString& path)
 	{
 		int f = path.Length;
+		TCharacterReverseEnumerator schars(path);
+
 		if (IsDirectorySeprator(path.GetLast()))
 		{
 			f--;
+			schars.MoveNext();
 		}
-
-		TCharacterReverseEnumerator schars(path);
+		
 		while(schars.MoveNext())
 		{
 			if (IsDirectorySeprator(schars.Current))
@@ -430,6 +432,9 @@ public:
 		path += DirectorySeprator;
 	}
 
+	/**
+	 * Retrieves full path for given relative path
+	 */
 	static TString GetFullPath(const TString& path)
 	{	
 		// TODO: resolve relativity.
