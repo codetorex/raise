@@ -169,7 +169,7 @@ TXMLNode* TXMLNode::SelectSingleNode( const TString& xpath )
 	return result;
 }
 
-void TXMLNode::DeserializeObject( TMemberInfo* minfo, void* object )
+void TXMLNode::DeserializeObject( TType* minfo, void* object )
 {
 
 }

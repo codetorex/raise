@@ -2,12 +2,12 @@
 #include "txmlwriter.h"
 
 
-void TXMLWriter::SerializeArray( TMember* curMember, void* object )
+void TXMLWriter::SerializeArray( TFieldInfo* curMember, void* object )
 {
 
 }
 
-void TXMLWriter::SerializeObject( TMemberInfo* minfo, void* object )
+void TXMLWriter::SerializeObject( TType* minfo, void* object )
 {
 	if(minfo->ObjectName)
 	{
@@ -26,7 +26,7 @@ void TXMLWriter::SerializeObject( TMemberInfo* minfo, void* object )
 
 	throw NotImplementedException();
 
-	TArrayEnumerator<TMember*> ae(minfo->Members);
+	TArrayEnumerator<TFieldInfo*> ae(minfo->Fields);
 	while(ae.MoveNext())
 	{
 		if (ae.Current->MemberType != MT_ARRAY)

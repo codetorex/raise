@@ -90,7 +90,7 @@ void TRMLWriter::Close()
 	UTF8Writer->Close();
 }
 
-void TRMLWriter::SerializeObject( TMemberInfo* minfo, void* object )
+void TRMLWriter::SerializeObject( TType* minfo, void* object )
 {
 	if (minfo->ObjectName != 0)
 	{
@@ -108,9 +108,9 @@ void TRMLWriter::SerializeObject( TMemberInfo* minfo, void* object )
 	}
 	
 
-	for (ui32 i=0;i<minfo->Members.Count;i++)
+	for (ui32 i=0;i<minfo->Fields.Count;i++)
 	{
-		TMember* curMember = minfo->Members.Item[i];
+		TFieldInfo* curMember = minfo->Fields.Item[i];
 		if (curMember->MemberType != MT_ARRAY)
 		{
 			WriteKeyPart(curMember->Name);
@@ -151,7 +151,7 @@ void TRMLWriter::SerializeObject( TMemberInfo* minfo, void* object )
 	}
 }
 
-void TRMLWriter::SerializeArray( TMember* curMember, void* object )
+void TRMLWriter::SerializeArray( TFieldInfo* curMember, void* object )
 {
 	WriteElementStart( curMember->Name );
 

@@ -5,6 +5,7 @@
 #include "texception.h"
 #include "tarray.h"
 
+/// TODO: these guys should be TTypeInfo too
 enum MemberTypes
 {
 	MT_NONE,
@@ -23,72 +24,102 @@ enum MemberTypes
 	MT_ARRAY,
 };
 
-class TMemberInfo;
+class TType;
+class TFieldInfo;
 
-class TMember
-{
-public:
-	MemberTypes MemberType; // it can be, int float or something or TArray
-	MemberTypes MemberSubtype; // if type is array or something, this will be indicate type of array
-	TMemberInfo* ObjectInfo; // if anyof types uses MT_OBJECT, then this should be set
-	
-	int ID;
-	int Offset;
-	TString Name;
-
-	TString* GetStringPtr(void* object)
-	{
-		return (TString*)((byte*)object + Offset);
-	}
-
-	bool* GetBoolPtr(void* object)
-	{
-		return (bool*)((byte*)object + Offset);
-	}
-
-	int* GetIntPtr(void* object)
-	{
-		return (int*)((byte*)object + Offset);
-	}
-
-	void* GetVoidPtr(void* object)
-	{
-		return (void*)((byte*)object + Offset);
-	}
-
-	void** GetPtrPtr(void* object)
-	{
-		return (void**)((byte*)object + Offset);
-	}
-};
 
 /**
 * Will hold the object member info.
 */
-class TMemberInfo
+class TType
 {
 public:
-	TMember* ObjectName;
-	TArray< TMember* > Members;
+	TString Name;
+	TString FullName;
 
-	TMemberInfo()
+	TArray< TFieldInfo* > Fields;
+
+	bool IsSimple;
+
+	bool IsClass;
+	bool IsTemplate;
+	TType* TemplateType;
+	TType* BaseClass;
+
+	/// Size that holds in memory
+	ui32 Size;
+
+	TType()
 	{
-		ObjectName = 0;
+		
+		BaseClass = 0;
+		TemplateType = 0;
+		IsTemplate = false;
+		IsClass = false;
+		IsSimple = false;
+		Size = 0;
 	}
 };
 
-class TMemberInfoBuilder
+class TSystemTypes
 {
 public:
-	TMemberInfo*	TargetInfo;
-	void*			RelativeObject;
+	TType ST_Bool;
+	
+	TType ST_Int8;
+	TType ST_UInt8;
+	
+	TType ST_Int16;
+	TType ST_UInt16;
+	
+	TType ST_Int32;
+	TType ST_UInt32;
+	
+	TType ST_Float;
+	TType ST_Double;
 
-	TMemberInfoBuilder(TMemberInfo* _Target)
+	TType ST_Array;
+	TType ST_String;
+};
+
+class TFieldInfo
+{
+public:
+	int Offset;
+	TType* FieldType;
+	TString Name;
+	ui32 ID;
+
+	inline void* GetPointer(void* object)
+	{
+		return (void*)((byte*)object + Offset);
+	}
+
+	inline void GetValue(void* object, void* output)
+	{
+		void* trg = GetPointer(object);
+		MemoryDriver::ShortCopy(output,trg, FieldType->Size);
+	}
+
+	inline void SetValue(void* object, void* input)
+	{
+		void* trg = GetPointer(object);
+		MemoryDriver::ShortCopy(trg,input, FieldType->Size);
+	}
+};
+
+class TTypeBuilder
+{
+public:
+	TType*	TargetInfo;
+	void*	RelativeObject;
+
+	TTypeBuilder(TType* _Target)
 	{
 		TargetInfo = _Target;
 	}
 
-	TMemberInfoBuilder(TMemberInfo* _Target, void* _RelativeObject)
+	TTypeBuilder(TType* _Target, void* _RelativeObject)
 	{
 		TargetInfo = _Target;
 		RelativeObject = _RelativeObject;
@@ -104,10 +135,10 @@ public:
 		return (int)((byte*)member - (byte*)RelativeObject);
 	}
 
-	TMember* SetObjectName(const TString& value)
+	TFieldInfo* SetObjectName(const TString& value)
 	{
-		TMember* nmember = new TMember();
-		nmember->ID = TargetInfo->Members.Count;
+		TFieldInfo* nmember = new TFieldInfo();
+		nmember->ID = TargetInfo->Fields.Count;
 		nmember->MemberType = MT_NONE;
 		nmember->MemberSubtype = MT_NONE;
 		nmember->Offset = -1;
@@ -120,10 +151,10 @@ public:
 	/**
 	* Sets object name from offset. It should be TString.
 	*/
-	TMember* SetObjectName(int offset)
+	TFieldInfo* SetObjectName(int offset)
 	{
-		TMember* nmember = new TMember();
-		nmember->ID = TargetInfo->Members.Count;
+		TFieldInfo* nmember = new TFieldInfo();
+		nmember->ID = TargetInfo->Fields.Count;
 		nmember->MemberType = MT_STRING;
 		nmember->MemberSubtype = MT_NONE;
 		nmember->Offset = offset;
@@ -132,7 +163,7 @@ public:
 		return nmember;
 	}
 
-	inline TMember* SetObjectName(TString* tstrptr)
+	inline TFieldInfo* SetObjectName(TString* tstrptr)
 	{
 		return SetObjectName(GetOffset(tstrptr));
 	}
@@ -140,23 +171,23 @@ public:
 	/**
 	* Adds a member with name.
 	*/
-	TMember* AddMember(const TString& name,int offset, MemberTypes typ, MemberTypes subtyp = MT_NONE,TMemberInfo* minfo = 0)
+	TFieldInfo* AddMember(const TString& name,int offset, MemberTypes typ, MemberTypes subtyp = MT_NONE,TType* minfo = 0)
 	{
-		TMember* nmember = new TMember();
-		nmember->ID = TargetInfo->Members.Count;
+		TFieldInfo* nmember = new TFieldInfo();
+		nmember->ID = TargetInfo->Fields.Count;
 		nmember->MemberType = typ;
 		nmember->MemberSubtype = subtyp;
 		nmember->Name = name;
 		nmember->Offset = offset;
 		nmember->ObjectInfo = minfo;
-		TargetInfo->Members.Add(nmember);
+		TargetInfo->Fields.Add(nmember);
 		return nmember;
 	}
 
 	/**
 	* Adds a member with name and memberPtr.
 	*/
-	TMember* AddMember(const TString& name,void* MemberPtr, MemberTypes typ, MemberTypes subtyp = MT_NONE,TMemberInfo* minfo = 0)
+	TFieldInfo* AddMember(const TString& name,void* MemberPtr, MemberTypes typ, MemberTypes subtyp = MT_NONE,TType* minfo = 0)
 	{
 		int offset = GetOffset(MemberPtr);
 		return AddMember(name,offset,typ,subtyp,minfo);
@@ -165,15 +196,15 @@ public:
 	/**
 	* Adds a member with just ID.
 	*/
-	TMember* AddMember(int offset, MemberTypes typ, MemberTypes subtyp = MT_NONE,TMemberInfo* minfo = 0)
+	TFieldInfo* AddMember(int offset, MemberTypes typ, MemberTypes subtyp = MT_NONE,TType* minfo = 0)
 	{
-		TMember* nmember = new TMember();
-		nmember->ID = TargetInfo->Members.Count;
+		TFieldInfo* nmember = new TFieldInfo();
+		nmember->ID = TargetInfo->Fields.Count;
 		nmember->MemberType = typ;
 		nmember->MemberSubtype = subtyp;
 		nmember->Offset = offset;
 		nmember->ObjectInfo = minfo;
-		TargetInfo->Members.Add(nmember);
+		TargetInfo->Fields.Add(nmember);
 		return nmember;
 	}
 };
@@ -181,7 +212,7 @@ public:
 class TSerializable
 {
 public:
-	virtual TMemberInfo* GetMemberInfo() = 0;
+	virtual TType* GetType() = 0;
 };
 
 /**
@@ -190,11 +221,11 @@ public:
 class TSerializer
 {
 public:
-	virtual void SerializeObject(TMemberInfo* minfo, void* object) = 0;
+	virtual void SerializeObject(TType* minfo, void* object) = 0;
 
 	inline void Serialize(TSerializable* obj)
 	{
-		TMemberInfo* minfo = obj->GetMemberInfo();
+		TType* minfo = obj->GetType();
 		SerializeObject(minfo,obj);
 	}
 };
@@ -205,11 +236,11 @@ public:
 class TDeserializer
 {
 public:
-	virtual void DeserializeObject(TMemberInfo* minfo, void* object) = 0;
+	virtual void DeserializeObject(TType* minfo, void* object) = 0;
 	
 	inline void Deserialize(TSerializable* obj)
 	{
-		TMemberInfo* minfo = obj->GetMemberInfo();
+		TType* minfo = obj->GetType();
 		DeserializeObject(minfo,obj);
 	}
 };

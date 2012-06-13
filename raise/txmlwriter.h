@@ -156,8 +156,8 @@ public:
 		UTF8Writer->Close();
 	}
 
-	void SerializeArray(TMember* curMember, void* object);
-	void SerializeObject(TMemberInfo* minfo, void* object);
+	void SerializeArray(TFieldInfo* curMember, void* object);
+	void SerializeObject(TType* minfo, void* object);
 };
 
 

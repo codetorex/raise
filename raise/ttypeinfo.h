@@ -3,10 +3,10 @@
 
 #include "tstring.h"
 
-class TTypeInfo
+class TType
 {
 public:
-	TTypeInfo* Parent;
+	TType* Parent;
 	TString Name;
 };
 
