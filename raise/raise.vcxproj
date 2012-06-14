@@ -263,7 +263,7 @@
     <ClInclude Include="tregistry.h" />
     <ClInclude Include="trmlreader.h" />
     <ClInclude Include="trmlwriter.h" />
-    <ClInclude Include="tserializable.h" />
+    <ClInclude Include="tserialization.h" />
     <ClInclude Include="tsharedpointer.h" />
     <ClInclude Include="tsmartptr.h" />
     <ClInclude Include="tsort.h" />
@@ -285,6 +285,7 @@
     <ClInclude Include="tstringdriverfixedwidth.h" />
     <ClInclude Include="tstringformat.h" />
     <ClInclude Include="tstringwriter.h" />
+    <ClInclude Include="tsystem.h" />
     <ClInclude Include="ttest.h" />
     <ClInclude Include="ttestsuitereporting.h" />
     <ClInclude Include="ttextreader.h" />
@@ -292,7 +293,9 @@
     <ClInclude Include="tthread.h" />
     <ClInclude Include="tcolor.h" />
     <ClInclude Include="ttimedriver.h" />
-    <ClInclude Include="ttypeinfo.h" />
+    <ClInclude Include="ttype.h" />
+    <ClInclude Include="ttypebuilder.h" />
+    <ClInclude Include="ttypemanager.h" />
     <ClInclude Include="tutf16encoding.h" />
     <ClInclude Include="tutf8encoding.h" />
     <ClInclude Include="twintools.h" />
@@ -359,10 +362,12 @@
     <ClCompile Include="tstringbuilder.cpp" />
     <ClCompile Include="tstringdriver.cpp" />
     <ClCompile Include="tstringfixedwidth.cpp" />
+    <ClCompile Include="tsystem.cpp" />
     <ClCompile Include="ttest.cpp" />
     <ClCompile Include="ttestsuitereporting.cpp" />
     <ClCompile Include="tthread.cpp" />
     <ClCompile Include="ttimedriver.cpp" />
+    <ClCompile Include="ttypemanager.cpp" />
     <ClCompile Include="twintools.cpp" />
     <ClCompile Include="txmlreader.cpp" />
     <ClCompile Include="txmlwriter.cpp" />

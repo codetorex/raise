@@ -97,6 +97,8 @@ void TModule::SetIdentifyText()
 
 TApplication Application;
 
+#include "tsystem.h"
+
 void TApplication::Begin( TString _Name, TVersion& _Version, TString _Company )
 {
 	StartupPath = TPathDriver::CurrentDirectory();
@@ -107,6 +109,8 @@ void TApplication::Begin( TString _Name, TVersion& _Version, TString _Company )
 	Company = _Company;
 
 	SetIdentifyText();
+
+	System.Initialize(); // TODO: move this to better place
 }
 
 void TApplication::Begin( TString _Name, TVersion& _Version )

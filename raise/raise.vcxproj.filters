@@ -105,6 +105,9 @@
     <Filter Include="Source Files\IO\Literacy\CSS">
       <UniqueIdentifier>{10208ff8-483d-408e-962f-1443d3f33f65}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Source Files\System\Type">
+      <UniqueIdentifier>{706b7851-b7f1-4622-afbe-6155542a19a7}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="tlinkedlist.h">
@@ -218,9 +221,6 @@
     <ClInclude Include="tbitmapformats.h">
       <Filter>Source Files\Graphics</Filter>
     </ClInclude>
-    <ClInclude Include="ttypeinfo.h">
-      <Filter>Source Files\System</Filter>
-    </ClInclude>
     <ClInclude Include="trmlwriter.h">
       <Filter>Source Files\IO\Literacy\RML</Filter>
     </ClInclude>
@@ -295,9 +295,6 @@
     </ClInclude>
     <ClInclude Include="tcompositeconverter.h">
       <Filter>Source Files\IO\Buffer</Filter>
-    </ClInclude>
-    <ClInclude Include="tserializable.h">
-      <Filter>Source Files\IO\Literacy</Filter>
     </ClInclude>
     <ClInclude Include="tstringfixedwidth.h">
       <Filter>Source Files\String</Filter>
@@ -632,6 +629,21 @@
     <ClInclude Include="tcssreader.h">
       <Filter>Source Files\IO\Literacy\CSS</Filter>
     </ClInclude>
+    <ClInclude Include="tsystem.h">
+      <Filter>Source Files\System</Filter>
+    </ClInclude>
+    <ClInclude Include="ttype.h">
+      <Filter>Source Files\System\Type</Filter>
+    </ClInclude>
+    <ClInclude Include="ttypemanager.h">
+      <Filter>Source Files\System\Type</Filter>
+    </ClInclude>
+    <ClInclude Include="ttypebuilder.h">
+      <Filter>Source Files\System\Type</Filter>
+    </ClInclude>
+    <ClInclude Include="tserialization.h">
+      <Filter>Source Files\IO\Literacy</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">
@@ -822,6 +834,12 @@
     </ClCompile>
     <ClCompile Include="tcssreader.cpp">
       <Filter>Source Files\IO\Literacy\CSS</Filter>
+    </ClCompile>
+    <ClCompile Include="ttypemanager.cpp">
+      <Filter>Source Files\System\Type</Filter>
+    </ClCompile>
+    <ClCompile Include="tsystem.cpp">
+      <Filter>Source Files\System</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

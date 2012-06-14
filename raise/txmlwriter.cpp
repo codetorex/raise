@@ -9,7 +9,14 @@ void TXMLWriter::SerializeArray( TFieldInfo* curMember, void* object )
 
 void TXMLWriter::SerializeObject( TType* minfo, void* object )
 {
-	if(minfo->ObjectName)
+
+	WriteStartElement(minfo->Name);
+
+	throw NotImplementedException();
+
+	WriteEndElement();
+
+	/*if(minfo->ObjectName)
 	{
 		TString* objectName;
 		if (minfo->ObjectName->MemberType == MT_NONE)
@@ -45,5 +52,5 @@ void TXMLWriter::SerializeObject( TType* minfo, void* object )
 	if (minfo->ObjectName)
 	{
 		WriteEndElement();
-	}
+	}*/
 }

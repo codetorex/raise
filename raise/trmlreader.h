@@ -4,7 +4,7 @@
 #include "tstring.h"
 #include "tdictionary.h"
 #include "tstreamreader.h"
-#include "tserializable.h"
+#include "tserialization.h"
 
 class TRMLNode: public TDeserializer
 {

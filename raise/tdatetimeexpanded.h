@@ -108,7 +108,7 @@ public:
 		return strresult;
 	}
 
-	TString ToString(string format) const
+	TString ToString(const TString& format) const
 	{
 		if (format.Length == 1)
 		{

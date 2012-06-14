@@ -3,7 +3,7 @@
 
 #include "tstreamwriterutf8.h"
 #include "tstring.h"
-#include "tserializable.h"
+#include "tserialization.h"
 
 class TXMLWriter: public TSerializer
 {

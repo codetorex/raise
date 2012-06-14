@@ -90,9 +90,70 @@ void TRMLWriter::Close()
 	UTF8Writer->Close();
 }
 
+#include "ttypemanager.h"
+
 void TRMLWriter::SerializeObject( TType* minfo, void* object )
 {
-	if (minfo->ObjectName != 0)
+
+	WriteElementStart(minfo->Name);
+
+	TArrayEnumerator< TFieldInfo* > ae( minfo->Fields );
+	while(ae.MoveNext())
+	{
+		TFieldInfo* fi = ae.Current;
+		void* value = fi->GetPointer(object);
+		if (fi->FieldType->IsSimple)
+		{
+			WriteKeyPart(fi->Name);
+
+			if(fi->FieldType == Types.ST_Bool)
+			{
+				bool bval = *(bool*)value;
+				LineBuilder.Append(bval ? txtTrue : txtFalse);
+			}
+			else if (fi->FieldType == Types.ST_Int32)
+			{
+				int ival = *(int*)value;
+				LineBuilder.Append(ival);
+			}
+			else if (fi->FieldType == Types.ST_String)
+			{
+				TString* str = (TString*)value;
+				LineBuilder.Append(*str);
+			}
+
+			FinishKeyValueLine();
+		}
+		else
+		{
+			if (fi->FieldType->IsArray)
+			{
+				if (fi->FieldType->TemplateBase == Types.ST_Array)
+				{
+
+					WriteElementStart( fi->Name );
+
+					TType* itemType = fi->FieldType->TemplateArguments[0];
+					if (itemType->IsClass)
+					{
+						TArray< void* >* arry = (TArray<void*>*)fi->GetPointer(object);
+						TArrayEnumerator< void* > itms(*arry);
+						while(itms.MoveNext())
+						{
+							SerializeObject(itemType, itms.Current);
+						}
+					}
+
+					WriteElementEnd();
+				}
+				
+			}
+		}
+	}
+
+	WriteElementEnd();
+
+	/*if (minfo->ObjectName != 0)
 	{
 		TString* objectname;
 		if (minfo->ObjectName->MemberType == MT_NONE)
@@ -148,10 +209,10 @@ void TRMLWriter::SerializeObject( TType* minfo, void* object )
 	if (minfo->ObjectName != 0)
 	{
 		WriteElementEnd();
-	}
+	}*/
 }
 
-void TRMLWriter::SerializeArray( TFieldInfo* curMember, void* object )
+/*void TRMLWriter::SerializeArray( TFieldInfo* curMember, void* object )
 {
 	WriteElementStart( curMember->Name );
 
@@ -167,4 +228,4 @@ void TRMLWriter::SerializeArray( TFieldInfo* curMember, void* object )
 	}
 
 	WriteElementEnd();
-}
+}*/

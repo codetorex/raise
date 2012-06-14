@@ -3,7 +3,7 @@
 
 #include "tstreamwriterutf8.h"
 #include "tstring.h"
-#include "tserializable.h"
+#include "tserialization.h"
 
 class TRMLWriter: public TSerializer
 {
@@ -29,7 +29,7 @@ public:
 
 	void Close();
 
-	void SerializeArray(TFieldInfo* curMember, void* object);
+	//void SerializeArray(TFieldInfo* curMember, void* object);
 	void SerializeObject(TType* minfo, void* object);
 };
 

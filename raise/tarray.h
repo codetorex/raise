@@ -55,9 +55,24 @@ public:
 	{
 		Item = 0;
 		Count = 0;
-		Allocate(cpy.Capacity);
-		MemoryDriver::Copy(Item,cpy.Item,sizeof(T) * cpy.Count);
-		Count = cpy.Count;
+		if (cpy.Count)
+		{
+			if (cpy.Capacity > cpy.Count)
+			{
+				Allocate(cpy.Capacity);
+			}
+			else
+			{
+				Allocate(cpy.Count);
+			}
+			
+			MemoryDriver::Copy(Item,cpy.Item,sizeof(T) * cpy.Count);
+			Count = cpy.Count;
+		}
+		else
+		{
+			Capacity = 0;
+		}
 	}
 
 	inline ~TArray()

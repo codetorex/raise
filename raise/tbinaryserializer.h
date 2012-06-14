@@ -1,7 +1,7 @@
 #ifndef TBINARYSERIALIZER_H
 #define TBINARYSERIALIZER_H
 
-#include "tserializable.h"
+#include "tserialization.h"
 
 
 class TBinarySerializer: public TSerializer
