@@ -629,9 +629,6 @@
     <ClInclude Include="tcssreader.h">
       <Filter>Source Files\IO\Literacy\CSS</Filter>
     </ClInclude>
-    <ClInclude Include="tsystem.h">
-      <Filter>Source Files\System</Filter>
-    </ClInclude>
     <ClInclude Include="ttype.h">
       <Filter>Source Files\System\Type</Filter>
     </ClInclude>
@@ -643,6 +640,9 @@
     </ClInclude>
     <ClInclude Include="tserialization.h">
       <Filter>Source Files\IO\Literacy</Filter>
+    </ClInclude>
+    <ClInclude Include="tplatform.h">
+      <Filter>Source Files\System</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -838,7 +838,7 @@
     <ClCompile Include="ttypemanager.cpp">
       <Filter>Source Files\System\Type</Filter>
     </ClCompile>
-    <ClCompile Include="tsystem.cpp">
+    <ClCompile Include="tplatform.cpp">
       <Filter>Source Files\System</Filter>
     </ClCompile>
   </ItemGroup>

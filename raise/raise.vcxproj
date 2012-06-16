@@ -285,7 +285,7 @@
     <ClInclude Include="tstringdriverfixedwidth.h" />
     <ClInclude Include="tstringformat.h" />
     <ClInclude Include="tstringwriter.h" />
-    <ClInclude Include="tsystem.h" />
+    <ClInclude Include="tplatform.h" />
     <ClInclude Include="ttest.h" />
     <ClInclude Include="ttestsuitereporting.h" />
     <ClInclude Include="ttextreader.h" />
@@ -362,7 +362,7 @@
     <ClCompile Include="tstringbuilder.cpp" />
     <ClCompile Include="tstringdriver.cpp" />
     <ClCompile Include="tstringfixedwidth.cpp" />
-    <ClCompile Include="tsystem.cpp" />
+    <ClCompile Include="tplatform.cpp" />
     <ClCompile Include="ttest.cpp" />
     <ClCompile Include="ttestsuitereporting.cpp" />
     <ClCompile Include="tthread.cpp" />

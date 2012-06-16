@@ -97,7 +97,7 @@ void TModule::SetIdentifyText()
 
 TApplication Application;
 
-#include "tsystem.h"
+#include "tplatform.h"
 
 void TApplication::Begin( TString _Name, TVersion& _Version, TString _Company )
 {
@@ -110,7 +110,7 @@ void TApplication::Begin( TString _Name, TVersion& _Version, TString _Company )
 
 	SetIdentifyText();
 
-	System.Initialize(); // TODO: move this to better place
+	Platform.Initialize(); // TODO: move this to better place
 }
 
 void TApplication::Begin( TString _Name, TVersion& _Version )

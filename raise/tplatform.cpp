@@ -1,10 +1,10 @@
 #include "stdafx.h"
-#include "tsystem.h"
+#include "tplatform.h"
 #include "ttypemanager.h"
 
-TSystem System;
+TPlatform Platform;
 
-void TSystem::Initialize()
+void TPlatform::Initialize()
 {
 	Types.Initialize();
 }

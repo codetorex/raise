@@ -36,6 +36,12 @@ public:
 		Y = y_;
 	}
 
+	inline void SetVector(const MVector2<T>& value)
+	{
+		X = value.X;
+		Y = value.Y;
+	}
+
 	inline void SetVector( T x_,T y_ )
 	{
 		X = x_;
