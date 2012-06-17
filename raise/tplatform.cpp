@@ -6,5 +6,5 @@ TPlatform Platform;
 
 void TPlatform::Initialize()
 {
-	Types.Initialize();
+	Types.GetType("BOG");
 }

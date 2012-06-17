@@ -63,7 +63,7 @@ public:
 
 	TType()
 	{
-
+		InitializeType();
 	}
 
 	/**
@@ -71,7 +71,9 @@ public:
 	 */
 	TType( const TString& name )
 	{
-		InitializeType(name);
+		InitializeType();
+		this->Name = name;
+		this->FullName = Name;
 	}
 
 	/**
@@ -79,12 +81,14 @@ public:
 	 */
 	TType( const TString& name, ui32 size )
 	{
-		InitializeType(name);
+		InitializeType();
+		this->Name = name;
+		this->FullName = Name;
 		this->Size = size;
 		IsSimple = true;
 	}
 
-	void InitializeType(const TString& name)
+	void InitializeType()
 	{
 		PointedType = 0;
 		IsPointer = false;	
@@ -95,8 +99,8 @@ public:
 		IsClass = false;
 		IsArray = false;
 		IsSimple = false;
-		this->Name = name;
-		this->FullName = Name;
+		
+		
 	}
 	
 	/// TODO: use type registry here instead creating everytime

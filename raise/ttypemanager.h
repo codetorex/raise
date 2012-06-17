@@ -53,7 +53,7 @@ public:
 
 	TType* GetType(const TString& name)
 	{
-
+		return 0;
 	}
 };
 
