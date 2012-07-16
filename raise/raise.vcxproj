@@ -162,6 +162,7 @@
     <ClInclude Include="tblend.h" />
     <ClInclude Include="tboxmodel.h" />
     <ClInclude Include="tcssreader.h" />
+    <ClInclude Include="tenum.h" />
     <ClInclude Include="thexdump.h" />
     <ClInclude Include="tioservice.h" />
     <ClInclude Include="tioserviceiocp.h" />
@@ -245,6 +246,7 @@
     <ClInclude Include="tloghtml.h" />
     <ClInclude Include="tlogstream.h" />
     <ClInclude Include="mpadding2.h" />
+    <ClInclude Include="tmemorywriter.h" />
     <ClInclude Include="tresetevent.h" />
     <ClInclude Include="tmemorydriver.h" />
     <ClInclude Include="tmemorystream.h" />

@@ -644,6 +644,12 @@
     <ClInclude Include="tplatform.h">
       <Filter>Source Files\System</Filter>
     </ClInclude>
+    <ClInclude Include="tenum.h">
+      <Filter>Source Files\Collection</Filter>
+    </ClInclude>
+    <ClInclude Include="tmemorywriter.h">
+      <Filter>Source Files\IO\Buffer</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">
