@@ -14,6 +14,14 @@ public:
 
 	static TArray< TBitmapReader* > Readers;
 
+	/**
+	 * Every instance of a reader automatically adds itself to readers list
+	 */
+	TBitmapReader()
+	{
+		Readers.Add(this);
+	}
+
 	static TBitmapReader* GetReader(ui32 extension)
 	{
 		int i= Readers.Count;

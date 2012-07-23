@@ -23,6 +23,10 @@ class TArray;
  */
 
 /**
+ * We could even use auto refcounting system and garbagae collection?
+ */
+
+/**
  * UTF-8 based string class.
  * Uses copy on write technique to avoid unnecessary copies.
  */
@@ -453,7 +457,15 @@ public:
 
 	TString Substring( ui32 startIndex ) const;
 
+	/**
+	 * Gets a part of string from start index until it matches a character
+	 */
+	TString SubstringUntil(ui32 startIndex, ch32 matchCharacter) const;
 
+	/**
+	 * Gets a part of a string from start index until it matches a character, result is copied to byte array, returns copied byte count
+	 */
+	ui32 SubstringUntil(ui32 startIndex, ch32 matchCharacter, TArray<byte>& output) const;
 
 	inline TString Trim()
 	{
@@ -531,7 +543,17 @@ public:
 
 	TArray<TString*> Split(const TArray<ch32>& seprators, bool removeEmpty = false) const;
 
-	TArray<TString*> Split(const TArray<TString*>& seprators, bool removeEMpty = false) const;
+	TArray<TString*> Split(const TArray<TString*>& seprators, bool removeEmpty = false) const;
+
+	/**
+	 * Splits by single char.
+	 */
+	TArray<TString*> Split(ch32 c, bool removeEmpty = false) const
+	{
+		ch32 sepratorChar = c;
+		TArray<ch32> seps(&sepratorChar, 1);
+		return Split(seps,removeEmpty);
+	}
 
 	void Clear()
 	{

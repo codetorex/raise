@@ -106,7 +106,7 @@ public:
 		return vCrossProduct;
 	}
 	
-	inline MVector3& interpolate(const MVector3& vdest, T tween)
+	inline MVector3 interpolate(const MVector3& vdest, T tween) const
 	{
 		MVector3 tw(vdest);
 		tw *= tween;
@@ -117,7 +117,7 @@ public:
 	/**
 	* Extend as in line.
 	*/
-	inline MVector3& extend(const MVector3& vdir, T factor)
+	inline MVector3 extend(const MVector3& vdir, T factor) const
 	{
 		MVector3 resul(*this);
 		resul -= (factor * vdir);
@@ -139,7 +139,7 @@ public:
 	/**
 	* basic reflection function
 	*/
-	inline MVector3& reflect(const MVector3& normal)
+	inline MVector3 reflect(const MVector3& normal) const
 	{
 		MVector3 res(*this); // R = I - 2*(N·I)*N
 		res -= (2.0f * dot(normal)) * normal;
@@ -147,7 +147,7 @@ public:
 	}
 
 
-	MVector3 operator + (const MVector3 &other)
+	MVector3 operator + (const MVector3 &other) const
 	{
 		MVector3 vResult;
 
@@ -158,7 +158,7 @@ public:
 		return vResult;
 	}
 
-	MVector3 operator -  (const MVector3 &other)
+	MVector3 operator -  (const MVector3 &other) const
 	{
 		MVector3 vResult(0.0f, 0.0f, 0.0f);
 
@@ -169,7 +169,7 @@ public:
 		return vResult;
 	}
 
-	MVector3 operator *  (const MVector3 &other)
+	MVector3 operator *  (const MVector3 &other) const
 	{
 		MVector3 vResult(0.0f, 0.0f, 0.0f);
 
@@ -180,7 +180,7 @@ public:
 		return vResult;
 	}
 
-	MVector3 operator /  (const MVector3 &other)
+	MVector3 operator /  (const MVector3 &other) const
 	{
 		MVector3 vResult(0.0f, 0.0f, 0.0f);
 
@@ -192,7 +192,7 @@ public:
 	}
 
 
-	MVector3 operator /	(const T factor)
+	MVector3 operator /	(const T factor) const
 	{
 		MVector3 vResult(0.0f, 0.0f, 0.0f);
 
@@ -203,7 +203,7 @@ public:
 		return vResult;
 	}
 
-	MVector3 operator *  (const T factor)
+	MVector3 operator *  (const T factor) const
 	{
 		MVector3 vResult(0.0f, 0.0f, 0.0f);
 
@@ -214,9 +214,10 @@ public:
 		return vResult;
 	}
 
-	friend MVector3 operator * (const T factor, const MVector3 &other)
+	template <class T>
+	friend MVector3<T> operator * (const T factor, const MVector3<T> &other)
 	{
-		MVector3 vResult(0.0f, 0.0f, 0.0f);
+		MVector3<T> vResult(0.0f, 0.0f, 0.0f);
 
 		vResult.x = other.x * factor;
 		vResult.y = other.y * factor;

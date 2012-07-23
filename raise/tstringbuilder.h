@@ -262,6 +262,36 @@ public:
 	}
 
 	/**
+	 * Replaces given character with other one
+	 * returns Replaced char count
+	 */
+	inline int ReplaceChar(ch32 matchChar, ch32 replaceChar)
+	{
+		int count = 0;
+
+		if (IsASCII())
+		{
+			char mc = matchChar;
+			char rc = replaceChar;
+			/// TODO: replace this function with faster equivalent?
+			for (ui32 i=0;i<ByteLength;i++)
+			{
+				if (Data[i] == mc)
+				{
+					Data[i] = rc;
+					count++;
+				}
+			}
+		}
+		else
+		{
+			LowLevelNotImplemented(SOURCENAME(4),__LINE__);
+		}
+
+		return count;
+	}
+
+	/**
 	 * Appends string value left padded.
 	 */
 	inline void AppendPadded(const TString& value,int padlength, char padchar = ' ', bool truncate = false)

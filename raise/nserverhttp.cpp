@@ -23,11 +23,8 @@ void NHTTPSession::HandleReceive( const SystemError& err, ui32 dataReaded )
 
 	TString header(ReceivePacket.Data,ReceivePacket.Length);
 
-	TArray<ch32> SplitChars;
-	SplitChars.Add('\n');
 
-
-	TArray<TString*> headerLines = header.Split(SplitChars);
+	TArray<TString*> headerLines = header.Split('\n');
 
 	Log.Output(LG_INF,*headerLines.Item[0]);
 

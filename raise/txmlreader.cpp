@@ -137,9 +137,7 @@ TXMLNode* TXMLNode::SelectSingleNode( const TString& xpath )
 	if (xpath.IndexOf("/") > -1)
 	{
 		// split it and find it
-		ch32 delim = '/';
-		TArray<ch32> delimeter(&delim,1);
-		TArray< TString* > splitResult =  xpath.Split(delimeter);
+		TArray< TString* > splitResult =  xpath.Split('/');
 
 		TXMLNode* curNode = this;
 		for (int i=0;i<splitResult.Count;i++)

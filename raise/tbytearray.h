@@ -4,6 +4,8 @@
 #include "raisetypes.h"
 #include "tmemorydriver.h"
 
+/// TODO: typedef TArray<byte> and get rid of this class
+
 class TByteArray
 {
 public:

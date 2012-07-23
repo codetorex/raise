@@ -306,7 +306,7 @@ public:
 	void	Reverse();
 	void	Sort();
 
-	inline void Free()
+	inline virtual void Free()
 	{
 		if (Item && Capacity > 0) // if capacity is 0 then this means data is static
 		{
@@ -368,10 +368,7 @@ public:
 	{
 		if (newsize == 0)
 		{
-			if (Item)
-			{
-				delete [] Item;
-			}
+			Free();
 
 			Capacity = 0;
 			Item = 0;
@@ -386,10 +383,38 @@ public:
 		if (Item)
 		{
 			MemoryDriver::Copy(NItem,Item,sizeof(T) * Count);
-			delete [] Item;
+			Free();
 		}
 		Item = NItem;
 		Capacity = newsize;
+	}
+};
+
+
+template <class T, int K>
+class TArrayStack: public TArray<T>
+{
+public:
+	T Temp[K];
+
+	TArrayStack(): TArray(Temp,0)
+	{
+		Capacity = K;
+	}
+
+	void Free()
+	{
+		if (Item == Temp)
+		{
+			Item = 0; // shouldn't delete stack ptr
+		}
+		this->TArray::Free();
+	}
+
+	~TArrayStack()
+	{
+		Item = 0;
+		Capacity = 0;
 	}
 };
 

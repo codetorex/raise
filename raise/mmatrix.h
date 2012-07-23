@@ -126,6 +126,99 @@ public:
 		_42 = (top+bottom) / (bottom-top);
 		_43 = znear / (znear - zfar);
 	}
+
+	inline void PerspectiveR(float width, float height, float znear, float zfar)
+	{
+		_11 = (2.0f * znear) / width;
+		_22 = (2.0f * znear) / height;
+
+		float depth = znear - zfar;
+		_33 = zfar / depth;
+		_34 = -1.0f;
+		_43 = (znear * zfar) / depth;
+	}
+
+	inline void PerspectiveL(float width, float height, float znear, float zfar)
+	{
+		_11 = (2.0f * znear) / width;
+		_22 = (2.0f * znear) / height;
+		_33 = zfar / (zfar - znear);
+		_34 = 1.0f;
+		_43 = (znear * zfar) / (znear - zfar);
+	}
+};
+
+class MViewMatrix: public MMatrix4x4
+{
+public:
+
+	/**
+	 * Setups a left handed look at view matrix from given parameters
+	 */
+	inline void LookAtL(const Vector3& Position, const Vector3& Look, const Vector3& Up)
+	{
+		Vector3 zaxis = Look - Position;
+		zaxis.normalize();
+
+		Vector3 xaxis = Up.cross(zaxis);
+		xaxis.normalize();
+
+		Vector3 yaxis = zaxis.cross(xaxis);
+
+		_11 = xaxis.x;
+		_12 = yaxis.x;
+		_13 = zaxis.x;
+		_14 = 0.0f;
+
+		_21 = xaxis.y;
+		_22 = yaxis.y;
+		_23 = zaxis.y;
+		_24 = 0.0f;
+
+		_31 = xaxis.z;
+		_32 = yaxis.z;
+		_33 = zaxis.z;
+		_34 = 0.0f;
+
+		_41 = -xaxis.dot(Position);
+		_42 = -yaxis.dot(Position);
+		_43 = -zaxis.dot(Position);
+		_44 = 1.0f;
+	}
+
+	/**
+	 * Setups a right handed look at view matrix from given parameters
+	 */
+	inline void LookAtR(const Vector3& Position, const Vector3& Look, const Vector3& Up)
+	{
+		Vector3 zaxis = Position - Look;
+		zaxis.normalize();
+
+		Vector3 xaxis = Up.cross(zaxis);
+		xaxis.normalize();
+
+		Vector3 yaxis = zaxis.cross(xaxis);
+
+		_11 = xaxis.x;
+		_12 = yaxis.x;
+		_13 = zaxis.x;
+		_14 = 0.0f;
+
+		_21 = xaxis.y;
+		_22 = yaxis.y;
+		_23 = zaxis.y;
+		_24 = 0.0f;
+
+		_31 = xaxis.z;
+		_32 = yaxis.z;
+		_33 = zaxis.z;
+		_34 = 0.0f;
+
+		_41 = xaxis.dot(Position);
+		_42 = yaxis.dot(Position);
+		_43 = zaxis.dot(Position);
+		_44 = 1.0f;
+	}
 };
 
 typedef MMatrix4x4 mat4;

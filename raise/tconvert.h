@@ -86,6 +86,13 @@ public:
 	static ui32 ToUInt32Hex(const TString& value);
 
 	static int ToInt32Ambiguous(const TString& value, int startIndex, int* numLength = 0, bool skipBegin = true);
+
+	/**
+	 * Splits a string with a character, then parses integers available. Returns match count, and adds integers to results array
+	 * Warning: skips non number files between splits like
+	 * example: "54 4845/ 58 539 / 48482" as value, and splitchar is '/' it will parse ints as 544845,58539,48482
+	 */
+	static int ToInt32Split(const TString& value, ch32 splitChar, TArray<int>& results);
 };
 
 typedef TConvert Convert;

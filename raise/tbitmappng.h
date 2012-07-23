@@ -12,8 +12,6 @@ public:
 	TBitmapPNG()
 	{
 		WriteExtension = ReadExtension = DWORDSTR(".PNG");
-		Readers.Add(this);
-		Writers.Add(this);
 	}
 
 	void ReadBitmap(TBitmap* bmp, Stream* src);

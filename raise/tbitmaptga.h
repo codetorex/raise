@@ -10,9 +10,6 @@ public:
 	TBitmapTGA()
 	{
 		WriteExtension = ReadExtension = DWORDSTR(".TGA");
-
-		Readers.Add(this);
-		Writers.Add(this);
 	}
 
 	void WriteBitmap(TBitmap* bmp, Stream* dst, TBitmapWriterParameters* params = 0);

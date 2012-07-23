@@ -14,6 +14,14 @@ public:
 
 	static TArray< TBitmapWriter* > Writers;
 
+	/**
+	 * Every instance of a writer automatically adds itself to writers list
+	 */
+	TBitmapWriter()
+	{
+		Writers.Add(this);
+	}
+
 	static TBitmapWriter* GetWriter(ui32 extension)
 	{
 		int i= Writers.Count;

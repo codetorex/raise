@@ -40,6 +40,51 @@ int TConvert::ToCharArrayInt( int value, char* dst , int dstCap )
 	return (dstw - dst);
 }
 
+int TConvert::ToInt32Split( const TString& value, ch32 splitChar, TArray<int>& results )
+{
+	if (!value.IsASCII())
+	{
+		throw NotImplementedException();
+	}
+
+	int matchCount = 0;
+
+	char numbers[32];
+	int numLen = 0;
+
+	for (int i=0;i<value.Length;i++)
+	{
+		char curChar = value.Data[i];
+		if (curChar == splitChar)
+		{
+			matchCount++;
+			if (numLen > 0)
+			{
+				int curResult = ToInt32(numbers);
+				results.Add(curResult);
+				numLen = 0;
+			}
+			continue;
+		}
+
+		// skip non-numbers?
+		if (curChar != '-' && !(curChar >= '0' && curChar <= '9'))
+		{
+			continue;
+		}
+
+		numbers[numLen++] = curChar;
+	}
+
+	if (numLen > 0)
+	{
+		int curResult = ToInt32(numbers);
+		results.Add(curResult);
+	}
+
+	return matchCount;
+}
+
 int TConvert::ToInt32Ambiguous( const TString& value, int startIndex,int* numLength, bool skipBegin )
 {
 	TCharacterEnumerator schars(value);
@@ -145,3 +190,4 @@ ui32 TConvert::DecodeHexChar( char val )
 	}
 	throw Exception("Wrong hex value");
 }
+
