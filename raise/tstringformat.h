@@ -113,7 +113,7 @@ public:
 		Source = (byte*)Tmp;
 	}
 
-	inline TStringFormatElementFloat(float _value, int _precision = 0, int _padwidth = 0, char _padchar = ' ')
+	inline TStringFormatElementFloat(float _value, int _precision, int _padwidth = 0, char _padchar = ' ')
 	{
 		PadWidth = _padwidth;
 		PadChar = _padchar;

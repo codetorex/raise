@@ -63,9 +63,9 @@ public:
 		Radian = 0;
 	}
 
-	MDegree( float f )
+	MDegree( float f ): MRadian(ToRadian(f))
 	{
-		SetDegree(f);
+		Degree = f;
 	}
 
 	inline void SetDegree(float f)
@@ -89,5 +89,8 @@ public:
 typedef MDegree<float> DegreeAngle;
 
 typedef MRadian<float> RadianAngle;
+
+// SI UNIT
+typedef RadianAngle Angle;
 
 #endif

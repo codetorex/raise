@@ -305,6 +305,7 @@
     <ClInclude Include="txmlwriter.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="mmatrix.cpp" />
     <ClCompile Include="npacketbuilder.cpp" />
     <ClCompile Include="nserverhttp.cpp" />
     <ClCompile Include="nsocketiocpOLD.cpp" />

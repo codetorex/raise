@@ -847,6 +847,9 @@
     <ClCompile Include="tplatform.cpp">
       <Filter>Source Files\System</Filter>
     </ClCompile>
+    <ClCompile Include="mmatrix.cpp">
+      <Filter>Source Files\Mathematics</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <None Include="Rules.txt" />

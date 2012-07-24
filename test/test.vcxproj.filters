@@ -61,5 +61,11 @@
     <ClInclude Include="test_convert.h">
       <Filter>Tests</Filter>
     </ClInclude>
+    <ClInclude Include="test_matrix.h">
+      <Filter>Tests</Filter>
+    </ClInclude>
+    <ClInclude Include="test_vector3.h">
+      <Filter>Tests</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>

@@ -56,6 +56,18 @@ public:
 		return tan(value);
 	}
 
+	template<class T>
+	inline static T Absolute(T value)
+	{
+		return fabs(value);
+	}
+
+	template<class T>
+	inline static T Cotangent(T value)
+	{
+		return ((T)1.0f / Tangent(value));
+	}
+
 	inline static double Round(double value)
 	{
 		return (value > 0.0) ? floor(value + 0.5) : ceil(value - 0.5);

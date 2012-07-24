@@ -130,8 +130,12 @@ public:
 
 	void InitializeCapacity(int capacity)
 	{
-		if(Data) delete Data;
-		this->Allocate(capacity);
+		if (capacity > this->Capacity)
+		{
+			if(Data) delete Data;
+			this->Allocate(capacity);
+		}
+		
 		Length = 0;
 		ByteLength = 0;
 	}
