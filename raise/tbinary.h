@@ -101,7 +101,7 @@ public:
 	/**
 	* Log base 2 of value by lookup table. Use this if you know value is 2^n
 	*/
-	inline int log2k()
+	inline int Log2Known()
 	{
 		static const int MultiplyDeBruijnBitPosition2[32] = 
 		{
@@ -115,7 +115,7 @@ public:
 	/**
 	* Log base 2 of value. By lookup table.
 	*/
-	inline int log2()
+	inline int Log2()
 	{
 		register ui32 v = value;
 		static const int MultiplyDeBruijnBitPosition[32] = 
@@ -136,11 +136,11 @@ public:
 
 
 	/**
-	* Checks if value is 2^n
+	* Returns if value is 2^n
 	*/
-	inline bool is2n()
+	inline bool IsPowerOf2()
 	{
-		if (popcount() == 1)
+		if (PopulationCount() == 1)
 		{
 			return true;
 		}
@@ -148,9 +148,9 @@ public:
 	}
 
 	/**
-	* Optimized bit population count.
+	* Returns number of set bits
 	*/
-	inline int popcount()
+	inline int PopulationCount()
 	{
 		register ui32 v = value;
 		v = v - ((v >> 1) & 0x55555555);                    // reuse input as temporary
@@ -279,6 +279,6 @@ public:
 
 };
 
-typedef TBinary bindw; // binary dword short hand definition
+typedef TBinary bin32; // binary dword short hand definition
 
 #endif

@@ -27,8 +27,8 @@ void TBitset::ClearBits()
 
 ui32 TBitset::CalculateDwordLengthFromBitLength( int bitlength )
 {
-	int irrpart = MOD32(bitlength);
-	int dwdpart = DIV32( (bitlength-irrpart) );
+	int irrpart = bitlength % 32;
+	int dwdpart = bitlength / 32;
 	if (irrpart > 0)
 		dwdpart++;
 

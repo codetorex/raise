@@ -157,10 +157,10 @@ class TestBinary
 public:
 	void PrintK(TBinary& k)
 	{
-		printf("log2:\t%i\n",k.log2());
-		printf("log2k:\t%i\n",k.log2k());
-		printf("popcount:\t%i\n",k.popcount());
-		printf("is2n:\t%i\n",k.is2n());
+		printf("log2:\t%i\n",k.Log2());
+		printf("log2k:\t%i\n",k.Log2Known());
+		printf("popcount:\t%i\n",k.PopulationCount());
+		printf("is2n:\t%i\n",k.IsPowerOf2());
 	}
 
 	void Test()
