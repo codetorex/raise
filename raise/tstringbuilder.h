@@ -128,7 +128,7 @@ public:
 		ByteLength = 0;
 	}
 
-	void InitializeCapacity(int capacity)
+	void InitializeCapacity(ui32 capacity)
 	{
 		if (capacity > this->Capacity)
 		{

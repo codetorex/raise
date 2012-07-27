@@ -85,18 +85,7 @@ static const ui32 invbitmasks[] =
 class RDLL TBinary
 {
 public:
-	ui32 value;
-
-	TBinary()
-	{
-		value = 0;
-	}
-
-	TBinary(ui32 _value)
-	{
-		value = _value;
-	}
-
+	ui32 Value;
 
 	/**
 	* Log base 2 of value by lookup table. Use this if you know value is 2^n
@@ -108,7 +97,7 @@ public:
 			0, 1, 28, 2, 29, 14, 24, 3, 30, 22, 20, 15, 25, 17, 4, 8, 
 			31, 27, 13, 23, 21, 19, 16, 7, 26, 12, 18, 6, 11, 5, 10, 9
 		};
-		return (MultiplyDeBruijnBitPosition2[(ui32)(value * 0x077CB531U) >> 27]);
+		return (MultiplyDeBruijnBitPosition2[(ui32)(Value * 0x077CB531U) >> 27]);
 	}
 
 
@@ -117,7 +106,7 @@ public:
 	*/
 	inline int Log2()
 	{
-		register ui32 v = value;
+		register ui32 v = Value;
 		static const int MultiplyDeBruijnBitPosition[32] = 
 		{
 			0, 9, 1, 10, 13, 21, 2, 29, 11, 14, 16, 18, 22, 25, 3, 30,
@@ -132,8 +121,6 @@ public:
 
 		return MultiplyDeBruijnBitPosition[(ui32)(v * 0x07C4ACDDU) >> 27];
 	}
-
-
 
 	/**
 	* Returns if value is 2^n
@@ -152,11 +139,66 @@ public:
 	*/
 	inline int PopulationCount()
 	{
-		register ui32 v = value;
+		register ui32 v = Value;
 		v = v - ((v >> 1) & 0x55555555);                    // reuse input as temporary
 		v = (v & 0x33333333) + ((v >> 2) & 0x33333333);     // temp
 		ui32 c = ((v + (v >> 4) & 0xF0F0F0F) * 0x1010101) >> 24; // count
 		return c;
+	}
+
+	
+	/**
+	 * Sets bits of mixed or single flag
+	 */
+	inline void SetFlag(ui32 flag)
+	{
+		Value |= flag;
+	}
+
+	/**
+	 * Unsets bits of mixed or single flag
+	 */
+	inline void UnsetFlag(ui32 flag)
+	{
+		Value &= ~flag;
+	}
+
+	/**
+	 * Returns if mixed or single flag matches
+	 */
+	inline bool GetFlag(ui32 flag)
+	{
+		return ((Value & flag) != 0);
+	}
+	
+	/**
+	 * Sets single bit to 1
+	 */
+	inline void SetBit(ui32 bit)
+	{
+		SetFlag( 1 << bit);
+	}
+
+	/**
+	 * Unsets single bit to 0
+	 */
+	inline void UnsetBit(ui32 bit)
+	{
+		UnsetFlag(1 << bit);
+	}
+
+	/**
+	 * Returns status of a bit
+	 */
+	inline bool GetBit(ui32 bit)
+	{
+		return GetFlag( 1 << bit);
+	}
+
+	inline TBinary& operator = ( ui32 val )
+	{
+		Value = val;
+		return *this;
 	}
 
 	/**
@@ -164,7 +206,7 @@ public:
 	*/
 	inline TString ToString()
 	{
-		return ToString(value);
+		return ToString(Value);
 	}
 
 	static inline TString ToString(ui32 binvalue)
@@ -196,7 +238,7 @@ public:
 	*/
 	inline int log2_naive()
 	{
-		register ui32 vcopy = value;
+		register ui32 vcopy = Value;
 		int r = 0;
 		while(vcopy>>=1)
 			r++;
@@ -208,7 +250,7 @@ public:
 	*/
 	inline int log2_calc()
 	{
-		ui32 v = value;
+		ui32 v = Value;
 		register unsigned int r; // result of log2(v) will go here
 		register unsigned int shift;
 
@@ -227,7 +269,7 @@ public:
 	inline int popcount_naive()
 	{
 		int bits = 32;
-		register ui32 v = value;
+		register ui32 v = Value;
 		int c = 0;
 		while(bits--)
 		{
@@ -242,7 +284,7 @@ public:
 	*/
 	inline int popcount_brian()
 	{
-		register ui32 v = value;
+		register ui32 v = Value;
 		ui32 c; // c accumulates the total bits set in v
 		for (c = 0; v; c++)
 		{
@@ -265,7 +307,7 @@ public:
 			B6(0), B6(1), B6(1), B6(2)
 		};
 
-		register ui32 v = value;
+		register ui32 v = Value;
 		int c; // c is the total bits set in v
 
 		unsigned char * p = (unsigned char *) &v;
@@ -276,9 +318,35 @@ public:
 		return c;
 	}
 #endif
+};
 
+/**
+ * Allows easily access to bits in a binary.
+ * So if you use it in a union you not need give paremeters to get set and unset bit functions.
+ */
+template <int fbit>
+class TBit : public TBinary
+{
+public:
+
+	inline void Set()
+	{
+		SetBit(fbit);
+	}
+
+	inline void Unset()
+	{
+		UnsetBit(fbit);
+	}
+
+	inline bool Get()
+	{
+		return GetBit(fbit);
+	}
 };
 
 typedef TBinary bin32; // binary dword short hand definition
+typedef TBinary flag32;
+typedef TBinary TFlag32;
 
 #endif

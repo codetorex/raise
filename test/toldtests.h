@@ -167,9 +167,9 @@ public:
 	{
 		TBinary k(1024);
 		PrintK(k);
-		k.value = 7543;
+		k.Value = 7543;
 		PrintK(k);
-		k.value = MXDWORD;
+		k.Value = MXDWORD;
 		PrintK(k);
 
 	}

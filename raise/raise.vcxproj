@@ -226,7 +226,6 @@
     <ClInclude Include="tfilestream.h" />
     <ClInclude Include="tdirectoryinfo.h" />
     <ClInclude Include="tfilewin32.h" />
-    <ClInclude Include="tflag.h" />
     <ClInclude Include="tgraphics.h" />
     <ClInclude Include="tgrouparray.h" />
     <ClInclude Include="thashcodeprovider.h" />

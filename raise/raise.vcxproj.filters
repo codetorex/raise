@@ -485,9 +485,6 @@
     <ClInclude Include="nsshsession.h">
       <Filter>Source Files\Network\SSH</Filter>
     </ClInclude>
-    <ClInclude Include="tflag.h">
-      <Filter>Source Files\Collection</Filter>
-    </ClInclude>
     <ClInclude Include="tkeyboard.h">
       <Filter>Source Files\System\Input</Filter>
     </ClInclude>
