@@ -1,14 +1,17 @@
 #include "stdafx.h"
-#include "tprocessdebug.h"
+#include "tprocess.h"
 
 #ifdef WIN32
+
+#include "twintools.h"
+#include "tthread.h"
 
 void TBreakpoint::SetBreakpoint()
 {
 	if (!IsSet)
 	{
-		OrginalByte = Parent->ReadByte((ui32)Address);
-		Parent->WriteByte((ui32)Address,0xCC);
+		OrginalByte = Process->Memory.ReadByte((ui32)Address);
+		Process->Memory.WriteByte((ui32)Address,0xCC);
 		IsSet = true;
 	}
 }
@@ -17,7 +20,7 @@ void TBreakpoint::UnsetBreakpoint()
 {
 	if (IsSet)
 	{
-		Parent->WriteByte((ui32)Address,OrginalByte);
+		Process->Memory.WriteByte((ui32)Address,OrginalByte);
 		IsSet = false;
 	}
 }
@@ -55,7 +58,7 @@ TBreakpoint* TProcessDebug::CreateBreakpoint( ui32 addr )
 	TBreakpoint* tb = GetBreakpoint(addr);
 	if (tb == NULL)
 	{
-		tb = new TBreakpoint((void*)addr,this);
+		tb = new TBreakpoint((void*)addr,this->Process);
 		Breakpoints.Add(tb);
 	}
 	return tb;
@@ -128,6 +131,7 @@ TProcessDebug::TProcessDebug()
 {
 	IsDebug = 0;
 	DebugThread = NULL;
+	QueueExitDebug = false;
 }
 
 void TProcessDebug::GetDebuggerPrivileges()
@@ -154,9 +158,14 @@ void TProcessDebug::GetDebuggerPrivileges()
 
 void TProcessDebug::EndDebugging()
 {
-	ExitDebugMode();
+	if ( !ExitDebugMode() )
+	{
+		DWORD err = GetLastError();
+		TString r = TWinTools::ErrorToString(err);
+		throw Exception("Failed to leave debug mode: %", sfs(r));
+	}
 	IsDebug = 0;
-	DebugThread->Join();
+	//DebugThread->Join();
 }
 
 void TProcessDebug::DebuggerLoop()
@@ -180,7 +189,7 @@ void TProcessDebug::DebuggerLoop()
 				if ( DebugEvent.u.DebugString.fUnicode == 0 )
 				{
 					char CurrentDebugString[2048];
-					Read((DWORD)DebugEvent.u.DebugString.lpDebugStringData,(byte*)CurrentDebugString,DebugEvent.u.DebugString.nDebugStringLength);
+					Process->Memory.Read((DWORD)DebugEvent.u.DebugString.lpDebugStringData,(byte*)CurrentDebugString,DebugEvent.u.DebugString.nDebugStringLength);
 					OnDebugString.call(CurrentDebugString);
 				}
 
@@ -281,6 +290,12 @@ void TProcessDebug::DebuggerLoop()
 
 					IsContextActive = false;
 					ContinueDebugEvent(DebugEvent.dwProcessId,DebugEvent.dwThreadId, DBG_CONTINUE);
+
+					if (QueueExitDebug)
+					{
+						EndDebugging();
+					}
+
 					continue;
 				}
 
@@ -343,10 +358,5 @@ void TProcessDebug::UnsetHardwareBreakpoint( CONTEXT& ctx,int slot )
 	ctx.Dr7 &= ~enable;
 	}*/
 
-
-TProcessHack::TProcessHack()
-{
-	AllMemory.Initialize("All Memory",0x00400000,0x7FFFFFFF,this);
-}
 
 #endif

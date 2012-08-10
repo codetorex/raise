@@ -287,6 +287,37 @@ public:
 		}
 		return -1;
 	}
+
+	/**
+	 * Picks data from larger one with help of a pattern
+	 * Returns -1 when output capacity is reached
+	 * Returns 0 or positive integer of how much bytes written to output
+	 */
+	static int ReadPattern(const byte* src, int srcLength, const byte* pattern, int patternLength, byte patternMatch, byte* output, int outputCapacity)
+	{
+		assert(outputCapacity > 0);
+		assert(srcLength > 0);
+		assert(patternLength > 0);
+
+		int outIndex = 0;
+		int dataLength = srcLength < patternLength ? srcLength : patternLength;
+
+		for (int i=0;i<dataLength;i++)
+		{
+			if (pattern[i] == patternMatch)
+			{
+				if (outIndex == outputCapacity)
+				{
+					return -1; // -1 means capacity reached
+				}
+
+				output[outIndex] = src[i];
+				outIndex++;
+			}
+		}
+
+		return outIndex;
+	}
 };
 
 #endif

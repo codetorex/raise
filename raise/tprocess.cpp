@@ -4,35 +4,38 @@
 
 #include "tprocess.h"
 #include "texception.h"
+#include "twintools.h"
 
-void TProcess::OpenFromWindow( const TString& windowname )
+
+
+#include <Psapi.h>
+
+TString TProcess::GetModulePath()
 {
-	if (!windowname.IsASCII())
-	{
-		throw Exception("Window name has unicode characters");
-	}
-	HWND wnd = FindWindowA(0,(char*)windowname.Data);
-	if (!wnd)
-	{
-		throw Exception("Can't find window");
-	}
+	ch16 Temp[4096];
+	Temp[0] = 0;
+	GetModuleFileNameExW(processHandle,0,Temp,4096);
+	return TWinTools::RaiseString(Temp);
+}
 
-	GetWindowThreadProcessId(wnd,&processID);
-	if (!processID)
+void TProcess::CloseProcessHandle()
+{
+	if (processHandle)
 	{
-		throw Exception("Can't get process id");
+		CloseHandle(processHandle);
 	}
+}
 
+void TProcess::OpenProcessHandle()
+{
 	processHandle = OpenProcess(PROCESS_ALL_ACCESS,0,processID);
 	if (!processHandle)
 	{
 		throw Exception("Can't open process");
 	}
-}
 
-void TProcess::CreateFromExecutable( const TString& exepath, const TString& params /*= 0*/ )
-{
-	throw Exception("Not implemented yet");
+	Memory.InitializeMemory(this);
+	Debug.InitializeDebug(this);
 }
 
 ui32 TProcessMemory::Search( ui32 start,ui32 end, const void* needle, int length )
@@ -63,4 +66,20 @@ ui32 TProcessMemory::SearchPattern( ui32 start,ui32 end, const void* needle, con
 	return NFOUND;
 }
 
+void TProcessMemory::InitializeMemory( TProcess* pprocess )
+{
+	InitializeFrom(*pprocess);
+	Process = pprocess;
+
+	Buffer.Allocate(4 * 1024);
+	MainRegion.Initialize("Main Memory Region",0x00400000,0x7FFFFFFF,this);
+}
+
+void TProcessDebug::InitializeDebug( TProcess* pprocess )
+{
+	InitializeFrom(*pprocess);
+	Process = pprocess;
+}
+
 #endif
+

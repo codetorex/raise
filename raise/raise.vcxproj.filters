@@ -185,12 +185,6 @@
     <ClInclude Include="tprocess.h">
       <Filter>Source Files\Hacking</Filter>
     </ClInclude>
-    <ClInclude Include="tprocessdebug.h">
-      <Filter>Source Files\Hacking</Filter>
-    </ClInclude>
-    <ClInclude Include="tprocessmodule.h">
-      <Filter>Source Files\Hacking</Filter>
-    </ClInclude>
     <ClInclude Include="tqueue.h">
       <Filter>Source Files\Collection</Filter>
     </ClInclude>
@@ -647,6 +641,15 @@
     <ClInclude Include="tmemorywriter.h">
       <Filter>Source Files\IO\Buffer</Filter>
     </ClInclude>
+    <ClInclude Include="tkeyboardmapped.h">
+      <Filter>Source Files\System\Input</Filter>
+    </ClInclude>
+    <ClInclude Include="tmousemapped.h">
+      <Filter>Source Files\System\Input</Filter>
+    </ClInclude>
+    <ClInclude Include="twindowhandle.h">
+      <Filter>Source Files\Hacking</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">
@@ -846,6 +849,12 @@
     </ClCompile>
     <ClCompile Include="mmatrix.cpp">
       <Filter>Source Files\Mathematics</Filter>
+    </ClCompile>
+    <ClCompile Include="tprocessmanager.cpp">
+      <Filter>Source Files\Hacking</Filter>
+    </ClCompile>
+    <ClCompile Include="twindowhandle.cpp">
+      <Filter>Source Files\Hacking</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

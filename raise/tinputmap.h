@@ -4,6 +4,7 @@
 #include "tevent.h"
 #include "tmouse.h"
 #include "tkeyboard.h"
+#include "texceptionlow.h"
 
 // NOTE: these Actions will be result of sensor input. CSensor -> Take Data -> CAction
 // ***************************************************************
@@ -12,26 +13,148 @@
 
 // TODO: there should be actions defined and Inputs can be set for that actions.
 
+
+class TButtonSensor;
+class TPositionSensor;
+
+class TInputModeBase;
+
+
+/// THE FOLLOWING CLASSES IS NEW AND IMPROVED SYSTEMS
+enum TInputActionTypes
+{
+	IA_BUTTON,
+	IA_POSITION,
+	IA_AXIS,
+};
+
 class TInputAction
 {
 public:
-	TString actionName;
+	TString Name; // name of input, like FlyCamX, FlyCamY, FlyCamAscend ?
+	int ActionType;
 };
 
 class TTriggerAction: public TInputAction
 {
 public:
-	virtual void Trigger(bool value) = 0; // button press will use this
+	TTriggerAction()
+	{
+		ActionType = IA_BUTTON; 
+	}
+
+	bool Value;
+
+	virtual void Trigger(bool value)
+	{
+		this->Value = value;
+	}
+};
+
+class TTriggerActionEvent: public TTriggerAction
+{
+public:
+	typedef delegate0<void> NoParamEvent;
+	typedef delegate1<void,bool> BoolEvent;
+
+	event<NoParamEvent> KeyDown;
+	event<NoParamEvent> KeyUp;
+	event<BoolEvent>	KeyPress;
+
+	void Trigger(bool value)
+	{
+		if (value)
+		{
+			KeyDown.call();
+		}
+		else
+		{
+			KeyUp.call();
+		}
+
+		KeyPress.call(value);
+	}
 };
 
 class TAxisAction: public TInputAction
 {
-	virtual void Axis(float value) = 0; // axis of joystick will use this
+public:
+	float Value;
+	float Difference;
+	
+	void Axis(float value)
+	{
+	
+	}// axis of joystick will use this
 };
 
 class TMoveAction: public TInputAction
 {
-	virtual void Move(int value) = 0; // mouse will use this?
+public:
+	TMoveAction()
+	{
+		ActionType = IA_POSITION;
+	}
+
+	int Position;
+	int Difference;
+
+	virtual void Move(int value)
+	{
+		Difference = value - Difference;
+		Position = value;
+	}
+};
+
+
+class TInputModeBase
+{
+public:
+	TString Name;
+	TArray< TInputAction* > Actions; // actions that uses this mode
+
+	TTriggerAction* CreateTriggerAction(const TString& name)
+	{
+		TTriggerAction* newAction = new TTriggerAction();
+		newAction->Name = name;
+		Actions.Add(newAction);
+		return newAction;
+	}
+
+	TMoveAction* CreateMoveAction(const TString& name)
+	{
+		TMoveAction* newAction = new TMoveAction();
+		newAction->Name = name;
+		Actions.Add(newAction);
+		return newAction;
+	}
+
+	TInputAction* GetAction(const TString& name, int actionType)
+	{
+		TArrayEnumerator<TInputAction*> e(Actions);
+		while(e.MoveNext())
+		{
+			if (e.Current->Name == name)
+			{
+				if (e.Current->ActionType == actionType)
+				{
+					return e.Current;
+				}
+			}
+		}
+
+		return 0;
+	}
+
+	TTriggerAction* GetTriggerAction(const TString& name)
+	{
+		return (TTriggerAction*)GetAction(name,IA_BUTTON);
+	}
+
+	TMoveAction* GetMoveAction(const TString& name)
+	{
+		return (TMoveAction*)GetAction(name,IA_POSITION);
+	}
 };
 
 /**
@@ -89,7 +212,7 @@ public:
 	}
 };
 
-class TFloatChangerAction: public TTriggerAction
+/*class TFloatChangerAction: public TTriggerAction
 {
 public:
 	float* valueToChange;
@@ -103,7 +226,7 @@ public:
 	{
 		*valueToChange = value;
 	}
-};
+};*/
 
 /*class RDLL CValueChangerAction: public CAction
 {
@@ -187,11 +310,11 @@ public:
 class RDLL TButtonSensor: public TInputSensor<TTriggerAction>
 {
 public:
-	bool state; // true for down, false for up
+	bool State; // true for down, false for up
 
 	TButtonSensor()
 	{
-		state = false;
+		State = false;
 	}
 
 	inline bool Down()
@@ -228,8 +351,7 @@ public:
 
 	TPositionSensor()
 	{
-		Absolute = 0;
-		Diff = 0;
+		Reset();
 	}
 
 	TPositionSensor(const int val)
@@ -238,114 +360,32 @@ public:
 		Diff = 0;
 	}
 
+	inline void Reset()
+	{
+		Diff = 0;
+		Absolute = 0;
+	}
+
 	inline void Set(int newPos)
 	{
+		
 		Diff = newPos - Absolute;
 		Absolute = newPos;
+		if (Action)
+		{
+			Action->Move(newPos);
+		}
 	}
 
 	inline TPositionSensor& operator = (int newPos)
 	{
-		Diff = newPos - Absolute;
-		Absolute = newPos;
+		Set(newPos);
 		return *this;
 	}
 
 	inline operator int (void)
 	{
 		return Absolute;
-	}
-};
-
-class TMappedKeyboard: public IKeyboardObserver
-{
-public:
-	// TODO: could be made and implemented by Keyboard class?
-	// so functions return if the event handled or not if its handled
-	// keyboard will stop dispatching event to observers if not handled
-	// it will continue
-
-	TMappedKeyboard* Parent;
-
-	TButtonSensor Keys[256];
-
-	TMappedKeyboard()
-	{
-		Parent = 0;
-	}
-
-	void BindKey(int KeyID, TTriggerAction* Action)
-	{
-		Keys[KeyID].BindAction(Action);
-	}
-
-	void UnbindKey(int KeyID)
-	{
-		Keys[KeyID].UnbindAction();
-	}
-
-	void KeyDown(int keyID)
-	{
-		if( Keys[keyID].Action != 0)
-		{
-			Keys[keyID].Down();
-		}
-		else
-		{
-			if (Parent) Parent->KeyDown(keyID);
-		}
-	}
-
-	void KeyUp(int keyID)
-	{
-		if (Keys[keyID].Action != 0)
-		{
-			Keys[keyID].Up();
-		}
-		else
-		{
-			if (Parent) Parent->KeyUp(keyID);
-		}
-	}
-
-	void KeyUnicode(ch16 keyChar)
-	{
-		// HMM... Not any known uses? Maybe used for mapping stuff in non english keyboards?
-	}
-};
-
-class TMappedMouse: public IMouseObserver
-{
-public:
-	TButtonSensor Buttons[5];
-	TPositionSensor X;
-	TPositionSensor Y;
-
-	void MouseMove(int x,int y)
-	{
-		X = x;
-		Y = y;
-	}
-
-	void MouseDown(int x,int y, int button)
-	{
-		X = x;
-		Y = y;
-		Buttons[button].Down();
-	}
-
-	void MouseUp(int x,int y, int button)
-	{
-		X = x;
-		Y = y;
-		Buttons[button].Up();
-	}
-
-	void MouseWheel(int x,int y,int delta)
-	{
-		X = x;
-		Y = y;
-		// wtf we going to do with wheel?
 	}
 };
 

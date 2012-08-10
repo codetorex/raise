@@ -1,9 +1,8 @@
 #include "stdafx.h"
-#include "tprocessdebug.h"
-#include "tprocessmodule.h"
+
 
 #ifdef WIN32
-
+#include "tprocess.h"
 
 ui32 TProcessMemoryRegion::FindString( const TString& src )
 {
@@ -11,12 +10,12 @@ ui32 TProcessMemoryRegion::FindString( const TString& src )
 	{
 		throw Exception("String should be ASCII (no characters over 127)");
 	}
-	return Parent->Search(StartAddress,EndAddress,src.Data,src.Length);
+	return Memory->Search(StartAddress,EndAddress,src.Data,src.Length);
 }
 
 ui32 TProcessMemoryRegion::FindXref( ui32 addr)
 {
-	return Parent->Search(StartAddress,EndAddress,&addr,4);
+	return Memory->Search(StartAddress,EndAddress,&addr,4);
 }
 
 ui32 TProcessMemoryRegion::FindFunctionBegin( ui32 addr ,int intCount)
@@ -24,7 +23,7 @@ ui32 TProcessMemoryRegion::FindFunctionBegin( ui32 addr ,int intCount)
 	int counter = 0;
 
 	byte fncBytes[1024];
-	Parent->Read(addr-1024,fncBytes,1024);
+	Memory->Read(addr-1024,fncBytes,1024);
 	int i = 1024;
 	while(i--)
 	{
@@ -71,7 +70,7 @@ ui32 TProcessMemoryRegion::FindFunctionFromString( const TString& src )
 ui32 TProcessMemoryRegion::FindFunctionFromString( const TString& src, byte firstByte)
 {
 	ui32 fncAddr = FindFunctionFromString(src);
-	byte RealFirstByte = Parent->ReadByte(fncAddr);
+	byte RealFirstByte = Memory->ReadByte(fncAddr);
 	if (RealFirstByte != firstByte )
 	{
 		throw Exception("Function begin check failed");
@@ -79,23 +78,23 @@ ui32 TProcessMemoryRegion::FindFunctionFromString( const TString& src, byte firs
 	return fncAddr;
 }
 
-void TProcessMemoryRegion::Initialize( const TString& _name, ui32 _start,ui32 _end,TProcessHack* _prn )
+void TProcessMemoryRegion::Initialize( const TString& _name, ui32 _start,ui32 _end,TProcessMemory* _prn )
 {
 	ModuleName = _name;
 	StartAddress = _start;
 	EndAddress = _end;
 	EntryPointAddress = 0x00400000;
 	ModuleMemorySize = EndAddress - StartAddress;
-	Parent = _prn;
+	Memory = _prn;
 }
 
-TProcessMemoryRegion::TProcessMemoryRegion( const TString& _name, const TString& _file,ui32 _start,ui32 _end,TProcessHack* _prn )
+TProcessMemoryRegion::TProcessMemoryRegion( const TString& _name, const TString& _file,ui32 _start,ui32 _end,TProcessMemory* _prn )
 {
 	Initialize(_name,_start,_end,_prn);
 	FileName = _file;
 }
 
-TProcessMemoryRegion::TProcessMemoryRegion( const TString& _name, ui32 _start,ui32 _end,TProcessHack* _prn )
+TProcessMemoryRegion::TProcessMemoryRegion( const TString& _name, ui32 _start,ui32 _end,TProcessMemory* _prn )
 {
 	Initialize(_name,_start,_end,_prn);
 }
@@ -108,11 +107,11 @@ TProcessMemoryRegion::TProcessMemoryRegion()
 	ModuleMemorySize = 0;
 }
 
-TProcessMemoryRegion::TProcessMemoryRegion( ui32 _start,ui32 _end,TProcessHack* prn )
+TProcessMemoryRegion::TProcessMemoryRegion( ui32 _start,ui32 _end,TProcessMemory* prn )
 {
 	StartAddress = _start;
 	EndAddress = _end;
-	Parent = prn;
+	Memory = prn;
 
 	EntryPointAddress = 0;
 	ModuleMemorySize = 0;
@@ -120,12 +119,12 @@ TProcessMemoryRegion::TProcessMemoryRegion( ui32 _start,ui32 _end,TProcessHack* 
 
 ui32 TProcessMemoryRegion::Search( const void* needle, int length )
 {
-	return Parent->Search(StartAddress,EndAddress,needle,length);
+	return Memory->Search(StartAddress,EndAddress,needle,length);
 }
 
 ui32 TProcessMemoryRegion::SearchPattern( const void* needle, const byte* pattern, int length )
 {
-	return Parent->SearchPattern(StartAddress,EndAddress,needle,pattern,length);
+	return Memory->SearchPattern(StartAddress,EndAddress,needle,pattern,length);
 }
 
 #endif

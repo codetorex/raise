@@ -237,6 +237,7 @@
     <ClInclude Include="tjoystick.h" />
     <ClInclude Include="tkeyboard.h" />
     <ClInclude Include="tinputenum.h" />
+    <ClInclude Include="tkeyboardmapped.h" />
     <ClInclude Include="tkeyvalue.h" />
     <ClInclude Include="tlatin1encoding.h" />
     <ClInclude Include="tlibrary.h" />
@@ -246,6 +247,7 @@
     <ClInclude Include="tlogstream.h" />
     <ClInclude Include="mpadding2.h" />
     <ClInclude Include="tmemorywriter.h" />
+    <ClInclude Include="tmousemapped.h" />
     <ClInclude Include="tresetevent.h" />
     <ClInclude Include="tmemorydriver.h" />
     <ClInclude Include="tmemorystream.h" />
@@ -256,8 +258,6 @@
     <ClInclude Include="tpalette.h" />
     <ClInclude Include="tpath.h" />
     <ClInclude Include="tprocess.h" />
-    <ClInclude Include="tprocessdebug.h" />
-    <ClInclude Include="tprocessmodule.h" />
     <ClInclude Include="tprofiler.h" />
     <ClInclude Include="tproperty.h" />
     <ClInclude Include="tqueue.h" />
@@ -299,6 +299,7 @@
     <ClInclude Include="ttypemanager.h" />
     <ClInclude Include="tutf16encoding.h" />
     <ClInclude Include="tutf8encoding.h" />
+    <ClInclude Include="twindowhandle.h" />
     <ClInclude Include="twintools.h" />
     <ClInclude Include="txmlreader.h" />
     <ClInclude Include="txmlwriter.h" />
@@ -355,6 +356,7 @@
     <ClCompile Include="tpath.cpp" />
     <ClCompile Include="tprocess.cpp" />
     <ClCompile Include="tprocessdebug.cpp" />
+    <ClCompile Include="tprocessmanager.cpp" />
     <ClCompile Include="tprocessmodule.cpp" />
     <ClCompile Include="trmlreader.cpp" />
     <ClCompile Include="trmlwriter.cpp" />
@@ -370,6 +372,7 @@
     <ClCompile Include="tthread.cpp" />
     <ClCompile Include="ttimedriver.cpp" />
     <ClCompile Include="ttypemanager.cpp" />
+    <ClCompile Include="twindowhandle.cpp" />
     <ClCompile Include="twintools.cpp" />
     <ClCompile Include="txmlreader.cpp" />
     <ClCompile Include="txmlwriter.cpp" />

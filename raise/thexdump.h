@@ -132,8 +132,10 @@ public:
 				}
 				
 				byte curData = *(Data + i + k);
-				if (curData >= 32 && curData <= 126)
+				if (curData < 32 || curData > 126)
+				{
 					curData = '.';
+				}
 				Target->WriteChar(curData);
 			}
 			Target->WriteLine();
