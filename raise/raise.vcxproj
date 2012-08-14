@@ -102,6 +102,7 @@
       <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
       <AdditionalIncludeDirectories>
       </AdditionalIncludeDirectories>
+      <RuntimeTypeInfo>false</RuntimeTypeInfo>
     </ClCompile>
     <CustomBuildStep>
       <Command>"C:\Library\Projects\AutoBuildNumber\AutoBuildNumber\bin\Release\AutoBuildNumber.exe" "$(ProjectDir)raiseversion.h"</Command>

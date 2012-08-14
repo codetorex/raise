@@ -28,7 +28,34 @@ void TProcess::CloseProcessHandle()
 
 void TProcess::OpenProcessHandle()
 {
-	processHandle = OpenProcess(PROCESS_ALL_ACCESS,0,processID);
+	OpenProcessHandle(PROCESS_ALL_ACCESS);
+}
+
+void TProcess::OpenProcessHandle( bool memoryRead, bool memoryWrite, bool debug )
+{
+	if (memoryRead && memoryWrite && debug)
+	{
+		OpenProcessHandle();
+		return;
+	}
+
+	ui32 access = 0;
+	if (memoryRead)
+	{
+		access |= PROCESS_VM_READ;
+	}
+
+	if (memoryWrite)
+	{
+		access |= PROCESS_VM_WRITE;
+	}
+
+	OpenProcessHandle(access);
+}
+
+void TProcess::OpenProcessHandle( ui32 access )
+{
+	processHandle = OpenProcess(access,0,processID);
 	if (!processHandle)
 	{
 		throw Exception("Can't open process");
@@ -81,5 +108,38 @@ void TProcessDebug::InitializeDebug( TProcess* pprocess )
 	Process = pprocess;
 }
 
-#endif
+ui32 TProcessMemory::GetPointerOffset( ui32 basePtr, ui32 offset1 )
+{
+	ui32 cur = ReadDWord(basePtr);
+	if (cur == 0)
+	{
+		throw Exception("Base address points to null", 1);
+	}
 
+	cur += offset1;
+	return cur;
+}
+
+int TProcessMemory::GetPointer( TProcessPointerMultilevel& p )
+{
+	int curLevel = 0;
+
+	ui32 currentPtr = p.BasePointer;
+
+	for (int i=0;i<p.Offsets.Count;i++)
+	{
+		currentPtr = ReadDWord(currentPtr);
+		if (currentPtr == 0)
+		{
+			p.RealPointer = 0;
+			return -curLevel;
+		}
+		currentPtr += p.Offsets[i].Offset;
+		curLevel++;
+	}
+
+	p.RealPointer = currentPtr;
+	return 1;
+}
+
+#endif

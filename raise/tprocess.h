@@ -33,26 +33,79 @@ class TProcessPointerOffset
 {
 public:
 	ui32 Offset;
+
+	TProcessPointerOffset()
+	{
+		Offset = 0;
+	}
+
+	TProcessPointerOffset(ui32 offset)
+	{
+		Offset = offset;
+	}
+
+	TProcessPointerOffset& operator = (ui32 newOffset)
+	{
+		Offset = newOffset;
+		return *this;
+	}
+
+	operator ui32()
+	{
+		return Offset;
+	}
 };
 
 class TProcessPointer
 {
 public:
-	enum PointedType
-	{
-		PT_BYTE,
-		PT_WORD,
-		PT_DWORD,
-		PT_PTR,
-	};
-
-	TProcess* Parent;
 	ui32 Address;
-	PointedType Type;
 
-	TProcessPointer ReadPointedPointer()
+	TProcessPointer()
 	{
+		Address = 0;
+	}
 
+	TProcessPointer(ui32 addr)
+	{
+		Address = addr;
+	}
+
+	TProcessPointer& operator = (ui32 newAddress)
+	{
+		Address = newAddress;
+		return *this;
+	}
+
+	operator ui32()
+	{
+		return Address;
+	}
+};
+
+/**
+ * Represents multilevel offsetted pointer
+ */
+class TProcessPointerMultilevel
+{
+public:
+	TProcessPointer BasePointer;
+	TProcessPointer RealPointer;
+	TArrayStack<TProcessPointerOffset,16> Offsets;
+
+	TProcessPointerMultilevel()
+	{
+	
+	}
+
+	TProcessPointerMultilevel(ui32 basePtr)
+	{
+		BasePointer = basePtr;
+	}
+
+	inline void AddOffset(ui32 offset)
+	{
+		Offsets.Add(offset);
 	}
 };
 
@@ -103,6 +156,8 @@ public:
 	TVirtualBuffer Buffer;
 	TProcess* Process;
 	TProcessMemoryRegion MainRegion;
+
+	// ADD MEMORY USAGE FUNCTIONS
 
 	void InitializeMemory(TProcess* pprocess);
 
@@ -174,6 +229,14 @@ public:
 		Write(address,&value,4);
 	}
 
+	/**
+	 * Returns 1 when everything went smooth
+	 * 0 and negative numbers means which offset it got null pointer
+	 */
+	int GetPointer(TProcessPointerMultilevel& p);
+
+	ui32 GetPointerOffset(ui32 basePtr, ui32 offset1);
+	
 	inline ui32 FillBuffer(ui32 address)
 	{
 		ui32 readed = Read(address,Buffer.Data,Buffer.Capacity);
@@ -375,6 +438,10 @@ public:
 	 * Opens handle for process so we can do stuff
 	 */
 	void OpenProcessHandle();
+
+	void OpenProcessHandle(ui32 access);
+
+	void OpenProcessHandle(bool memoryRead, bool memoryWrite, bool debug = false);
 
 	/**
 	 * Call this when you got nothing to do left with this process
