@@ -179,6 +179,9 @@ public:
 
 	//TODO: implement wide char string reading functions
 
+	/**
+	 * Returns amount of bytes readed
+	 */
 	inline ui32 Read(ui32 address, void* buffer, int length)
 	{
 		DWORD readed;
@@ -210,6 +213,13 @@ public:
 	inline ui32 ReadDWord(ui32 address)
 	{
 		ui32 data;
+		Read(address,&data,4);
+		return data;
+	}
+
+	inline float ReadFloat(ui32 address)
+	{
+		float data;
 		Read(address,&data,4);
 		return data;
 	}

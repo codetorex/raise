@@ -40,7 +40,8 @@ class TTriggerAction: public TInputAction
 public:
 	TTriggerAction()
 	{
-		ActionType = IA_BUTTON; 
+		ActionType = IA_BUTTON;
+		Value = false;
 	}
 
 	bool Value;
@@ -48,6 +49,20 @@ public:
 	virtual void Trigger(bool value)
 	{
 		this->Value = value;
+	}
+};
+
+/**
+ * Sets given Bool ptr to key state
+ */
+class TTriggerActionBool: public TTriggerAction
+{
+public:
+	bool* BoolPtr;
+
+	void Trigger(bool value)
+	{
+		*BoolPtr = value;
 	}
 };
 
@@ -94,6 +109,8 @@ public:
 	TMoveAction()
 	{
 		ActionType = IA_POSITION;
+		Position = 0;
+		Difference = 0;
 	}
 
 	int Position;
@@ -101,7 +118,7 @@ public:
 
 	virtual void Move(int value)
 	{
-		Difference = value - Difference;
+		Difference = value - Position;
 		Position = value;
 	}
 };
@@ -112,6 +129,24 @@ class TInputModeBase
 public:
 	TString Name;
 	TArray< TInputAction* > Actions; // actions that uses this mode
+
+	TTriggerAction* CreateBoolAction(const TString& name, bool* boolPtr)
+	{
+		TTriggerActionBool* ta = new TTriggerActionBool();
+		ta->Name = name;
+		ta->BoolPtr = boolPtr;
+		Actions.Add(ta);
+		return ta;
+	}
+
+	TTriggerAction* CreateEventAction(const TString& name, TTriggerActionEvent::BoolEvent* handler)
+	{
+		TTriggerActionEvent* ta = new TTriggerActionEvent();
+		ta->Name = name;
+		ta->KeyPress += handler;
+		Actions.Add(ta);
+		return ta;
+	}
 
 	TTriggerAction* CreateTriggerAction(const TString& name)
 	{

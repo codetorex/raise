@@ -290,6 +290,37 @@ public:
 		_43 = -zaxis.dot(Position);
 		_44 = 1.0f;
 	}
+
+		/**
+	 * Setups a right handed look at view matrix from given parameters
+	 */
+	inline void LookAtDirectionR(const Vector3& Position, const Vector3& Direction, const Vector3& Up)
+	{
+		Vector3 xaxis = Up.cross(Direction);
+		xaxis.normalize();
+
+		Vector3 yaxis = Direction.cross(xaxis);
+
+		_11 = xaxis.x;
+		_12 = yaxis.x;
+		_13 = Direction.x;
+		_14 = 0.0f;
+
+		_21 = xaxis.y;
+		_22 = yaxis.y;
+		_23 = Direction.y;
+		_24 = 0.0f;
+
+		_31 = xaxis.z;
+		_32 = yaxis.z;
+		_33 = Direction.z;
+		_34 = 0.0f;
+
+		_41 = -xaxis.dot(Position);
+		_42 = -yaxis.dot(Position);
+		_43 = -Direction.dot(Position);
+		_44 = 1.0f;
+	}
 };
 
 typedef MMatrix4x4 mat4;

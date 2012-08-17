@@ -13,7 +13,7 @@ public:
 
 	TKeyboardMapped()
 	{
-		Parent = 0;
+
 	}
 
 	void BindKey(int KeyID, TTriggerAction* Action)
@@ -28,12 +28,12 @@ public:
 
 	void KeyDown(int keyID)
 	{
-		return Keys[keyID].Down();
+		Keys[keyID].Down();
 	}
 
 	void KeyUp(int keyID)
 	{
-		return Keys[keyID].Up();
+		Keys[keyID].Up();
 	}
 
 	void KeyUnicode(ch16 keyChar)
