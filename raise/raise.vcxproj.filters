@@ -108,6 +108,9 @@
     <Filter Include="Source Files\System\Type">
       <UniqueIdentifier>{706b7851-b7f1-4622-afbe-6155542a19a7}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Source Files\Web">
+      <UniqueIdentifier>{04b929f9-bad5-4b56-bec9-cdb8dfc38b49}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="tlinkedlist.h">
@@ -649,6 +652,21 @@
     </ClInclude>
     <ClInclude Include="twindowhandle.h">
       <Filter>Source Files\Hacking</Filter>
+    </ClInclude>
+    <ClInclude Include="whttprequest.h">
+      <Filter>Source Files\Web</Filter>
+    </ClInclude>
+    <ClInclude Include="wcontroller.h">
+      <Filter>Source Files\Web</Filter>
+    </ClInclude>
+    <ClInclude Include="whttpresponse.h">
+      <Filter>Source Files\Web</Filter>
+    </ClInclude>
+    <ClInclude Include="whttpcontext.h">
+      <Filter>Source Files\Web</Filter>
+    </ClInclude>
+    <ClInclude Include="whttphandler.h">
+      <Filter>Source Files\Web</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
