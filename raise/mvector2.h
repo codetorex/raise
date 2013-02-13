@@ -2,6 +2,7 @@
 #define MVECTOR2_H
 
 #include "raisetypes.h"
+#include "mmathdriver.h"
 
 template <class T>
 class MVector2

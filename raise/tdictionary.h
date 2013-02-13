@@ -86,7 +86,7 @@ public:
 		sfunc:
 		if ( d->Map[curMap].Values.Count > curItem )
 		{
-			Current = d->Map[curMap].Values.Item[curItem];
+			this->Current = d->Map[curMap].Values.Item[curItem];
 			curItem++;
 		}
 		else

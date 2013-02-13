@@ -2,6 +2,8 @@
 #include "tprocess.h"
 #include "twintools.h"
 
+#ifdef WIN32
+
 void TWindowList::CaptureWindowList()
 {
 	WNDENUMPROC enumFunc = TWindowList::AddItem;
@@ -58,3 +60,5 @@ TString TWindowHandle::GetModulePath()
 
 	return TString::Empty;
 }
+
+#endif

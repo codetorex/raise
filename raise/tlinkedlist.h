@@ -187,7 +187,7 @@ public:
 	 */
 	void ClearDelete()
 	{
-		throw NotImplementedException();
+		LowLevelNotImplemented();
 	}
 
 	/**
@@ -227,7 +227,7 @@ public:
 		{
 			if (baseItem != FirstItem)
 			{
-				throw Exception("Impposiblru error");
+				LowLevelException("Impposiblru error");
 			}
 
 			itm->Parent = this;
@@ -262,14 +262,14 @@ public:
 	{
 		CurrentIndex = 0;
 		FakeFirst.NextItem = mList->FirstItem; // This guy saves us from checking in every moveNext call.
-		Current = (T)&FakeFirst;
+		this->Current = (T)&FakeFirst;
 	}
 
 	bool MoveNext()
 	{
-		Current = Current->NextItem;
+		this->Current = this->Current->NextItem;
 		CurrentIndex++;
-		return Current != 0;
+		return this->Current != 0;
 	}
 };
 

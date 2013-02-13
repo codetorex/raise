@@ -2,14 +2,14 @@
 <solution>
 	<xmlversion>2</xmlversion>
 	<settings>
-		<Host>192.168.2.9</Host>
-		<Username>devnet-linux</Username>
-		<Password>xyzburak</Password>
+		<Host>192.168.2.30</Host>
+		<Username>kalem</Username>
+		<Password>burak123</Password>
 		<RemotePath>~/Desktop/Projects/raise/</RemotePath>
 		<DeleteStuff>False</DeleteStuff>
 		<FilterExtension>aps,idb,ncp,obj,pch,sbr,tmp,pdb,bsc,ilk,res,ncb,opt,suo,manifest,dep,vcproj,vcxproj,user,filters</FilterExtension>
 		<FilterDirectory>Debug,Release</FilterDirectory>
-		<ScriptSource>C:\Library\Projects\RemoteCompiler\MakefileExampleScripts\testscript.rcs</ScriptSource>
+		<ScriptSource>C:\Library\Projects\RemoteCompiler\MakefileExampleScripts\testscript_gcc47.rcs</ScriptSource>
 	</settings>
 	<projects>
 		<project name="raise\raise.vcxproj">

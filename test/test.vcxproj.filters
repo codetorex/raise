@@ -67,5 +67,8 @@
     <ClInclude Include="test_vector3.h">
       <Filter>Tests</Filter>
     </ClInclude>
+    <ClInclude Include="test_mvc.h">
+      <Filter>Tests</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>

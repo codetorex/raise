@@ -60,10 +60,10 @@ public:
 	MDegree()
 	{
 		Degree = 0;
-		Radian = 0;
+		this->Radian = 0;
 	}
 
-	MDegree( float f ): MRadian(ToRadian(f))
+	MDegree( float f ): MRadian<T>(ToRadian(f))
 	{
 		Degree = f;
 	}
@@ -71,13 +71,13 @@ public:
 	inline void SetDegree(float f)
 	{
 		Degree = f;
-		Radian = ToRadian(f);
+		this->Radian = ToRadian(f);
 	}
 
 	MDegree(const MRadian<T>& rad)
 	{
 		Degree = MRadian<T>::ToDegree(rad.Radian);
-		Radian = rad.Radian;
+		this->Radian = rad.Radian;
 	}
 
 	inline static T ToRadian(T deg)

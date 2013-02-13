@@ -38,10 +38,10 @@ public:
 
 	inline void SetRectangle(T rx,T ry, T rw, T rh)
 	{
-		X = rx;
-		Y = ry;
-		Width = rw;
-		Height = rh;
+		this->X = rx;
+		this->Y = ry;
+		this->Width = rw;
+		this->Height = rh;
 	}
 
 	/**
@@ -57,42 +57,42 @@ public:
 			return;
 
 		case CA_TopCenter:
-			srcRect.X = (Width - srcRect.Width) / 2;
+			srcRect.X = (this->Width - srcRect.Width) / 2;
 			srcRect.Y = 0;
 
 		case CA_TopRight:
-			srcRect.X = Width - srcRect.Width;
+			srcRect.X = this->Width - srcRect.Width;
 			srcRect.Y = 0;
 			return;
 
 		case CA_MiddleLeft:
 			srcRect.X = 0;
-			srcRect.Y = (( Height - srcRect.Height ) / 2);
+			srcRect.Y = (( this->Height - srcRect.Height ) / 2);
 			return;
 
 		case CA_MiddleCenter:
-			srcRect.X = ((Width - srcRect.Width) / 2);
-			srcRect.Y = ((Height - srcRect.Height ) / 2);
+			srcRect.X = ((this->Width - srcRect.Width) / 2);
+			srcRect.Y = ((this->Height - srcRect.Height ) / 2);
 			return;
 
 		case CA_MiddleRight:
-			srcRect.X = Width - srcRect.Width;
-			srcRect.Y = (( Height - srcRect.Height ) / 2);
+			srcRect.X = this->Width - srcRect.Width;
+			srcRect.Y = (( this->Height - srcRect.Height ) / 2);
 			return;
 
 		case CA_BottomLeft:
 			srcRect.X = 0;
-			srcRect.Y = ( Height ) - srcRect.Height;
+			srcRect.Y = ( this->Height ) - srcRect.Height;
 			return;
 
 		case CA_BottomCenter:
-			srcRect.X = ((Width - srcRect.Width) / 2);
-			srcRect.Y = Height - srcRect.Height;
+			srcRect.X = ((this->Width - srcRect.Width) / 2);
+			srcRect.Y = this->Height - srcRect.Height;
 			return;
 
 		case CA_BottomRight:
-			srcRect.X = Width - srcRect.Width;
-			srcRect.Y = Height - srcRect.Height;
+			srcRect.X = this->Width - srcRect.Width;
+			srcRect.Y = this->Height - srcRect.Height;
 			return;
 		}
 	}
@@ -103,124 +103,124 @@ public:
 	void AlignOutside(MRectangle<T>& srcRect, Alignment alignment) const
 	{
 		Align(srcRect,alignment);
-		srcRect.TranslateVector(X,Y);
+		srcRect.TranslateVector(this->X,this->Y);
 	}
 
 	inline void MoveX( T x_)
 	{
-		X = x_;
+		this->X = x_;
 	}
 
 	inline void MoveY( T y_)
 	{
-		Y = y_;
+		this->Y = y_;
 	}
 
 	inline void Move(T x_, T y_)
 	{
-		X = x_;
-		Y = y_;
+		this->X = x_;
+		this->Y = y_;
 	}
 
 	inline void ChangeWidth( T w_ )
 	{
-		Width = w_;
+		this->Width = w_;
 	}
 
 	inline void ChangeHeight( T h_ )
 	{
-		Height = h_;
+		this->Height = h_;
 	}
 
 	inline void SetRectangle( const MRectangle<T>& other)
 	{
-		X = other.X;
-		Y = other.Y;
-		Width = other.Width;
-		Height = other.Height;
+		this->X = other.X;
+		this->Y = other.Y;
+		this->Width = other.Width;
+		this->Height = other.Height;
 	}
 
 	inline void SetFromPadding(T totalWidth, T totalHeight, const MPadding2<T>& padding)
 	{
-		X = padding.Left;
-		Y = padding.Top;
-		Width = padding.RemainingWidth(totalWidth);
-		Height = padding.RemainingHeight(totalHeight);
+		this->X = padding.Left;
+		this->Y = padding.Top;
+		this->Width = padding.RemainingWidth(totalWidth);
+		this->Height = padding.RemainingHeight(totalHeight);
 	}
 
 	inline T Right() const
 	{
-		return X + Width;
+		return this->X + this->Width;
 	}
 
 	inline T Bottom() const
 	{
-		return Y + Height;
+		return this->Y + this->Height;
 	}
 
 	inline void Shrink(T amount)
 	{
-		X += amount;
-		Y += amount;
-		Width -= amount * 2;
-		Height -= amount * 2;
+		this->X += amount;
+		this->Y += amount;
+		this->Width -= amount * 2;
+		this->Height -= amount * 2;
 	}
 
 	inline void Shrink( T shWidth, T shHeight)
 	{
-		X += shWidth;
-		Y += shHeight;
-		Width -= shWidth * 2;
-		Height -= shHeight * 2;
+		this->X += shWidth;
+		this->Y += shHeight;
+		this->Width -= shWidth * 2;
+		this->Height -= shHeight * 2;
 	}
 
 	inline  void Shrink( const MPadding2<T>& pad )
 	{
-		X += pad.Left;
-		Y += pad.Top;
-		Width -= pad.Left + pad.Right;
-		Height -= pad.Top + pad.Bottom;
+		this->X += pad.Left;
+		this->Y += pad.Top;
+		this->Width -= pad.Left + pad.Right;
+		this->Height -= pad.Top + pad.Bottom;
 	}
 
 	inline void Inflate( const MPadding2<T>& pad)
 	{
-		X -= pad.Left;
-		Y -= pad.Top;
-		Width += pad.Left + pad.Right;
-		Height += pad.Top + pad.Bottom;
+		this->X -= pad.Left;
+		this->Y -= pad.Top;
+		this->Width += pad.Left + pad.Right;
+		this->Height += pad.Top + pad.Bottom;
 	}
 
 	inline void Inflate( T size)
 	{
-		X -= size;
-		Y -= size;
-		Width += size * 2;
-		Height += size * 2;
+		this->X -= size;
+		this->Y -= size;
+		this->Width += size * 2;
+		this->Height += size * 2;
 	}
 
 	inline void Inflate( T infWidth, T infHeight)
 	{
-		X -= infWidth;
-		Y -= infHeight;
-		Width += infWidth * 2;
-		Height += infHeight * 2;
+		this->X -= infWidth;
+		this->Y -= infHeight;
+		this->Width += infWidth * 2;
+		this->Height += infHeight * 2;
 	}
 
 	inline T CenterX()
 	{
-		return X + (Width / 2);
+		return this->X + (this->Width / 2);
 	}
 
 	inline T CenterY()
 	{
-		return Y + (Height / 2);
+		return this->Y + (this->Height / 2);
 	}
 
 	inline bool IsInside(T pX, T pY) const
 	{
-		if (pX >= X && pX < Right())
+		if (pX >= this->X && pX < Right())
 		{
-			if (pY >= Y && pY < Bottom())
+			if (pY >= this->Y && pY < Bottom())
 			{
 				return true;
 			}
@@ -231,7 +231,7 @@ public:
 
 	inline bool IsColliding(const MRectangle<T>& r2)
 	{
-		return ! ( r2.X > Right() || r2.Right() < X || r2.Y > Bottom() || r2.Bottom() < Y );
+		return ! ( r2.X > Right() || r2.Right() < this->X || r2.Y > Bottom() || r2.Bottom() < this->Y );
 	}
 };
 

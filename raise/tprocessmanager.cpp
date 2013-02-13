@@ -3,6 +3,7 @@
 #include "texception.h"
 #include "twintools.h"
 
+#ifdef WIN32
 
 TProcess TProcessManager::FindByWindowName( const TString& windowname )
 {
@@ -87,3 +88,5 @@ TProcess TProcessManager::FindByWindowNamePartExePathPart( const TString& window
 
 	return FindByWindow(foundItem->Handle);
 }
+
+#endif

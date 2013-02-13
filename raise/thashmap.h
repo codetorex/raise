@@ -17,9 +17,9 @@ public:
 
 	THashKeyValue(ui32 h,const TString& k, T v)
 	{
-		Hash = h;
-		Key = k;
-		Value = v;
+		this->Hash = h;
+		this->Key = k;
+		this->Value = v;
 	}
 };
 
@@ -45,16 +45,16 @@ template <class T>
 class RDLL TMapLeaf: public TMapNode<T>
 {
 public:
-	TMapLeaf()
+	TMapLeaf<T>()
 	{
-		leaf = true;
+		this->leaf = true;
 	}
 
 	THashKeyValue<T>* values[4];
 
 	inline THashKeyValue<T>* Get(ui32 h,const TString& key)
 	{
-		int i=valueCount;
+		int i=this->valueCount;
 		while(i--)
 		{
 			if ( values[i]->Hash == h)
@@ -71,7 +71,7 @@ public:
 
 	inline void Add(ui32 h,THashKeyValue<T>* value)
 	{
-		values[valueCount++] = value;
+		values[this->valueCount++] = value;
 	}
 };
 
@@ -86,7 +86,7 @@ private:
 		{
 			Map[i] = 0;
 		}
-		leaf = false;
+		this->leaf = false;
 		branchLevel = _branchLevel;
 		branchShift = MUL8(branchLevel);
 	}
@@ -252,8 +252,8 @@ private:
 			if (!curNode) continue;
 			if (curNode->leaf)
 			{
-				Current = LoopLeaf( (TMapLeaf<T>*)curNode );
-				if (Current) return true;
+				this->Current = LoopLeaf( (TMapLeaf<T>*)curNode );
+				if (this->Current) return true;
 			}
 			else
 			{

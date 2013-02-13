@@ -397,24 +397,24 @@ class TArrayStack: public TArray<T>
 public:
 	T Temp[K];
 
-	TArrayStack(): TArray(Temp,0)
+	TArrayStack<T,K>(): TArray<T>(Temp,0)
 	{
-		Capacity = K;
+		this->Capacity = K;
 	}
 
 	void Free()
 	{
-		if (Item == Temp)
+		if (this->Item == this->Temp)
 		{
-			Item = 0; // shouldn't delete stack ptr
+			this->Item = 0; // shouldn't delete stack ptr
 		}
-		this->TArray::Free();
+		this->TArray<T>::Free();
 	}
 
-	~TArrayStack()
+	~TArrayStack<T,K>()
 	{
-		Item = 0;
-		Capacity = 0;
+		this->Item = 0;
+		this->Capacity = 0;
 	}
 };
 

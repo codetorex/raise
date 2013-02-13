@@ -105,22 +105,22 @@ public:
 	inline static void Unformat(const ch16* src, const ch16* format, va_list ap)
 	{
 		throw 0;
-		swscanf_s(src,format,ap);
+		/*swscanf_s(src,format,ap);*/
 	}
 
 	inline static void Unformat(const ch8* src, const ch8* format, va_list ap)
 	{
 		throw 0;
-		sscanf_s(src,format,ap);
+		/*sscanf_s(src,format,ap);*/
 	}
 	
 	inline static void Unformat(const ch16* src, const ch16* format, ...)
 	{
 		throw 0;
-		va_list ap;
+		/*va_list ap;
 		va_start(ap,format);
 		Unformat(src,format,ap);
-		va_end(ap);
+		va_end(ap);*/
 	}
 
 	inline static void Unformat(const ch8* src, const ch8* format, ...)

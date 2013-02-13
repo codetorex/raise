@@ -254,6 +254,7 @@
     <ClInclude Include="mpadding2.h" />
     <ClInclude Include="tmemorywriter.h" />
     <ClInclude Include="tmousemapped.h" />
+    <ClInclude Include="tplatformwin32.h" />
     <ClInclude Include="tresetevent.h" />
     <ClInclude Include="tmemorydriver.h" />
     <ClInclude Include="tmemorystream.h" />
@@ -314,6 +315,8 @@
     <ClInclude Include="whttphandler.h" />
     <ClInclude Include="whttprequest.h" />
     <ClInclude Include="whttpresponse.h" />
+    <ClInclude Include="wmvchandler.h" />
+    <ClInclude Include="wview.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="mmatrix.cpp" />

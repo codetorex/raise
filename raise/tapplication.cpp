@@ -95,7 +95,7 @@ void TModule::SetIdentifyText()
 	IdentifyBuildText = TString::Format("% - % - %", sfs(Name), sfs(Version.BuildPhaseText), sfs(Company));
 }
 
-TApplication Application;
+static TApplication Application;
 
 #include "tplatform.h"
 

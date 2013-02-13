@@ -60,9 +60,6 @@
     <Filter Include="Source Files\IO\Literacy\RML">
       <UniqueIdentifier>{a55c0f8b-568e-4beb-81b8-ad57aaca3fc7}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Source Files\System\Windows">
-      <UniqueIdentifier>{7b09620a-1851-48fe-90c5-c7153a1b6d48}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Source Files\System\Testing">
       <UniqueIdentifier>{2dc78062-2149-4741-b90d-76fde35f4d5a}</UniqueIdentifier>
     </Filter>
@@ -110,6 +107,18 @@
     </Filter>
     <Filter Include="Source Files\Web">
       <UniqueIdentifier>{04b929f9-bad5-4b56-bec9-cdb8dfc38b49}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Web\MVC">
+      <UniqueIdentifier>{61248f24-075d-429c-bd91-8eac5e3d5c89}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Platform">
+      <UniqueIdentifier>{ed9622e8-7bab-4758-aed9-c185d5ae6006}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Platform\Win32">
+      <UniqueIdentifier>{da16ba76-6a54-4097-a4ae-2c53eb27ff86}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Platform\Unix">
+      <UniqueIdentifier>{e91d4396-9b2f-4f18-ad48-7865d5e84f1a}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -302,9 +311,6 @@
     <ClInclude Include="tstringdriverfixedwidth.h">
       <Filter>Source Files\String</Filter>
     </ClInclude>
-    <ClInclude Include="tregistry.h">
-      <Filter>Source Files\System\Windows</Filter>
-    </ClInclude>
     <ClInclude Include="tproperty.h">
       <Filter>Source Files\System</Filter>
     </ClInclude>
@@ -376,9 +382,6 @@
     </ClInclude>
     <ClInclude Include="tstreamreaderutf8.h">
       <Filter>Source Files\IO\Literacy</Filter>
-    </ClInclude>
-    <ClInclude Include="twintools.h">
-      <Filter>Source Files\System\Windows</Filter>
     </ClInclude>
     <ClInclude Include="thashcodeprovider.h">
       <Filter>Source Files\Collection</Filter>
@@ -635,9 +638,6 @@
     <ClInclude Include="tserialization.h">
       <Filter>Source Files\IO\Literacy</Filter>
     </ClInclude>
-    <ClInclude Include="tplatform.h">
-      <Filter>Source Files\System</Filter>
-    </ClInclude>
     <ClInclude Include="tenum.h">
       <Filter>Source Files\Collection</Filter>
     </ClInclude>
@@ -656,9 +656,6 @@
     <ClInclude Include="whttprequest.h">
       <Filter>Source Files\Web</Filter>
     </ClInclude>
-    <ClInclude Include="wcontroller.h">
-      <Filter>Source Files\Web</Filter>
-    </ClInclude>
     <ClInclude Include="whttpresponse.h">
       <Filter>Source Files\Web</Filter>
     </ClInclude>
@@ -667,6 +664,27 @@
     </ClInclude>
     <ClInclude Include="whttphandler.h">
       <Filter>Source Files\Web</Filter>
+    </ClInclude>
+    <ClInclude Include="wmvchandler.h">
+      <Filter>Source Files\Web\MVC</Filter>
+    </ClInclude>
+    <ClInclude Include="wcontroller.h">
+      <Filter>Source Files\Web\MVC</Filter>
+    </ClInclude>
+    <ClInclude Include="wview.h">
+      <Filter>Source Files\Web\MVC</Filter>
+    </ClInclude>
+    <ClInclude Include="tplatform.h">
+      <Filter>Source Files\Platform</Filter>
+    </ClInclude>
+    <ClInclude Include="tplatformwin32.h">
+      <Filter>Source Files\Platform\Win32</Filter>
+    </ClInclude>
+    <ClInclude Include="tregistry.h">
+      <Filter>Source Files\Platform\Win32</Filter>
+    </ClInclude>
+    <ClInclude Include="twintools.h">
+      <Filter>Source Files\Platform\Win32</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -766,9 +784,6 @@
     <ClCompile Include="tencodinginfo.cpp">
       <Filter>Source Files\String</Filter>
     </ClCompile>
-    <ClCompile Include="twintools.cpp">
-      <Filter>Source Files\System\Windows</Filter>
-    </ClCompile>
     <ClCompile Include="thashcodeprovider.cpp">
       <Filter>Source Files\Collection</Filter>
     </ClCompile>
@@ -862,9 +877,6 @@
     <ClCompile Include="ttypemanager.cpp">
       <Filter>Source Files\System\Type</Filter>
     </ClCompile>
-    <ClCompile Include="tplatform.cpp">
-      <Filter>Source Files\System</Filter>
-    </ClCompile>
     <ClCompile Include="mmatrix.cpp">
       <Filter>Source Files\Mathematics</Filter>
     </ClCompile>
@@ -873,6 +885,12 @@
     </ClCompile>
     <ClCompile Include="twindowhandle.cpp">
       <Filter>Source Files\Hacking</Filter>
+    </ClCompile>
+    <ClCompile Include="tplatform.cpp">
+      <Filter>Source Files\Platform</Filter>
+    </ClCompile>
+    <ClCompile Include="twintools.cpp">
+      <Filter>Source Files\Platform\Win32</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

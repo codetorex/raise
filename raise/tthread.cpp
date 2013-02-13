@@ -2,6 +2,7 @@
 #include "tthread.h"
 #include "texception.h"
 
+#ifdef WIN32
 
 
 DWORD WINAPI WinThread (LPVOID lpdwThreadParam ) 
@@ -33,5 +34,5 @@ void TThread::Start()
 	}
 }
 
-
+#endif
 

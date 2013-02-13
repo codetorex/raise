@@ -276,7 +276,7 @@ public:
 		return result;
 	}
 
-	TArray<TStringFixedWidth<T>>* Split(TArray<TStringFixedWidth<T>>* seprator, bool removeEmpty = false)
+	TArray< TStringFixedWidth<T> >* Split(TArray< TStringFixedWidth<T> >* seprator, bool removeEmpty = false)
 	{
 		throw "Not Implemented";
 	}
