@@ -302,13 +302,7 @@
     <ClInclude Include="tcompositeconverter.h">
       <Filter>Source Files\IO\Buffer</Filter>
     </ClInclude>
-    <ClInclude Include="tstringfixedwidth.h">
-      <Filter>Source Files\String</Filter>
-    </ClInclude>
     <ClInclude Include="tstring.h">
-      <Filter>Source Files\String</Filter>
-    </ClInclude>
-    <ClInclude Include="tstringdriverfixedwidth.h">
       <Filter>Source Files\String</Filter>
     </ClInclude>
     <ClInclude Include="tproperty.h">
@@ -683,8 +677,11 @@
     <ClInclude Include="tregistry.h">
       <Filter>Source Files\Platform\Win32</Filter>
     </ClInclude>
-    <ClInclude Include="twintools.h">
-      <Filter>Source Files\Platform\Win32</Filter>
+    <ClInclude Include="tplatforminterface.h">
+      <Filter>Source Files\Platform</Filter>
+    </ClInclude>
+    <ClInclude Include="tplatformunix.h">
+      <Filter>Source Files\Platform\Unix</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -747,9 +744,6 @@
     </ClCompile>
     <ClCompile Include="tcomposition.cpp">
       <Filter>Source Files\IO\Buffer</Filter>
-    </ClCompile>
-    <ClCompile Include="tstringfixedwidth.cpp">
-      <Filter>Source Files\String</Filter>
     </ClCompile>
     <ClCompile Include="tstring.cpp">
       <Filter>Source Files\String</Filter>
@@ -889,7 +883,7 @@
     <ClCompile Include="tplatform.cpp">
       <Filter>Source Files\Platform</Filter>
     </ClCompile>
-    <ClCompile Include="twintools.cpp">
+    <ClCompile Include="tplatformwin32.cpp">
       <Filter>Source Files\Platform\Win32</Filter>
     </ClCompile>
   </ItemGroup>

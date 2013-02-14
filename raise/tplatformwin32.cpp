@@ -1,11 +1,12 @@
 #include "stdafx.h"
-#include "twintools.h"
 
+
+#ifdef WIN32
+
+#include "tplatformwin32.h"
 #include <ShlObj.h>
 
-ch16 TWinTools::TempSystemString[1024];
-
-bool TWinTools::BrowseFolder( const TString& startPath, TString& OUT selectedPath )
+bool TPlatformWin32::BrowseFolder( const TString& startPath, TString& selectedPath )
 {
 	bool result = false;
 
@@ -52,3 +53,30 @@ bool TWinTools::BrowseFolder( const TString& startPath, TString& OUT selectedPat
 
 	return bResult;*/
 }
+
+void TPlatformWin32::ShowMessageBox( const TString& message )
+{
+	ch16 Temp[4096];
+	RaiseToSystemString(message,(byte*)Temp,sizeof(Temp));
+
+	MessageBoxW(0,Temp,L"Message", MB_OK);
+}
+
+TString TPlatformWin32::GetErrorDescription( ui32 systemErrorID )
+{
+	ch16 Temp[4096];
+
+	FormatMessageW( 
+		FORMAT_MESSAGE_FROM_SYSTEM |
+		FORMAT_MESSAGE_IGNORE_INSERTS,
+		NULL,
+		systemErrorID,
+		MAKELANGID(LANG_NEUTRAL, SUBLANG_DEFAULT),
+		Temp,
+		4096, NULL );
+
+	return RaiseString(Temp);
+}
+
+#endif
+

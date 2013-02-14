@@ -34,7 +34,7 @@ public:
 
 	void Setup(TDirectoryInfo* parent)
 	{
-		TWinTools::SystemString16(parent->FullPath,FullPath,1024);
+		Platform.RaiseToSystemString(parent->FullPath,(byte*)FullPath,sizeof(FullPath));
 		FullPath[parent->FullPath.Length] = L'*';
 		FullPath[parent->FullPath.Length+1] = 0;
 		FindDataOpen = false;

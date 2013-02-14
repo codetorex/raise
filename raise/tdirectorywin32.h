@@ -5,7 +5,7 @@
 
 #ifdef WIN32
 
-#include "twintools.h"
+#include "tplatform.h"
 
 class TDirectoryInfo: public IDirectory
 {
@@ -89,7 +89,7 @@ public:
 	inline FileAttribute GetAttributes()
 	{
 		ch16 tmp[1024];
-		TWinTools::SystemString16(FullPath,tmp,1024);
+		Platform.RaiseToSystemString(FullPath,(byte*)tmp,sizeof(tmp));
 		return GetFileAttributesW(tmp);
 	}
 
@@ -101,7 +101,7 @@ public:
 	static bool Exists(const TString& path)
 	{
 		ch16 tmp[1024];
-		TWinTools::SystemString16(path,tmp,1024);
+		Platform.RaiseToSystemString(path,(byte*)tmp,sizeof(tmp));
 		FileAttribute fa = GetFileAttributesW(tmp);
 		if (fa != INVALID_FILE_ATTRIBUTES)
 		{

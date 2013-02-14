@@ -10,7 +10,7 @@
 
 #ifdef WIN32 // move this def outside of class?
 
-#include "twintools.h"
+#include "tplatform.h"
 
 class TimeDriver
 {
@@ -88,8 +88,8 @@ public:
 			dtz.Bias += dtz.DaylightBias;
 		}
 
-		LocalStandartName = TWinTools::RaiseString(dtz.StandardName);
-		LocalDaylightName = TWinTools::RaiseString(dtz.DaylightName);
+		LocalStandartName = Platform.RaiseString(dtz.StandardName);
+		LocalDaylightName = Platform.RaiseString(dtz.DaylightName);
 		LocalDifference = dtz.Bias * -60; // in seconds
 	}
 };

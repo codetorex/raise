@@ -2,22 +2,19 @@
 #define TPLATFORM_H
 
 
+#ifdef WIN32
+#include "tplatformwin32.h"
+#else
+#include "tplatformunix.h"
+#endif // WIN32
+
+
 // TODO: derive this from current platfomr, define TPlatform, and implement platform related stuff in there
 
 class TTypeManager;
 
 
-enum EDialogResult
-{
-	TDR_None,
-	TDR_OK,
-	TDR_Cancel,
-	TDR_Abort,
-	TDR_Retry,
-	TDR_Ignore,
-	TDR_Yes,
-	TDR_No,
-};
+
 
 /*enum ECursorSystem
 {
@@ -38,12 +35,6 @@ public:
 
 	virtual EDialogResult ShowMessageBox(const TString& text, const TString& caption, int button, int icon) = 0;
 
-	virtual void RaiseToSystemString(const TString& raiseStr, byte* output, ui32 outputSize) = 0;
-
-	virtual TString SystemToRaiseString(byte* input, ui32 inputSize) = 0;
-
-	virtual TString GetErrorDescription(ui32 errorID);
-
 	virtual EDialogResult BrowseFolder(const TString& startPath, TString& OUT selectedPath);
 
 
@@ -60,7 +51,7 @@ typedef TPlatformWindows TPlatformCurrent;
 /**
  * Main system façade to do everything?
  */
-class TPlatform // : public TPlatformCurrent
+class TPlatform: public TPlatformCurrent
 {
 public:
 	/**

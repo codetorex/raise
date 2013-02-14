@@ -254,6 +254,8 @@
     <ClInclude Include="mpadding2.h" />
     <ClInclude Include="tmemorywriter.h" />
     <ClInclude Include="tmousemapped.h" />
+    <ClInclude Include="tplatforminterface.h" />
+    <ClInclude Include="tplatformunix.h" />
     <ClInclude Include="tplatformwin32.h" />
     <ClInclude Include="tresetevent.h" />
     <ClInclude Include="tmemorydriver.h" />
@@ -284,13 +286,11 @@
     <ClInclude Include="tstring.h" />
     <ClInclude Include="tstringbuilder.h" />
     <ClInclude Include="tstringdriver.h" />
-    <ClInclude Include="tstringfixedwidth.h" />
     <ClInclude Include="tbitset.h" />
     <ClInclude Include="tlinkedlist.h" />
     <ClInclude Include="tmemory.h" />
     <ClInclude Include="stdafx.h" />
     <ClInclude Include="tcompositebuffer.h" />
-    <ClInclude Include="tstringdriverfixedwidth.h" />
     <ClInclude Include="tstringformat.h" />
     <ClInclude Include="tstringwriter.h" />
     <ClInclude Include="tplatform.h" />
@@ -307,7 +307,6 @@
     <ClInclude Include="tutf16encoding.h" />
     <ClInclude Include="tutf8encoding.h" />
     <ClInclude Include="twindowhandle.h" />
-    <ClInclude Include="twintools.h" />
     <ClInclude Include="txmlreader.h" />
     <ClInclude Include="txmlwriter.h" />
     <ClInclude Include="wcontroller.h" />
@@ -368,6 +367,7 @@
     <ClCompile Include="tmemory.cpp" />
     <ClCompile Include="tpackedrectangle.cpp" />
     <ClCompile Include="tpath.cpp" />
+    <ClCompile Include="tplatformwin32.cpp" />
     <ClCompile Include="tprocess.cpp" />
     <ClCompile Include="tprocessdebug.cpp" />
     <ClCompile Include="tprocessmanager.cpp" />
@@ -379,7 +379,6 @@
     <ClCompile Include="tstring.cpp" />
     <ClCompile Include="tstringbuilder.cpp" />
     <ClCompile Include="tstringdriver.cpp" />
-    <ClCompile Include="tstringfixedwidth.cpp" />
     <ClCompile Include="tplatform.cpp" />
     <ClCompile Include="ttest.cpp" />
     <ClCompile Include="ttestsuitereporting.cpp" />
@@ -387,7 +386,6 @@
     <ClCompile Include="ttimedriver.cpp" />
     <ClCompile Include="ttypemanager.cpp" />
     <ClCompile Include="twindowhandle.cpp" />
-    <ClCompile Include="twintools.cpp" />
     <ClCompile Include="txmlreader.cpp" />
     <ClCompile Include="txmlwriter.cpp" />
   </ItemGroup>

@@ -8,7 +8,7 @@
 
 #ifdef WIN32
 
-#include "twintools.h"
+#include "tplatform.h"
 
 class TPathDriver
 {
@@ -24,20 +24,20 @@ public:
 			tmplength++;
 			tmp[tmplength] = 0;
 		}
-		return TWinTools::RaiseString(tmp);
+		return Platform.RaiseString(tmp);
 	}
 
 	static TString TempDirectory()
 	{
 		ch16 tmp[1024];
 		GetTempPathW(1024,tmp);
-		return TWinTools::RaiseString(tmp);
+		return Platform.RaiseString(tmp);
 	}
 
 	static void CreateFolder(const TString& path)
 	{
 		ch16 tmp[1024];
-		TWinTools::SystemString16(path,tmp,1024);
+		Platform.RaiseToSystemString(path,(byte*)tmp,sizeof(tmp));
 		if ( CreateDirectoryW(tmp,NULL) == FALSE )
 		{
 			ui32 errorId = GetLastError();

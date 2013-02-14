@@ -31,7 +31,7 @@ byte TConsoleWindows::ColorTransformTable[16] = {0,4,2,6,1,5,3,7,8,12,10,14,9,13
 #include <io.h>
 #include <iostream>
 #include <fstream>
-#include "twintools.h"
+#include "tplatform.h"
 
 void TConsoleWindows::CreateConsole( const TString& title )
 {
@@ -40,7 +40,7 @@ void TConsoleWindows::CreateConsole( const TString& title )
 	if (!(title == TString::Empty))
 	{
 		ch16 wtitle[512];
-		TWinTools::SystemString16(title,wtitle,512);
+		Platform.RaiseToSystemString(title,(byte*)wtitle,sizeof(wtitle));
 		SetConsoleTitleW(wtitle);
 	}
 	//

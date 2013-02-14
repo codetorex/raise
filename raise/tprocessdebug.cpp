@@ -3,7 +3,7 @@
 
 #ifdef WIN32
 
-#include "twintools.h"
+#include "tplatform.h"
 #include "tthread.h"
 
 void TBreakpoint::SetBreakpoint()
@@ -161,7 +161,7 @@ void TProcessDebug::EndDebugging()
 	if ( !ExitDebugMode() )
 	{
 		DWORD err = GetLastError();
-		TString r = TWinTools::ErrorToString(err);
+		TString r = Platform.GetErrorDescription(err);
 		throw Exception("Failed to leave debug mode: %", sfs(r));
 	}
 	IsDebug = 0;

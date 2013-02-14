@@ -4,7 +4,7 @@
 
 #include "tprocess.h"
 #include "texception.h"
-#include "twintools.h"
+#include "tplatform.h"
 
 
 
@@ -15,7 +15,7 @@ TString TProcess::GetModulePath()
 	ch16 Temp[4096];
 	Temp[0] = 0;
 	GetModuleFileNameExW(processHandle,0,Temp,4096);
-	return TWinTools::RaiseString(Temp);
+	return Platform.RaiseString(Temp);
 }
 
 void TProcess::CloseProcessHandle()

@@ -11,7 +11,7 @@
 #define MAX_BUFF_SIZE		8192
 
 #ifdef WIN32
-#include "twintools.h"
+#include "tplatform.h"
 // TODO: after we do tplatform.h we should use it instead macro stuff
 #endif
 
@@ -27,7 +27,7 @@ protected:
 
 	void ThrowError( const TString& operation )
 	{
-		throw Exception( operation , sfs( TWinTools::ErrorToStringWithCode(WSAGetLastError())) );
+		throw Exception( operation , sfs( Platform.GetErrorDescription(WSAGetLastError())) );
 	}
 
 	void Initialize(AddressFamilies _AddressFamily, SocketTypes _SocketType, ProtocolTypes _ProtocolType)

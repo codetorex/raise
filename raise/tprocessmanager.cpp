@@ -1,7 +1,7 @@
 #include "stdafx.h"
 #include "tprocess.h"
 #include "texception.h"
-#include "twintools.h"
+#include "tplatform.h"
 
 #ifdef WIN32
 

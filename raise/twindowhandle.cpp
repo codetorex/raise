@@ -1,6 +1,6 @@
 #include "stdafx.h"
 #include "tprocess.h"
-#include "twintools.h"
+#include "tplatform.h"
 
 #ifdef WIN32
 
@@ -31,7 +31,7 @@ void TWindowHandle::UpdateTitle()
 	ch16 Temp[4096];
 	Temp[0] = 0;
 	GetWindowTextW(Handle,Temp,4096);
-	Title = TWinTools::RaiseString(Temp);
+	Title = Platform.RaiseString(Temp);
 }
 
 void TWindowHandle::UpdateClassName()
@@ -39,7 +39,7 @@ void TWindowHandle::UpdateClassName()
 	ch16 Temp[4096];
 	Temp[0] = 0;
 	GetClassNameW(Handle,Temp,4096);
-	ClassName = TWinTools::RaiseString(Temp);
+	ClassName = Platform.RaiseString(Temp);
 }
 
 TString TWindowHandle::GetModulePath()

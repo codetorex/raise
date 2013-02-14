@@ -127,7 +127,14 @@ public:
 		return result;
 	}
 
-	void ConvertString(const TString& src,ch16* dst, int dstcapacity) const
+
+	/**
+	 * @brief Converts TString to ch16* destination.
+	 * @param src Source string
+	 * @param dst wide character destination
+	 * @param dstcapacity byte length of destination
+	 */
+	void ConvertString(const TString& src,byte* dst, int dstcapacity) const
 	{
 		ch16 tmp[4];
 
@@ -142,17 +149,13 @@ public:
 			switch (ln)
 			{
 			case 2:
-				dst[0] = tmp[0];
-				dst++;
-
-			case 1:
-				dst[0] = tmp[0];
-				dst++;
+				*(ch16*)dst = tmp[0];
+				dst += ln;
 			}
 
 			dstcapacity -= ln;
 		}
-		dst[0] = 0;
+		*(ch16*)dst = 0;
 	}
 
 	inline int GetBytes(byte* dst, ch32 character) const

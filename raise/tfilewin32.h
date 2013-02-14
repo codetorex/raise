@@ -42,7 +42,7 @@ public:
 	inline void UpdateCache()
 	{
 		ch16 tmp[1024];
-		TWinTools::SystemString16(FullPath,tmp,1024);
+		Platform.RaiseToSystemString(FullPath,(byte*)tmp,sizeof(tmp));
 		WIN32_FILE_ATTRIBUTE_DATA fileAttributes;
 
 		FileAttributeCache = true;
@@ -150,7 +150,7 @@ public:
 	static bool Exists(const TString& path)
 	{
 		ch16 tmp[1024];
-		TWinTools::SystemString16(path,tmp,1024);
+		Platform.RaiseToSystemString(path,(byte*)tmp,sizeof(tmp));
 
 		FileAttribute fa = GetFileAttributesW(tmp);
 

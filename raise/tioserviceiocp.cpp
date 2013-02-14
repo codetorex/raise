@@ -3,7 +3,7 @@
 #include "tlog.h"
 
 #ifdef WIN32
-#include "twintools.h"
+#include "tplatform.h"
 #include "tioserviceiocp.h"
 
 bool TIOServiceIOCP::Initialized = false;
@@ -51,7 +51,7 @@ void TIOServiceIOCP::Start( ui32 workerCount )
 
 	if (nRet == SOCKET_ERROR)
 	{
-		throw("Failed to load AcceptEx: %", sfs(TWinTools::ErrorToStringWithCode(WSAGetLastError())));
+		throw("Failed to load AcceptEx: %", sfs(Platform.GetErrorDescription(WSAGetLastError())));
 	}
 
 	bytes = 0;
@@ -70,7 +70,7 @@ void TIOServiceIOCP::Start( ui32 workerCount )
 
 	if (nRet == SOCKET_ERROR)
 	{
-		throw("Failed to load ConnectEx: %", sfs(TWinTools::ErrorToStringWithCode(WSAGetLastError())));
+		throw("Failed to load ConnectEx: %", sfs(Platform.GetErrorDescription(WSAGetLastError())));
 	}
 
 	closesocket(tmpSocket);
@@ -299,7 +299,7 @@ NSocket* TIOServiceIOCP::CreateSocket(AddressFamilies _AddressFamily, SocketType
 	sdSocket = WSASocket(_AddressFamily, _SocketType, _ProtocolType, NULL, 0, WSA_FLAG_OVERLAPPED); 
 	if( sdSocket == INVALID_SOCKET ) 
 	{
-		Log.Output(LG_ERR,"WSASocket(sdSocket) failed: %", sfs(TWinTools::ErrorToStringWithCode(WSAGetLastError())));
+		Log.Output(LG_ERR,"WSASocket(sdSocket) failed: %", sfs(Platform.GetErrorDescription(WSAGetLastError())));
 		return NULL;
 	}
 
@@ -308,7 +308,7 @@ NSocket* TIOServiceIOCP::CreateSocket(AddressFamilies _AddressFamily, SocketType
 	if( nRet == SOCKET_ERROR) 
 	{
 		closesocket(sdSocket);
-		Log.Output(LG_ERR,"setsockopt(SNDBUF) failed: %", sfs(TWinTools::ErrorToStringWithCode(WSAGetLastError())));
+		Log.Output(LG_ERR,"setsockopt(SNDBUF) failed: %", sfs(Platform.GetErrorDescription(WSAGetLastError())));
 		return NULL;
 	}
 
@@ -330,7 +330,7 @@ void TIOServiceIOCP::IntroduceIOCP( NSocketIOCP* sck )
 	IOCPHandle = CreateIoCompletionPort((HANDLE)sck->Socket, IOCPHandle, (ULONG_PTR)sck, 0);
 	if(IOCPHandle == NULL) 
 	{
-		Log.Output(LG_ERR,"CreateIoCompletionPort() failed: %", sfs(TWinTools::ErrorToStringWithCode(GetLastError())));
+		Log.Output(LG_ERR,"CreateIoCompletionPort() failed: %", sfs(Platform.GetErrorDescription(GetLastError())));
 		delete sck;
 		return;
 	}
@@ -389,7 +389,7 @@ void TIOServiceIOCP::AcceptAsync( NSocket* sck, NSocket* target, void* object, N
 
 	if( nRet == SOCKET_ERROR && (ERROR_IO_PENDING != WSAGetLastError()) ) 
 	{
-		Log.Output(LG_ERR,"AcceptEx() failed: %", sfs(TWinTools::ErrorToStringWithCode(WSAGetLastError())));
+		Log.Output(LG_ERR,"AcceptEx() failed: %", sfs(Platform.GetErrorDescription(WSAGetLastError())));
 	}
 }
 
@@ -416,7 +416,7 @@ void TIOServiceIOCP::ConnectAsync( NSocket* sck, NEndPoint& endpoint, ConnectCal
 
 	if (nRet != 0)
 	{
-		Log.Output(LG_ERR,"AcceptEx() failed: %", sfs(TWinTools::ErrorToStringWithCode(WSAGetLastError())));
+		Log.Output(LG_ERR,"AcceptEx() failed: %", sfs(Platform.GetErrorDescription(WSAGetLastError())));
 	}
 }
 
