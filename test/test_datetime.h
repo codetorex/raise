@@ -76,7 +76,7 @@ public:
 		tunix = edate;
 		AddResult(tunix.TimeStamp == 1310557123, "Expanded to Unix timestamp conversion");
 
-		edate.Set( TimeDriver::Now(), true);
+		edate.Set( Platform.GetUtcTime(), true);
 		AddOutput("Local date time: " + edate.ToStringUniversal());
 	}
 

@@ -42,15 +42,15 @@ private:
 		}
 		else if (utf16char == 0xFFFE )
 		{
-			throw NotImplementedException(); // BIG ENDIAN UTF16
+			throw NotImplementedException(__FILE__,__LINE__); // BIG ENDIAN UTF16
 		}
 		else if (utf32char == 0xFEFF)
 		{
-			throw NotImplementedException(); // UTF32 encoding
+			throw NotImplementedException(__FILE__,__LINE__); // UTF32 encoding
 		}
 		else if (utf32char == 0xFFFE0000)
 		{
-			throw NotImplementedException(); // big endian UTF32 encoding
+			throw NotImplementedException(__FILE__,__LINE__); // big endian UTF32 encoding
 		}
 		else
 		{
@@ -185,7 +185,7 @@ public:
 
 	inline int Read(ch32* buffer,int count)
 	{
-		throw NotImplementedException();
+		throw NotImplementedException(__FILE__,__LINE__);
 		// TODO: This function should read as char.
 	}
 

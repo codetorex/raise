@@ -115,6 +115,9 @@
     <PreBuildEvent>
       <Command>"C:\Library\Projects\AutoBuildNumber\AutoBuildNumber\bin\Release\AutoBuildNumber.exe" "$(ProjectDir)raiseversion.h"</Command>
     </PreBuildEvent>
+    <Lib>
+      <AdditionalDependencies>libpng.lib;zlib.lib;</AdditionalDependencies>
+    </Lib>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Template|Win32'">
     <ClCompile>
@@ -167,8 +170,11 @@
     <ClInclude Include="tbitmapwriterparameters.h" />
     <ClInclude Include="tblend.h" />
     <ClInclude Include="tboxmodel.h" />
+    <ClInclude Include="tconsolebase.h" />
+    <ClInclude Include="tconsolewin32.h" />
     <ClInclude Include="tcssreader.h" />
     <ClInclude Include="tenum.h" />
+    <ClInclude Include="tfileunix.h" />
     <ClInclude Include="thexdump.h" />
     <ClInclude Include="tioservice.h" />
     <ClInclude Include="tioserviceiocp.h" />
@@ -205,7 +211,6 @@
     <ClInclude Include="tcompositionprimitive.h" />
     <ClInclude Include="tconsole.h" />
     <ClInclude Include="tconsolebuffer.h" />
-    <ClInclude Include="tconsoledriver.h" />
     <ClInclude Include="tconsoleformats.h" />
     <ClInclude Include="tconsolevt100.h" />
     <ClInclude Include="tconvert.h" />
@@ -254,6 +259,7 @@
     <ClInclude Include="mpadding2.h" />
     <ClInclude Include="tmemorywriter.h" />
     <ClInclude Include="tmousemapped.h" />
+    <ClInclude Include="tpewin32.h" />
     <ClInclude Include="tplatforminterface.h" />
     <ClInclude Include="tplatformunix.h" />
     <ClInclude Include="tplatformwin32.h" />
@@ -277,6 +283,10 @@
     <ClInclude Include="tsharedpointer.h" />
     <ClInclude Include="tsmartptr.h" />
     <ClInclude Include="tsort.h" />
+    <ClInclude Include="tsound.h" />
+    <ClInclude Include="tsoundreader.h" />
+    <ClInclude Include="tsoundwav.h" />
+    <ClInclude Include="tsoundwriter.h" />
     <ClInclude Include="tstack.h" />
     <ClInclude Include="tstream.h" />
     <ClInclude Include="tstreamreader.h" />
@@ -325,6 +335,7 @@
     <ClCompile Include="nuri.cpp" />
     <ClCompile Include="tbitmapcodecs.cpp" />
     <ClCompile Include="tblend.cpp" />
+    <ClCompile Include="tconsolewin32.cpp" />
     <ClCompile Include="tcssreader.cpp" />
     <ClCompile Include="texception.cpp" />
     <ClCompile Include="tgraphics.cpp" />
@@ -348,7 +359,6 @@
     <ClCompile Include="tcomposition.cpp" />
     <ClCompile Include="tconsole.cpp" />
     <ClCompile Include="tconsolebuffer.cpp" />
-    <ClCompile Include="tconsoledriver.cpp" />
     <ClCompile Include="tconsoleformats.cpp" />
     <ClCompile Include="tconvert.cpp" />
     <ClCompile Include="tdatetime.cpp" />
@@ -367,6 +377,7 @@
     <ClCompile Include="tmemory.cpp" />
     <ClCompile Include="tpackedrectangle.cpp" />
     <ClCompile Include="tpath.cpp" />
+    <ClCompile Include="tpewin32.cpp" />
     <ClCompile Include="tplatformwin32.cpp" />
     <ClCompile Include="tprocess.cpp" />
     <ClCompile Include="tprocessdebug.cpp" />
@@ -375,6 +386,7 @@
     <ClCompile Include="trmlreader.cpp" />
     <ClCompile Include="trmlwriter.cpp" />
     <ClCompile Include="tsort.cpp" />
+    <ClCompile Include="tsoundwav.cpp" />
     <ClCompile Include="tstreamwriterutf8.cpp" />
     <ClCompile Include="tstring.cpp" />
     <ClCompile Include="tstringbuilder.cpp" />
@@ -383,13 +395,13 @@
     <ClCompile Include="ttest.cpp" />
     <ClCompile Include="ttestsuitereporting.cpp" />
     <ClCompile Include="tthread.cpp" />
-    <ClCompile Include="ttimedriver.cpp" />
     <ClCompile Include="ttypemanager.cpp" />
     <ClCompile Include="twindowhandle.cpp" />
     <ClCompile Include="txmlreader.cpp" />
     <ClCompile Include="txmlwriter.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="ClassDiagram.cd" />
     <None Include="Rules.txt" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

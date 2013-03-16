@@ -2,7 +2,7 @@
 #include "tdatetime.h"
 #include "texception.h"
 #include "ttimedriver.h"
-
+#include "tplatform.h"
 
 const TString TDateTimeExpanded::DayNames[] = { "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday" };
 const int TDateTime::MonthDays[] = {31,28,31,30,31,30,31,31,30,31,30,31};
@@ -217,8 +217,8 @@ TDateTimeUnix& TDateTimeUnix::operator = (const TDateTimeExpanded& value)
 
 void TDateTimeExpanded::ToLocalTime()
 {
-	TDateTime ltime = TimeDriver::ToLocalTime(*this);
-	*this = ltime;
+	TDateTime localTime = Platform.ToLocalTime(*this);
+	*this = localTime;
 	LocalTime = true;
 }
 
@@ -226,7 +226,7 @@ void TDateTimeExpanded::Set(const TDateTime& time, bool convertToLocal /* = fals
 {
 	if (convertToLocal)
 	{
-		TDateTime tmp = TimeDriver::ToLocalTime(time);
+		TDateTime tmp = Platform.ToLocalTime(time);
 		*this = tmp;
 		LocalTime = true;
 	}

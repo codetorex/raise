@@ -5,12 +5,12 @@
 // will result like 26: .....
 // so just substring 0 to indexof(':')
 
-#define RAISE_BUILD					805
-#define RAISE_BUILD_STRING			"805"
+#define RAISE_BUILD					861
+#define RAISE_BUILD_STRING			"861"
 
 #define RAISE_PHASE					&TVersionPhase::PreAlpha
 
-#define RAISE_DEFAULT_COMPANYNAME	"Doychka"
+#define RAISE_DEFAULT_COMPANYNAME	"codetorex"
 
 #define RAISEMODULE					TModule("Raise",TVersion(RAISE_BUILD,RAISE_PHASE), RAISE_DEFAULT_COMPANYNAME)
 

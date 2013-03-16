@@ -97,9 +97,9 @@ public:
 
 	TModule() {};
 
-	TModule(const TString& _Name, TVersion& _Version, const TString& _Company);
+	TModule(const TString& _Name, const TVersion& _Version, const TString& _Company);
 
-	TModule(const TString& _Name, TVersion& _Version);
+	TModule(const TString& _Name, const TVersion& _Version);
 
 	void SetIdentifyText();
 };
@@ -119,12 +119,12 @@ public:
 	/**
 	 * Easier setup for initializing application data.
 	 */
-	void Begin( TString _Name, TVersion& _Version, TString _Company );
+	void Begin( TString _Name, const TVersion& _Version, TString _Company );
 	
 	/**
 	 * Uses default company name while initializing application data.
 	 */
-	void Begin( TString _Name, TVersion& _Version );
+	void Begin( TString _Name, const TVersion& _Version );
 
 	void PrintIdentifierToConsole(bool printModules = false);
 };

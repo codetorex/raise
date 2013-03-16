@@ -1,6 +1,7 @@
-#ifndef TCONSOLEDRIVER_H
-#define TCONSOLEDRIVER_H
+#ifndef TCONSOLEBASE_H
+#define TCONSOLEBASE_H
 
+#include "tfilestream.h"
 #include "tstring.h"
 #include "ttextwriter.h"
 #include "tpalette.h"
@@ -45,7 +46,7 @@ enum TConsoleColor
 	CC_WHITE,
 };
 
-class TConsoleDriver: public TTextWriter
+class TConsole: public TTextWriter
 {
 public:
 	static TPalette XTermColors;
@@ -101,6 +102,9 @@ public:
 	 */
 	virtual void SetForeColor( byte color ) = 0;
 
+	/**
+	 * Clears entire screen.
+	 */
 	virtual void Clear() = 0;
 
 	/**
@@ -171,9 +175,18 @@ public:
 	 * Event based get string.
 	 */
 	//virtual void BeginGetString( delegate1<void,const TString&>* callback ) = 0;
+
+	inline void WriteHeader(const TString& value, ui32 length = 50)
+	{
+		int toRepeat = ((length - 4) - value.Length) / 2;
+		RepeatChar('-',toRepeat);
+		RepeatChar(' ',2);
+		Write(value);
+		RepeatChar(' ',2);
+		RepeatChar('-',toRepeat);
+		WriteLine();
+	}
 	
 };
 
-
-
-#endif
+#endif // !TCONSOLEBASE_H

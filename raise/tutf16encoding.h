@@ -141,7 +141,7 @@ public:
 		TCharacterEnumerator schars(src);
 		while(schars.MoveNext())
 		{
-			int ln = GetBytes((byte*)tmp,schars.Current) / 2;
+			int ln = GetBytes((byte*)tmp,schars.Current);
 			if (dstcapacity < ln)
 			{
 				return;
@@ -166,7 +166,7 @@ public:
 			return 2;
 		}
 		
-		throw NotImplementedException();
+		throw NotImplementedException(__FILE__,__LINE__);
 		/*
 
 		UTF16 X = (UTF16) C;
@@ -194,27 +194,27 @@ public:
 	int GetChars( byte* bytes, int bytecount, ch32* chars , int charcapacity ) const
 	{
 		return 0;
-		//throw NotImplementedException();
+		//throw NotImplementedException(__FILE__,__LINE__);
 	}
 
 /*	TCharBuffer GetChars( byte* bytes, int bytecount )
 	{
-		throw NotImplementedException();
+		throw NotImplementedException(__FILE__,__LINE__);
 	}*/
 
 	int GetBytes( ch32* chars, int charcount, byte* bytes, int bytecapacity ) const
 	{
-		throw NotImplementedException();
+		throw NotImplementedException(__FILE__,__LINE__);
 	}
 
 /*	TByteBuffer GetBytes ( ch32* chars, int charcount )
 	{
-		throw NotImplementedException();
+		throw NotImplementedException(__FILE__,__LINE__);
 	}*/
 
 	ui32 GetChars( byte* bytes, ui32 bytecount, TCharBuffer& buffer ) const
 	{
-		throw NotImplementedException();
+		throw NotImplementedException(__FILE__,__LINE__);
 	}
 
 	TString GetString(byte* bytes, int bytecount) const
@@ -235,7 +235,7 @@ public:
 
 	/*int GetChars( byte* bytes, int bytecount, TCharBuffer& buffer)
 	{
-		throw NotImplementedException();
+		throw NotImplementedException(__FILE__,__LINE__);
 	}*/
 };
 

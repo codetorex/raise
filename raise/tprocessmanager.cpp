@@ -49,13 +49,13 @@ TProcess TProcessManager::FindByWindow( const TWindowHandle& winHandle )
 
 TProcess TProcessManager::CreateFromExecutable( const TString& exepath, const TString& params /*= 0*/ )
 {
-	throw NotImplementedException();
+	throw NotImplementedException(__FILE__,__LINE__);
 	return TProcess(0);
 }
 
 TProcess TProcessManager::FindByWindowNamePart( const TString& windowname )
 {
-	throw NotImplementedException();
+	throw NotImplementedException(__FILE__,__LINE__);
 	return TProcess(0);
 }
 

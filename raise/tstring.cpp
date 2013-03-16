@@ -202,7 +202,7 @@ TArray<TString*> TString::Split( const TArray<ch32>& seprators, bool removeEmpty
 
 TArray<TString*> TString::Split( const TArray<TString*>& seprators, bool removeEmpty /*= false*/ ) const
 {
-	throw NotImplementedException();
+	throw NotImplementedException(__FILE__,__LINE__);
 }
 
 
@@ -416,12 +416,12 @@ TString TString::Format( const TString& format,int argc , const TStringFormatEle
 
 TString TString::SubstringUntil( ui32 startIndex, ch32 matchCharacter ) const
 {
-	throw NotImplementedException();
+	throw NotImplementedException(__FILE__,__LINE__);
 }
 
 ui32 TString::SubstringUntil( ui32 startIndex, ch32 matchCharacter, TArray<byte>& output ) const
 {
-	throw NotImplementedException();
+	throw NotImplementedException(__FILE__,__LINE__);
 }
 
 /*TString TString::Format( const TString& format,... )

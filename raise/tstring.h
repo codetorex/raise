@@ -400,7 +400,7 @@ public:
 		else
 		{
 			// TODO: find start index byte start if non ASCII
-			LowLevelNotImplemented(SOURCENAME(1),__LINE__);
+			LowLevelNotImplemented(__FILE__,__LINE__);
 		}
 		return -2;
 	}
@@ -427,7 +427,7 @@ public:
 		else
 		{
 			// TODO: find start index byte start and end if non ASCII
-			LowLevelNotImplemented(SOURCENAME(1),__LINE__);
+			LowLevelNotImplemented(__FILE__,__LINE__);
 		}
 		
 	}

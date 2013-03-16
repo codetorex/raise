@@ -6,9 +6,13 @@
 
 #ifndef NOPNGLIB
 
+#include <png.h>
 
-#include "png.h"
-#include "pngstruct.h"
+#ifdef WIN32
+#include <pngstruct.h>
+#endif // WIN32
+
+
 
 #define PNG_BYTES_TO_CHECK 4
 
@@ -68,7 +72,7 @@ void TBitmapPNG::ReadBitmap( TBitmap* bmp, Stream* src )
 
 	png_read_info(png_ptr, info_ptr);
 
-	ui32 piWidth,piHeight;
+	png_uint_32 piWidth,piHeight;
 	int iBitDepth,iColorType;
 	png_get_IHDR(png_ptr, info_ptr, &piWidth, &piHeight, &iBitDepth,&iColorType, NULL, NULL, NULL);
 

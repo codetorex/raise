@@ -59,7 +59,7 @@ public:
 
 	inline decimal ReadDecimal()
 	{
-		throw NotImplementedException();
+		throw NotImplementedException(__FILE__,__LINE__);
 	}
 
 	inline double ReadDouble()

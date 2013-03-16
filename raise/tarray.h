@@ -351,7 +351,7 @@ public:
 	/**
 	* Assigning of arrays will destroy other.
 	*/
-	inline TArray<T>& operator = (TArray<T>& other)
+	TArray<T>& operator = (TArray<T>& other)
 	{
 		// TODO: USE SHARED STUFF LIKE TSTRING HERE
 		Free();

@@ -5,7 +5,7 @@ void TBitmapGraphics::DrawLine( TPen& pen, int x1, int y1, int x2, int y2 )
 {
 	if (pen.Color.a != 255)
 	{
-		throw NotImplementedException();
+		throw NotImplementedException(__FILE__,__LINE__);
 	}
 
 	TranslateCoord(x1,y1);
@@ -53,7 +53,7 @@ void TBitmapGraphics::DrawLine( TPen& pen, int x1, int y1, int x2, int y2 )
 	}
 }
 
-#include "TCompositeConverter.h"
+#include "tcompositeconverter.h"
 
 
 void TBitmapGraphics::DrawImage( TBitmap& srcBmp, int dstX, int dstY, int srcX, int srcY, int width , int height )
@@ -229,7 +229,7 @@ TGraphics* TGraphics::FromBitmap( TBitmap* bitmap )
 
 	// not power of 2 and not optimizable bitmap
 
-	throw NotImplementedException();
+	throw NotImplementedException(__FILE__,__LINE__);
 	return 0;*/
 }
 

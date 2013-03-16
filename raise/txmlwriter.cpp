@@ -12,7 +12,7 @@ void TXMLWriter::SerializeObject( TType* minfo, void* object )
 
 	WriteStartElement(minfo->Name);
 
-	throw NotImplementedException();
+	throw NotImplementedException(__FILE__,__LINE__);
 
 	WriteEndElement();
 
@@ -31,7 +31,7 @@ void TXMLWriter::SerializeObject( TType* minfo, void* object )
 		WriteStartElement(*objectName);
 	}
 
-	throw NotImplementedException();
+	throw NotImplementedException(__FILE__,__LINE__);
 
 	TArrayEnumerator<TFieldInfo*> ae(minfo->Fields);
 	while(ae.MoveNext())

@@ -187,7 +187,7 @@ public:
 	 */
 	void ClearDelete()
 	{
-		LowLevelNotImplemented();
+		LowLevelNotImplemented(__FILE__,__LINE__);
 	}
 
 	/**
@@ -195,7 +195,7 @@ public:
 	 */
 	void Merge( TList<T>* other )
 	{
-		LowLevelNotImplemented();
+		LowLevelNotImplemented(__FILE__,__LINE__);
 	}
 
 	/**
@@ -203,7 +203,7 @@ public:
 	 */
 	void MergeDelete(TList<T>* other)
 	{
-		LowLevelNotImplemented();
+		LowLevelNotImplemented(__FILE__,__LINE__);
 	}
 
 	void InsertAfter(T baseItem , T itm)

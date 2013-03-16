@@ -19,6 +19,8 @@
 #else
 #define LINUX
 #include <pthread.h>
+#include <sys/socket.h>
+#include <sys/types.h>
 #endif
 
 #include <stdlib.h>

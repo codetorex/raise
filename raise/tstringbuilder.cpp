@@ -19,7 +19,7 @@ string TStringBuilder::ToString( int startIndex, int length )
 	// b = Count bytes of characters from startIndex to startIndex + length
 	// Copy (b) bytes from (a) to new string
 
-	throw NotImplementedException();
+	throw NotImplementedException(__FILE__,__LINE__);
 }
 
 string TStringBuilder::ToString()

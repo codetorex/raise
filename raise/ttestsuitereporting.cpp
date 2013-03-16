@@ -62,11 +62,11 @@ void TTestSuiteReport::RunSuite( ui32 tests /*= TEST_CHECK*/ )
 		}
 		else if (curTest->TestType == TEST_PERFORMANCE)
 		{
-			throw NotImplementedException();
+			throw NotImplementedException(__FILE__,__LINE__);
 		}
 		else if (curTest->TestType == TEST_COMPARISON)
 		{
-			throw NotImplementedException();
+			throw NotImplementedException(__FILE__,__LINE__);
 		}
 		AppendNewLine();
 	}

@@ -150,7 +150,7 @@ public:
 	{
 		if (!path.IsASCII())
 		{
-			throw NotImplementedException();
+			throw NotImplementedException(__FILE__,__LINE__);
 		}
 
 		if (path.Length < 4)
@@ -342,7 +342,7 @@ public:
 		}
 
 		return path.Substring(i,k-i);*/
-		throw NotImplementedException();
+		throw NotImplementedException(__FILE__,__LINE__);
 	}
 
 
@@ -470,7 +470,7 @@ public:
 	{
 		// TODO: implement something that uses system api. GetTempFileName for win.tempnam for linux.
 		CheckTempFolder();
-		throw NotImplementedException();
+		throw NotImplementedException(__FILE__,__LINE__);
 		//return TempFolder + TString::Random(8);
 	}
 

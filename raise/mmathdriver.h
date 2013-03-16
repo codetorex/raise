@@ -1,6 +1,8 @@
 #ifndef MMATHDRIVER_H
 #define MMATHDRIVER_H
 
+//#include <cmath>
+#include <stdlib.h>
 #include <math.h>
 #include "m64bit.h"
 

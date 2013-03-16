@@ -172,7 +172,7 @@ public:
 			Data[ByteLength] = 0;
 			return;
 		}
-		LowLevelNotImplemented(SOURCENAME(4),__LINE__);
+		LowLevelNotImplemented(__FILE__,__LINE__);
 	}
 
 	inline void Append(int value)
@@ -289,7 +289,7 @@ public:
 		}
 		else
 		{
-			LowLevelNotImplemented(SOURCENAME(4),__LINE__);
+			LowLevelNotImplemented(__FILE__,__LINE__);
 		}
 
 		return count;
@@ -367,7 +367,7 @@ public:
 		if (!IsASCII())
 		{
 			// call ToLowerUnicode
-			LowLevelNotImplemented();
+			LowLevelNotImplemented(__FILE__,__LINE__);
 			return;
 		}
 
@@ -383,7 +383,7 @@ public:
 		if (!IsASCII())
 		{
 			// call ToLowerUnicode
-			LowLevelNotImplemented();
+			LowLevelNotImplemented(__FILE__,__LINE__);
 			return;
 		}
 

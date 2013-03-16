@@ -87,7 +87,14 @@ public:
 		ParameterIndex++;
 	}
 
-	void Initialize(int parameterCount, char* params[]);
+	void Initialize(int parameterCount, char* params[])
+	{
+		for (int i=0;i<parameterCount;i++)
+		{
+			TString* nstring = new TString(params[i]);
+			Parameters.Add(nstring);
+		}
+	}
 
 	void Initialize(int parameterCount, ch16* params[])
 	{

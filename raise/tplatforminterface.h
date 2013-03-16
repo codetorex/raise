@@ -2,6 +2,8 @@
 #define TPLATFORMINTERFACE_H
 
 #include "tstring.h"
+#include "m64bit.h"
+#include "tdatetime.h"
 
 enum EDialogResult
 {
@@ -15,19 +17,27 @@ enum EDialogResult
 	TDR_No,
 };
 
+class TDateTime;
+
 /**
  * With this class we are setting functions needed to be implemented by target platforms.
  */
-class TPlatformInterface
+class IPlatform
 {
 public:
 	virtual void RaiseToSystemString(const TString& raiseStr, byte* output, ui32 outputSize) = 0;
 	virtual TString SystemToRaiseString(byte* input, ui32 inputSize) = 0;
 
-	virtual void ShowMessageBox(const TString& message) = 0;
+	virtual ui32 TickCount() = 0;
+	virtual TDateTime GetUtcTime() = 0;
+	virtual TDateTime ToLocalTime(const TDateTime& inputDateTime) = 0;
+
+	virtual qword HighPrecisionTime() = 0;
+	virtual qword HighPrecisionTimeFrequency() = 0;
 
 
 	// The functions that I am not sure about their correctness comes here
+	virtual void ShowMessageBox(const TString& message) = 0;
 	virtual TString GetErrorDescription(ui32 systemErrorID) = 0;
 	virtual bool BrowseFolder(const TString& startPath, TString& selectedPath) = 0;
 };

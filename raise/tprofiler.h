@@ -1,8 +1,9 @@
 #ifndef TPROFILER_H
 #define TPROFILER_H
 
+#include "raisetypes.h"
 #include "m64bit.h"
-#include "ttimedriver.h"
+#include "tplatform.h"
 
 class TProfiler
 {
@@ -15,12 +16,12 @@ public:
 
 	inline void BeginProfiling()
 	{
-		tickStart = TimeDriver::TickCount();
+		tickStart = Platform.TickCount();
 	}
 
 	inline void EndProfiling()
 	{
-		tickDelta = TimeDriver::TickCount() - tickStart;
+		tickDelta = Platform.TickCount() - tickStart;
 	}
 
 	inline void BeginProfiling(ui32 callCount)

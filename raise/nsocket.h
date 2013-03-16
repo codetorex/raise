@@ -10,9 +10,16 @@
 
 #define MAX_BUFF_SIZE		8192
 
-#ifdef WIN32
 #include "tplatform.h"
-// TODO: after we do tplatform.h we should use it instead macro stuff
+
+#ifdef LINUX
+#include <sys/types.h>
+#include <sys/socket.h>
+#define INVALID_SOCKET (SOCKET)(~0)
+#define closesocket	close
+typedef int SOCKET;
+#include <unistd.h>
+#define SOCKET_ERROR (-1)
 #endif
 
 
@@ -27,7 +34,11 @@ protected:
 
 	void ThrowError( const TString& operation )
 	{
+#ifdef WIN32
 		throw Exception( operation , sfs( Platform.GetErrorDescription(WSAGetLastError())) );
+#else
+		throw Exception(operation);
+#endif
 	}
 
 	void Initialize(AddressFamilies _AddressFamily, SocketTypes _SocketType, ProtocolTypes _ProtocolType)
@@ -202,7 +213,7 @@ public:
 	NSocket* Accept()
 	{
 		sockaddr ep;
-		int epsize;
+		socklen_t epsize;
 
 		SOCKET r = accept(Socket,&ep,&epsize);
 
@@ -229,7 +240,7 @@ public:
 			break;
 		}*/
 
-		throw NotImplementedException();
+		throw NotImplementedException(__FILE__,__LINE__);
 
 
 	}

@@ -17,12 +17,17 @@ void LowLevelException( ui16 _file, ui16 _line, ui32 _error, const char* msg )
 
 void LowLevelNotImplemented()
 {
-	throw NotImplementedException();
+	throw NotImplementedException(__FILE__,__LINE__);
 }
 
 void LowLevelNotImplemented( ui16 _file, ui16 _line )
 {
 	throw NotImplementedException(_file,_line);
+}
+
+void LowLevelNotImplemented( const char* _filename, ui16 _line )
+{
+	throw NotImplementedException(_filename,_line);
 }
 
 void LowLevelLogWarn( const char* msg )

@@ -72,9 +72,6 @@
     <Filter Include="Source Files\Cryptography">
       <UniqueIdentifier>{d7fc52e5-163b-43bb-bb42-983f0bdb3ce2}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Source Files\IO\File System\Win32">
-      <UniqueIdentifier>{e45eca2d-315d-4710-9328-c1ece9c1e581}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Source Files\Diagram">
       <UniqueIdentifier>{a64b93ab-7ad5-4cf6-8beb-bfaedbe611e1}</UniqueIdentifier>
     </Filter>
@@ -119,6 +116,12 @@
     </Filter>
     <Filter Include="Source Files\Platform\Unix">
       <UniqueIdentifier>{e91d4396-9b2f-4f18-ad48-7865d5e84f1a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Sound">
+      <UniqueIdentifier>{5dca3520-d38d-47cd-99ed-c27ea2ac24d8}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Sound\File Formats2">
+      <UniqueIdentifier>{e9f23d6a-1c5d-429e-a194-7d8c3bf787d6}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -392,12 +395,6 @@
     <ClInclude Include="tbinaryserializer.h">
       <Filter>Source Files\IO\Literacy\Binary</Filter>
     </ClInclude>
-    <ClInclude Include="tdirectorywin32.h">
-      <Filter>Source Files\IO\File System\Win32</Filter>
-    </ClInclude>
-    <ClInclude Include="tfilewin32.h">
-      <Filter>Source Files\IO\File System\Win32</Filter>
-    </ClInclude>
     <ClInclude Include="tcompositesimple.h">
       <Filter>Source Files\IO\Buffer</Filter>
     </ClInclude>
@@ -460,9 +457,6 @@
     </ClInclude>
     <ClInclude Include="tcompositionmanager.h">
       <Filter>Source Files\IO\Buffer</Filter>
-    </ClInclude>
-    <ClInclude Include="tconsoledriver.h">
-      <Filter>Source Files\System\Console</Filter>
     </ClInclude>
     <ClInclude Include="tgraphics.h">
       <Filter>Source Files\Graphics</Filter>
@@ -683,6 +677,36 @@
     <ClInclude Include="tplatformunix.h">
       <Filter>Source Files\Platform\Unix</Filter>
     </ClInclude>
+    <ClInclude Include="tconsolewin32.h">
+      <Filter>Source Files\Platform\Win32</Filter>
+    </ClInclude>
+    <ClInclude Include="tpewin32.h">
+      <Filter>Source Files\Platform\Win32</Filter>
+    </ClInclude>
+    <ClInclude Include="tconsolebase.h">
+      <Filter>Source Files\System\Console</Filter>
+    </ClInclude>
+    <ClInclude Include="tsoundwav.h">
+      <Filter>Source Files\Sound\File Formats2</Filter>
+    </ClInclude>
+    <ClInclude Include="tsound.h">
+      <Filter>Source Files\Sound</Filter>
+    </ClInclude>
+    <ClInclude Include="tsoundreader.h">
+      <Filter>Source Files\Sound</Filter>
+    </ClInclude>
+    <ClInclude Include="tsoundwriter.h">
+      <Filter>Source Files\Sound</Filter>
+    </ClInclude>
+    <ClInclude Include="tdirectorywin32.h">
+      <Filter>Source Files\Platform\Win32</Filter>
+    </ClInclude>
+    <ClInclude Include="tfilewin32.h">
+      <Filter>Source Files\Platform\Win32</Filter>
+    </ClInclude>
+    <ClInclude Include="tfileunix.h">
+      <Filter>Source Files\Platform\Unix</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">
@@ -763,9 +787,6 @@
     <ClCompile Include="tdatetime.cpp">
       <Filter>Source Files\System\DateTime</Filter>
     </ClCompile>
-    <ClCompile Include="ttimedriver.cpp">
-      <Filter>Source Files\System</Filter>
-    </ClCompile>
     <ClCompile Include="tstringdriver.cpp">
       <Filter>Source Files\String</Filter>
     </ClCompile>
@@ -783,9 +804,6 @@
     </ClCompile>
     <ClCompile Include="tstreamwriterutf8.cpp">
       <Filter>Source Files\IO\Literacy</Filter>
-    </ClCompile>
-    <ClCompile Include="tdirectorywin32.cpp">
-      <Filter>Source Files\IO\File System\Win32</Filter>
     </ClCompile>
     <ClCompile Include="tlog.cpp">
       <Filter>Source Files\System\Log</Filter>
@@ -818,9 +836,6 @@
       <Filter>Source Files\System\Console</Filter>
     </ClCompile>
     <ClCompile Include="tconsolebuffer.cpp">
-      <Filter>Source Files\System\Console</Filter>
-    </ClCompile>
-    <ClCompile Include="tconsoledriver.cpp">
       <Filter>Source Files\System\Console</Filter>
     </ClCompile>
     <ClCompile Include="tthread.cpp">
@@ -886,8 +901,21 @@
     <ClCompile Include="tplatformwin32.cpp">
       <Filter>Source Files\Platform\Win32</Filter>
     </ClCompile>
+    <ClCompile Include="tconsolewin32.cpp">
+      <Filter>Source Files\Platform\Win32</Filter>
+    </ClCompile>
+    <ClCompile Include="tpewin32.cpp">
+      <Filter>Source Files\Platform\Win32</Filter>
+    </ClCompile>
+    <ClCompile Include="tsoundwav.cpp">
+      <Filter>Source Files\Sound\File Formats2</Filter>
+    </ClCompile>
+    <ClCompile Include="tdirectorywin32.cpp">
+      <Filter>Source Files\Platform\Win32</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <None Include="Rules.txt" />
+    <None Include="ClassDiagram.cd" />
   </ItemGroup>
 </Project>

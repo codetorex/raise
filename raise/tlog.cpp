@@ -1,6 +1,6 @@
 #include "stdafx.h"
 #include "tlog.h"
-#include "ttimedriver.h"
+#include "tplatform.h"
 
 TLog Log;
 
@@ -8,7 +8,7 @@ TLog::TLog()
 {
 	LogCSection.Initialize();
 
-	StartTick = TimeDriver::TickCount();
+	StartTick = Platform.TickCount();
 
 	TLogGroup* fatalGroup = new TLogGroup();
 	fatalGroup->Name = "Fatal";
@@ -58,7 +58,7 @@ void TLog::Output( int group, const TString& value )
 	curEntry.Content = value;
 	curEntry.GroupID = group;
 	curEntry.Color = Groups.Item[group]->DefaultColor;
-	curEntry.Tick = TimeDriver::TickCount() - StartTick;
+	curEntry.Tick = Platform.TickCount() - StartTick;
 
 	Notify(&curEntry);
 }

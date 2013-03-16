@@ -6,6 +6,8 @@
 
 #ifdef LINUX
 #include <sys/types.h>
+#define INFINITE MXDWORD
+typedef void* HANDLE;
 #endif
 
 class TThread
@@ -67,7 +69,9 @@ public:
 		return GetCurrentThreadId();
 #else
 		//http://www.kernel.org/doc/man-pages/online/pages/man2/gettid.2.html
-		return gettid();
+		
+		LowLevelNotImplemented(__FILE__,__LINE__);
+		///return gettid();
 #endif 
 	}
 

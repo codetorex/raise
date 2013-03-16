@@ -44,7 +44,7 @@ int TConvert::ToInt32Split( const TString& value, ch32 splitChar, TArray<int>& r
 {
 	if (!value.IsASCII())
 	{
-		throw NotImplementedException();
+		throw NotImplementedException(__FILE__,__LINE__);
 	}
 
 	int matchCount = 0;

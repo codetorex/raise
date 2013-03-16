@@ -9,6 +9,12 @@
       <UniqueIdentifier>{93995380-89BD-4b04-88EB-625FBE52EBFB}</UniqueIdentifier>
       <Extensions>h;hpp;hxx;hm;inl;inc;xsd</Extensions>
     </Filter>
+    <Filter Include="Commands">
+      <UniqueIdentifier>{dd0ee61e-c1d0-4340-b738-5aa57afd4f38}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Test Data">
+      <UniqueIdentifier>{60436c80-27fb-4442-a3bf-87da593778a4}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">
@@ -20,6 +26,9 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="ReadMe.txt" />
+    <None Include="color-test.tga">
+      <Filter>Test Data</Filter>
+    </None>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="stdafx.h">
@@ -70,5 +79,25 @@
     <ClInclude Include="test_mvc.h">
       <Filter>Tests</Filter>
     </ClInclude>
+    <ClInclude Include="cmd_exportlib.h">
+      <Filter>Commands</Filter>
+    </ClInclude>
+    <ClInclude Include="tapplet.h">
+      <Filter>Source Files</Filter>
+    </ClInclude>
+    <ClInclude Include="cmd_test.h">
+      <Filter>Commands</Filter>
+    </ClInclude>
+    <ClInclude Include="ttestsuiteparameters.h">
+      <Filter>Source Files</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <Image Include="color-test.bmp">
+      <Filter>Test Data</Filter>
+    </Image>
+    <Image Include="color-test.png">
+      <Filter>Test Data</Filter>
+    </Image>
   </ItemGroup>
 </Project>

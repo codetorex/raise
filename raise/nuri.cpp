@@ -27,7 +27,7 @@ void NUri::Parse( const TString& value )
 		throw Exception ( "Unicode character in uri" );
 	}
 
-	throw NotImplementedException();
+	throw NotImplementedException(__FILE__,__LINE__);
 
 	for (int i=0;i<value.Length;i++)
 	{

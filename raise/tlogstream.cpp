@@ -4,7 +4,7 @@
 #include "tthread.h"
 #include "tstring.h"
 #include "tdatetime.h"
-#include "ttimedriver.h"
+#include "tplatform.h"
 
 
 void TLogStream::Initialize(TStream* outputStream)
@@ -20,7 +20,9 @@ void TLogStream::Initialize(TStream* outputStream)
 	sb.AppendLine();
 
 	sb.Append("Date: ");
-	TDateTimeExpanded now = TimeDriver::Now();
+	
+	TDateTimeExpanded now = Platform.GetUtcTime();
+
 	sb.AppendLine( now.ToStringUniversal() );
 
 	sb.AppendLine(Application.IdentifyText);
@@ -77,7 +79,9 @@ TString TLogStream::GetLogFileName( const TString& prefix )
 	TStringBuilderStack<48> sb;
 
 	sb.Append(prefix);
-	TDateTimeExpanded now = TimeDriver::Now();
+
+	TDateTimeExpanded now = Platform.GetUtcTime();
+
 	sb.Append(now.ToStringFileName());
 	sb.Append(".txt");
 

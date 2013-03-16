@@ -87,17 +87,17 @@ public:
 
 	/*TCharBuffer GetChars( byte* bytes, int bytecount )
 	{
-		throw NotImplementedException();
+		throw NotImplementedException(__FILE__,__LINE__);
 	}*/
 
 	int GetBytes( ch32* chars, int charcount, byte* bytes, int bytecapacity ) const
 	{
-		throw NotImplementedException();
+		throw NotImplementedException(__FILE__,__LINE__);
 	}
 
 	/*TByteBuffer GetBytes ( ch32* chars, int charcount )
 	{
-		throw NotImplementedException();
+		throw NotImplementedException(__FILE__,__LINE__);
 	}*/
 
 	ui32 GetChars( byte* bytes, ui32 bytecount, TCharBuffer& buffer ) const
@@ -134,7 +134,7 @@ public:
 
 	TString GetString(byte* bytes, int bytecount) const
 	{
-		throw NotImplementedException();
+		throw NotImplementedException(__FILE__,__LINE__);
 	}
 };
 

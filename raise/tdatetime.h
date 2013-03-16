@@ -65,7 +65,7 @@ public:
 	 */
 	void ChangeDate(int year,int month,int day)
 	{
-		throw NotImplementedException();
+		throw NotImplementedException(__FILE__,__LINE__);
 	}
 
 	/**
@@ -169,7 +169,7 @@ public:
 
 	inline TDateTime& AddMonths(int months)
 	{
-		throw NotImplementedException();
+		throw NotImplementedException(__FILE__,__LINE__);
 		return *this;
 	}
 
@@ -199,7 +199,7 @@ public:
 
 	inline TDateTime& AddYears(int years)
 	{
-		throw NotImplementedException();
+		throw NotImplementedException(__FILE__,__LINE__);
 		return *this;
 	}
 

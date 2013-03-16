@@ -112,7 +112,10 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="cmd_exportlib.h" />
+    <ClInclude Include="cmd_test.h" />
     <ClInclude Include="stdafx.h" />
+    <ClInclude Include="tapplet.h" />
     <ClInclude Include="test_array.h" />
     <ClInclude Include="test_bitmap.h" />
     <ClInclude Include="test_characterenumerator.h" />
@@ -128,6 +131,7 @@
     <ClInclude Include="test_vector3.h" />
     <ClInclude Include="test_xml.h" />
     <ClInclude Include="toldtests.h" />
+    <ClInclude Include="ttestsuiteparameters.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">
@@ -137,6 +141,9 @@
     <ClCompile Include="test.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="color-test.tga">
+      <DeploymentContent Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</DeploymentContent>
+    </None>
     <None Include="ReadMe.txt" />
   </ItemGroup>
   <ItemGroup>
@@ -144,6 +151,14 @@
       <Project>{bd3d8a71-e80c-42db-b0f3-59f9aa8660e5}</Project>
       <ReferenceOutputAssembly>false</ReferenceOutputAssembly>
     </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <Image Include="color-test.bmp">
+      <DeploymentContent Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</DeploymentContent>
+    </Image>
+    <Image Include="color-test.png">
+      <DeploymentContent Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</DeploymentContent>
+    </Image>
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

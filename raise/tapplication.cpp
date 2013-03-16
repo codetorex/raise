@@ -73,7 +73,7 @@ TVersion::TVersion( int _maj, int _min, int _sub, int _build, const TVersionPhas
 	Initialize(_maj,_min,_sub,_build,_phase);
 }
 
-TModule::TModule( const TString& _Name, TVersion& _Version, const TString& _Company )
+TModule::TModule( const TString& _Name, const TVersion& _Version, const TString& _Company )
 {
 	Name = _Name;
 	Version = _Version;
@@ -81,7 +81,7 @@ TModule::TModule( const TString& _Name, TVersion& _Version, const TString& _Comp
 	SetIdentifyText();
 }
 
-TModule::TModule( const TString& _Name, TVersion& _Version )
+TModule::TModule( const TString& _Name, const TVersion& _Version )
 {
 	Name = _Name;
 	Version = _Version;
@@ -99,7 +99,7 @@ TApplication Application;
 
 #include "tplatform.h"
 
-void TApplication::Begin( TString _Name, TVersion& _Version, TString _Company )
+void TApplication::Begin( TString _Name, const TVersion& _Version, TString _Company )
 {
 	StartupPath = TPathDriver::CurrentDirectory();
 	ExecutablePath = "Not Implemented";
@@ -113,7 +113,7 @@ void TApplication::Begin( TString _Name, TVersion& _Version, TString _Company )
 	Platform.Initialize(); // TODO: move this to better place
 }
 
-void TApplication::Begin( TString _Name, TVersion& _Version )
+void TApplication::Begin( TString _Name, const TVersion& _Version )
 {
 	Begin( _Name,_Version, TString::Empty );
 }

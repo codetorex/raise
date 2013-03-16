@@ -66,14 +66,15 @@ public:
 #else
 	inline static void ShortCopy(void* _dst,const void* _src,int _size)
 	{
-		asm
+		memcpy(_dst,_src,_size); // TODO: fix this
+		/*asm
 			(
 			"cld;"
 			"rep\n"
 			"movsb;"
 			:
 		: "S"(_src),"D"(_dst),"c"(_size)
-			);
+			);*/
 	}
 #endif
 

@@ -3,7 +3,9 @@
 
 #ifdef WIN32
 
-#include "tplatformwin32.h"
+#include "tplatform.h"
+#include "tdatetimewindows.h"
+#include "tdatetime.h"
 #include <ShlObj.h>
 
 bool TPlatformWin32::BrowseFolder( const TString& startPath, TString& selectedPath )
@@ -77,6 +79,81 @@ TString TPlatformWin32::GetErrorDescription( ui32 systemErrorID )
 
 	return RaiseString(Temp);
 }
+
+
+TDateTime TPlatformWin32::GetUtcTime()
+{
+	TDateTimeWindows wintime;
+	GetSystemTimeAsFileTime(&wintime.Date);
+
+	return TDateTime( wintime );
+}
+
+string LocalStandartName;
+string LocalDaylightName;
+int LocalDaylight = 0;
+ui32 LocalLastUpdate = 0;
+
+// Local time difference in seconds
+int LocalDifference = 0;
+bool HighPrecisionSupported = true;
+
+void UpdateLocalTimezone()
+{
+	TIME_ZONE_INFORMATION dtz;
+	ui32 status = GetTimeZoneInformation (&dtz);
+
+	if (status == TIME_ZONE_ID_STANDARD || status == TIME_ZONE_ID_UNKNOWN)
+	{
+		LocalDaylight = 0;
+	}
+	else if (status == TIME_ZONE_ID_DAYLIGHT)
+	{
+		LocalDaylight = 1;
+		dtz.Bias += dtz.DaylightBias;
+	}
+
+	LocalStandartName = Platform.RaiseString(dtz.StandardName);
+	LocalDaylightName = Platform.RaiseString(dtz.DaylightName);
+	LocalDifference = dtz.Bias * -60; // in seconds
+
+	LocalLastUpdate = Platform.TickCount();
+}
+
+TDateTime TPlatformWin32::ToLocalTime( const TDateTime& inputDateTime )
+{
+	if (TickCount() - LocalLastUpdate > (60 * 60 * 1000)) // 1 hour
+	{
+		UpdateLocalTimezone(); // Do this every 2 hours or something
+	}
+
+	TDateTime result = inputDateTime;
+	result.AddSeconds(LocalDifference);
+	return result;
+}
+
+qword TPlatformWin32::HighPrecisionTime()
+{
+	qword val;
+	if ( !QueryPerformanceCounter((LARGE_INTEGER*)&val) )
+	{
+		HighPrecisionSupported = false;
+		return TickCount();
+	}
+
+	return val;
+}
+
+qword TPlatformWin32::HighPrecisionTimeFrequency()
+{
+	if (!HighPrecisionSupported)
+		return 1000;
+
+	qword val;
+	QueryPerformanceFrequency((LARGE_INTEGER*)&val);
+	return val;
+}
+
 
 #endif
 

@@ -103,9 +103,15 @@ public:
 		ErrorID = 1;
 	}
 
+	NotImplementedException(const char* _filename, ui16 _line): Exception(65535,_line,"Not Implemented")
+	{
+		printf("%s (%s) : %i\n", Message.Data ,_filename, (int)_line);
+	}
+
 	NotImplementedException(ui16 _file, ui16 _line): Exception(_file,_line,"Not Implemented")
 	{
 		ErrorID = 1;
+		
 	}
 };
 

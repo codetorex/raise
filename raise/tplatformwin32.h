@@ -6,7 +6,7 @@
 #include "tplatforminterface.h"
 #include "tencodings.h"
 
-class TPlatformWin32: public TPlatformInterface
+class TPlatformWin32: public IPlatform
 {
 public:
 
@@ -30,6 +30,19 @@ public:
 	TString GetErrorDescription( ui32 systemErrorID );
 
 	bool BrowseFolder( const TString& startPath, TString& selectedPath );
+
+	TDateTime GetUtcTime();
+
+	TDateTime ToLocalTime( const TDateTime& inputDateTime );
+
+	inline ui32 TickCount()
+	{
+		return GetTickCount();
+	}
+
+	qword HighPrecisionTime();
+
+	qword HighPrecisionTimeFrequency();
 
 };
 

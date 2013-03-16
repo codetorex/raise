@@ -2,15 +2,15 @@
 #define TLOGCONSOLE_H
 
 #include "tlog.h"
-#include "tconsoledriver.h"
+#include "tconsole.h"
 
 class TLogConsole: public TLogOutput
 {
 public:
-	TConsoleDriver* ConsoleOutput;
+	TConsole* ConsoleOutput;
 	
 
-	TLogConsole(TConsoleDriver* _ConsoleOutput)
+	TLogConsole(TConsole* _ConsoleOutput)
 	{
 		ConsoleOutput = _ConsoleOutput;
 	}

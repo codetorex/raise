@@ -214,7 +214,6 @@ public:
 		return vResult;
 	}
 
-	template <class T>
 	friend MVector3<T> operator * (const T factor, const MVector3<T> &other)
 	{
 		MVector3<T> vResult(0.0f, 0.0f, 0.0f);

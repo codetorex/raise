@@ -58,7 +58,7 @@ public:
 	 */
 	inline void WriteDecimal(decimal& value)
 	{
-		throw NotImplementedException();
+		throw NotImplementedException(__FILE__,__LINE__);
 	}
 
 	inline void WriteDouble(double value)

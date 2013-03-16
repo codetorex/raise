@@ -42,7 +42,7 @@ public:
 
 	inline void WriteDecimal()
 	{
-		throw NotImplementedException();
+		throw NotImplementedException(__FILE__,__LINE__);
 	}
 
 	inline void WriteDouble(double value)

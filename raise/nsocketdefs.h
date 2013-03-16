@@ -2,6 +2,10 @@
 #define NSOCKETDEFS_H
 
 
+#ifdef LINUX
+#define IPPROTO_IPV4	4
+#endif
+
 enum SocketTypes
 {
 	S_Stream = SOCK_STREAM,
@@ -9,7 +13,7 @@ enum SocketTypes
 	S_Raw = SOCK_RAW,
 	S_RDM = SOCK_RDM, // reliably-delivered message
 	S_SeqPacket = SOCK_SEQPACKET,
-	S_Unknown = MAXDWORD,
+	S_Unknown = MXDWORD,
 };
 
 enum AddressFamilies

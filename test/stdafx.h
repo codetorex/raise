@@ -28,6 +28,9 @@
 #include <ws2tcpip.h>
 #include <mswsock.h>
 
+#else
+#define LINUX
+
 #endif
 
 

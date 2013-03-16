@@ -74,7 +74,7 @@ public:
 	
 	static TString ToString(int value, int base)
 	{
-		LowLevelNotImplemented(SOURCENAME(2),__LINE__);
+		LowLevelNotImplemented(__FILE__,__LINE__);
 	}
 
 	static int ToInt32(char* value);

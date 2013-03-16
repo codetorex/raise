@@ -33,7 +33,7 @@ public:
 	{
 		char tmp[512];
 		TString tmpstr(tmp);
-		throw NotImplementedException();
+		throw NotImplementedException(__FILE__,__LINE__);
 		//CreateDirSlient(path,tmpstr.Chars);
 		return TDirectoryInfo(tmpstr);
 	}

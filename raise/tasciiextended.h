@@ -84,12 +84,12 @@ public:
 
 	inline int GetBytes(byte* dst, ch32 character) const
 	{
-		throw NotImplementedException();
+		throw NotImplementedException(__FILE__,__LINE__);
 	}
 
 	inline void GetBytesAdv(byte*& dst, ch32 character) const
 	{
-		throw NotImplementedException();
+		throw NotImplementedException(__FILE__,__LINE__);
 	}
 
 	inline ui32 GetChars( byte* bytes, ui32 bytecount, TCharBuffer& buffer ) const
@@ -119,7 +119,7 @@ public:
 
 	inline int GetBytes(ch32* chars, int charcount, byte* bytes, int bytecapacity) const
 	{
-		throw NotImplementedException();
+		throw NotImplementedException(__FILE__,__LINE__);
 	}
 
 	TString GetString(byte* bytes, int bytecount) const
