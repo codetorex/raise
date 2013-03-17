@@ -707,6 +707,12 @@
     <ClInclude Include="tfileunix.h">
       <Filter>Source Files\Platform\Unix</Filter>
     </ClInclude>
+    <ClInclude Include="wactionresult.h">
+      <Filter>Source Files\Web\MVC</Filter>
+    </ClInclude>
+    <ClInclude Include="wmvc.h">
+      <Filter>Source Files\Web\MVC</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">
@@ -912,6 +918,9 @@
     </ClCompile>
     <ClCompile Include="tdirectorywin32.cpp">
       <Filter>Source Files\Platform\Win32</Filter>
+    </ClCompile>
+    <ClCompile Include="whttprequest.cpp">
+      <Filter>Source Files\Web</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

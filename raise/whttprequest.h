@@ -37,12 +37,12 @@ public:
 	/**
 	 * Parses request information from incoming packet
 	 */
-	void ParseRequest(NPacketReader& packet);
+	void ParseRequest(NPacketReader* pck);
 
 	/**
 	 * Creates request packet from given information
 	 */
-	void CreateRequest(NPacketWriter& packet);
+	void CreateRequest(TArray<byte> data);
 
 
 };

@@ -319,11 +319,13 @@
     <ClInclude Include="twindowhandle.h" />
     <ClInclude Include="txmlreader.h" />
     <ClInclude Include="txmlwriter.h" />
+    <ClInclude Include="wactionresult.h" />
     <ClInclude Include="wcontroller.h" />
     <ClInclude Include="whttpcontext.h" />
     <ClInclude Include="whttphandler.h" />
     <ClInclude Include="whttprequest.h" />
     <ClInclude Include="whttpresponse.h" />
+    <ClInclude Include="wmvc.h" />
     <ClInclude Include="wmvchandler.h" />
     <ClInclude Include="wview.h" />
   </ItemGroup>
@@ -399,6 +401,7 @@
     <ClCompile Include="twindowhandle.cpp" />
     <ClCompile Include="txmlreader.cpp" />
     <ClCompile Include="txmlwriter.cpp" />
+    <ClCompile Include="whttprequest.cpp" />
   </ItemGroup>
   <ItemGroup>
     <None Include="ClassDiagram.cd" />
