@@ -54,6 +54,11 @@ public:
 		return Character == c;
 	}
 
+	inline  operator ch32 ()
+	{
+		return Character;
+	}
+
 	inline TChar& operator = (ch32 c)
 	{
 		Character = c;

@@ -6,7 +6,7 @@
 
 #include "cmd_test.h"
 #include "cmd_exportlib.h"
-
+#include "cmd_fcgi.h"
 
 
 
@@ -18,7 +18,22 @@
 
 
 
+class CmdExePath: public TCommandLineHandler
+{
+public:
 
+	HandleResult HandleParameter( TCommandLine* cmd ) 
+	{
+		if (cmd->ParameterIndex == 0)
+		{
+			TTestSuiteParameters* prm = (TTestSuiteParameters*)cmd->OptionObject;
+			prm->ExePath = cmd->GetCurrentParameter();
+			return TCommandLineHandler::HR_Handled;
+		}
+
+		return TCommandLineHandler::HR_Continue;
+	}
+} CmdExePathHandler;
 
 /*#include "trmlwriter.h"
 #include "tfile.h"
@@ -120,11 +135,18 @@ int main(int argc,char** argv)
 
 	try
 	{
-#ifdef WIN32
 		CmdLine.RegisterHandler(&CmdExePathHandler);
+
+#ifdef WIN32
 		CmdLine.RegisterHandler(&CmdExportLibHandler);
 		CmdLine.RegisterHandler(&CmdOutputHandler);
 #endif // WIN32
+
+#ifdef RAISE_FCGI
+		CmdLine.RegisterHandler(&CmdFastCgiHandler);
+#endif // RAISE_FASTCGI
+
+
 
 		CmdLine.Initialize(argc,argv);
 		CmdLine.ParseCommandLine();
@@ -137,7 +159,7 @@ int main(int argc,char** argv)
 
 	Params.Applet->Run(&Params);
 	
-	Console.ReadKey();
+	//Console.ReadKey();
 	return 0;
 }
 

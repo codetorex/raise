@@ -18,26 +18,51 @@ enum WHttpRequestMethod
 class NameValueCollection
 {
 public:
-
+	//TArray < TKeyValueArray<TString, TString> > NameValueArray;
 };
+
+class WQueryString: public NameValueCollection
+{
+public:
+
+	void ParseQueryString(const TString& queryString)
+	{
+
+	}
+
+	TString ToString()
+	{
+
+	}
+};
+
+class TStream;
 
 class WHttpRequest
 {
 public:
+	TStream*	InputStream;
+
 	string		Method;
 
 	int			ContentLength;
 	Encoding*	ContentEncoding;
 	string		ContentType;
+
+	string		RawUrl;
+	string		Path;
 	
+	string		UserAgent;
+
 	NameValueCollection Cookies;
+	WQueryString QueryString;
 
 	NUri		Url;
 
 	/**
 	 * Parses request information from incoming packet
 	 */
-	void ParseRequest(NPacketReader* pck);
+	void ParseRequest(const TString& request);
 
 	/**
 	 * Creates request packet from given information

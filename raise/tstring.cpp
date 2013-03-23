@@ -424,6 +424,42 @@ ui32 TString::SubstringUntil( ui32 startIndex, ch32 matchCharacter, TArray<byte>
 	throw NotImplementedException(__FILE__,__LINE__);
 }
 
+TArray<TString*> TString::SplitInplace( TChar character, bool removeEmpty /*= false*/ )
+{
+	TArray<TString*> result;
+
+	if (ByteLength != Length)
+	{
+		// UNICODE version of this function is not implemented atm
+		LowLevelNotImplemented(__FILE__,__LINE__);
+	}
+
+	int lastWordStart = 0;
+	for (int i=0;i<ByteLength;i++)
+	{
+		char curChar = Data[i];
+		if (curChar == character)
+		{
+			int curWordLength = i-lastWordStart;
+			if (curWordLength > 0 )
+			{
+				result.Add( new TString(Data+lastWordStart, curWordLength,curWordLength));
+			}
+			else
+			{
+				if (!removeEmpty)
+				{
+					result.Add( &TString::Empty );
+				}
+			}
+			Data[i] = 0;
+			lastWordStart = i+1;
+		}
+	}
+
+	return result;
+}
+
 /*TString TString::Format( const TString& format,... )
 {
 	va_list args;

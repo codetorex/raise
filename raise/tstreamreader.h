@@ -241,7 +241,7 @@ public:
 		TString result(1024);
 
 		ch32 d = Read();
-		while(d > 0)
+		while(!EndOfStream)
 		{
 			result += d;
 			d = Read();

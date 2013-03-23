@@ -91,6 +91,9 @@
     <ClInclude Include="ttestsuiteparameters.h">
       <Filter>Source Files</Filter>
     </ClInclude>
+    <ClInclude Include="cmd_fcgi.h">
+      <Filter>Commands</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Image Include="color-test.bmp">

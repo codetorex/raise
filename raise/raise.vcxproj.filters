@@ -653,9 +653,6 @@
     <ClInclude Include="whttphandler.h">
       <Filter>Source Files\Web</Filter>
     </ClInclude>
-    <ClInclude Include="wmvchandler.h">
-      <Filter>Source Files\Web\MVC</Filter>
-    </ClInclude>
     <ClInclude Include="wcontroller.h">
       <Filter>Source Files\Web\MVC</Filter>
     </ClInclude>
@@ -711,6 +708,21 @@
       <Filter>Source Files\Web\MVC</Filter>
     </ClInclude>
     <ClInclude Include="wmvc.h">
+      <Filter>Source Files\Web\MVC</Filter>
+    </ClInclude>
+    <ClInclude Include="waction.h">
+      <Filter>Source Files\Web\MVC</Filter>
+    </ClInclude>
+    <ClInclude Include="wmodel.h">
+      <Filter>Source Files\Web\MVC</Filter>
+    </ClInclude>
+    <ClInclude Include="wviewrenderer.h">
+      <Filter>Source Files\Web\MVC</Filter>
+    </ClInclude>
+    <ClInclude Include="wfalconrenderer.h">
+      <Filter>Source Files\Web\MVC</Filter>
+    </ClInclude>
+    <ClInclude Include="wmvcapplication.h">
       <Filter>Source Files\Web\MVC</Filter>
     </ClInclude>
   </ItemGroup>
@@ -921,6 +933,12 @@
     </ClCompile>
     <ClCompile Include="whttprequest.cpp">
       <Filter>Source Files\Web</Filter>
+    </ClCompile>
+    <ClCompile Include="wactionresult.cpp">
+      <Filter>Source Files\Web\MVC</Filter>
+    </ClCompile>
+    <ClCompile Include="wfalconrenderer.cpp">
+      <Filter>Source Files\Web\MVC</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

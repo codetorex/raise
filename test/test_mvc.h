@@ -12,12 +12,19 @@ public:
 
 	HomeController()
 	{
-		Actions.Add(new WAction("Index", GetHandler(this, HomeController::Index)));
+		Name = "Home";
+		RegisterAction(new WAction("Index", GetHandler(this, &HomeController::Index)));
+		RegisterAction(new WAction("Test", GetHandler(this, &HomeController::Test)));
 	}
 
 	WActionResult* Index( WModel* model )
 	{
-		
+		return View(model);
+	}
+
+	WActionResult* Test( WModel* model )
+	{
+		return NULL;
 	}
 
 };
@@ -29,16 +36,22 @@ public:
 
 	void Test()
 	{
-		TStringBuilder requestHeader;
-		requestHeader.AppendLine("GET /Home/Index HTTP/1.1");
-		requestHeader.AppendLine("Host: codetorex.com");
-		requestHeader.AppendLine("User-Agent: RaiseTest");
-		requestHeader.AppendLine();
-		TString request = requestHeader.ToString();
+		/*TStringBuilder requestBuilder;
+		requestBuilder.AppendLine("GET /Home/Index HTTP/1.1");
+		requestBuilder.AppendLine("Host: codetorex.com");
+		requestBuilder.AppendLine("User-Agent: RaiseTest");
+		requestBuilder.AppendLine();
+		TString requestString = requestBuilder.ToString();
+
+		WHttpContext httpContext;
+		httpContext.Request.ParseRequest(requestString);
 
 
+		WMVCApplication mvcApp;
+		mvcApp.ApplicationPath = "C:\\Library\\Projects\\raise\\bin\\codetorex\\";
+		mvcApp.RegisterController(new HomeController());
 
-
+		mvcApp.ProcessRequest(&httpContext);*/
 	}
 
 } WMVCCheck;

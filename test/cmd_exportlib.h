@@ -62,22 +62,7 @@ public:
 	}
 };
 
-class CmdExePath: public TCommandLineHandler
-{
-public:
 
-	HandleResult HandleParameter( TCommandLine* cmd ) 
-	{
-		if (cmd->ParameterIndex == 0)
-		{
-			TTestSuiteParameters* prm = (TTestSuiteParameters*)cmd->OptionObject;
-			prm->ExePath = cmd->GetCurrentParameter();
-			return TCommandLineHandler::HR_Handled;
-		}
-
-		return TCommandLineHandler::HR_Continue;
-	}
-} CmdExePathHandler;
 
 class CmdExportLib: public TCommandLineHandlerSimple
 {

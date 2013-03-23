@@ -541,6 +541,8 @@ public:
 		return 0;
 	}
 
+	TArray<TString*> SplitInplace(TChar character, bool removeEmpty = false);
+
 	TArray<TString*> Split(const TArray<ch32>& seprators, bool removeEmpty = false) const;
 
 	TArray<TString*> Split(const TArray<TString*>& seprators, bool removeEmpty = false) const;
