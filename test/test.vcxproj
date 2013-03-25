@@ -127,12 +127,15 @@
     <ClInclude Include="test_color.h" />
     <ClInclude Include="test_convert.h" />
     <ClInclude Include="test_datetime.h" />
+    <ClInclude Include="test_falconrenderer.h" />
     <ClInclude Include="test_graphics.h" />
+    <ClInclude Include="test_markdown.h" />
     <ClInclude Include="test_matrix.h" />
     <ClInclude Include="test_mvc.h" />
     <ClInclude Include="test_network.h" />
     <ClInclude Include="test_queue.h" />
     <ClInclude Include="test_string.h" />
+    <ClInclude Include="test_stringreader.h" />
     <ClInclude Include="test_vector3.h" />
     <ClInclude Include="test_xml.h" />
     <ClInclude Include="toldtests.h" />
@@ -150,6 +153,7 @@
       <DeploymentContent Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</DeploymentContent>
     </None>
     <None Include="ReadMe.txt" />
+    <None Include="test.rhtml" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\raise\raise.vcxproj">

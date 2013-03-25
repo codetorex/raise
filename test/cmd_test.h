@@ -18,6 +18,8 @@
 #include "test_convert.h"
 #include "test_matrix.h"
 #include "test_mvc.h"
+#include "test_markdown.h"
+#include "test_falconrenderer.h"
 
 #ifdef WIN32
 //#include <strsafe.h>
@@ -72,9 +74,13 @@ public:
 		suite.AddTest(&TXMLCheck);
 		suite.AddTest(&TConvertCheck);
 		suite.AddTest(&MMatrixCheck);
+		suite.AddTest(&TRaiseMarkdownCheck);
 		suite.AddTest(&WMVCCheck);
+		suite.AddTest(&WFalconRendererCheck);
 
 		suite.RunSuite();
+
+		Console.ReadKey();
 	}
 
 };

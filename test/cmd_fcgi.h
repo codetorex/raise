@@ -23,6 +23,32 @@ extern char **environ;
 #define DLLAPI
 #include <fcgiapp.h>
 
+#include "wmvc.h"
+
+class HomeController: public WController
+{
+public:
+
+	HomeController()
+	{
+		Name = "Home";
+		RegisterAction(new WAction("Index", GetHandler(this, &HomeController::Index)));
+		RegisterAction(new WAction("Test", GetHandler(this, &HomeController::Test)));
+	}
+
+	WActionResult* Index( WModel* model )
+	{
+		return View(model);
+	}
+
+	WActionResult* Test( WModel* model )
+	{
+		return NULL;
+	}
+
+};
+
+
 /*
 
 REDIRECT
@@ -58,7 +84,8 @@ public:
 
 		while (FCGX_Accept_r(&request) == 0)
 		{
-			FCGX_FPrintF(request.out, "Content-type: text/html\r\n\r\n<h1>Hello World!</h1>");
+
+			FCGX_FPrintF(request.out, "Content-type: text/html\r\n\r\nHello");
 
 			
 

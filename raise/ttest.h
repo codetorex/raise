@@ -54,8 +54,14 @@ public:
 	virtual void Test() {};
 };
 
+/**
+ * Unit testing class to check if things works accordingly.
+ */
 class TTestCheck: public TTest
 {
+private:
+	TString ShouldCondition;
+
 public:
 	TArray< TTestResult* > Results;
 
@@ -63,6 +69,8 @@ public:
 	int CountFail;
 	int CountTotal;
 	int CountOutput;
+
+	
 	
 	TTestCheck(const string& _testName): TTest(_testName) 
 	{
@@ -71,6 +79,21 @@ public:
 		CountFail = 0;
 		CountTotal = 0;
 		CountOutput = 0;
+	}
+
+
+	/**
+	 * For writing in style of executable specification.
+	 */
+	void Should(const string& condition)
+	{
+		ShouldCondition = condition;
+	}
+
+	void AddResult(bool passed)
+	{
+		AddResult(passed, ShouldCondition);
+		ShouldCondition = TString::Empty;
 	}
 
 	void AddResult(bool passed, const string& comment);

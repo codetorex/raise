@@ -39,7 +39,7 @@ public:
 	TStream* BaseStream;
 	TStreamWriterUTF8* UTF8Writer;
 
-	TXMLWriter( TStream* output )
+	TXMLWriter( TStream* output, bool writeVersion = true )
 	{
 		BaseStream = output;
 		IndentLevel = 0;
@@ -47,7 +47,10 @@ public:
 		UTF8Writer = new TStreamWriterUTF8(output);
 		ElementCap = false;
 
-		WriteVersion();
+		if (writeVersion)
+		{
+			WriteVersion();
+		}
 	}
 
 	void WriteStartElement( const TString& elemName )

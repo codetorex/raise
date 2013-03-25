@@ -1,0 +1,173 @@
+@model ImageUpload.Web.Models.ManagementModel
+@{
+    ViewBag.Title = "Yönetim Paneli";
+    Layout = "~/Views/Shared/Management/_LayoutLogged.cshtml";
+}
+
+<div class="row-fluid sortable">
+
+
+	<div class="box span9">
+		<div class="box-header well" data-original-title>
+			<h2><i class="icon-picture"></i> Onay Bekleyen Resimler</h2>
+			<div class="box-icon">
+				
+			</div>
+		</div>
+		<div class="box-content">
+			<ul class="thumbnails gallery">
+
+                @foreach (var img in Model.PicturesNeedsApproval)
+                {
+                    <li picId="@img.Id" class="thumbnail">
+                        <div class="memory" style="display:none;"><strong>@img.Participant.Name</strong><br /><i>@img.CreatedDate</i><br />@img.PictureMemory</div>
+					    <a class="thumbimg" style="background:url(@Url.Content("~/Uploads/" + img.ThumbPath))" href="~/Uploads/@img.ImagePath"></a>
+				    </li>
+                }
+											
+			</ul>
+		</div>
+	</div><!--/span-->
+
+    <div class="box span3">
+		<div class="box-header well" data-original-title>
+			<h2><i class="icon-picture"></i> Resimdeki Aný</h2>
+			<div class="box-icon">
+				
+			</div>
+		</div>
+		<div class="box-content">
+			<div class="memoryview" style="font-family:'Trebuchet MS'; font-size: 1.0em;height:200px;"></div>
+		</div>
+	</div><!--/span-->
+
+			
+</div><!--/row-->
+
+<input id="viewerImageId" type="hidden" />
+
+<script>
+
+    function imageOkay(id)
+    {
+        $('.thumbnail[picId="' + id + '"]').remove();
+    }
+
+    function changeFail()
+    {
+
+    }
+
+    function approveImage(id) {
+        var spsc = new SetPictureStatusCommand( '@Url.Action("SetPictureStatus")', id, PictureStatus.PS_VERIFIED, function () { imageOkay(id); }, changeFail);
+        Service.executeCommand(spsc);
+    }
+
+    function removeImage(id) {
+        var spsc = new SetPictureStatusCommand('@Url.Action("SetPictureStatus")', id, PictureStatus.PS_NOTVERIFIED, function () { imageOkay(id); }, changeFail);
+        Service.executeCommand(spsc);
+    }
+
+    function approve() {
+        var imgid = $('#viewerImageId').val();
+        approveImage(imgid);
+    }
+
+    function reject() {
+        var imgid = $('#viewerImageId').val();
+        removeImage(imgid);
+    }
+
+
+
+    $(document).ready(function (e)
+    {
+        
+
+        $('ul.gallery li').each(function () {
+            $(this).find('.gallery-controls').remove();
+            $(this).append('<div class="gallery-controls">' +
+                                '<p><a href="#" class="gallery-yes btn"><i class="icon-ok"></i></a> <a href="#" class="gallery-no btn"><i class="icon-remove"></i></a></p>' +
+                            '</div>');
+        });
+
+        $('.gallery-yes').click(function (e) {
+            e.preventDefault();
+            var imgid = $(this).closest('li').attr('picId');
+            $('#viewerImageId').val(imgid);
+            approve();
+        });
+
+
+        $('.gallery-no').click(function (e) {
+            e.preventDefault();
+            var imgid = $(this).closest('li').attr('picId');
+            $('#viewerImageId').val(imgid);
+            reject();
+        });
+
+        $('.view-yes').live('click', function (e) {
+            e.preventDefault();
+            approve();
+            $.colorbox.close();
+        });
+
+        $('.view-no').live('click', function (e) {
+            e.preventDefault();
+            reject();
+            $.colorbox.close();
+        });
+
+
+        $('.thumbimg').mouseenter(function () {
+            var picMem = $(this).parent().children('.memory').html();
+            $('.memoryview').html(picMem);
+        });
+
+        $('.thumbimg').mouseleave(function () {
+            $('.memoryview').text('');
+        });
+
+        $('.thumbimg').click(function (e) {
+            e.preventDefault();
+            var picAddr = $(this).attr('href');
+            var picId = $(this).closest('li').attr('picId');
+            $('#viewerImageId').val(picId);
+            $.colorbox({
+                rel: 'nofollow', transition: "elastic", maxWidth: "95%", maxHeight: "95%", href: picAddr, title: function () {
+                    return '<a href="#" class="view-yes btn" style="margin-right:15%;"><i class="icon-ok"></i> Onay Ver</a> <a href="#" class="view-no btn"><i class="icon-remove"></i> Sil</a>'
+                }
+            });
+        });
+
+
+
+        /*$('.thumbimg').colorbox({
+            rel: 'nofollow', transition: "elastic", maxWidth: "95%", maxHeight: "95%", title: function () {
+                var url = $(this).attr('href');
+                return '<a href="#" class="gallery-edit btn" style="margin-right:15%;"><i class="icon-ok"></i> Onay Ver</a> <a href="#" class="gallery-delete btn"><i class="icon-remove"></i> Sil</a>';
+            }
+        });*/
+
+        /*
+
+        button logic
+        
+        $('.thumbnails').on('click', '.gallery-delete', function (e) {
+            e.preventDefault();
+            //get image id
+            //alert($(this).parents('.thumbnail').attr('id'));
+            $(this).parents('.thumbnail').fadeOut();
+        });
+        //gallery edit
+        $('.thumbnails').on('click', '.gallery-edit', function (e) {
+            e.preventDefault();
+            //get image id
+            //alert($(this).parents('.thumbnail').attr('id'));
+        });*/
+    });
+
+
+	
+
+</script>

@@ -29,6 +29,9 @@
     <None Include="color-test.tga">
       <Filter>Test Data</Filter>
     </None>
+    <None Include="test.rhtml">
+      <Filter>Test Data</Filter>
+    </None>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="stdafx.h">
@@ -93,6 +96,15 @@
     </ClInclude>
     <ClInclude Include="cmd_fcgi.h">
       <Filter>Commands</Filter>
+    </ClInclude>
+    <ClInclude Include="test_markdown.h">
+      <Filter>Tests</Filter>
+    </ClInclude>
+    <ClInclude Include="test_stringreader.h">
+      <Filter>Tests</Filter>
+    </ClInclude>
+    <ClInclude Include="test_falconrenderer.h">
+      <Filter>Tests</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

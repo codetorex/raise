@@ -123,6 +123,24 @@
     <Filter Include="Source Files\Sound\File Formats2">
       <UniqueIdentifier>{e9f23d6a-1c5d-429e-a194-7d8c3bf787d6}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Source Files\Data">
+      <UniqueIdentifier>{3f82f70f-a237-41ff-b07d-5113914f1812}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Data\Engine">
+      <UniqueIdentifier>{2e9f7745-8ac1-41d1-8c05-68c69bcc4dda}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Data\Engine\RaiseDB">
+      <UniqueIdentifier>{78762220-29e9-4421-8a65-8e8830346e58}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Text">
+      <UniqueIdentifier>{f5d932aa-3210-4bc7-94a1-3b8557b94b0f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\IO\Literacy\HTML">
+      <UniqueIdentifier>{1457e8a6-56aa-4c92-806c-1d5aeb471e65}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\IO\Literacy\JSON">
+      <UniqueIdentifier>{27bf737c-d93a-4f6b-9adb-7e4177f3a45c}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="tlinkedlist.h">
@@ -725,6 +743,18 @@
     <ClInclude Include="wmvcapplication.h">
       <Filter>Source Files\Web\MVC</Filter>
     </ClInclude>
+    <ClInclude Include="rdbset.h">
+      <Filter>Source Files\Data\Engine\RaiseDB</Filter>
+    </ClInclude>
+    <ClInclude Include="rdbcontext.h">
+      <Filter>Source Files\Data\Engine\RaiseDB</Filter>
+    </ClInclude>
+    <ClInclude Include="thtmlwriter.h">
+      <Filter>Source Files\IO\Literacy\HTML</Filter>
+    </ClInclude>
+    <ClInclude Include="traisemarkdown.h">
+      <Filter>Source Files\Text</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">
@@ -943,6 +973,6 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="Rules.txt" />
-    <None Include="ClassDiagram.cd" />
+    <None Include="specification.md" />
   </ItemGroup>
 </Project>

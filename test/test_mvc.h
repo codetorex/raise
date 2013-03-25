@@ -6,7 +6,7 @@
 
 // LETS DEVELOP THIS BITCH TEST DRIVEN HELL YEAH
 
-class HomeController: public WController
+/*class HomeController: public WController
 {
 public:
 
@@ -27,7 +27,7 @@ public:
 		return NULL;
 	}
 
-};
+};*/
 
 class TestMVC: public TTestCheck
 {
