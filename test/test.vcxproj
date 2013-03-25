@@ -129,6 +129,7 @@
     <ClInclude Include="test_datetime.h" />
     <ClInclude Include="test_falconrenderer.h" />
     <ClInclude Include="test_graphics.h" />
+    <ClInclude Include="test_hawkrenderer.h" />
     <ClInclude Include="test_markdown.h" />
     <ClInclude Include="test_matrix.h" />
     <ClInclude Include="test_mvc.h" />

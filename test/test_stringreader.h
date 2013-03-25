@@ -70,6 +70,14 @@ public:
 			AddResult(secondPart == "Data.Load(\"test\")" && interrupt == -1);
 		}
 
+		Should("Read until matching a given string");
+		{
+			TString testString = "Test string @Data.Load(\"test\")";
+			TStringReader sr(testString);
+			TString firstPart = sr.ReadUntilString("@Data");
+			AddResult(firstPart == "Test string ");
+		}
+
 	}
 
 } TStringReaderCheck;

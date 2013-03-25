@@ -5,6 +5,7 @@
 
 #include "tstreamreader.h"
 #include "wmvcapplication.h"
+#include "tstringreader.h"
 
 void WFalconRenderer::Render( WController* c, WModel* model )
 {
@@ -27,15 +28,68 @@ void WFalconRenderer::LoadSource( const TString& srcPath )
 
 void WFalconRenderer::ParseSource()
 {
-	/*int i = 0;
-	while (i != Source.Length)
-	{
-		//TString textPart = Source.SubstringUntil(i,'@');
+	TStringReader sr(Source);
 
-	}*/
-	
+	while (true)
+	{
+		int interrupt;
+		TString textPart = sr.ReadUntil("@",TString::Empty,interrupt);
+		if (interrupt == '@')
+		{
+			ch32 nextChar = sr.Peek();
+			if (nextChar == '@')
+			{
+				sr.Read();
+				textPart.AppendASCII('@');
+			}
+			if (textPart.Length > 0)
+			{
+				AddFragment(FFT_TEXT, textPart);
+			}
+
+			ParseCode(sr);
+		}
+
+		if (interrupt == -1)
+		{
+			if (textPart.Length > 0)
+			{
+				AddFragment(FFT_TEXT, textPart);
+			}
+			break;
+		}
+	}
 
 }
+
+void WFalconRenderer::ParseCode( TStringReader& sr )
+{
+	int interrupt;
+	TString codePart = sr.ReadUntil("( \"><{", TString::Empty, interrupt);
+
+	if (interrupt == '(' || interrupt == ' ')
+	{
+		if (IsKeyword(codePart))
+		{
+			// take whole line
+			TString rest = sr.ReadLine();
+		}
+	}
+
+}
+
+bool WFalconRenderer::IsKeyword( const TString& str )
+{
+	if (str == "model")
+		return true;
+
+	if (str == "foreach")
+		return true;
+
+	return false;
+}
+
+
 
 void WFalconRenderer::AddFragment( int type, const TString& content )
 {
@@ -44,3 +98,4 @@ void WFalconRenderer::AddFragment( int type, const TString& content )
 	frg->Type = type;
 	Fragments.Add(frg);
 }
+

@@ -328,6 +328,7 @@
     <ClInclude Include="wactionresult.h" />
     <ClInclude Include="wcontroller.h" />
     <ClInclude Include="wfalconrenderer.h" />
+    <ClInclude Include="whawkrenderer.h" />
     <ClInclude Include="whttpcontext.h" />
     <ClInclude Include="whttphandler.h" />
     <ClInclude Include="whttprequest.h" />
@@ -412,6 +413,7 @@
     <ClCompile Include="txmlwriter.cpp" />
     <ClCompile Include="wactionresult.cpp" />
     <ClCompile Include="wfalconrenderer.cpp" />
+    <ClCompile Include="whawkrenderer.cpp" />
     <ClCompile Include="whttprequest.cpp" />
   </ItemGroup>
   <ItemGroup>

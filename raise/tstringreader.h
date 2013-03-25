@@ -15,6 +15,7 @@ public:
 	{
 		CurrentIndex = 0;
 		CurrentByteIndex = 0;
+		EndOfStream = false;
 	}
 
 	TStringReader(const TString& srcString)
@@ -27,6 +28,7 @@ public:
 		SourceString = srcString;
 		CurrentIndex = 0;
 		CurrentByteIndex = 0;
+		EndOfStream = false;
 	}
 
 	void Rewind()
@@ -37,7 +39,7 @@ public:
 
 	ch32 Peek() 
 	{
-		if (CurrentByteIndex == SourceString.ByteLength)
+		if (EndOfStream)
 		{
 			return -1;
 		}
@@ -49,14 +51,19 @@ public:
 
 	ch32 Read() 
 	{
-		if (CurrentByteIndex == SourceString.ByteLength)
+		if (EndOfStream)
 		{
-			return -1; // no more bytes left to read
+			return -1;
 		}
+		
 		int byteLength;
 		ch32 curChar = StringDriver::Decode(SourceString.Data + CurrentByteIndex, byteLength);
 		CurrentIndex++;
 		CurrentByteIndex += byteLength;
+		if (CurrentByteIndex == SourceString.ByteLength)
+		{
+			EndOfStream = true;
+		}
 		return curChar;
 	}
 
@@ -79,12 +86,7 @@ public:
 	TString ReadLine() 
 	{
 		int interrupt;
-		TString result = ReadUntil("\r\n",TString::Empty, interrupt);
-		ch32 nextChar = Peek();
-		if (nextChar == '\r' || nextChar == '\n')
-		{
-			Read(); // skip single char
-		}
+		TString result = ReadUntil("\n","\r", interrupt);
 		return result;
 	}
 
@@ -97,21 +99,64 @@ public:
 	{
 		TStringBuilder result;
 
-		while (true)
+		while (!EndOfStream)
 		{
 			ch32 curChar = Read();
-			if (curChar == -1)
-			{
-				interrupt = -1;
-				return result.ToString();
-			}
-			else if (interrupChars.Have(curChar))
+			
+			if (interrupChars.Have(curChar))
 			{
 				interrupt = curChar;
 				return result.ToString();
 			}
+			if (!ignoreChars.Have(curChar))
+			{
+				result.AppendUnicode(curChar);
+			}
+		}
 
-			result.AppendUnicode(curChar);
+		interrupt = -1;
+		return result.ToString();
+	}
+
+	TString ReadUntilString(const TString& matchString) 
+	{
+		TStringBuilder sb;
+		ch32 firstChar = matchString.GetFirst();
+
+		int lastIndex;
+		int lastByteIndex;
+
+		while (!EndOfStream)
+		{
+			ch32 curChar = Read();
+			if (curChar == firstChar)
+			{
+				lastIndex = CurrentIndex;
+				lastByteIndex = CurrentByteIndex;
+
+				bool match = true;
+				TCharacterEnumerator ce(matchString);
+				while (ce.MoveNext())
+				{
+					if (curChar != ce.Current)
+					{
+						match = false;
+					}
+					curChar = Read();
+				}
+
+				if (match)
+				{
+					return sb.ToString();
+				}
+				else
+				{
+					CurrentIndex = lastIndex;
+					CurrentByteIndex = lastByteIndex;
+				}
+			}
+
+			sb.AppendUnicode(curChar);
 		}
 	}
 

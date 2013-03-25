@@ -106,6 +106,9 @@
     <ClInclude Include="test_falconrenderer.h">
       <Filter>Tests</Filter>
     </ClInclude>
+    <ClInclude Include="test_hawkrenderer.h">
+      <Filter>Tests</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Image Include="color-test.bmp">

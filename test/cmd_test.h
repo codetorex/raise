@@ -20,6 +20,7 @@
 #include "test_mvc.h"
 #include "test_markdown.h"
 #include "test_falconrenderer.h"
+#include "test_hawkrenderer.h"
 #include "test_stringreader.h"
 
 #ifdef WIN32
@@ -79,8 +80,8 @@ public:
 		suite.AddTest(&MMatrixCheck);
 		suite.AddTest(&TRaiseMarkdownCheck);
 		suite.AddTest(&WMVCCheck);
-		suite.AddTest(&WFalconRendererCheck);
-		
+		//suite.AddTest(&WFalconRendererCheck);
+		suite.AddTest(&WHawkRendererCheck);
 
 		// TODO: implement test grouping so we can have categorized test results.
 

@@ -5,6 +5,7 @@
 
 class WModel;
 class WController;
+class TStringReader;
 
 enum FalconFragmentTypes
 {
@@ -23,7 +24,9 @@ class WFalconRenderer:public WViewRenderer
 {
 protected:
 	void AddFragment(int type, const TString& content);
-	void ParseParens(TCharacterEnumerator& ce, TStringBuilder& sb);
+	void ParseCode(TStringReader& sr);
+	void ParseParens(TStringReader& sr);
+	bool IsKeyword(const TString& str);
 
 public:
 	TString Source;
@@ -39,6 +42,8 @@ public:
 	}
 
 	void ParseSource();
+
+	
 
 	void Render(WController* c, WModel* model);
 };

@@ -758,6 +758,9 @@
     <ClInclude Include="tstringreader.h">
       <Filter>Source Files\IO\Literacy</Filter>
     </ClInclude>
+    <ClInclude Include="whawkrenderer.h">
+      <Filter>Source Files\Web\MVC</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">
@@ -971,6 +974,9 @@
       <Filter>Source Files\Web\MVC</Filter>
     </ClCompile>
     <ClCompile Include="wfalconrenderer.cpp">
+      <Filter>Source Files\Web\MVC</Filter>
+    </ClCompile>
+    <ClCompile Include="whawkrenderer.cpp">
       <Filter>Source Files\Web\MVC</Filter>
     </ClCompile>
   </ItemGroup>

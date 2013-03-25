@@ -53,6 +53,14 @@ public:
 	 */
 	virtual TString ReadUntil(const TString& interrupChars, const TString& ignoreChars, int& interrupt) = 0;
 
+
+	virtual TString ReadUntilString(const TString& matchString) 
+	{
+		// TODO: change readUntil and use this instead and make it work with ch32 array
+		LowLevelNotImplemented(__FILE__,__LINE__);
+		return TString::Empty;
+	}
+
 	/**
 	 * Closes the reader.
 	 */
