@@ -4,170 +4,88 @@
     Layout = "~/Views/Shared/Management/_LayoutLogged.cshtml";
 }
 
+
 <div class="row-fluid sortable">
+    <div class="box span12">
+					<div class="box-header well" data-original-title>
+						<h2><i class="icon-user"></i> Katýlýmcýlar</h2>
+						<div class="box-icon">
+							
+						</div>
+					</div>
+					<div class="box-content">
+						<table class="table table-striped table-bordered bootstrap-datatable datatable">
+						  <thead>
+							  <tr>
+                                  <th>Facebook Id</th>
+								  <th>Ýsim</th>
+								  <th>Email</th>
+								  <th>Telefon</th>
+								  <th>Þehir</th>
+								  <th>Resim</th>
+                                  <th>Aldýðý Oy</th>
+							  </tr>
+						  </thead>   
+						  <tbody>
+                        @foreach(var par in Model.ParticipantTable)
+                        {
+							<tr>
+                                <td><a class="center fbidlnk">@par.Participant.FacebookId</a></td>
+								<td>@par.Participant.Name</td>
+								<td class="center">@par.Participant.Email</td>
+								<td class="center">@par.Participant.Telephone</td>
+								<td class="center">@par.Participant.City</td>
+								<td class="center">
+									<a class="btn btn-success zoombtn" href="@par.Participant.Pictures.FirstOrDefault().ImagePath">
+										<i class="icon-zoom-in icon-white"></i>  
+										Bak                                            
+									</a>
 
-
-	<div class="box span9">
-		<div class="box-header well" data-original-title>
-			<h2><i class="icon-picture"></i> Onay Bekleyen Resimler</h2>
-			<div class="box-icon">
-				
-			</div>
-		</div>
-		<div class="box-content">
-			<ul class="thumbnails gallery">
-
-                @foreach (var img in Model.PicturesNeedsApproval)
-                {
-                    <li picId="@img.Id" class="thumbnail">
-                        <div class="memory" style="display:none;"><strong>@img.Participant.Name</strong><br /><i>@img.CreatedDate</i><br />@img.PictureMemory</div>
-					    <a class="thumbimg" style="background:url(@Url.Content("~/Uploads/" + img.ThumbPath))" href="~/Uploads/@img.ImagePath"></a>
-				    </li>
-                }
-											
-			</ul>
-		</div>
-	</div><!--/span-->
-
-    <div class="box span3">
-		<div class="box-header well" data-original-title>
-			<h2><i class="icon-picture"></i> Resimdeki Aný</h2>
-			<div class="box-icon">
-				
-			</div>
-		</div>
-		<div class="box-content">
-			<div class="memoryview" style="font-family:'Trebuchet MS'; font-size: 1.0em;height:200px;"></div>
-		</div>
-	</div><!--/span-->
-
+                                    <a class="btn btn-danger removebtn" picid="@par.Participant.Pictures.FirstOrDefault().Id">
+										<i class="icon-trash icon-white"></i>  
+										Kaldýr                                            
+									</a>
+								</td>
+                                <td class="center">@par.TotalVote</td>
+							</tr>
+                         }
+							
+						  </tbody>
+					  </table>            
+					</div>
+				</div><!--/span-->
+			
+			</div><!--/row-->
 			
 </div><!--/row-->
 
-<input id="viewerImageId" type="hidden" />
-
 <script>
-
-    function imageOkay(id)
-    {
-        $('.thumbnail[picId="' + id + '"]').remove();
-    }
-
-    function changeFail()
-    {
-
-    }
-
-    function approveImage(id) {
-        var spsc = new SetPictureStatusCommand( '@Url.Action("SetPictureStatus")', id, PictureStatus.PS_VERIFIED, function () { imageOkay(id); }, changeFail);
-        Service.executeCommand(spsc);
-    }
-
-    function removeImage(id) {
-        var spsc = new SetPictureStatusCommand('@Url.Action("SetPictureStatus")', id, PictureStatus.PS_NOTVERIFIED, function () { imageOkay(id); }, changeFail);
-        Service.executeCommand(spsc);
-    }
-
-    function approve() {
-        var imgid = $('#viewerImageId').val();
-        approveImage(imgid);
-    }
-
-    function reject() {
-        var imgid = $('#viewerImageId').val();
-        removeImage(imgid);
-    }
-
-
-
-    $(document).ready(function (e)
-    {
-        
-
-        $('ul.gallery li').each(function () {
-            $(this).find('.gallery-controls').remove();
-            $(this).append('<div class="gallery-controls">' +
-                                '<p><a href="#" class="gallery-yes btn"><i class="icon-ok"></i></a> <a href="#" class="gallery-no btn"><i class="icon-remove"></i></a></p>' +
-                            '</div>');
+    $(document).ready(function () {
+        $('.fbidlnk').each(function () {
+            $(this).attr('href', 'https://www.facebook.com/' + $(this).text());
+            $(this).attr('target', '_blank');
         });
 
-        $('.gallery-yes').click(function (e) {
+        $('.removebtn').click(function (e) {
             e.preventDefault();
-            var imgid = $(this).closest('li').attr('picId');
-            $('#viewerImageId').val(imgid);
-            approve();
-        });
-
-
-        $('.gallery-no').click(function (e) {
-            e.preventDefault();
-            var imgid = $(this).closest('li').attr('picId');
-            $('#viewerImageId').val(imgid);
-            reject();
-        });
-
-        $('.view-yes').live('click', function (e) {
-            e.preventDefault();
-            approve();
-            $.colorbox.close();
-        });
-
-        $('.view-no').live('click', function (e) {
-            e.preventDefault();
-            reject();
-            $.colorbox.close();
-        });
-
-
-        $('.thumbimg').mouseenter(function () {
-            var picMem = $(this).parent().children('.memory').html();
-            $('.memoryview').html(picMem);
-        });
-
-        $('.thumbimg').mouseleave(function () {
-            $('.memoryview').text('');
-        });
-
-        $('.thumbimg').click(function (e) {
-            e.preventDefault();
-            var picAddr = $(this).attr('href');
-            var picId = $(this).closest('li').attr('picId');
-            $('#viewerImageId').val(picId);
-            $.colorbox({
-                rel: 'nofollow', transition: "elastic", maxWidth: "95%", maxHeight: "95%", href: picAddr, title: function () {
-                    return '<a href="#" class="view-yes btn" style="margin-right:15%;"><i class="icon-ok"></i> Onay Ver</a> <a href="#" class="view-no btn"><i class="icon-remove"></i> Sil</a>'
+            var request = {imgId : $(this).attr('picId') };
+            var op = $(this).closest('tr');
+            $.post('@Url.Action("RemoveImage")', request, function (data) {
+                if (data.Result == "Done") {
+                    $(op).remove();
                 }
-            });
+                else {
+                    alert(data.Result);
+                }
+            }, 'json');
+            
         });
 
-
-
-        /*$('.thumbimg').colorbox({
-            rel: 'nofollow', transition: "elastic", maxWidth: "95%", maxHeight: "95%", title: function () {
-                var url = $(this).attr('href');
-                return '<a href="#" class="gallery-edit btn" style="margin-right:15%;"><i class="icon-ok"></i> Onay Ver</a> <a href="#" class="gallery-delete btn"><i class="icon-remove"></i> Sil</a>';
-            }
-        });*/
-
-        /*
-
-        button logic
-        
-        $('.thumbnails').on('click', '.gallery-delete', function (e) {
+        $('.zoombtn').click(function (e) {
             e.preventDefault();
-            //get image id
-            //alert($(this).parents('.thumbnail').attr('id'));
-            $(this).parents('.thumbnail').fadeOut();
+            var targ = $(this).attr('href');
+            var picLink = '@Url.Content("~/Uploads/")' + targ;
+            $.colorbox({ rel: 'nofollow', transition: "elastic", maxWidth: "95%", maxHeight: "95%", href: picLink });
         });
-        //gallery edit
-        $('.thumbnails').on('click', '.gallery-edit', function (e) {
-            e.preventDefault();
-            //get image id
-            //alert($(this).parents('.thumbnail').attr('id'));
-        });*/
     });
-
-
-	
-
 </script>

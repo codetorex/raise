@@ -755,6 +755,9 @@
     <ClInclude Include="traisemarkdown.h">
       <Filter>Source Files\Text</Filter>
     </ClInclude>
+    <ClInclude Include="tstringreader.h">
+      <Filter>Source Files\IO\Literacy</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">

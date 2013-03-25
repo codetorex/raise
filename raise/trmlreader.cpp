@@ -33,7 +33,7 @@ void TRMLReader::Parse( bool closeStream )
 
 	while(!TextStream->EndOfStream)
 	{
-		data = TextStream->ReadInterrupted(interruptChars,ignoreChars,interrupt);
+		data = TextStream->ReadUntil(interruptChars,ignoreChars,interrupt);
 
 		switch (interrupt)
 		{
@@ -67,7 +67,7 @@ void TRMLReader::Parse( bool closeStream )
 			break;
 
 		case '"':
-			data = TextStream->ReadInterrupted(quotChars,TString::Empty,interrupt);
+			data = TextStream->ReadUntil(quotChars,TString::Empty,interrupt);
 			if (waitingValue)
 			{
 				curValue = data;

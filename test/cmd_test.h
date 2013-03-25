@@ -20,6 +20,7 @@
 #include "test_mvc.h"
 #include "test_markdown.h"
 #include "test_falconrenderer.h"
+#include "test_stringreader.h"
 
 #ifdef WIN32
 //#include <strsafe.h>
@@ -62,21 +63,26 @@ public:
 		suite.PrintTestName = true;
 		suite.PrintOutputs = true;
 
-		suite.AddTest(&TStringCheck);
-		suite.AddTest(&TDateTimeCheck);
+		
 		suite.AddTest(&TArrayCheck);
-		suite.AddTest(&TBitmapCheck);
-		suite.AddTest(&TColorCheck);
+		suite.AddTest(&TStringCheck);
+		suite.AddTest(&TStringReaderCheck);
 		suite.AddTest(&TCharacterEnumeratorCheck);
-		suite.AddTest(&NIPAddress4Check);
-		suite.AddTest(&TQueueCheck);
-		suite.AddTest(&TGraphicsBitmapCheck);
-		suite.AddTest(&TXMLCheck);
+		suite.AddTest(&TDateTimeCheck);
 		suite.AddTest(&TConvertCheck);
+		suite.AddTest(&TQueueCheck);
+		suite.AddTest(&TColorCheck);		
+		suite.AddTest(&TBitmapCheck);
+		suite.AddTest(&TGraphicsBitmapCheck);
+		suite.AddTest(&NIPAddress4Check);
+		suite.AddTest(&TXMLCheck);
 		suite.AddTest(&MMatrixCheck);
 		suite.AddTest(&TRaiseMarkdownCheck);
 		suite.AddTest(&WMVCCheck);
 		suite.AddTest(&WFalconRendererCheck);
+		
+
+		// TODO: implement test grouping so we can have categorized test results.
 
 		suite.RunSuite();
 

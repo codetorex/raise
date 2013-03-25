@@ -252,7 +252,7 @@ public:
 		return result;
 	}
 
-	TString ReadInterrupted(const TString& interrupChars, const TString& ignoreChars, int& interrupt)
+	TString ReadUntil(const TString& interrupChars, const TString& ignoreChars, int& interrupt)
 	{
 		TString readed(512);
 		ch32 d = Read();

@@ -416,7 +416,12 @@ TString TString::Format( const TString& format,int argc , const TStringFormatEle
 
 TString TString::SubstringUntil( ui32 startIndex, ch32 matchCharacter ) const
 {
-	throw NotImplementedException(__FILE__,__LINE__);
+	if (!IsASCII())
+	{
+		throw NotImplementedException(__FILE__,__LINE__);
+	}
+
+
 }
 
 ui32 TString::SubstringUntil( ui32 startIndex, ch32 matchCharacter, TArray<byte>& output ) const

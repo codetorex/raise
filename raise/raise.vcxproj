@@ -306,6 +306,7 @@
     <ClInclude Include="stdafx.h" />
     <ClInclude Include="tcompositebuffer.h" />
     <ClInclude Include="tstringformat.h" />
+    <ClInclude Include="tstringreader.h" />
     <ClInclude Include="tstringwriter.h" />
     <ClInclude Include="tplatform.h" />
     <ClInclude Include="ttest.h" />

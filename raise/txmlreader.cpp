@@ -32,7 +32,7 @@ int TXMLReader::ParseAttributes( TXMLNode& node )
 
 	while(1)
 	{
-		data = TextStream->ReadInterrupted(attributeInterrupt,attributeIgnore,interrupt);
+		data = TextStream->ReadUntil(attributeInterrupt,attributeIgnore,interrupt);
 
 		switch(interrupt)
 		{
@@ -41,7 +41,7 @@ int TXMLReader::ParseAttributes( TXMLNode& node )
 			break;
 
 		case '"':
-			data = TextStream->ReadInterrupted(valueInterrupt,TString::Empty,interrupt);
+			data = TextStream->ReadUntil(valueInterrupt,TString::Empty,interrupt);
 			node.Attributes.Add(attributeName, new TString(data));
 			break;
 
@@ -64,7 +64,7 @@ int TXMLReader::ParseNode( TXMLNode& node )
 	TString nodeName;
 	int interrupt;
 	
-	nodeName = TextStream->ReadInterrupted(nameInterrupt,TString::Empty,interrupt);
+	nodeName = TextStream->ReadUntil(nameInterrupt,TString::Empty,interrupt);
 
 	if (nodeName == "?xml")
 	{
@@ -90,7 +90,7 @@ int TXMLReader::ParseNode( TXMLNode& node )
 	{
 		node.Value = data;
 
-		data = TextStream->ReadInterrupted(endInterrupt,endIgnore,interrupt);
+		data = TextStream->ReadUntil(endInterrupt,endIgnore,interrupt);
 		if (!(data == node.Name))
 		{
 			throw Exception("Error while reading XML");
@@ -108,7 +108,7 @@ int TXMLReader::ParseNode( TXMLNode& node )
 		data = SkipToNodeStart();
 		if (TextStream->Peek() == '/')
 		{
-			data = TextStream->ReadInterrupted(endInterrupt,endIgnore,interrupt);
+			data = TextStream->ReadUntil(endInterrupt,endIgnore,interrupt);
 			if (!(data == node.Name))
 			{
 				throw Exception("Error while reading XML");
@@ -129,7 +129,7 @@ TString TXMLReader::SkipToNodeStart()
 {
 	TString mainInterrupt = "<";
 	int interrupt;
-	return TextStream->ReadInterrupted(mainInterrupt,TString::Empty,interrupt);
+	return TextStream->ReadUntil(mainInterrupt,TString::Empty,interrupt);
 }
 
 TXMLNode* TXMLNode::SelectSingleNode( const TString& xpath )

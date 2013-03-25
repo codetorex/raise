@@ -51,7 +51,7 @@ public:
 	 * @param [out] interrupt The interrupt.
 	 * @return The string before interruption.
 	 */
-	virtual TString ReadInterrupted(const TString& interrupChars, const TString& ignoreChars, int& interrupt) = 0;
+	virtual TString ReadUntil(const TString& interrupChars, const TString& ignoreChars, int& interrupt) = 0;
 
 	/**
 	 * Closes the reader.
