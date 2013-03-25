@@ -2,6 +2,7 @@
 #define TSTRINGREADER_H
 
 #include "ttextreader.h"
+#include "tmemorydriver.h"
 
 class TStringReader: public TTextReader
 {
@@ -128,36 +129,34 @@ public:
 
 		while (!EndOfStream)
 		{
+			lastIndex = CurrentIndex;
+			lastByteIndex = CurrentByteIndex;
+
 			ch32 curChar = Read();
 			if (curChar == firstChar)
 			{
-				lastIndex = CurrentIndex;
-				lastByteIndex = CurrentByteIndex;
-
-				bool match = true;
-				TCharacterEnumerator ce(matchString);
-				while (ce.MoveNext())
+				if (SourceString.ByteLength - CurrentByteIndex > matchString.ByteLength)
 				{
-					if (curChar != ce.Current)
+					int result = MemoryDriver::Compare(SourceString.Data+lastByteIndex, matchString.Data, matchString.ByteLength);
+					if (result == 0)
 					{
-						match = false;
+						CurrentIndex = lastIndex + matchString.Length;
+						CurrentByteIndex = lastByteIndex + matchString.ByteLength;
+						return sb.ToString();
 					}
-					curChar = Read();
-				}
-
-				if (match)
-				{
-					return sb.ToString();
-				}
-				else
-				{
-					CurrentIndex = lastIndex;
-					CurrentByteIndex = lastByteIndex;
+					else
+					{
+						CurrentIndex = lastIndex;
+						CurrentByteIndex = lastByteIndex;
+						curChar = Read();
+					}
 				}
 			}
 
 			sb.AppendUnicode(curChar);
 		}
+
+		return sb.ToString();
 	}
 
 	void Close() 

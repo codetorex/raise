@@ -23,13 +23,18 @@ public:
 
 	void Test()
 	{
-		Should("Parse as text fragment until it reaches <$");
+		Should("Parse text and code in a mixed string");
 		{
 			WHawkRenderer renderer;
 			TStringReader sr("Test text <$ Test Code $> End Text");
 			renderer.LoadSource(sr);
-			if (renderer.Fragments.Count > 0)
+
+			Should("Have 3 fragments in given test string");
+			if (renderer.Fragments.Count == 3)
 			{
+				AddResult(true);
+
+				Should("Parse as text fragment until it reaches <$");
 				bool result = CheckFragment(renderer.Fragments[0], WHawkFragment::HFTYP_TEXT, "Test text " );
 				AddResult(result);
 

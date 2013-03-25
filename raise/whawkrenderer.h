@@ -25,6 +25,9 @@ public:
 
 class WHawkRenderer:public WViewRenderer
 {
+private:
+	void AddFragment(int type, const TString& content);
+
 public:
 	TString CodeStart;
 	TString CodeEnd;

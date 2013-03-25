@@ -76,6 +76,22 @@ public:
 			TStringReader sr(testString);
 			TString firstPart = sr.ReadUntilString("@Data");
 			AddResult(firstPart == "Test string ");
+
+
+
+		}
+
+		Should("Omit search pattern from original text");
+		{
+			TStringReader sr("Test text <$ Test Code $> End Text");
+			TString textPart = sr.ReadUntilString("<$");
+			TString codePart = sr.ReadUntilString("$>");
+
+		
+			AddResult(textPart == "Test text ");
+
+			Should("Not read more than pattern itself");
+			AddResult(codePart == " Test Code ");
 		}
 
 	}
