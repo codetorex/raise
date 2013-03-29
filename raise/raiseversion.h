@@ -5,8 +5,8 @@
 // will result like 26: .....
 // so just substring 0 to indexof(':')
 
-#define RAISE_BUILD					920
-#define RAISE_BUILD_STRING			"920"
+#define RAISE_BUILD					924
+#define RAISE_BUILD_STRING			"924"
 
 #define RAISE_PHASE					&TVersionPhase::PreAlpha
 

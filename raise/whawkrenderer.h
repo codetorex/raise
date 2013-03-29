@@ -40,7 +40,9 @@ public:
 
 	TArray< WHawkFragment* > Fragments;
 
-	void LoadSource(TTextReader& source);
+	void ParseSource(TTextReader& source);
+	void CreateCode();
+	void CompileCode();
 
 	void Render(WController* c, WModel* model);
 };

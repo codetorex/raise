@@ -76,6 +76,15 @@ So in programming sometimes we have to sacrifice one or other. Our main focus is
 ## Constructors
 Constructors should prepare class for any work. But it shouldn't do any work by itself. It should just set internal state of object.
 
+# MVC Internals
+
+Currently MVC stack is working like this; Request is delivered over FastCGI.
+We are parsing necessary stuff from request and building the Controller object.
+(In future we can get it from cache or something for faster processing?)
+Controller finds the view file and generates model. If view file is changed,
+it parses it and compiles it. Then runs its main with generated Model.
+
+
 # License
 
 Boost Software License - Version 1.0 - August 17, 2003

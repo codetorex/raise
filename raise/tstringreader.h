@@ -135,13 +135,17 @@ public:
 			ch32 curChar = Read();
 			if (curChar == firstChar)
 			{
-				if (SourceString.ByteLength - CurrentByteIndex > matchString.ByteLength)
+				if (SourceString.ByteLength - lastByteIndex >= matchString.ByteLength)
 				{
 					int result = MemoryDriver::Compare(SourceString.Data+lastByteIndex, matchString.Data, matchString.ByteLength);
 					if (result == 0)
 					{
 						CurrentIndex = lastIndex + matchString.Length;
 						CurrentByteIndex = lastByteIndex + matchString.ByteLength;
+						if (CurrentByteIndex == SourceString.ByteLength)
+						{
+							EndOfStream = true;
+						}
 						return sb.ToString();
 					}
 					else

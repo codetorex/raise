@@ -2,7 +2,7 @@
 #include "whawkrenderer.h"
 #include "ttextreader.h"
 
-void WHawkRenderer::LoadSource( TTextReader& source )
+void WHawkRenderer::ParseSource( TTextReader& source )
 {
 	TStringBuilder textPart;
 
@@ -23,16 +23,16 @@ void WHawkRenderer::LoadSource( TTextReader& source )
 	}
 }
 
-void WHawkRenderer::Render( WController* c, WModel* model )
-{
-
-}
-
 void WHawkRenderer::AddFragment( int type, const TString& content )
 {
 	WHawkFragment* frg = new WHawkFragment();
 	frg->Type = type;
 	frg->Fragment = content;
 	Fragments.Add(frg);
+}
+
+void WHawkRenderer::Render( WController* c, WModel* model )
+{
+
 }
 
