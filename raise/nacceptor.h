@@ -10,7 +10,7 @@
 class NAcceptor
 {
 public:
-	NSocket* Listener;
+	NSocketAsync* Listener;
 	TIOService* Service;
 
 	NEndPoint ListeningEndpoint;
@@ -46,7 +46,7 @@ public:
 		Accepting = true;
 	}
 
-	void BeginAccept(NSocket* target, void* object, NPacket* first, AcceptedCallback* cb )
+	void BeginAccept(NSocketAsync* target, void* object, NPacket* first, AcceptedCallback* cb )
 	{
 		Listener->BeginAccept(target,object,first,cb);
 	}

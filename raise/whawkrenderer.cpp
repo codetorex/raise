@@ -36,3 +36,8 @@ void WHawkRenderer::Render( WController* c, WModel* model )
 
 }
 
+void WHawkRenderer::CreateCode()
+{
+
+}
+

@@ -11,7 +11,7 @@ class TFileStream;
 class NHTTPSession
 {
 public:
-	NSocket* Socket;
+	NSocketAsync* Socket;
 	NHTTPServer* Server;
 	TIOService* Service;
 

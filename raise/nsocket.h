@@ -1,7 +1,6 @@
 #ifndef NSOCKET_H
 #define NSOCKET_H
 
-#include "tioservice.h"
 #include "texception.h"
 #include "naddress.h"
 #include "npacket.h"
@@ -30,12 +29,15 @@ typedef int SOCKET;
 class NSocket
 {
 protected:
-	TIOService*			Service;
 
-	void ThrowError( const TString& operation )
+	void ThrowError( const TString& operation, int err = -1 )
 	{
 #ifdef WIN32
-		throw Exception( operation , sfs( Platform.GetErrorDescription(WSAGetLastError())) );
+		if (err == -1)
+		{
+			err = WSAGetLastError();
+		}
+		throw Exception( operation , sfs( Platform.GetErrorDescription(err)) );
 #else
 		throw Exception(operation);
 #endif
@@ -168,14 +170,19 @@ public:
 		Socket = INVALID_SOCKET;
 	}
 
-	inline int Send( NPacket* data )
+	inline int Send( const void* Data , ui32 Length)
 	{
-		return send(Socket,(char*)data->Data,data->Length,0);
+		return send (Socket, (char*)Data, Length, 0);
 	}
 
-	inline int Receive( byte* pData, ui32 Length)
+	inline int Send( NPacket* data )
 	{
-		return recv(Socket,(char*)pData,Length,0);
+		return Send(data->Data, data->Length);
+	}
+
+	inline int Receive( void* Data, ui32 Length)
+	{
+		return recv(Socket,(char*)Data,Length,0);
 	}
 
 	inline int Receive( NPacket* data )
@@ -213,17 +220,20 @@ public:
 	NSocket* Accept()
 	{
 		sockaddr ep;
-		socklen_t epsize;
+		socklen_t epsize = sizeof(ep);
 
 		SOCKET r = accept(Socket,&ep,&epsize);
 
 		if( r == INVALID_SOCKET )
 		{
+			int error = WSAGetLastError();
 			Disconnect();
-			ThrowError("Accept failed: %");
+			ThrowError("Accept failed: %",error);
 		}
 
 		NSocket* nsck = new NSocket(AddressFamily,SocketType,ProtocolType,r);
+
+		return nsck;
 
 		// TODO: write a ipV6 and ipV4 supporting class that parses these stuff.
 		/*switch(ep.sa_family)
@@ -245,25 +255,9 @@ public:
 
 	}
 
-	inline void BeginAccept ( NSocket* target,void* object, NPacket* first,   AcceptedCallback* Callback)
-	{
-		Service->AcceptAsync(this, target , object, first, Callback);
-	}
 
-	inline void BeginConnect( NEndPoint& endpoint, ConnectCallback* Callback )
-	{
-		Service->ConnectAsync(this, endpoint, Callback);
-	}
-
-	inline void BeginSend(NPacket* packet, SendCallback* Callback)
-	{
-		Service->SendAsync(this,packet,Callback);
-	}
-
-	inline void BeginReceive(NPacket* packet, ReceiveCallback* Callback)
-	{
-		Service->RecvAsync(this, packet, Callback);
-	}
 };
+
+
 
 #endif

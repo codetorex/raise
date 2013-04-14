@@ -6,17 +6,20 @@
 #include "tarray.h"
 #include "tevent.h"
 #include "nsocketdefs.h"
+#include "nsocket.h"
 
 class TIOService;
 class NService;
-class NSocket;
 class TThread;
-class NSocket;
+class NSocketAsync;
 
 typedef delegate1<void, const SystemError&>			ConnectCallback;
 typedef delegate1<void, const SystemError&>			SendCallback;
 typedef delegate2<void, void*,const SystemError&>	AcceptedCallback;
 typedef delegate2<void, const SystemError&, ui32>	ReceiveCallback;
+
+
+
 
 /**
  * Asynchronous Server/Client interface for networking.
@@ -40,7 +43,7 @@ public:
 	ServiceStatus				Status;
 	TArray<TThread*>			Workers;
 	TString						Name;
-	TArray< NSocket* >			Sockets;
+	TArray< NSocketAsync* >		Sockets;
 	event<StatusChangedEvent>	StatusChanged;
 
 	/**
@@ -72,14 +75,14 @@ public:
 	 * Creates a socket that can be used with IOService.
 	 * TODO: make this factory instead?
 	 */
-	virtual NSocket* CreateSocket(AddressFamilies _AddressFamily, SocketTypes _SocketType, ProtocolTypes _ProtocolType) = 0;
+	virtual NSocketAsync* CreateSocket(AddressFamilies _AddressFamily, SocketTypes _SocketType, ProtocolTypes _ProtocolType) = 0;
 
-	inline NSocket* CreateSocketTCP()
+	inline NSocketAsync* CreateSocketTCP()
 	{
 		return CreateSocket(A_InterNetworkV4, S_Stream, P_TCP);
 	}
 
-	inline NSocket* CreateSocketUDP()
+	inline NSocketAsync* CreateSocketUDP()
 	{
 		return CreateSocket(A_InterNetworkV4, S_DataGram, P_UDP);
 	}
@@ -89,21 +92,52 @@ public:
 	 */
 	//virtual NSocket* ConvertSocket(NSocket* oldSocket) = 0;
 
-	virtual void Disconnect( NSocket* Client, bool Graceful = false) = 0;
+	virtual void Disconnect( NSocketAsync* Client, bool Graceful = false) = 0;
 
-	virtual void AcceptAsync ( NSocket* sck, NSocket* target, void* object,  NPacket* first, AcceptedCallback* Callback ) = 0;
+	virtual void AcceptAsync ( NSocketAsync* sck, NSocketAsync* target, void* object,  NPacket* first, AcceptedCallback* Callback ) = 0;
 
-	virtual void ConnectAsync ( NSocket* sck, NEndPoint& endpoint, ConnectCallback* Callback ) = 0;
+	virtual void ConnectAsync ( NSocketAsync* sck, NEndPoint& endpoint, ConnectCallback* Callback ) = 0;
 
-	virtual void SendAsync ( NSocket* sck, NPacket* packet , SendCallback* Callback) = 0;
+	virtual void SendAsync ( NSocketAsync* sck, NPacket* packet , SendCallback* Callback) = 0;
 
-	virtual void RecvAsync ( NSocket* sck, NPacket* packet, ReceiveCallback* Callback ) = 0;
+	virtual void RecvAsync ( NSocketAsync* sck, NPacket* packet, ReceiveCallback* Callback ) = 0;
 
 protected:
 	inline void ChangeStatus( ServiceStatus newStatus )
 	{
 		Status = newStatus;
 		StatusChanged.call(newStatus);
+	}
+};
+
+class NSocketAsync: public NSocket
+{
+public:
+	TIOService* Service;
+
+	NSocketAsync(AddressFamilies _AddressFamily, SocketTypes _SocketType, ProtocolTypes _ProtocolType,SOCKET _Socket = INVALID_SOCKET): NSocket(_AddressFamily, _SocketType, _ProtocolType, _Socket)
+	{
+
+	}
+
+	inline void BeginAccept ( NSocketAsync* target,void* object, NPacket* first,   AcceptedCallback* Callback)
+	{
+		Service->AcceptAsync(this, target , object, first, Callback);
+	}
+
+	inline void BeginConnect( NEndPoint& endpoint, ConnectCallback* Callback )
+	{
+		Service->ConnectAsync(this, endpoint, Callback);
+	}
+
+	inline void BeginSend(NPacket* packet, SendCallback* Callback)
+	{
+		Service->SendAsync(this,packet,Callback);
+	}
+
+	inline void BeginReceive(NPacket* packet, ReceiveCallback* Callback)
+	{
+		Service->RecvAsync(this, packet, Callback);
 	}
 };
 

@@ -141,6 +141,18 @@
     <Filter Include="Source Files\IO\Literacy\JSON">
       <UniqueIdentifier>{27bf737c-d93a-4f6b-9adb-7e4177f3a45c}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Source Files\Coding">
+      <UniqueIdentifier>{cca1cca4-c24c-44a0-8513-535bb1718956}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Coding\Scripting">
+      <UniqueIdentifier>{a17baad6-c9d1-4c16-afdf-dd18af091282}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Coding\Compiling">
+      <UniqueIdentifier>{0d19ceae-12e6-4243-abdb-e93f8bb1d146}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Coding\Compiling\TCC">
+      <UniqueIdentifier>{1792bb69-0e32-49d8-8f7a-e34f096aa9a3}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="tlinkedlist.h">
@@ -760,6 +772,9 @@
     </ClInclude>
     <ClInclude Include="whawkrenderer.h">
       <Filter>Source Files\Web\MVC</Filter>
+    </ClInclude>
+    <ClInclude Include="tccompiler.h">
+      <Filter>Source Files\Coding\Compiling</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

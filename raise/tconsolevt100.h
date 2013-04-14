@@ -45,7 +45,7 @@ public:
 
 	void GetPosition() 
 	{
-		Write("\x1B6n"); // must read after this
+		//Write("\x1B6n"); // must read after this
 		// TODO: read position
 	}
 
@@ -66,7 +66,7 @@ public:
 	{
 		if (UseXTermExtensions)
 		{
-			this->Write("\x1B[48;5;%m", sfi(color));
+			this->Write("\x1B[38;5;%m", sfi(color));
 		}
 	}
 

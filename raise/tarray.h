@@ -33,7 +33,7 @@ public:
 		Allocate(size);
 		Count = 0;
 	}
-
+	
 	inline TArray( const T* data )
 	{
 		Item = (T*)data;

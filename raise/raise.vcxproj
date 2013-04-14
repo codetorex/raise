@@ -172,6 +172,7 @@
     <ClInclude Include="tbitmapwriterparameters.h" />
     <ClInclude Include="tblend.h" />
     <ClInclude Include="tboxmodel.h" />
+    <ClInclude Include="tccompiler.h" />
     <ClInclude Include="tconsolebase.h" />
     <ClInclude Include="tconsolewin32.h" />
     <ClInclude Include="tcssreader.h" />

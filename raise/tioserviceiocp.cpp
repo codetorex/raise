@@ -290,7 +290,7 @@ void TIOServiceIOCP::Stop()
 }
 
 
-NSocket* TIOServiceIOCP::CreateSocket(AddressFamilies _AddressFamily, SocketTypes _SocketType, ProtocolTypes _ProtocolType)
+NSocketAsync* TIOServiceIOCP::CreateSocket(AddressFamilies _AddressFamily, SocketTypes _SocketType, ProtocolTypes _ProtocolType)
 {
 	int nRet = 0;
 	int nZero = 0;
@@ -351,7 +351,7 @@ void TIOServiceIOCP::Restart()
 }
 
 
-void TIOServiceIOCP::AcceptAsync( NSocket* sck, NSocket* target, void* object, NPacket* first, AcceptedCallback* Callback )
+void TIOServiceIOCP::AcceptAsync( NSocketAsync* sck, NSocketAsync* target, void* object, NPacket* first, AcceptedCallback* Callback )
 {
 	NSocketIOCP* listener = (NSocketIOCP*)sck;
 	
@@ -393,7 +393,7 @@ void TIOServiceIOCP::AcceptAsync( NSocket* sck, NSocket* target, void* object, N
 	}
 }
 
-void TIOServiceIOCP::ConnectAsync( NSocket* sck, NEndPoint& endpoint, ConnectCallback* Callback )
+void TIOServiceIOCP::ConnectAsync( NSocketAsync* sck, NEndPoint& endpoint, ConnectCallback* Callback )
 {
 	NSocketIOCP* isck = (NSocketIOCP*)sck;
 
@@ -420,7 +420,7 @@ void TIOServiceIOCP::ConnectAsync( NSocket* sck, NEndPoint& endpoint, ConnectCal
 	}
 }
 
-void TIOServiceIOCP::SendAsync( NSocket* sck, NPacket* packet , SendCallback* Callback )
+void TIOServiceIOCP::SendAsync( NSocketAsync* sck, NPacket* packet , SendCallback* Callback )
 {
 	NSocketIOCP* isock = (NSocketIOCP*)sck;
 
@@ -452,7 +452,7 @@ void TIOServiceIOCP::SendAsync( NSocket* sck, NPacket* packet , SendCallback* Ca
 	}
 }
 
-void TIOServiceIOCP::RecvAsync( NSocket* sck, NPacket* packet, ReceiveCallback* Callback )
+void TIOServiceIOCP::RecvAsync( NSocketAsync* sck, NPacket* packet, ReceiveCallback* Callback )
 {
 	NSocketIOCP* isock = (NSocketIOCP*)sck;
 
@@ -482,7 +482,7 @@ void TIOServiceIOCP::RecvAsync( NSocket* sck, NPacket* packet, ReceiveCallback* 
 	}
 }
 
-void TIOServiceIOCP::Disconnect( NSocket* Client, bool Graceful /*= false*/ )
+void TIOServiceIOCP::Disconnect( NSocketAsync* Client, bool Graceful /*= false*/ )
 {
 	NSocketIOCP* isock = (NSocketIOCP*)Client;
 

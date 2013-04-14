@@ -48,7 +48,7 @@ public:
 	WSAOVERLAPPED		Overlapped;
 	WSABUF				wsabuf;
 	NPacket*			CurrentPacket;
-	NSocket*			AcceptSocket;
+	NSocketAsync*			AcceptSocket;
 	ui32				SentBytes;
 	ui32				TotalBytes;
 	bool				Working;
@@ -84,12 +84,12 @@ public:
  * Berkeley sockets derived socket implementation for windows that supports asynchronous I/O.
  * TODO: make these guys not derived.
  */
-class NSocketIOCP: public NSocket
+class NSocketIOCP: public NSocketAsync
 {
 public:
 
 
-	NSocketIOCP(AddressFamilies _AddressFamily, SocketTypes _SocketType, ProtocolTypes _ProtocolType, SOCKET _Socket, TIOService* svc): NSocket(_AddressFamily, _SocketType, _ProtocolType, _Socket)
+	NSocketIOCP(AddressFamilies _AddressFamily, SocketTypes _SocketType, ProtocolTypes _ProtocolType, SOCKET _Socket, TIOService* svc): NSocketAsync(_AddressFamily, _SocketType, _ProtocolType, _Socket)
 	{
 		Service = svc;
 		Introduced = false;
@@ -136,17 +136,17 @@ public:
 
 	void WorkerMain();
 
-	NSocket* CreateSocket(AddressFamilies _AddressFamily, SocketTypes _SocketType, ProtocolTypes _ProtocolType);
+	NSocketAsync* CreateSocket(AddressFamilies _AddressFamily, SocketTypes _SocketType, ProtocolTypes _ProtocolType);
 
-	void Disconnect( NSocket* Client, bool Graceful = false);
+	void Disconnect( NSocketAsync* Client, bool Graceful = false);
 
-	void AcceptAsync ( NSocket* sck, NSocket* target, void* object, NPacket* first, AcceptedCallback* Callback );
+	void AcceptAsync ( NSocketAsync* sck, NSocketAsync* target, void* object, NPacket* first, AcceptedCallback* Callback );
 
-	void ConnectAsync ( NSocket* sck, NEndPoint& endpoint, ConnectCallback* Callback );
+	void ConnectAsync ( NSocketAsync* sck, NEndPoint& endpoint, ConnectCallback* Callback );
 
-	void SendAsync ( NSocket* sck, NPacket* packet , SendCallback* Callback);
+	void SendAsync ( NSocketAsync* sck, NPacket* packet , SendCallback* Callback);
 
-	void RecvAsync ( NSocket* sck, NPacket* packet, ReceiveCallback* Callback );
+	void RecvAsync ( NSocketAsync* sck, NPacket* packet, ReceiveCallback* Callback );
 };
 
 #endif
