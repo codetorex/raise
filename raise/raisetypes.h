@@ -60,8 +60,6 @@ typedef unsigned char		byte; // technically ui8
 #define RDLL __attribute__ ((visibility("default")))
 #endif
 
-#define AttachFunctionPointer(A,B) *(long*)(&(A)) = (long)((void*)(*(long*)((long)&B)));
-
 #ifndef WHEEL_DELTA
 #define WHEEL_DELTA			120
 #endif
@@ -70,38 +68,6 @@ typedef unsigned char		byte; // technically ui8
 #define MXDWORD				0xFFFFFFFF
 
 #define MAX_UI32			((ui32)~((ui32)0))
-
-#define DIV2POWN(x,y)		( (x) >> y )
-
-#define DIV2(x)				( DIV2POWN(x,1) )
-#define DIV4(x)				( DIV2POWN(x,2) )
-#define DIV8(x)				( DIV2POWN(x,3) )
-#define DIV16(x)			( DIV2POWN(x,4) )
-#define DIV32(x)			( DIV2POWN(x,5) )
-
-/**
- * This maybe different in big endian system.
- */
-#define MUL2POWN(x,y)		( (x) << y )
-
-// TODO: test these in raise-test
-#define MUL2(x)				( MUL2POWN(x,1) )
-#define MUL4(x)				( MUL2POWN(x,2) )
-#define MUL8(x)				( MUL2POWN(x,3) )
-#define MUL16(x)			( MUL2POWN(x,4) )
-#define MUL32(x)			( MUL2POWN(x,5) )
-
-// and with ( 2^n - 1 )
-#define MOD2(x)				( (x) & 1  )
-#define MOD4(x)				( (x) & 3  )
-#define MOD8(x)				( (x) & 7  )
-#define MOD16(x)			( (x) & 15 )
-#define MOD32(x)			( (x) & 31 )
-
-#define DW1BYTE				0x000000FF
-#define DW2BYTE				0x0000FF00
-#define DW3BYTE				0x00FF0000
-#define DW4BYTE				0xFF000000
 
 //#define NOPNGLIB
 

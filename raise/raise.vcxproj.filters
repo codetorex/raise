@@ -99,9 +99,6 @@
     <Filter Include="Source Files\IO\Literacy\CSS">
       <UniqueIdentifier>{10208ff8-483d-408e-962f-1443d3f33f65}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Source Files\System\Type">
-      <UniqueIdentifier>{706b7851-b7f1-4622-afbe-6155542a19a7}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Source Files\Web">
       <UniqueIdentifier>{04b929f9-bad5-4b56-bec9-cdb8dfc38b49}</UniqueIdentifier>
     </Filter>
@@ -155,6 +152,12 @@
     </Filter>
     <Filter Include="Source Files\Network\Telnet">
       <UniqueIdentifier>{7bd15228-1cdc-4fdc-9da5-9252a3e0b624}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\System\Reflection">
+      <UniqueIdentifier>{913ce2bf-0dfb-4537-8ae9-4418b6e04eb8}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\System\Text">
+      <UniqueIdentifier>{4efbcc9d-0bfd-42bf-aa8f-9a611305d6fc}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -275,9 +278,6 @@
     <ClInclude Include="mdecibel.h">
       <Filter>Source Files\Mathematics</Filter>
     </ClInclude>
-    <ClInclude Include="tcharacter.h">
-      <Filter>Source Files\String</Filter>
-    </ClInclude>
     <ClInclude Include="tbytearray.h">
       <Filter>Source Files\System</Filter>
     </ClInclude>
@@ -395,18 +395,6 @@
     <ClInclude Include="tnumberformatinfo.h">
       <Filter>Source Files\System\Globalization</Filter>
     </ClInclude>
-    <ClInclude Include="tutf8encoding.h">
-      <Filter>Source Files\String</Filter>
-    </ClInclude>
-    <ClInclude Include="tencoding.h">
-      <Filter>Source Files\String</Filter>
-    </ClInclude>
-    <ClInclude Include="tencodinginfo.h">
-      <Filter>Source Files\String</Filter>
-    </ClInclude>
-    <ClInclude Include="tutf16encoding.h">
-      <Filter>Source Files\String</Filter>
-    </ClInclude>
     <ClInclude Include="tcharbuffer.h">
       <Filter>Source Files\String</Filter>
     </ClInclude>
@@ -415,12 +403,6 @@
     </ClInclude>
     <ClInclude Include="thashcodeprovider.h">
       <Filter>Source Files\Collection</Filter>
-    </ClInclude>
-    <ClInclude Include="tasciiextended.h">
-      <Filter>Source Files\String</Filter>
-    </ClInclude>
-    <ClInclude Include="tlatin1encoding.h">
-      <Filter>Source Files\String</Filter>
     </ClInclude>
     <ClInclude Include="tstreamwriterutf8.h">
       <Filter>Source Files\IO\Literacy</Filter>
@@ -647,15 +629,6 @@
     <ClInclude Include="tcssreader.h">
       <Filter>Source Files\IO\Literacy\CSS</Filter>
     </ClInclude>
-    <ClInclude Include="ttype.h">
-      <Filter>Source Files\System\Type</Filter>
-    </ClInclude>
-    <ClInclude Include="ttypemanager.h">
-      <Filter>Source Files\System\Type</Filter>
-    </ClInclude>
-    <ClInclude Include="ttypebuilder.h">
-      <Filter>Source Files\System\Type</Filter>
-    </ClInclude>
     <ClInclude Include="tserialization.h">
       <Filter>Source Files\IO\Literacy</Filter>
     </ClInclude>
@@ -782,6 +755,36 @@
     <ClInclude Include="tprocessmemory.h">
       <Filter>Source Files\Hacking</Filter>
     </ClInclude>
+    <ClInclude Include="ttype.h">
+      <Filter>Source Files\System\Reflection</Filter>
+    </ClInclude>
+    <ClInclude Include="ttypebuilder.h">
+      <Filter>Source Files\System\Reflection</Filter>
+    </ClInclude>
+    <ClInclude Include="ttypemanager.h">
+      <Filter>Source Files\System\Reflection</Filter>
+    </ClInclude>
+    <ClInclude Include="tutf8encoding.h">
+      <Filter>Source Files\System\Text</Filter>
+    </ClInclude>
+    <ClInclude Include="tutf16encoding.h">
+      <Filter>Source Files\System\Text</Filter>
+    </ClInclude>
+    <ClInclude Include="tlatin1encoding.h">
+      <Filter>Source Files\System\Text</Filter>
+    </ClInclude>
+    <ClInclude Include="tasciiextended.h">
+      <Filter>Source Files\System\Text</Filter>
+    </ClInclude>
+    <ClInclude Include="tencoding.h">
+      <Filter>Source Files\System\Text</Filter>
+    </ClInclude>
+    <ClInclude Include="tencodinginfo.h">
+      <Filter>Source Files\System\Text</Filter>
+    </ClInclude>
+    <ClInclude Include="tcharacter.h">
+      <Filter>Source Files\System\Text</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">
@@ -868,12 +871,6 @@
     <ClCompile Include="tstringbuilder.cpp">
       <Filter>Source Files\String</Filter>
     </ClCompile>
-    <ClCompile Include="tencoding.cpp">
-      <Filter>Source Files\String</Filter>
-    </ClCompile>
-    <ClCompile Include="tencodinginfo.cpp">
-      <Filter>Source Files\String</Filter>
-    </ClCompile>
     <ClCompile Include="thashcodeprovider.cpp">
       <Filter>Source Files\Collection</Filter>
     </ClCompile>
@@ -958,9 +955,6 @@
     <ClCompile Include="tcssreader.cpp">
       <Filter>Source Files\IO\Literacy\CSS</Filter>
     </ClCompile>
-    <ClCompile Include="ttypemanager.cpp">
-      <Filter>Source Files\System\Type</Filter>
-    </ClCompile>
     <ClCompile Include="mmatrix.cpp">
       <Filter>Source Files\Mathematics</Filter>
     </ClCompile>
@@ -1002,6 +996,15 @@
     </ClCompile>
     <ClCompile Include="tprocessmemory.cpp">
       <Filter>Source Files\Hacking</Filter>
+    </ClCompile>
+    <ClCompile Include="ttypemanager.cpp">
+      <Filter>Source Files\System\Reflection</Filter>
+    </ClCompile>
+    <ClCompile Include="tencoding.cpp">
+      <Filter>Source Files\System\Text</Filter>
+    </ClCompile>
+    <ClCompile Include="tencodinginfo.cpp">
+      <Filter>Source Files\System\Text</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

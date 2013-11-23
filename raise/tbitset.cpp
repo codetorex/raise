@@ -43,8 +43,8 @@ void TBitset::UseBitLength( int bitlength )
 
 char* TBitset::GetBitsAsChar( int start,int length )
 {
-	int irrstart = MOD32(start);
-	int relstart = DIV32( (start-irrstart) );
+	int irrstart = start % 32;
+	int relstart = (start-irrstart) / 32;
 	ui32 k = 1 << irrstart;
 	int j = irrstart;
 
@@ -80,8 +80,8 @@ char* TBitset::GetBitsAsChar( int start,int length )
 int TBitset::FillBits( int start,int length, bool value )
 {
 	int f=0;
-	int irrstart = MOD32(start);
-	int relstart = DIV32( (start-irrstart) );
+	int irrstart = start % 32;
+	int relstart = (start-irrstart) / 32;
 	ui32 k = 1 << irrstart;
 	int j = irrstart;
 
@@ -116,8 +116,8 @@ int TBitset::FillBits( int start,int length, bool value )
 int TBitset::SearchEmptyBits( int bitcount, int start )
 {
 	int f = 0;
-	int irrstart = MOD32(start);
-	int relstart = DIV32( (start-irrstart) );
+	int irrstart = start % 32;
+	int relstart = (start-irrstart) / 32;
 	ui32 k = 1 << irrstart;
 	int j = irrstart;
 
@@ -136,7 +136,7 @@ int TBitset::SearchEmptyBits( int bitcount, int start )
 				f++;
 				if (f==bitcount)
 				{
-					return ((MUL32(i) + j + 1) - f);
+					return (((i * 32) + j + 1) - f);
 				}
 			}
 			else

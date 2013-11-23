@@ -88,7 +88,7 @@ private:
 		}
 		this->leaf = false;
 		branchLevel = _branchLevel;
-		branchShift = MUL8(branchLevel);
+		branchShift = branchLevel * 8;
 	}
 
 public:
@@ -128,7 +128,7 @@ public:
 
 	inline THashKeyValue<T>* Get(ui32 h,const TString& key)
 	{
-		int i = MOD32(h >> branchShift);
+		int i = (h >> branchShift) % 32;
 		//h >>= 8;
 		if (Map[i] != 0)
 		{
@@ -139,7 +139,7 @@ public:
 
 	inline void Add(ui32 h,THashKeyValue<T>* value)
 	{
-		int i = MOD32(h >> branchShift);
+		int i = (h >> branchShift) % 32;
 		if (Map[i] != 0)
 		{
 			if ( Map[i]->leaf && Map[i]->valueCount == 4 )

@@ -38,7 +38,7 @@ public:
 	{
 		if (Count == Capacity)
 		{
-			Allocate(MUL2(Capacity));
+			Allocate(Capacity * 2);
 		}
 		Item[Count++] = value;
 		CurItem = value;

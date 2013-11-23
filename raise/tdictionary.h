@@ -48,7 +48,7 @@ public:
 	 */
 	void Add(const TString& key,T value)
 	{
-		int Page = MOD32(key.Data[0]);
+		int Page = key.Data[0] % 32;
 		TKeyValue<TString, T>* newKV = new TKeyValue<TString, T>(key, value);
 		Map[Page].Values.Add(newKV);
 		totalValues++;

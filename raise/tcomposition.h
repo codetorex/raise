@@ -26,7 +26,7 @@ public:
 	{
 		Elements = _elements;
 		BitsPerItem = CalculateBitsPerItem();
-		BytesPerItem = DIV8(BitsPerItem);
+		BytesPerItem = BitsPerItem / 8;
 	}
 
 	TComposition()
