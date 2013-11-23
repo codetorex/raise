@@ -5,10 +5,10 @@
 #include "tbitmap.h"
 #include "tpath.h"
 
-class TestTBitmap: public TTestCheck
+class TestTBitmap: public UnitTest
 {
 public:
-	TestTBitmap(): TTestCheck("TBitmap check") {};
+	TestTBitmap(): UnitTest("TBitmap check") {};
 
 	void TestFormat(const TString& path)
 	{
@@ -23,7 +23,7 @@ public:
 		sb.Append( fext );
 		sb.Append(" byte order and buffer order comparison");
 
-		AddResult(result, sb.ToString());
+		Result(result, sb.ToString());
 
 		if (!result)
 		{
@@ -33,11 +33,11 @@ public:
 			sb.Append(border);
 			sb.Append(" , Buffer is ");
 			sb.Append(bload.BufferFormat->ShortName);
-			AddOutput(sb.ToString());
+			Output(sb.ToString());
 		}
 	}
 
-	void Test()
+	void Execute()
 	{
 		TestFormat("color-test.png");
 

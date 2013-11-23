@@ -6,10 +6,10 @@
 #include "tstringreader.h"
 
 
-class TestHawkRenderer: public TTestCheck
+class TestHawkRenderer: public UnitTest
 {
 public:
-	TestHawkRenderer(): TTestCheck("WHawkRenderer check") {};
+	TestHawkRenderer(): UnitTest("WHawkRenderer check") {};
 
 
 	bool CheckFragment(WHawkFragment* frg, int typ, const TString& val)
@@ -21,7 +21,7 @@ public:
 		return false;
 	}
 
-	void Test()
+	void Execute()
 	{
 		Should("Parse text and code in a mixed string");
 		{
@@ -32,23 +32,23 @@ public:
 			Should("Have 3 fragments in given test string");
 			if (renderer.Fragments.Count == 3)
 			{
-				AddResult(true);
+				Result(true);
 
 				Should("Parse as text fragment until it reaches <$");
 				bool result = CheckFragment(renderer.Fragments[0], WHawkFragment::HFTYP_TEXT, "Test text " );
-				AddResult(result);
+				Result(result);
 
 				Should("Parse between <$ $> as code");
 				result = CheckFragment(renderer.Fragments[1], WHawkFragment::HFTYP_CODE, " Test Code " );
-				AddResult(result);
+				Result(result);
 
 				Should("Parse remaining part as text");
 				result = CheckFragment(renderer.Fragments[2], WHawkFragment::HFTYP_TEXT, " End Text" );
-				AddResult(result);
+				Result(result);
 			}
 			else
 			{
-				AddResult(false);
+				Result(false);
 			}
 		}
 
@@ -59,10 +59,10 @@ public:
 			renderer.ParseSource(sr); // creates fragments from given source file
 
 			bool result = CheckFragment(renderer.Fragments[0], WHawkFragment::HFTYP_CODE, " Test Code ");
-			AddResult(result);
+			Result(result);
 
 			Should("Only have 1 code fragment"); // TODO: implement AlsoShould function.
-			AddResult(renderer.Fragments.Count == 1);
+			Result(renderer.Fragments.Count == 1);
 		}
 
 		Should("Parse as text if there is no code");
@@ -72,10 +72,10 @@ public:
 			renderer.ParseSource(sr); // creates fragments from given source file
 
 			bool result = CheckFragment(renderer.Fragments[0], WHawkFragment::HFTYP_TEXT, "Test Text");
-			AddResult(result);
+			Result(result);
 
 			Should("Only have 1 text fragment"); // TODO: implement AlsoShould function.
-			AddResult(renderer.Fragments.Count == 1);
+			Result(renderer.Fragments.Count == 1);
 		}
 
 		Should("Parse remaining as code if no end of code found");
@@ -85,13 +85,13 @@ public:
 			renderer.ParseSource(sr); // creates fragments from given source file
 
 			bool result = CheckFragment(renderer.Fragments[0], WHawkFragment::HFTYP_TEXT, "Test Text ");
-			AddResult(result);
+			Result(result);
 
 			result = CheckFragment(renderer.Fragments[1], WHawkFragment::HFTYP_CODE, " Test Code");
-			AddResult(result);
+			Result(result);
 
 			Should("Only have 2 fragments"); // TODO: implement AlsoShould function.
-			AddResult(renderer.Fragments.Count == 2);
+			Result(renderer.Fragments.Count == 2);
 		}
 	}
 

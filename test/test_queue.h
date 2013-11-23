@@ -5,15 +5,15 @@
 #include "tqueue.h"
 #include "mmathdriver.h"
 
-class TestTQueue: public TTestCheck
+class TestTQueue: public UnitTest
 {
 public:
-	TestTQueue(): TTestCheck("TQueue check") 
+	TestTQueue(): UnitTest("TQueue check") 
 	{
 
 	}
 
-	void Test()
+	void Execute()
 	{
 		TQueue<int> tq;
 		TQueue<int> tq2;
@@ -27,20 +27,20 @@ public:
 		}
 		tq2.Enqueue(testary,5);
 
-		AddResult(tq.Count == 5, "Item enqueue count");
-		AddResult(tq.Head == 0, "Item enqueue head");
-		AddResult(tq.Tail == 5, "Item enqueue tail");
+		Result(tq.Count == 5, "Item enqueue count");
+		Result(tq.Head == 0, "Item enqueue head");
+		Result(tq.Tail == 5, "Item enqueue tail");
 
-		AddResult(tq.Peek() == 5, "Item peek");
+		Result(tq.Peek() == 5, "Item peek");
 
 		for (int i=0;i<4;i++)
 		{
-			AddResult( testary[i] == tq.Dequeue(),"Item enqueue/dequeue no " + Convert::ToString(i));
+			Result( testary[i] == tq.Dequeue(),"Item enqueue/dequeue no " + Convert::ToString(i));
 		}
 		tq2.Dequeue(testary2,4);
 		
-		AddResult(tq.Head == 4, "Item dequeue head");
-		AddResult(tq.Tail == 5, "Item dequeue tail");
+		Result(tq.Head == 4, "Item dequeue head");
+		Result(tq.Tail == 5, "Item dequeue tail");
 
 		for (int i=0;i<5;i++)
 		{
@@ -48,17 +48,17 @@ public:
 		}
 		tq2.Enqueue(testary,5);
 
-		AddResult(tq.Head == 4, "Item re enqueue head");
-		AddResult(tq.Tail == 2, "Item re enqueue tail");
+		Result(tq.Head == 4, "Item re enqueue head");
+		Result(tq.Tail == 2, "Item re enqueue tail");
 
-		AddResult(tq.Head == tq2.Head, "Enqueue array and enqueue comparison head");
-		AddResult(tq.Tail == tq2.Tail, "Enqueue array and enqueue comparison tail");
+		Result(tq.Head == tq2.Head, "Enqueue array and enqueue comparison head");
+		Result(tq.Tail == tq2.Tail, "Enqueue array and enqueue comparison tail");
 
-		AddResult(tq.Dequeue() == 1, "Item dequeue from old value");
+		Result(tq.Dequeue() == 1, "Item dequeue from old value");
 
 		for (int i=0;i<5;i++)
 		{
-			AddResult( testary[i] == tq.Dequeue(),"Item re enqueue/dequeue no " + Convert::ToString(i));
+			Result( testary[i] == tq.Dequeue(),"Item re enqueue/dequeue no " + Convert::ToString(i));
 		}
 
 		/**
@@ -135,13 +135,13 @@ public:
 
 		if (!passed)
 		{
-			AddResult(passed, "ByteQueue extensive usage test" + sb.ToString());
+			Result(passed, "ByteQueue extensive usage test" + sb.ToString());
 		}
 		else
 		{
-			AddResult(passed, "ByteQueue extensive usage test");
-			AddOutput("After extensive usage:" );
-			AddOutput(sb.ToString());
+			Result(passed, "ByteQueue extensive usage test");
+			Output("After extensive usage:" );
+			Output(sb.ToString());
 		}
 	}
 } TQueueCheck;

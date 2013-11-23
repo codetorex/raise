@@ -22,6 +22,7 @@
 #include "test_falconrenderer.h"
 #include "test_hawkrenderer.h"
 #include "test_stringreader.h"
+#include "test_sharedpointer.h"
 
 #ifdef WIN32
 //#include <strsafe.h>
@@ -64,7 +65,7 @@ public:
 		suite.PrintTestName = true;
 		suite.PrintOutputs = true;
 
-		
+		suite.AddTest(new TestPointer());
 		suite.AddTest(&TArrayCheck);
 		suite.AddTest(&TStringCheck);
 		suite.AddTest(&TStringReaderCheck);

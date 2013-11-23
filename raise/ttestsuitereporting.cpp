@@ -29,11 +29,11 @@ void TTestSuiteReport::RunSuite( ui32 tests /*= TEST_CHECK*/ )
 		Append("    + ");
 		AppendPadded(curTest->TestName,30);
 
-		curTest->Test();
+		curTest->Execute();
 
 		if (curTest->TestType == TEST_CHECK)
 		{
-			TTestCheck* curCheck = (TTestCheck*)curTest;
+			UnitTest* curCheck = (UnitTest*)curTest;
 			Append("Pass:");
 			AppendPadded( Convert::ToString(curCheck->CountPass) , 5 );
 			Append("Fail:");

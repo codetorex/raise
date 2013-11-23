@@ -29,12 +29,12 @@ public:
 
 };*/
 
-class TestMVC: public TTestCheck
+class TestMVC: public UnitTest
 {
 public:
-	TestMVC(): TTestCheck("Web MVC check") {};
+	TestMVC(): UnitTest("Web MVC check") {};
 
-	void Test()
+	void Execute()
 	{
 		/*TStringBuilder requestBuilder;
 		requestBuilder.AppendLine("GET /Home/Index HTTP/1.1");

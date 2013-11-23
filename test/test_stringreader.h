@@ -6,23 +6,23 @@
 
 
 
-class TestTStringReader: public TTestCheck
+class TestTStringReader: public UnitTest
 {
 public:
 
-	TestTStringReader(): TTestCheck("TStringReader Check") 
+	TestTStringReader(): UnitTest("TStringReader Check") 
 	{
 
 	}
 
-	void Test()
+	void Execute()
 	{
 		Should("Let you peek a char");
 		{
 			TString testString = "Test String";
 			TStringReader sr(testString);
 			ch32 result = sr.Peek();
-			AddResult(result == 'T' && sr.CurrentIndex == 0 && sr.CurrentByteIndex == 0); // its not advanced the index
+			Result(result == 'T' && sr.CurrentIndex == 0 && sr.CurrentByteIndex == 0); // its not advanced the index
 		}
 
 		Should("Read a character");
@@ -30,15 +30,15 @@ public:
 			TString testString = "Test String";
 			TStringReader sr(testString);
 			ch32 result = sr.Read();
-			AddResult(result == 'T' && sr.CurrentIndex == 1 && sr.CurrentByteIndex == 1); // its not advanced the index
+			Result(result == 'T' && sr.CurrentIndex == 1 && sr.CurrentByteIndex == 1); // its not advanced the index
 
 			Should("Read second character");
 			result = sr.Read();
-			AddResult(result == 'e' && sr.CurrentIndex == 2 && sr.CurrentByteIndex == 2);
+			Result(result == 'e' && sr.CurrentIndex == 2 && sr.CurrentByteIndex == 2);
 
 			Should("Read third character");
 			result = sr.Read();
-			AddResult(result == 's' && sr.CurrentIndex == 3 && sr.CurrentByteIndex == 3);
+			Result(result == 's' && sr.CurrentIndex == 3 && sr.CurrentByteIndex == 3);
 		}
 
 		Should("Read a line");
@@ -46,15 +46,15 @@ public:
 			TString testString = "First line\nSecond Line\nThird Line";
 			TStringReader sr(testString);
 			TString firstLine = sr.ReadLine();
-			AddResult(firstLine == "First line");
+			Result(firstLine == "First line");
 
 			Should("Read second line");
 			TString secondLine = sr.ReadLine();
-			AddResult(secondLine == "Second Line");
+			Result(secondLine == "Second Line");
 
 			Should("Read third line");
 			TString thirdLine = sr.ReadLine();
-			AddResult(thirdLine == "Third Line");
+			Result(thirdLine == "Third Line");
 		}
 
 		Should("Read until encountering some character");
@@ -63,11 +63,11 @@ public:
 			TStringReader sr(testString);
 			int interrupt;
 			TString firstPart = sr.ReadUntil("@", TString::Empty,interrupt);
-			AddResult(firstPart == "Test string " && interrupt == '@');
+			Result(firstPart == "Test string " && interrupt == '@');
 
 			Should("Read second part");
 			TString secondPart = sr.ReadUntil(" ", TString::Empty, interrupt);
-			AddResult(secondPart == "Data.Load(\"test\")" && interrupt == -1);
+			Result(secondPart == "Data.Load(\"test\")" && interrupt == -1);
 		}
 
 		Should("Read until matching a given string");
@@ -75,7 +75,7 @@ public:
 			TString testString = "Test string @Data.Load(\"test\")";
 			TStringReader sr(testString);
 			TString firstPart = sr.ReadUntilString("@Data");
-			AddResult(firstPart == "Test string ");
+			Result(firstPart == "Test string ");
 
 
 
@@ -88,10 +88,10 @@ public:
 			TString codePart = sr.ReadUntilString("$>");
 
 		
-			AddResult(textPart == "Test text ");
+			Result(textPart == "Test text ");
 
 			Should("Not read more than pattern itself");
-			AddResult(codePart == " Test Code ");
+			Result(codePart == " Test Code ");
 		}
 
 	}

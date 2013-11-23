@@ -3,16 +3,16 @@
 
 #include "tgraphics.h"
 
-class TestTGraphicsBitmap: public TTestCheck
+class TestTGraphicsBitmap: public UnitTest
 {
 public:
 
-	TestTGraphicsBitmap(): TTestCheck("TGraphicsBitmap check") 
+	TestTGraphicsBitmap(): UnitTest("TGraphicsBitmap check") 
 	{
 
 	}
 
-	void Test()
+	void Execute()
 	{
 		TBrush testBrush(TColors::Aqua);
 
@@ -27,18 +27,18 @@ public:
 		TColor32 p3 = gfx->GetPixel(15,0);
 		TColor32 p4 = gfx->GetPixel(0,15);
 
-		AddResult(p1 == TColors::Aqua, "Fill rectangle top left corner");
-		AddResult(p2 == TColors::Aqua, "Fill rectangle bottom right corner");
-		AddResult(p3 == TColors::Aqua, "Fill rectangle top right corner");
-		AddResult(p4 == TColors::Aqua, "Fill rectangle bottom left corner");
+		Result(p1 == TColors::Aqua, "Fill rectangle top left corner");
+		Result(p2 == TColors::Aqua, "Fill rectangle bottom right corner");
+		Result(p3 == TColors::Aqua, "Fill rectangle top right corner");
+		Result(p4 == TColors::Aqua, "Fill rectangle bottom left corner");
 		
 		p1 = gfx->GetPixel(16,16);
 		p2 = gfx->GetPixel(16,0);
 		p3 = gfx->GetPixel(0,16);
 
-		AddResult(p1 != TColors::Aqua, "Fill rectangle outside test bottom right corner");
-		AddResult(p2 != TColors::Aqua, "Fill rectangle outside test top right corner");
-		AddResult(p3 != TColors::Aqua, "Fill rectangle outside test bottom left");
+		Result(p1 != TColors::Aqua, "Fill rectangle outside test bottom right corner");
+		Result(p2 != TColors::Aqua, "Fill rectangle outside test top right corner");
+		Result(p3 != TColors::Aqua, "Fill rectangle outside test bottom left");
 
 		bmp.Save("test.png");
 		bmp.Save("test.bmp");

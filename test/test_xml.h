@@ -8,12 +8,12 @@
 #include "tfile.h"
 #include "tdictionary.h"
 
-class TestTXML: public TTestCheck
+class TestTXML: public UnitTest
 {
 public:
-	TestTXML(): TTestCheck("XML Writer/Reader check"){}
+	TestTXML(): UnitTest("XML Writer/Reader check"){}
 
-	void Test()
+	void Execute()
 	{
 		TFileStream* fs = File::OpenWrite("test.xml");
 
@@ -52,21 +52,21 @@ public:
 		TXMLReader xr(fs);
 		xr.Parse();
 
-		AddResult(xr.RootNode.Name == "xmlbase", "Xml writer/reader root node name");
-		AddResult(xr.RootNode.Nodes.Count == 15, "Xml writer/reader root's child node count");
+		Result(xr.RootNode.Name == "xmlbase", "Xml writer/reader root node name");
+		Result(xr.RootNode.Nodes.Count == 15, "Xml writer/reader root's child node count");
 
 		TXMLNode* singleNode = xr.RootNode.SelectSingleNode("host");
 
-		AddResult(singleNode != 0, "Select single node existing node");
+		Result(singleNode != 0, "Select single node existing node");
 
-		AddResult(singleNode && singleNode->Nodes.Count == 2, "Selected node child count");
-		AddResult(singleNode && singleNode->Nodes.GetLast()->Name == "FakeID", "Selected node last child");
+		Result(singleNode && singleNode->Nodes.Count == 2, "Selected node child count");
+		Result(singleNode && singleNode->Nodes.GetLast()->Name == "FakeID", "Selected node last child");
 
 
 
 		singleNode = xr.RootNode.SelectSingleNode("dafaf");
 
-		AddResult(singleNode == 0, "Select single node not existing node");
+		Result(singleNode == 0, "Select single node not existing node");
 
 		/*TFileStream* tsf = File::OpenWrite("output.txt");
 		TStreamWriterUTF8* ts = new TStreamWriterUTF8(tsf);

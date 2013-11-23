@@ -51,13 +51,13 @@ public:
 		TestType = TEST_BASE;
 	}
 
-	virtual void Test() {};
+	virtual void Execute() {};
 };
 
 /**
  * Unit testing class to check if things works accordingly.
  */
-class TTestCheck: public TTest
+class UnitTest: public TTest
 {
 private:
 	TString ShouldCondition;
@@ -72,7 +72,7 @@ public:
 
 	
 	
-	TTestCheck(const string& _testName): TTest(_testName) 
+	UnitTest(const string& _testName): TTest(_testName) 
 	{
 		TestType = TEST_CHECK;
 		CountPass = 0;
@@ -90,16 +90,16 @@ public:
 		ShouldCondition = condition;
 	}
 
-	void AddResult(bool passed)
+	void Result(bool passed)
 	{
-		AddResult(passed, ShouldCondition);
+		Result(passed, ShouldCondition);
 		ShouldCondition = TString::Empty;
 	}
 
-	void AddResult(bool passed, const string& comment);
-	void AddOutput(const string& comment);
+	void Result(bool passed, const string& comment);
+	void Output(const string& comment);
 
-	virtual void Test() = 0;
+	virtual void Execute() = 0;
 };
 
 class TTestPerformance: public TTest

@@ -4,7 +4,7 @@
 #include "ttest.h"
 #include "mvector3.h"
 
-class TestMVector3: public TTestCheck
+class TestMVector3: public UnitTest
 {
 public:
 

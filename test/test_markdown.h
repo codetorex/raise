@@ -4,11 +4,11 @@
 #include "ttest.h"
 #include "traisemarkdown.h"
 
-class TestTRaiseMarkdown: public TTestCheck
+class TestTRaiseMarkdown: public UnitTest
 {
 public:
 
-	TestTRaiseMarkdown(): TTestCheck("TRaiseMarkdown check") 
+	TestTRaiseMarkdown(): UnitTest("TRaiseMarkdown check") 
 	{
 
 	}
@@ -20,7 +20,7 @@ public:
 			TString testStr = "Test Heading\n==";
 			TRaiseMarkdown markdown;
 			markdown.Parse(testStr);
-			AddResult(markdown.Elements[0].Type == MET_HEADING1 && markdown.Elements[0].Text == "Test Heading");
+			Result(markdown.Elements[0].Type == MET_HEADING1 && markdown.Elements[0].Text == "Test Heading");
 		}
 
 
@@ -29,7 +29,7 @@ public:
 			TString testStr = "# Test Heading";
 			TRaiseMarkdown markdown;
 			markdown.Parse(testStr);
-			AddResult(markdown.Elements[0].Type == MET_HEADING1 && markdown.Elements[0].Text == "Test Heading");
+			Result(markdown.Elements[0].Type == MET_HEADING1 && markdown.Elements[0].Text == "Test Heading");
 		}
 
 
@@ -38,7 +38,7 @@ public:
 			TString testStr = "## Test Heading";
 			TRaiseMarkdown markdown;
 			markdown.Parse(testStr);
-			AddResult(markdown.Elements[0].Type == MET_HEADING2 && markdown.Elements[0].Text == "Test Heading");
+			Result(markdown.Elements[0].Type == MET_HEADING2 && markdown.Elements[0].Text == "Test Heading");
 		}
 
 
@@ -47,7 +47,7 @@ public:
 			TString testStr = "### Test Heading";
 			TRaiseMarkdown markdown;
 			markdown.Parse(testStr);
-			AddResult(markdown.Elements[0].Type == MET_HEADING3 && markdown.Elements[0].Text == "Test Heading");
+			Result(markdown.Elements[0].Type == MET_HEADING3 && markdown.Elements[0].Text == "Test Heading");
 		}
 
 
@@ -56,11 +56,11 @@ public:
 			TString testStr = "#### Test Heading";
 			TRaiseMarkdown markdown;
 			markdown.Parse(testStr);
-			AddResult(markdown.Elements[0].Type == MET_HEADING4 && markdown.Elements[0].Text == "Test Heading");
+			Result(markdown.Elements[0].Type == MET_HEADING4 && markdown.Elements[0].Text == "Test Heading");
 		}
 	}
 
-	void Test()
+	void Execute()
 	{
 		HeadingTest();
 

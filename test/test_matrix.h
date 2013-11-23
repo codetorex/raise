@@ -4,11 +4,11 @@
 #include "ttest.h"
 #include "mmatrix.h"
 
-class TestMMatrix: public TTestCheck
+class TestMMatrix: public UnitTest
 {
 public:
 
-	TestMMatrix(): TTestCheck("MMatrix check") {}
+	TestMMatrix(): UnitTest("MMatrix check") {}
 
 	bool MatrixCompare(MMatrix4x4& refMat, MMatrix4x4& ourMat)
 	{
@@ -28,7 +28,7 @@ public:
 				sb.AppendLine("Our Matrix:");
 				ourMat.ToStringBuilder(sb);
 
-				AddOutput(sb.ToString());
+				Output(sb.ToString());
 
 				return false;
 			}
@@ -37,7 +37,7 @@ public:
 		return true;
 	}
 
-	void Test()
+	void Execute()
 	{
 		/// REFERENCE MATRICES WITH CORRECT RESULTS
 		MMatrix4x4 PerspectiveFovR ( 1.357995f, 0.000000f, 0.000000f, 0.000000f, 0.000000f, 2.414213f, 0.000000f, 0.000000f, 0.000000f, 0.000000f, -1.001001f, -1.000000f, 0.000000f, 0.000000f, -0.100100f, 0.000000f );
@@ -55,51 +55,51 @@ public:
 
 		MProjectionMatrix persFovR;
 		persFovR.PerpectiveFovR(DegreeAngle(45.0f),1280.0f / 720.0f, 0.1f, 100.0f);
-		AddResult( MatrixCompare(PerspectiveFovR, persFovR), "Right Handed Perspective FOV Projection Matrix");
+		Result( MatrixCompare(PerspectiveFovR, persFovR), "Right Handed Perspective FOV Projection Matrix");
 
 		MProjectionMatrix persFovL;
 		persFovL.PerpectiveFovL(DegreeAngle(45.0f),1280.0f / 720.0f, 0.1f, 100.0f);
-		AddResult( MatrixCompare(PerspectiveFovL, persFovL), "Left Handed Perspective FOV Projection Matrix");
+		Result( MatrixCompare(PerspectiveFovL, persFovL), "Left Handed Perspective FOV Projection Matrix");
 
 		MProjectionMatrix ortL;
 		ortL.OrthoL(1280.0f,720.0f,0.0f, 1.0f);
-		AddResult( MatrixCompare(OrthoL, ortL), "Left Handed Orthographic Projection Matrix");
+		Result( MatrixCompare(OrthoL, ortL), "Left Handed Orthographic Projection Matrix");
 
 		MProjectionMatrix ortR;
 		ortR.OrthoR(1280.0f,720.0f,0.0f, 1.0f);
-		AddResult( MatrixCompare(OrthoR, ortR), "Right Handed Orthographic Projection Matrix");
+		Result( MatrixCompare(OrthoR, ortR), "Right Handed Orthographic Projection Matrix");
 
 		MProjectionMatrix ortOffR;
 		ortOffR.OrthoOffCenterR(0.0f,1280.0f,720.0f,0.0f,0.0f,1.0f);
-		AddResult( MatrixCompare(OrthoOffCenterR, ortOffR), "Right Handed Orthographic Off Center Projection Matrix");
+		Result( MatrixCompare(OrthoOffCenterR, ortOffR), "Right Handed Orthographic Off Center Projection Matrix");
 
 		MProjectionMatrix ortOffL;
 		ortOffL.OrthoOffCenterL(0.0f,1280.0f,720.0f,0.0f,0.0f,1.0f);
-		AddResult( MatrixCompare(OrthoOffCenterL, ortOffL), "Left Handed Orthographic Off Center Projection Matrix");
+		Result( MatrixCompare(OrthoOffCenterL, ortOffL), "Left Handed Orthographic Off Center Projection Matrix");
 
 		MProjectionMatrix persL;
 		persL.PerspectiveL(1280.0f,720.0f,0.1f, 100.0f);
-		AddResult( MatrixCompare(PerspectiveL, persL), "Left Handed Perspective Projection Matrix");
+		Result( MatrixCompare(PerspectiveL, persL), "Left Handed Perspective Projection Matrix");
 
 		MProjectionMatrix persR;
 		persR.PerspectiveR(1280.0f,720.0f,0.1f, 100.0f);
-		AddResult( MatrixCompare(PerspectiveR, persR), "Right Handed Perspective Projection Matrix");
+		Result( MatrixCompare(PerspectiveR, persR), "Right Handed Perspective Projection Matrix");
 
 		MProjectionMatrix persOffL;
 		persOffL.PerspectiveOffCenterL(0.0f, 1280.0f, 720.0f, 0.0f,0.1f, 100.0f);
-		AddResult( MatrixCompare(PerspectiveOffCenterL, persOffL), "Left Handed Perspective Off Center Projection Matrix");
+		Result( MatrixCompare(PerspectiveOffCenterL, persOffL), "Left Handed Perspective Off Center Projection Matrix");
 
 		MProjectionMatrix persOffR;
 		persOffR.PerspectiveOffCenterR(0.0f, 1280.0f, 720.0f, 0.0f,0.1f, 100.0f);
-		AddResult( MatrixCompare(PerspectiveOffCenterR, persOffR), "Right Handed Perspective Off Center Projection Matrix");
+		Result( MatrixCompare(PerspectiveOffCenterR, persOffR), "Right Handed Perspective Off Center Projection Matrix");
 
 		MViewMatrix lookR;
 		lookR.LookAtR(Vector3(30,30,30),Vector3(0,0,0),Vector3(0,1,0));
-		AddResult( MatrixCompare(LookAtR, lookR), "Right Handed Look At View Matrix");
+		Result( MatrixCompare(LookAtR, lookR), "Right Handed Look At View Matrix");
 
 		MViewMatrix lookL;
 		lookL.LookAtL(Vector3(30,30,30),Vector3(0,0,0),Vector3(0,1,0));
-		AddResult( MatrixCompare(LookAtL, lookL), "Left Handed Look At View Matrix");
+		Result( MatrixCompare(LookAtL, lookL), "Left Handed Look At View Matrix");
 	}
 
 } MMatrixCheck;

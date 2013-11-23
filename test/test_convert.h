@@ -4,18 +4,18 @@
 #include "ttest.h"
 #include "tstring.h"
 
-class TestTConvert: public TTestCheck
+class TestTConvert: public UnitTest
 {
 public:
-	TestTConvert(): TTestCheck("TConvert check"){}
+	TestTConvert(): UnitTest("TConvert check"){}
 
-	void Test()
+	void Execute()
 	{
-		AddResult( TConvert::ToUInt32Hex("0xffffffff") == 0xffffffff, "TConvert hex conversion test");
-		AddResult( TConvert::ToUInt32Hex("3f") == 0x3f , "TConvert hex conversion test 2");
-		AddResult( TConvert::ToUInt32Hex("2") == 0x2 , "TConvert hex conversion test 3");
-		AddResult( TConvert::ToUInt32Hex("0x5") == 0x5 , "TConvert hex conversion test 4");
-		AddResult( TConvert::ToUInt32Hex("0x3a5f1234") == 0x3a5f1234 , "TConvert hex conversion test 5");
+		Result( TConvert::ToUInt32Hex("0xffffffff") == 0xffffffff, "TConvert hex conversion test");
+		Result( TConvert::ToUInt32Hex("3f") == 0x3f , "TConvert hex conversion test 2");
+		Result( TConvert::ToUInt32Hex("2") == 0x2 , "TConvert hex conversion test 3");
+		Result( TConvert::ToUInt32Hex("0x5") == 0x5 , "TConvert hex conversion test 4");
+		Result( TConvert::ToUInt32Hex("0x3a5f1234") == 0x3a5f1234 , "TConvert hex conversion test 5");
 	}
 
 } TConvertCheck;

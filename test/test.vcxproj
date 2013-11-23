@@ -135,6 +135,7 @@
     <ClInclude Include="test_mvc.h" />
     <ClInclude Include="test_network.h" />
     <ClInclude Include="test_queue.h" />
+    <ClInclude Include="test_sharedpointer.h" />
     <ClInclude Include="test_string.h" />
     <ClInclude Include="test_stringreader.h" />
     <ClInclude Include="test_vector3.h" />

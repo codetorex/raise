@@ -5,10 +5,10 @@
 #include "wfalconrenderer.h"
 
 
-class TestFalconRenderer: public TTestCheck
+class TestFalconRenderer: public UnitTest
 {
 public:
-	TestFalconRenderer(): TTestCheck("WFalconRenderer check") {};
+	TestFalconRenderer(): UnitTest("WFalconRenderer check") {};
 
 
 	bool CheckFragment(WFalconFragment* frg, int typ, const TString& val)
@@ -20,7 +20,7 @@ public:
 		return false;
 	}
 
-	void Test()
+	void Execute()
 	{
 		Should("Parse @@ as @ in text");
 		{
@@ -29,7 +29,7 @@ public:
 			renderer.ParseSource();
 
 			bool result = CheckFragment(renderer.Fragments[0], FFT_TEXT, "<html>@</html>" );
-			AddResult(result);
+			Result(result);
 		}
 
 		Should("Parse code comes after @ as code until it reaches html part");
@@ -41,7 +41,7 @@ public:
 			bool result0 = CheckFragment(renderer.Fragments[0], FFT_TEXT, "<html><img src=\"" );
 			bool result1 = CheckFragment(renderer.Fragments[1], FFT_CODE, "Url.Content(\"~/Contents/Images/img.jpg\")" );
 			bool result2 = CheckFragment(renderer.Fragments[2], FFT_TEXT, "\"></html>" );
-			AddResult(result0 && result1 && result2);
+			Result(result0 && result1 && result2);
 		}
 	}
 

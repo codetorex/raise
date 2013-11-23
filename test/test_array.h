@@ -4,10 +4,10 @@
 #include "ttest.h"
 #include "tarray.h"
 
-class TestTArray: public TTestCheck
+class TestTArray: public UnitTest
 {
 public:
-	TestTArray(): TTestCheck("TArray check") {}
+	TestTArray(): UnitTest("TArray check") {}
 
 	void OutputArrayItems(const TArray<int>& value)
 	{
@@ -24,10 +24,10 @@ public:
 		}
 		sb.RemoveLast(2);
 
-		AddOutput(sb.ToString());
+		Output(sb.ToString());
 	}
 
-	void Test()
+	void Execute()
 	{
 		TArray<int> intarray;
 
@@ -36,32 +36,32 @@ public:
 			intarray.Add(i);
 		}
 
-		AddResult( intarray.Count == 8 , "Array count" );
-		AddResult( intarray.Capacity == 8, "Array capacity" );
+		Result( intarray.Count == 8 , "Array count" );
+		Result( intarray.Capacity == 8, "Array capacity" );
 
-		AddResult( intarray.Contains( 5 ), "Array contains" );
-		AddResult( !intarray.Contains( 9 ), "Array not contains" );
+		Result( intarray.Contains( 5 ), "Array contains" );
+		Result( !intarray.Contains( 9 ), "Array not contains" );
 
-		AddResult( intarray[4] == 4 , "Array index operator" );
+		Result( intarray[4] == 4 , "Array index operator" );
 
 		intarray.RemoveLast();
 
-		AddResult( intarray.Count == 7 && intarray.Capacity == 8, "Array remove last");
+		Result( intarray.Count == 7 && intarray.Capacity == 8, "Array remove last");
 
 		intarray.RemoveAt( 3 );
-		AddResult( intarray[3] != 3 && intarray.Count == 6 , "Array remove at" );
+		Result( intarray[3] != 3 && intarray.Count == 6 , "Array remove at" );
 
 		intarray.Remove(1);
-		AddResult( intarray[1] != 3 && intarray.Count == 5, "Array remove item" );
+		Result( intarray[1] != 3 && intarray.Count == 5, "Array remove item" );
 
 		int idx = intarray.IndexOf(9);
-		AddResult( idx == -1, "Array index of non item" );
+		Result( idx == -1, "Array index of non item" );
 
 		idx = intarray.IndexOf(0);
-		AddResult( idx == 0, "Array index of item");
+		Result( idx == 0, "Array index of item");
 
 		intarray.Clear();
-		AddResult( intarray.Count == 0, "Array clear" );
+		Result( intarray.Count == 0, "Array clear" );
 
 		intarray.Add(0);
 		intarray.Add(2);
@@ -69,29 +69,29 @@ public:
 		intarray.Insert(1,1);
 		intarray.Insert(3,3);
 
-		AddResult( intarray.Count == 5, "Insert count");
+		Result( intarray.Count == 5, "Insert count");
 		for (int i=0;i<5;i++)
 		{
-			AddResult( intarray.Item[i] == i, "Insert test");
+			Result( intarray.Item[i] == i, "Insert test");
 		}
 
 		intarray.Insert(-1,0);
-		AddResult( intarray.Count == 6, "Insert count 2");
-		AddResult( intarray.Item[0] == -1 && intarray.Item[1] == 0, "Insert test 2");
+		Result( intarray.Count == 6, "Insert count 2");
+		Result( intarray.Item[0] == -1 && intarray.Item[1] == 0, "Insert test 2");
 
 		intarray.Insert(5,6);
 
 		intarray.RemoveBetween(0,1);
 		intarray.RemoveBetween(3,3);
 
-		AddResult(intarray.Count == 3, "Remove between count");
-		AddResult(intarray.Item[0] == 0 && intarray.Item[1] == 1 && intarray.Item[2] == 2, "Remove between items test");
+		Result(intarray.Count == 3, "Remove between count");
+		Result(intarray.Item[0] == 0 && intarray.Item[1] == 1 && intarray.Item[2] == 2, "Remove between items test");
 
 		int vals[] = {5,4,3,2,1,0};
 		TArray<int> secondarray(vals);
-		AddResult( secondarray.Count == 5, "Const array count");
-		AddResult( secondarray.Capacity == 0, "Const array capacity");
-		AddResult( secondarray.Item == vals, "Const array item");
+		Result( secondarray.Count == 5, "Const array count");
+		Result( secondarray.Capacity == 0, "Const array capacity");
+		Result( secondarray.Item == vals, "Const array item");
 	}
 } TArrayCheck;
 
