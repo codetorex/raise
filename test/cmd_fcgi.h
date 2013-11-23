@@ -82,10 +82,20 @@ public:
 		
 		FCGX_InitRequest(&request, sockfd, 0);
 
+
+		WMVCApplication mvcApp;
+		mvcApp.ApplicationPath = "C:\\Library\\Projects\\raise\\bin\\codetorex\\";
+		mvcApp.RegisterController(new HomeController());
+
 		while (FCGX_Accept_r(&request) == 0)
 		{
 
+			WHttpContext* httpCtx = new WHttpContext();
+			
+			mvcApp.ProcessRequest(httpCtx);
+
 			FCGX_FPrintF(request.out, "Content-type: text/html\r\n\r\nHello");
+			
 
 			
 

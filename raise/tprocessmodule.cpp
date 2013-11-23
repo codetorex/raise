@@ -84,7 +84,7 @@ void TProcessMemoryRegion::Initialize( const TString& _name, ui32 _start,ui32 _e
 	StartAddress = _start;
 	EndAddress = _end;
 	EntryPointAddress = 0x00400000;
-	ModuleMemorySize = EndAddress - StartAddress;
+	Size = EndAddress - StartAddress;
 	Memory = _prn;
 }
 
@@ -104,7 +104,7 @@ TProcessMemoryRegion::TProcessMemoryRegion()
 	StartAddress = 0;
 	EndAddress = 0;
 	EntryPointAddress = 0;
-	ModuleMemorySize = 0;
+	Size = 0;
 }
 
 TProcessMemoryRegion::TProcessMemoryRegion( ui32 _start,ui32 _end,TProcessMemory* prn )
@@ -114,7 +114,7 @@ TProcessMemoryRegion::TProcessMemoryRegion( ui32 _start,ui32 _end,TProcessMemory
 	Memory = prn;
 
 	EntryPointAddress = 0;
-	ModuleMemorySize = 0;
+	Size = EndAddress - StartAddress;
 }
 
 ui32 TProcessMemoryRegion::Search( const void* needle, int length )
@@ -126,5 +126,11 @@ ui32 TProcessMemoryRegion::SearchPattern( const void* needle, const byte* patter
 {
 	return Memory->SearchPattern(StartAddress,EndAddress,needle,pattern,length);
 }
+
+ui32 TProcessMemoryRegion::SearchAll( const void* needle, int length, TArray<ui32>& result )
+{
+	return Memory->SearchAll(StartAddress,EndAddress, needle, length, result);
+}
+
 
 #endif

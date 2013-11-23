@@ -3,7 +3,7 @@
 
 #include "tstream.h"
 #include "tarray.h"
-
+#include "tfilestream.h"
 
 /**
  * BinaryWriter template

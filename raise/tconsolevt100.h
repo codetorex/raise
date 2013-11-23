@@ -75,6 +75,13 @@ public:
 		Write("\x1B[2J");
 	}
 
+	inline ch32 ReadKey()
+	{
+		byte tmp[4];
+		Input->Read(tmp,1,1);
+		return tmp[0];
+	}
+
 	/*inline void Write(const TString& value)
 	{
 		Output->Write(value.Data,1,value.ByteLength);
@@ -85,13 +92,6 @@ public:
 		byte tmp[8];
 		int l = StringDriver::Encode(tmp,chr);
 		Output->Write(tmp,1,l);
-	}
-
-	inline int ReadKey()
-	{
-		byte tmp[4];
-		Input->Read(tmp,1,1);
-		return tmp[0];
 	}
 
 };

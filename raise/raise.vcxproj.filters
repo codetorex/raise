@@ -153,6 +153,9 @@
     <Filter Include="Source Files\Coding\Compiling\TCC">
       <UniqueIdentifier>{1792bb69-0e32-49d8-8f7a-e34f096aa9a3}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Source Files\Network\Telnet">
+      <UniqueIdentifier>{7bd15228-1cdc-4fdc-9da5-9252a3e0b624}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="tlinkedlist.h">
@@ -776,6 +779,9 @@
     <ClInclude Include="tccompiler.h">
       <Filter>Source Files\Coding\Compiling</Filter>
     </ClInclude>
+    <ClInclude Include="tprocessmemory.h">
+      <Filter>Source Files\Hacking</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">
@@ -993,6 +999,9 @@
     </ClCompile>
     <ClCompile Include="whawkrenderer.cpp">
       <Filter>Source Files\Web\MVC</Filter>
+    </ClCompile>
+    <ClCompile Include="tprocessmemory.cpp">
+      <Filter>Source Files\Hacking</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

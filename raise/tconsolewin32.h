@@ -139,10 +139,9 @@ public:
 	}
 	
 	/**
-	 * Reads a key but wtf is this shit
-	 * @param intercept If true key wont be printed on screen.
+	 * Reads a key.
 	 */
-	inline int ReadKey(bool intercept = true)
+	inline ch32 ReadKey()
 	{
 		return getchar();
 	}

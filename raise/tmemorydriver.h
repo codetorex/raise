@@ -224,7 +224,7 @@ public:
 		return -1;
 	}
 
-	inline static int SearchVariable(const byte* src, const int srcLength, const byte* needle,int length)
+	inline static int SearchVariable(const byte* src, const int srcLength, const void* needle,int length)
 	{
 		int i = (srcLength+1) - length;
 		if (i <= 0) return -1;
@@ -232,7 +232,7 @@ public:
 		const byte* rptr = src;
 		while(i--)
 		{
-			if (*rptr == *needle)
+			if (*rptr == *(byte*)needle)
 			{
 				if (Compare(rptr,needle,length) == 0)
 				{
@@ -245,7 +245,32 @@ public:
 		return -1;
 	}
 
-	inline static int Search(const byte* src, const int srcLength, const byte* needle,int length)
+	/**
+	 * Use this for searching a float number
+	 */
+	inline static int Search(const byte* src, int srcLength, float needle, float epsilon)
+	{
+		if (srcLength < sizeof(float))
+		{
+			return -1;
+		}
+		
+		int i = (srcLength+1) - sizeof(float);
+
+		const byte* rptr = src;
+		while (i--)
+		{
+			float diff =  *(float*)rptr - needle;
+			if (diff < epsilon && diff > -epsilon )
+			{
+				return rptr	- src;
+			}
+			rptr++;
+		}
+		return -1;
+	}
+	
+	inline static int Search(const byte* src, const int srcLength, const void* needle,int length)
 	{
 		assert(srcLength > 0);
 		assert(length > 0);
@@ -253,7 +278,7 @@ public:
 		switch (length)
 		{
 		case 1:
-			return SearchByte(src,srcLength,*needle);
+			return SearchByte(src,srcLength,*(byte*)needle);
 
 		case 2:
 			return SearchWord(src,srcLength,*(ui16*)needle);

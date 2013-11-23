@@ -164,12 +164,31 @@ public:
 	/**
 	 * Blocking get key.
 	 */
-	//virtual ch32 GetKey() = 0;
+	virtual ch32 ReadKey() = 0;
 	
 	/**
 	 * Blocking get string.
 	 */
-	//virtual TString GetString() = 0;
+	virtual TString ReadLine()
+	{
+		TStringBuilderStack<2048> sb;
+		while (1)
+		{
+			ch32 key = ReadKey();
+
+			if (key == '\n')
+			{
+				return sb.ToString();
+			}
+
+			if (key == '\r' || key == '\n')
+			{
+				key = ReadKey();
+				return sb.ToString();
+			}
+			sb.AppendUnicode(key);
+		}
+	}
 
 	/**
 	 * Event based get string.

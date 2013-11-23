@@ -116,6 +116,17 @@ public:
 	{
 		return value1 > value2 ? value1 : value2;
 	}
+
+	template<class T>
+	inline static bool Compare(T value1, T value2, T epsilon)
+	{
+		float diff = value2 - value1;
+		if ( diff < epsilon && diff > -epsilon)
+		{
+			return true;
+		}
+		return false;
+	}
 };
 
 class MathInterpolate

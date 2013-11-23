@@ -8,7 +8,14 @@ typedef unsigned char byte;
 /**
  * An interface for implementing views with C language.
  */
-struct WView
+class WView
+{
+public:
+
+	virtual void Render() = 0;
+};
+
+/*struct WView
 {
 
 	void* Model;
@@ -24,6 +31,6 @@ struct WViewAPI
 {
 	char* (*UrlToAction)(char* input);
 	char* (*UrlToContent)(char* input);
-};
+};*/
 
 #endif // !WVIEW_H

@@ -63,28 +63,28 @@ public:
 		return result;
 	}
 
-	inline ui16 ReadWord()
+	inline ui16 ReadUInt16()
 	{
 		ui16 result;
 		Read((byte*)&result,2,1);
 		return result;
 	}
 
-	inline ui32 ReadDWord()
+	inline ui32 ReadUInt32()
 	{
 		ui32 result;
 		Read((byte*)&result,4,1);
 		return result;
 	}
 
-	inline int ReadInt()
+	inline int ReadInt32()
 	{
 		int result;
 		Read((byte*)&result,4,1);
 		return result;
 	}
 
-	inline short ReadShort()
+	inline short ReadInt16()
 	{
 		short result;
 		Read((byte*)&result,2,1);

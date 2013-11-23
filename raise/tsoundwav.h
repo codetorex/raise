@@ -10,7 +10,7 @@ public:
 
 	TSoundWAV()
 	{
-		WriteExtension = ReadExtension = DWORDSTR(".BMP");
+		WriteExtension = ReadExtension = DWORDSTR(".WAV");
 	}
 
 	void ReadSound(TSound* snd, Stream* src);

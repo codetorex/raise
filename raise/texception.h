@@ -131,7 +131,7 @@ public:
 		OSErrorID = _oserr;
 	}
 
-	OSException(const char* msg, ui32 _oserr): Exception(msg)
+	OSException(const TString& msg, ui32 _oserr): Exception(msg)
 	{
 		ErrorID = 2;
 		OSErrorID = _oserr;

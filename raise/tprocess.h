@@ -119,7 +119,12 @@ public:
 	ui32 StartAddress;
 	ui32 EndAddress;
 	ui32 EntryPointAddress;
-	ui32 ModuleMemorySize;
+	ui32 Size;
+	
+
+	ui32 State;
+	ui32 Protect;
+	ui32 Type;
 
 	TProcessMemory* Memory;
 
@@ -131,7 +136,7 @@ public:
 	void Initialize(const TString& _name, ui32 _start,ui32 _end,TProcessMemory* _prn);
 
 	/**
-	 * Searchs an ascii string.
+	 * Searches an ASCII string.
 	 */
 	ui32 FindString(const TString& src);
 
@@ -143,6 +148,9 @@ public:
 	ui32 FindFunctionBegin(ui32 addr,int intCount = 3);
 	ui32 FindFunctionFromString(const TString& src);
 	ui32 FindFunctionFromString(const TString& src, byte firstByte);
+
+	ui32 SearchAll( const void* needle, int length, TArray<ui32>& result ); 
+	ui32 SearchAll( float needle, float epsilon, TArray<ui32>& result ); 
 
 	ui32 Search( const void* needle, int length);
 	ui32 SearchPattern(const void* needle, const byte* pattern, int length);
@@ -156,6 +164,7 @@ public:
 	TVirtualBuffer Buffer;
 	TProcess* Process;
 	TProcessMemoryRegion MainRegion;
+
 
 	// ADD MEMORY USAGE FUNCTIONS
 
@@ -254,6 +263,14 @@ public:
 		Buffer.Index = Buffer.Capacity;
 		return readed;
 	}
+
+	ui32 Search(const void* needle, int length);
+	
+	ui32 SearchAll( const void* needle, int length, TArray<ui32>& result ); 
+	ui32 SearchAll( ui32 start, ui32 end, const void* needle, int length, TArray<ui32>& result ); 
+
+	ui32 SearchAll( float needle, float epsilon , TArray<ui32>& result );
+	ui32 SearchAll( ui32 start, ui32 end, float needle, float epsilon , TArray<ui32>& result );
 
 	ui32 Search(ui32 start,ui32 end, const void* needle, int length);
 	ui32 SearchPattern(ui32 start,ui32 end, const void* needle, const byte* pattern, int length);
@@ -423,9 +440,14 @@ private:
 // MEMORY MAP
 // DISASSEMBLER
 
+
+
+#include "tprocessmemory.h"
+
 class TProcess: public TProcessInfo
 {
 public:
+	TProcessMemory2 Memory2;
 	TProcessMemory Memory;
 	TProcessDebug Debug;
 

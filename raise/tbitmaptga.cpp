@@ -102,14 +102,14 @@ public:
 		ColorMapType = tga->ReadByte();
 		ImageType = tga->ReadByte();
 
-		ColorMapStart = tga->ReadWord();
-		ColorMapLength = tga->ReadWord();
+		ColorMapStart = tga->ReadUInt16();
+		ColorMapLength = tga->ReadUInt16();
 		ColorMapEntrySize = tga->ReadByte();
 
-		XOrigin = tga->ReadWord();
-		YOrigin = tga->ReadWord();
-		Width = tga->ReadWord();
-		Height = tga->ReadWord();
+		XOrigin = tga->ReadUInt16();
+		YOrigin = tga->ReadUInt16();
+		Width = tga->ReadUInt16();
+		Height = tga->ReadUInt16();
 		PixelDepth = tga->ReadByte();
 		ImageDescriptor = tga->ReadByte();
 

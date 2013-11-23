@@ -267,6 +267,7 @@
     <ClInclude Include="tplatforminterface.h" />
     <ClInclude Include="tplatformunix.h" />
     <ClInclude Include="tplatformwin32.h" />
+    <ClInclude Include="tprocessmemory.h" />
     <ClInclude Include="traisemarkdown.h" />
     <ClInclude Include="tresetevent.h" />
     <ClInclude Include="tmemorydriver.h" />
@@ -395,6 +396,7 @@
     <ClCompile Include="tprocess.cpp" />
     <ClCompile Include="tprocessdebug.cpp" />
     <ClCompile Include="tprocessmanager.cpp" />
+    <ClCompile Include="tprocessmemory.cpp" />
     <ClCompile Include="tprocessmodule.cpp" />
     <ClCompile Include="trmlreader.cpp" />
     <ClCompile Include="trmlwriter.cpp" />

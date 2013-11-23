@@ -63,17 +63,62 @@ void TProcess::OpenProcessHandle( ui32 access )
 
 	Memory.InitializeMemory(this);
 	Debug.InitializeDebug(this);
+	Memory2.InitializeMemory2(this);
 }
+
+ui32 TProcessMemory::SearchAll( ui32 start, ui32 end, const void* needle, int length, TArray<ui32>& result )
+{
+	int foundCount = 0;
+	for (ui32 addr=start;addr < end; addr += Buffer.Capacity)
+	{
+		ui32 readLength = end - addr;
+		if (readLength > Buffer.Capacity)
+		{
+			readLength = Buffer.Capacity;
+		}
+		ui32 readed = Read(addr,Buffer.Data,readLength);
+
+		if (readed != 0)
+		{
+			Buffer.SetVirtual(addr,addr+readed);
+			Buffer.Index = readed;
+			ui32 found = 0;
+			while (1)
+			{
+				found = Buffer.VirtualSearch((byte*)needle + found,length);
+				if (found == NFOUND) break;
+				result.Add(found);
+				found++;
+				foundCount++;
+			}
+			
+		}
+
+		addr -= length-1;
+	}
+	return foundCount;
+}
+
 
 ui32 TProcessMemory::Search( ui32 start,ui32 end, const void* needle, int length )
 {
 	for (ui32 addr=start;addr < end; addr += Buffer.Capacity)
 	{
-		if (FillBuffer(addr) != 0) // 0 bytes readed at that section
+		ui32 readLength = end - addr;
+		if (readLength > Buffer.Capacity)
 		{
+			readLength = Buffer.Capacity;
+		}
+		ui32 readed = Read(addr,Buffer.Data,readLength);
+		
+		if (readed != 0)
+		{
+			Buffer.SetVirtual(addr,addr+readed);
+			Buffer.Index = readed;
 			ui32 found = Buffer.VirtualSearch((byte*)needle,length);
 			if (found != NFOUND) return found;
 		}
+		
 		addr -= length-1;
 	}
 	return NFOUND;
@@ -98,7 +143,7 @@ void TProcessMemory::InitializeMemory( TProcess* pprocess )
 	InitializeFrom(*pprocess);
 	Process = pprocess;
 
-	Buffer.Allocate(4 * 1024);
+	Buffer.Allocate(64 * 1024);
 	MainRegion.Initialize("Main Memory Region",0x00400000,0x7FFFFFFF,this);
 }
 
@@ -142,4 +187,6 @@ int TProcessMemory::GetPointer( TProcessPointerMultilevel& p )
 	return 1;
 }
 
+
 #endif
+

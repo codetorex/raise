@@ -35,6 +35,7 @@ typedef unsigned char		byte; // technically ui8
 #define DWORDSTR(x)			(*(ui32*)x)
 
 #define PI					3.1415926535897f
+#define DOUBLEPI			6.2831853071794f
 #define HALFPI				1.5707963267948f
 
 
