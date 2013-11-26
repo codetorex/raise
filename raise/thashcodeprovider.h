@@ -3,7 +3,7 @@
 
 #include "raisetypes.h"
 
-class TString;
+class String;
 
 /**
  * This class provides a hashing function that can be used for generating DWORD hash for a string.
@@ -12,7 +12,7 @@ class TString;
 class THashCodeProvider
 {
 public:
-	virtual ui32 GetHashCode(const TString& value) = 0;
+	virtual ui32 GetHashCode(const String& value) = 0;
 };
 
 class TBasicHashCodeProvider: public THashCodeProvider
@@ -21,7 +21,7 @@ public:
 
 	static TBasicHashCodeProvider Instance;
 
-	ui32 GetHashCode(const TString& value);
+	ui32 GetHashCode(const String& value);
 };
 
 #endif

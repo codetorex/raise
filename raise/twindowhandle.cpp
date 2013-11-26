@@ -42,14 +42,14 @@ void TWindowHandle::UpdateClassName()
 	ClassName = Platform.RaiseString(Temp);
 }
 
-TString TWindowHandle::GetModulePath()
+String TWindowHandle::GetModulePath()
 {
 	TProcess prc;
 	try
 	{
 		prc = TProcessManager::FindByWindow(*this);
 		prc.OpenProcessHandle();
-		TString result = prc.GetModulePath();
+		String result = prc.GetModulePath();
 		prc.CloseProcessHandle();
 		return result;
 	}
@@ -58,7 +58,7 @@ TString TWindowHandle::GetModulePath()
 
 	}
 
-	return TString::Empty;
+	return String::Empty;
 }
 
 #endif

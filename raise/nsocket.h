@@ -29,7 +29,7 @@ class NSocket
 {
 protected:
 
-	void ThrowError( const TString& operation, int err = -1 )
+	void ThrowError( const String& operation, int err = -1 )
 	{
 		throw Exception(operation.ConvertToChar());
 #ifdef WIN32
@@ -134,7 +134,7 @@ public:
 		Connected = true;
 	}
 
-	void Connect ( TArray<NAddress4*>& addresses, ui32 port )
+	void Connect ( Array<NAddress4*>& addresses, ui32 port )
 	{
 		NEndPoint p;
 		p.Port = port;

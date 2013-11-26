@@ -38,7 +38,7 @@ public:
 		DataBuffer.Capacity = data->Capacity;
 	}
 
-	TMemoryStream(const TString& filePath)
+	TMemoryStream(const String& filePath)
 	{
 		LoadStream(File::OpenRead(filePath));
 	}

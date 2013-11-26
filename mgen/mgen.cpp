@@ -18,9 +18,9 @@ Member info generating preprocessor.
 class MGenDatabase
 {
 public:
-	TArray< MGenSource* > Sources;
+	Array< MGenSource* > Sources;
 
-	void LoadCPPSource(const TString& sourcePath)
+	void LoadCPPSource(const String& sourcePath)
 	{
 		MGenSource* msrc = new MGenSource();
 		
@@ -30,7 +30,7 @@ public:
 		int lineno = 0;
 		while(!src->EndOfStream)
 		{
-			TString currentLine = src->ReadLine();
+			String currentLine = src->ReadLine();
 			MGenSourceLine* mline = new MGenSourceLine();
 			mline->LineNumber = lineno;
 			mline->Line = currentLine;
@@ -45,8 +45,8 @@ public:
 		msp.Parse();
 	}
 
-	void SaveDatabase(const TString& targetPath);
-	void LoadDatabase(const TString& targetPath);
+	void SaveDatabase(const String& targetPath);
+	void LoadDatabase(const String& targetPath);
 } Database;
 
 int _tmain(int argc, _TCHAR* argv[])
@@ -87,7 +87,7 @@ int _tmain(int argc, _TCHAR* argv[])
 
 
 
-	TString ext = TPath::GetExtension( Params.InputFile );
+	String ext = TPath::GetExtension( Params.InputFile );
 
 	if (ext == ".h" || ext == ".cpp")
 	{

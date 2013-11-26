@@ -9,7 +9,7 @@ class TestTArray: public UnitTest
 public:
 	TestTArray(): UnitTest("TArray check") {}
 
-	void OutputArrayItems(const TArray<int>& value)
+	void OutputArrayItems(const Array<int>& value)
 	{
 		TStringBuilderStack<512> sb;
 		sb.Append("Array Count: ");
@@ -18,7 +18,7 @@ public:
 
 		for (ui32 i=0;i<value.Count;i++)
 		{
-			sb.Append(value.Item[i]);
+			sb.Append(value.Items[i]);
 			sb.AppendChar(' ');
 			sb.AppendChar(',');
 		}
@@ -29,7 +29,7 @@ public:
 
 	void Execute()
 	{
-		TArray<int> intarray;
+		Array<int> intarray;
 
 		for(int i=0;i<8;i++)
 		{
@@ -72,12 +72,12 @@ public:
 		Result( intarray.Count == 5, "Insert count");
 		for (int i=0;i<5;i++)
 		{
-			Result( intarray.Item[i] == i, "Insert test");
+			Result( intarray.Items[i] == i, "Insert test");
 		}
 
 		intarray.Insert(-1,0);
 		Result( intarray.Count == 6, "Insert count 2");
-		Result( intarray.Item[0] == -1 && intarray.Item[1] == 0, "Insert test 2");
+		Result( intarray.Items[0] == -1 && intarray.Items[1] == 0, "Insert test 2");
 
 		intarray.Insert(5,6);
 
@@ -85,13 +85,13 @@ public:
 		intarray.RemoveBetween(3,3);
 
 		Result(intarray.Count == 3, "Remove between count");
-		Result(intarray.Item[0] == 0 && intarray.Item[1] == 1 && intarray.Item[2] == 2, "Remove between items test");
+		Result(intarray.Items[0] == 0 && intarray.Items[1] == 1 && intarray.Items[2] == 2, "Remove between items test");
 
 		int vals[] = {5,4,3,2,1,0};
-		TArray<int> secondarray(vals);
+		Array<int> secondarray(vals);
 		Result( secondarray.Count == 5, "Const array count");
 		Result( secondarray.Capacity == 0, "Const array capacity");
-		Result( secondarray.Item == vals, "Const array item");
+		Result( secondarray.Items == vals, "Const array item");
 	}
 } TArrayCheck;
 

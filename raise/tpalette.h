@@ -8,7 +8,7 @@ class TPalette
 {
 public:
 
-	TArray< TColor32 > Colors;
+	Array< TColor32 > Colors;
 
 	int ColorCount;
 

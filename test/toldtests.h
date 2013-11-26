@@ -77,7 +77,7 @@ public:
 		PrintString(test2);
 		test2 += L" ";
 		PrintString(test2);
-		TString eight = " 8bit string ";
+		String eight = " 8bit string ";
 		test2 += eight;
 		PrintString(test2);
 		test2 += 8;
@@ -219,12 +219,12 @@ struct strCmp
 {
 	static const int bucket_size = 32;
 
-	ui32 operator() ( const TString& s1 ) const
+	ui32 operator() ( const String& s1 ) const
 	{
-		return TString::GetHash(s1);
+		return String::GetHash(s1);
 	}
 
-	bool operator()( const TString& s1, const TString& s2 ) const
+	bool operator()( const String& s1, const String& s2 ) const
 	{
 		return (s1 == s2);
 	}
@@ -240,9 +240,9 @@ public:
 	void Test()
 	{
 		THashMap<int> myhashmap;
-		myhashmap.Add(TString("quit"),500);
+		myhashmap.Add(String("quit"),500);
 
-		if (myhashmap.GetValue(TString("quit")) == 500)
+		if (myhashmap.GetValue(String("quit")) == 500)
 		{
 			printf("IT WORKS!");
 		}
@@ -250,15 +250,15 @@ public:
 
 	void Test2()
 	{
-		vector<TString*> dataToHash;
+		vector<String*> dataToHash;
 
 		srand(65536);
 		int i = 10000;
 		while(i--)
 		{
-			TString* newstr = new TString(8);
+			String* newstr = new String(8);
 			newstr->Length = 8;
-			TString::Random(*newstr);
+			String::Random(*newstr);
 			dataToHash.push_back(newstr);
 		}
 
@@ -292,7 +292,7 @@ public:
 
 
 		i = 10000;
-		hash_map<TString,int,strCmp> stdmap;
+		hash_map<String,int,strCmp> stdmap;
 		tp.BeginProfiling(10000);
 		while (i--)
 		{

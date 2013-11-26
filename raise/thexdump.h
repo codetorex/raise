@@ -21,7 +21,7 @@ public:
 	/// Number of columns
 	ui32 Columns;
 
-	TString LineStart;
+	String LineStart;
 
 	bool WriteAddress;
 
@@ -68,9 +68,9 @@ public:
 		Initialize(_data, _length);
 	}
 
-	THexDump(TArray<byte>& barry)
+	THexDump(Array<byte>& barry)
 	{
-		Initialize(barry.Item,barry.Count);
+		Initialize(barry.Items,barry.Count);
 	}
 
 	void Dump()
@@ -142,7 +142,7 @@ public:
 		}
 	}
 
-	inline TString ToString()
+	inline String ToString()
 	{
 		if (Target == &sw)
 		{

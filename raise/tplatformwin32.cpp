@@ -8,7 +8,7 @@
 #include "tdatetime.h"
 #include <ShlObj.h>
 
-bool TPlatformWin32::BrowseFolder( const TString& startPath, TString& selectedPath )
+bool TPlatformWin32::BrowseFolder( const String& startPath, String& selectedPath )
 {
 	bool result = false;
 
@@ -56,7 +56,7 @@ bool TPlatformWin32::BrowseFolder( const TString& startPath, TString& selectedPa
 	return bResult;*/
 }
 
-void TPlatformWin32::ShowMessageBox( const TString& message )
+void TPlatformWin32::ShowMessageBox( const String& message )
 {
 	ch16 Temp[4096];
 	RaiseToSystemString(message,(byte*)Temp,sizeof(Temp));
@@ -64,7 +64,7 @@ void TPlatformWin32::ShowMessageBox( const TString& message )
 	MessageBoxW(0,Temp,L"Message", MB_OK);
 }
 
-TString TPlatformWin32::GetErrorDescription( ui32 systemErrorID )
+String TPlatformWin32::GetErrorDescription( ui32 systemErrorID )
 {
 	ch16 Temp[4096];
 
@@ -89,8 +89,8 @@ TDateTime TPlatformWin32::GetUtcTime()
 	return TDateTime( wintime );
 }
 
-string LocalStandartName;
-string LocalDaylightName;
+String LocalStandartName;
+String LocalDaylightName;
 int LocalDaylight = 0;
 ui32 LocalLastUpdate = 0;
 

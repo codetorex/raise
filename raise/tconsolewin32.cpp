@@ -35,11 +35,11 @@ byte TConsoleWin32::ColorTransformTable[16] = {0,4,2,6,1,5,3,7,8,12,10,14,9,13,1
 #include <fstream>
 #include "tplatform.h"
 
-void TConsoleWin32::CreateConsole( const TString& title )
+void TConsoleWin32::CreateConsole( const String& title )
 {
 	AllocConsole();
 
-	if (!(title == TString::Empty))
+	if (!(title == String::Empty))
 	{
 		ch16 wtitle[512];
 		Platform.RaiseToSystemString(title,(byte*)wtitle,sizeof(wtitle));

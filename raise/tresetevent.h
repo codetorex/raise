@@ -8,7 +8,7 @@ class TResetEvent
 public:
 	HANDLE EventHandle;
 
-	TResetEvent(bool manualReset, bool initialState, const TString& name  )
+	TResetEvent(bool manualReset, bool initialState, const String& name  )
 	{
 		
 	}

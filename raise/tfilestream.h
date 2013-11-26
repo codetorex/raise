@@ -23,7 +23,7 @@ static const char* FileModeConversion[] = { "rb", "r+b", "wb", "w+b", "ab", "a+b
 class RDLL TFileStream: public TStream
 {
 public:
-	TString		FilePath;
+	String		FilePath;
 	FILE*		FileHandle;
 	FileMode	CurrentMode;
 
@@ -50,14 +50,14 @@ public:
 
 
 
-	TFileStream(FILE* fHandle,const TString& path,FileMode mode)
+	TFileStream(FILE* fHandle,const String& path,FileMode mode)
 	{
 		FileHandle = fHandle;
 		FilePath = path;
 		CurrentMode = mode;
 	}
 
-	TFileStream(const TString& path, FileMode mode )
+	TFileStream(const String& path, FileMode mode )
 	{
 		//TODO: use better string usage like OpenFile( converttowide( path ) )
 

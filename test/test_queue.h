@@ -71,7 +71,7 @@ public:
 		// Now generate a large data like 4 mb then array enqueue / dequeue and compare results
 		ui32 DataSize = 4 * MB;
 		
-		TArray<byte> bytes(DataSize);
+		Array<byte> bytes(DataSize);
 		for (int i=0;i< DataSize;i++)
 		{
 			byte rnd = Math.Random() % 256;
@@ -97,14 +97,14 @@ public:
 				{
 					rnden = DataSize - enindex;
 				}
-				bq.Enqueue(bytes.Item + enindex, rnden);
+				bq.Enqueue(bytes.Items + enindex, rnden);
 				enindex += rnden;
 			}
 			
 			ui32 rndde = 64 + (Math.Random() % 64);
 			ui32 readden = bq.Dequeue(tmp,rndde);
 
-			int cmpresult = MemoryDriver::Compare(bytes.Item + deindex,tmp,readden);
+			int cmpresult = MemoryDriver::Compare(bytes.Items + deindex,tmp,readden);
 			if (cmpresult != 0)
 			{
 				passed = false;

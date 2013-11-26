@@ -9,10 +9,10 @@ class TTestSuiteParameters
 public:
 	TApplet* Applet;
 
-	TString ExportLibraryName;
-	TString OutputFile;
+	String ExportLibraryName;
+	String OutputFile;
 
-	TString ExePath;
+	String ExePath;
 
 };
 

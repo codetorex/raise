@@ -35,7 +35,7 @@ public:
 	};
 
 
-	inline void Set( const TString& value)
+	inline void Set( const String& value)
 	{
 		Address = Parse(value);
 	}
@@ -63,14 +63,14 @@ public:
 		Set(value);
 	}
 
-	inline NAddress4(const TString& value)
+	inline NAddress4(const String& value)
 	{
 		Set(value);
 	}
 
 	inline NAddress4( const char* value )
 	{
-		TString tp = value;
+		String tp = value;
 		Set(tp);
 	}
 
@@ -100,7 +100,7 @@ public:
 		return *this;
 	}
 
-	static ui32 SystemParse(const TString& value)
+	static ui32 SystemParse(const String& value)
 	{
 		if (!value.IsASCII())
 		{
@@ -109,7 +109,7 @@ public:
 		return inet_addr((char*)value.Data);
 	}
 
-	static ui32 Parse(const TString& value)
+	static ui32 Parse(const String& value)
 	{
 		if (!value.IsASCII())
 		{
@@ -172,9 +172,9 @@ public:
 		return result;
 	}
 
-	inline TString ToString()
+	inline String ToString()
 	{
-		return TString::Format("%.%.%.%",sfu(A),sfu(B),sfu(C),sfu(D));
+		return String::Format("%.%.%.%",sfu(A),sfu(B),sfu(C),sfu(D));
 	}
 };
 

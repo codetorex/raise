@@ -101,10 +101,10 @@ public:
 		READX(float);
 	}
 
-	inline TString ReadString()
+	inline String ReadString()
 	{
 		ui32 ByteLength = ReadUInt32();
-		TString r(Data,ByteLength);
+		String r(Data,ByteLength);
 		Data += ByteLength;
 		return r;
 	}

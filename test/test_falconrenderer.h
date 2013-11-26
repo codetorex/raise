@@ -11,7 +11,7 @@ public:
 	TestFalconRenderer(): UnitTest("WFalconRenderer check") {};
 
 
-	bool CheckFragment(WFalconFragment* frg, int typ, const TString& val)
+	bool CheckFragment(WFalconFragment* frg, int typ, const String& val)
 	{
 		if (frg->Type == typ && frg->Fragment == val)
 		{

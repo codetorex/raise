@@ -5,13 +5,13 @@
 
 
 
-void WHttpRequest::ParseRequest( const TString& request )
+void WHttpRequest::ParseRequest( const String& request )
 {
-	TString data(request);
+	String data(request);
 	
-	TArray<TString*> lines = data.SplitInplace('\n',true);
+	Array<String*> lines = data.SplitInplace('\n',true);
 
-	TArray<TString*> requestLineParts = lines[0]->Split(' ',true);
+	Array<String*> requestLineParts = lines[0]->Split(' ',true);
 
 
 	this->Method = *requestLineParts[0];
@@ -20,7 +20,7 @@ void WHttpRequest::ParseRequest( const TString& request )
 	int QueryStart = RawUrl.IndexOf("?");
 	if (QueryStart > -1)
 	{
-		TString Query = RawUrl.Substring(QueryStart+1);
+		String Query = RawUrl.Substring(QueryStart+1);
 		this->QueryString.ParseQueryString(Query);
 		this->Path = Query.Substring(0,QueryStart);
 	}

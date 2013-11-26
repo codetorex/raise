@@ -55,9 +55,9 @@ public:
 	TIOService* Service;
 	ui16 Port;
 
-	TString ServerName;
-	TString ServerVersion;
-	TString RootFolder;
+	String ServerName;
+	String ServerVersion;
+	String RootFolder;
 
 	TMemberDelegate2<NHTTPServer,void, void*, const TIOStatus&> MyCallback;
 

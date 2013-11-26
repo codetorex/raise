@@ -33,7 +33,7 @@ public:
 
 	HANDLE ConsoleHandle;
 
-	void CreateConsole(const TString& title);
+	void CreateConsole(const String& title);
 
 	inline void Initialize()
 	{
@@ -113,7 +113,7 @@ public:
 		}
 	}
 
-	inline void Write(const TString& value)
+	inline void Write(const String& value)
 	{
 		if (value.IsASCII())
 		{

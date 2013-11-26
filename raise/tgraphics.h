@@ -39,7 +39,7 @@ public:
 class TFont
 {
 public:
-	TString FamilyName;
+	String FamilyName;
 	int Size;
 };
 

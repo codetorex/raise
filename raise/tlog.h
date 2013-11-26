@@ -8,7 +8,7 @@
 class TLogEntry
 {
 public:
-	TString		Content;
+	String		Content;
 	TColor32	Color;
 	ui32		GroupID;
 	ui32		Tick; // represents relative time from app start
@@ -17,8 +17,8 @@ public:
 class TLogGroup
 {
 public:
-	TString		Name;
-	TString		ShortName;
+	String		Name;
+	String		ShortName;
 	ui32		ID;
 	TColor32	DefaultColor;
 };
@@ -52,15 +52,15 @@ private:
 		LogCSection.Lock();
 		for (ui32 i=0;i<Outputs.Count;i++)
 		{
-			TLogOutput* curOutput = Outputs.Item[i];
+			TLogOutput* curOutput = Outputs.Items[i];
 			curOutput->Output(entry);
 		}
 		LogCSection.Unlock();
 	}
 
 public:
-	TArray<TLogOutput*> Outputs;
-	TArray<TLogGroup*> Groups;
+	Array<TLogOutput*> Outputs;
+	Array<TLogGroup*> Groups;
 
 	ui32 StartTick;
 	
@@ -76,29 +76,29 @@ public:
 		Outputs.Remove(output);
 	}
 
-	void Output(int group, const TString& value);
+	void Output(int group, const String& value);
 
-	inline void Output(int group, const TString& fmt, sfp arg0)
+	inline void Output(int group, const String& fmt, sfp arg0)
 	{
-		TString result = TString::Format(fmt,arg0);
+		String result = String::Format(fmt,arg0);
 		Output(group,result);
 	}
 
-	inline void Output(int group, const TString& fmt, sfp arg0, sfp arg1)
+	inline void Output(int group, const String& fmt, sfp arg0, sfp arg1)
 	{
-		TString result = TString::Format(fmt,arg0,arg1);
+		String result = String::Format(fmt,arg0,arg1);
 		Output(group,result);
 	}
 
-	inline void Output(int group, const TString& fmt, sfp arg0, sfp arg1,sfp arg2)
+	inline void Output(int group, const String& fmt, sfp arg0, sfp arg1,sfp arg2)
 	{
-		TString result = TString::Format(fmt,arg0,arg1,arg2);
+		String result = String::Format(fmt,arg0,arg1,arg2);
 		Output(group,result);
 	}
 
-	inline void Output(int group, const TString& fmt, sfp arg0, sfp arg1,sfp arg2,sfp arg3)
+	inline void Output(int group, const String& fmt, sfp arg0, sfp arg1,sfp arg2,sfp arg3)
 	{
-		TString result = TString::Format(fmt,arg0,arg1,arg2,arg3);
+		String result = String::Format(fmt,arg0,arg1,arg2,arg3);
 		Output(group,result);
 	}
 

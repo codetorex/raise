@@ -178,7 +178,7 @@ public:
 class TSoundChannel
 {
 public:
-	TString Name;
+	String Name;
 
 	/// Sample offset of channel data
 	ui32 Offset;
@@ -203,7 +203,7 @@ public:
 	SoundFormats Format;
 
 	/// Like left channel, right channel
-	TArray< TSoundChannel* > Channels;
+	Array< TSoundChannel* > Channels;
 };
 
 class TSoundPlayer
@@ -224,7 +224,7 @@ public:
 class TTracker: public TSound
 {
 public:
-	TArray< TTrackerChannel* > Tracks;
+	Array< TTrackerChannel* > Tracks;
 
 };
 

@@ -10,7 +10,7 @@ public:
 
 	void Execute()
 	{
-		TString realizer = "realizer";
+		String realizer = "realizer";
 
 		TCharacterEnumerator ce(realizer);
 		int curChar = 0;

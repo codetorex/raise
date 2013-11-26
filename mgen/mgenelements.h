@@ -7,7 +7,7 @@
 class MGenDataType
 {
 public:
-	TString			DataType;
+	String			DataType;
 
 	bool			IsInteger; // if true then integer or floating
 	bool			Signed; // true when data is signed
@@ -18,7 +18,7 @@ class MGenClassMember
 {
 public:
 	ui32			Flags;
-	TString			ClassMemberName;
+	String			ClassMemberName;
 	MGenDataType*	DataType;
 };
 
@@ -26,7 +26,7 @@ class MGenFunctionParameter
 {
 public:
 	ui32			Flags;
-	TString			ParameterName;
+	String			ParameterName;
 	MGenDataType*	DataType;
 };
 
@@ -34,24 +34,24 @@ class MGenFunction
 {
 public:
 	ui32			Flags;
-	TString			FunctionName;
+	String			FunctionName;
 	MGenDataType*	ReturnType;
 
-	TArray<MGenFunctionParameter*>	Parameters;
+	Array<MGenFunctionParameter*>	Parameters;
 };
 
 class MGenClass
 {
 public:
-	TString			ClassName;
+	String			ClassName;
 	ui32			Type; // if network packet or class?
 
 	ui32			TotalBitLength;
 	ui32			TotalByteLength;
 
-	TArray<MGenClassMember*>	Members;
+	Array<MGenClassMember*>	Members;
 
-	TArray<MGenFunction*>		Functions;
+	Array<MGenFunction*>		Functions;
 
 	void AddMember(MGenClassMember* member)
 	{
@@ -64,16 +64,16 @@ public:
 class MGenEnumItem
 {
 public:
-	TString			ItemName;
+	String			ItemName;
 	ui32			Value;
 };
 
 class MGenEnum
 {
 public:
-	TString					EnumName;
+	String					EnumName;
 
-	TArray<MGenEnumItem*>	Items;
+	Array<MGenEnumItem*>	Items;
 };
 
 

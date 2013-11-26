@@ -38,7 +38,7 @@ class TKeyValueArray
 {
 public:
 	K Key;
-	TArray<V> Values;
+	Array<V> Values;
 
 	TKeyValueArray()
 	{

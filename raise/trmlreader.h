@@ -9,18 +9,18 @@
 class TRMLNode: public TDeserializer
 {
 public:
-	TString Name;
+	String Name;
 
-	TDictionary<TString*> Values;
+	TDictionary<String*> Values;
 	//TArray< TKeyValue<TString,TString>* > Values; // similar to attributes in XML
-	TArray< TRMLNode* > Nodes;
+	Array< TRMLNode* > Nodes;
 
 	TRMLNode()
 	{
 		Name = "BaseNode";
 	}
 
-	TRMLNode(const TString& NodeName)
+	TRMLNode(const String& NodeName)
 	{
 		Name = NodeName;
 	}

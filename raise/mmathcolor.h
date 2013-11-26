@@ -47,9 +47,9 @@ public:
 	}*/
 
 	// TODO: move this to TColors as static function and delete this file?
-	inline static TString ChannelOrder(byte* data, int length)
+	inline static String ChannelOrder(byte* data, int length)
 	{
-		TString result;
+		String result;
 
 		for (int i=0;i<length;i++)
 		{

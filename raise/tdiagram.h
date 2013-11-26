@@ -89,8 +89,8 @@ public:
 
 	T								Value;
 	event < OutputEvent >			ValueChanged; // used for event connection ( maximum 8 connections )
-	TArray< T* >					Connections; // dangerous! low level but fast!
-	TArray< TDiagramOutputMemory >	MemoryConvertingConnections;
+	Array< T* >					Connections; // dangerous! low level but fast!
+	Array< TDiagramOutputMemory >	MemoryConvertingConnections;
 	
 	void ConnectMemory(T* ptrInput)
 	{
@@ -112,12 +112,12 @@ public:
 	{
 		for (ui32 i=0;i<Connections.Count;i++)
 		{
-			*Connections.Item[i] = Value;
+			*Connections.Items[i] = Value;
 		}
 
 		for (ui32 i=0;i<MemoryConvertingConnections.Count;i++)
 		{
-			TDiagramOutputMemory& curOutput = MemoryConvertingConnections.Item[i];
+			TDiagramOutputMemory& curOutput = MemoryConvertingConnections.Items[i];
 			switch(curOutput.TargetType)
 			{
 			case TDG_BOOL:
@@ -177,8 +177,8 @@ public:
 class TDiagramObjectDescription
 {
 public:
-	TArray< TDiagramSocket > Inputs;
-	TArray< TDiagramSocket > Outputs;
+	Array< TDiagramSocket > Inputs;
+	Array< TDiagramSocket > Outputs;
 };
 
 #endif

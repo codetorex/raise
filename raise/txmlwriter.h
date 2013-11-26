@@ -14,8 +14,8 @@ private:
 	bool ElementWritten;
 	bool AttributeMode;
 
-	TArray<TString> Elements;
-	TArray<int> ElementItemCounts;
+	Array<String> Elements;
+	Array<int> ElementItemCounts;
 
 	inline void WriteBuffer()
 	{
@@ -53,7 +53,7 @@ public:
 		}
 	}
 
-	void WriteStartElement( const TString& elemName )
+	void WriteStartElement( const String& elemName )
 	{
 		if (ElementCap)
 		{
@@ -107,14 +107,14 @@ public:
 		ElementItemCounts.RemoveLast();
 	}
 
-	void WriteElementString(const TString& elemName, const TString& value)
+	void WriteElementString(const String& elemName, const String& value)
 	{
 		WriteStartElement(elemName);
 		WriteString(value);
 		WriteEndElement();
 	}
 
-	void WriteString(const TString& text)
+	void WriteString(const String& text)
 	{
 		if (ElementCap && !AttributeMode)
 		{
@@ -127,14 +127,14 @@ public:
 		//UTF8Writer->Write(text);
 	}
 
-	void WriteAttributeString( const TString& attrName, const TString& value)
+	void WriteAttributeString( const String& attrName, const String& value)
 	{
 		WriteStartAttribute(attrName);
 		WriteString(value);
 		WriteEndAttribute();
 	}
 
-	void WriteStartAttribute( const TString& attrName )
+	void WriteStartAttribute( const String& attrName )
 	{
 		if (!ElementCap)
 		{

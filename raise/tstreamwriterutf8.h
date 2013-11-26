@@ -36,7 +36,7 @@ public:
 		BaseStream->Write(encoded,1,len);
 	}
 
-	inline void Write(const TString& value)
+	inline void Write(const String& value)
 	{
 		BaseStream->Write(value.Data,1,value.ByteLength);
 	}

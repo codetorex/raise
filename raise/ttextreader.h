@@ -36,13 +36,13 @@ public:
 	 * @brief Reads a line.
 	 * @return The line.
 	 */
-	virtual TString ReadLine() = 0;
+	virtual String ReadLine() = 0;
 
 	/**
 	 * @brief Reads to end.
 	 * @return String of file.
 	 */
-	virtual TString ReadToEnd() = 0;
+	virtual String ReadToEnd() = 0;
 
 	/**
 	 * @brief Reads string until encounters with any of interruption character.
@@ -51,14 +51,14 @@ public:
 	 * @param [out] interrupt The interrupt.
 	 * @return The string before interruption.
 	 */
-	virtual TString ReadUntil(const TString& interrupChars, const TString& ignoreChars, int& interrupt) = 0;
+	virtual String ReadUntil(const String& interrupChars, const String& ignoreChars, int& interrupt) = 0;
 
 
-	virtual TString ReadUntilString(const TString& matchString) 
+	virtual String ReadUntilString(const String& matchString) 
 	{
 		// TODO: change readUntil and use this instead and make it work with ch32 array
 		throw NotImplementedException(__FILE__,__LINE__);
-		return TString::Empty;
+		return String::Empty;
 	}
 
 	/**

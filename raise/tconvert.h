@@ -53,9 +53,9 @@ public:
 	 * @param value 32-bit signed integer
 	 * @return String representation of value
 	 */
-	static inline TString ToString(int value)
+	static inline String ToString(int value)
 	{
-		TString result(16);
+		String result(16);
 		int ln = ToCharArrayInt(value,(char*)result.Data,16);
 		result.Length = ln;
 		result.ByteLength = ln;
@@ -63,7 +63,7 @@ public:
 		return result;
 	}
 
-	static inline void AppendToString(int value, TString& output)
+	static inline void AppendToString(int value, String& output)
 	{
 		int ln = ToCharArrayInt(value,(char*)output.Data + output.ByteLength,output.Capacity);
 		output.Length += ln;
@@ -71,27 +71,27 @@ public:
 		output.Data[output.ByteLength] = 0;
 	}
 	
-	static TString ToString(int value, int base)
+	static String ToString(int value, int base)
 	{
 		throw NotImplementedException(__FILE__,__LINE__);
 	}
 
 	static int ToInt32(char* value);
 
-	static int ToInt32(const TString& value);
+	static int ToInt32(const String& value);
 
 	static ui32 DecodeHexChar(char val);
 
-	static ui32 ToUInt32Hex(const TString& value);
+	static ui32 ToUInt32Hex(const String& value);
 
-	static int ToInt32Ambiguous(const TString& value, int startIndex, int* numLength = 0, bool skipBegin = true);
+	static int ToInt32Ambiguous(const String& value, int startIndex, int* numLength = 0, bool skipBegin = true);
 
 	/**
 	 * Splits a string with a character, then parses integers available. Returns match count, and adds integers to results array
 	 * Warning: skips non number files between splits like
 	 * example: "54 4845/ 58 539 / 48482" as value, and splitchar is '/' it will parse ints as 544845,58539,48482
 	 */
-	static int ToInt32Split(const TString& value, ch32 splitChar, TArray<int>& results);
+	static int ToInt32Split(const String& value, ch32 splitChar, Array<int>& results);
 };
 
 typedef TConvert Convert;

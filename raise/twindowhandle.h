@@ -15,13 +15,13 @@ public:
 	}
 
 	HWND Handle;
-	TString Title;
-	TString ClassName;
+	String Title;
+	String ClassName;
 
 	void UpdateTitle();
 	void UpdateClassName();
 
-	TString GetModulePath();
+	String GetModulePath();
 	
 	void Update()
 	{
@@ -33,7 +33,7 @@ public:
 class TWindowList
 {
 public:
-	TArray<TWindowHandle*> Items;
+	Array<TWindowHandle*> Items;
 	
 	~TWindowList()
 	{

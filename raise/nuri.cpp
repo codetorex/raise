@@ -19,7 +19,7 @@ bool NUri::IsUnreserved( ch32 chr )
 }
 
 
-void NUri::Parse( const TString& value )
+void NUri::Parse( const String& value )
 {
 	if ( !value.IsASCII() )
 	{

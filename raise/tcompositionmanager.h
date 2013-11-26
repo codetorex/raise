@@ -7,8 +7,8 @@
 class TCompositeFormatFactory
 {
 public:
-	virtual TBufferFormat* CreateFormat(const TString& name, PrimitiveArray* primitives, const TString& components) = 0;
-	virtual TBufferFormat* CreateFormat(const TString& longname, const TString& shortname,PrimitiveArray* primitives, const TString& components) = 0;
+	virtual TBufferFormat* CreateFormat(const String& name, PrimitiveArray* primitives, const String& components) = 0;
+	virtual TBufferFormat* CreateFormat(const String& longname, const String& shortname,PrimitiveArray* primitives, const String& components) = 0;
 };
 
 class TCompositeFormatFactoryGeneric: public TCompositeFormatFactory
@@ -16,12 +16,12 @@ class TCompositeFormatFactoryGeneric: public TCompositeFormatFactory
 public:
 	static TCompositeFormatFactoryGeneric Instance;
 
-	TBufferFormat* CreateFormat(const TString& name, PrimitiveArray* primitives, const TString& components)
+	TBufferFormat* CreateFormat(const String& name, PrimitiveArray* primitives, const String& components)
 	{
 		return new TBufferFormat(name,primitives,components);
 	}
 
-	TBufferFormat* CreateFormat(const TString& longname, const TString& shortname,PrimitiveArray* primitives, const TString& components) 
+	TBufferFormat* CreateFormat(const String& longname, const String& shortname,PrimitiveArray* primitives, const String& components) 
 	{
 		return new TBufferFormat(longname,shortname,primitives,components);
 	}
@@ -30,9 +30,9 @@ public:
 class TCompositionManager
 {
 public:
-	TArray<TCompositionPrimitive*> Primitives;
+	Array<TCompositionPrimitive*> Primitives;
 
-	TArray<TBufferFormat*> Formats;
+	Array<TBufferFormat*> Formats;
 
 	TCompositeFormatFactory* Factory;
 
@@ -48,7 +48,7 @@ public:
 		}
 	}
 
-	inline TBufferFormat* GetFormat(const TString& shortname)
+	inline TBufferFormat* GetFormat(const String& shortname)
 	{
 		TArrayEnumerator< TBufferFormat* > bf(Formats);
 		while(bf.MoveNext())
@@ -67,7 +67,7 @@ public:
 		conv->SourceFormat->Converters.Add(conv);
 	}
 
-	void AddConverter(const TString& src, const TString& dst, TCompositeConverter* conv)
+	void AddConverter(const String& src, const String& dst, TCompositeConverter* conv)
 	{
 		TBufferFormat* srcFormat = GetFormat(src);
 		TBufferFormat* dstFormat = GetFormat(dst);
@@ -95,7 +95,7 @@ public:
 	/**
 	 * Sets the primitive data and adds it to registry.
 	 */
-	inline void SetPrimitive(TCompositionPrimitive& prm, const TString& _name, const TString& _short, int _dataType )
+	inline void SetPrimitive(TCompositionPrimitive& prm, const String& _name, const String& _short, int _dataType )
 	{
 		prm.Set(_name,_short,_dataType);
 		AddPrimitive(&prm);
@@ -104,7 +104,7 @@ public:
 	/**
 	 * Sets the composite primitive data and adds it to registry.
 	 */
-	inline void SetCompositePrimitive(TComposition& comp, const TString& _name, const TString& _short, const TString& components)
+	inline void SetCompositePrimitive(TComposition& comp, const String& _name, const String& _short, const String& components)
 	{
 		comp.Set(_name,_short,tc_group);
 		comp.CreateElementList(&Primitives,components);
@@ -114,7 +114,7 @@ public:
 	/**
 	 * Creates a primitive, adds it to registry and returns a pointer to it.
 	 */
-	inline TCompositionPrimitive* CreatePrimitive(const TString& _name, const TString& _short, int _dataType)
+	inline TCompositionPrimitive* CreatePrimitive(const String& _name, const String& _short, int _dataType)
 	{
 		TCompositionPrimitive* result = new TCompositionPrimitive(_name,_short,_dataType);
 		AddPrimitive(result);
@@ -124,7 +124,7 @@ public:
 	/**
 	 * Creates a format using long naming and short naming and adds it to format registry.
 	 */
-	inline TBufferFormat* CreateFormat(const TString& longname,const TString& shortname, const TString& components)
+	inline TBufferFormat* CreateFormat(const String& longname,const String& shortname, const String& components)
 	{
 		TBufferFormat* result = Factory->CreateFormat(longname,shortname, &Primitives,components);
 		AddFormat(result);
@@ -134,7 +134,7 @@ public:
 	/**
 	 * Creates a format using shortname and adds it to format registry.
 	 */
-	inline TBufferFormat* CreateFormat(const TString& name, const TString& components)
+	inline TBufferFormat* CreateFormat(const String& name, const String& components)
 	{
 		TBufferFormat* result = Factory->CreateFormat(name, &Primitives,components);
 		AddFormat(result);

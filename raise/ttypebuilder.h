@@ -30,13 +30,13 @@ public:
 		return (int)((byte*)member - (byte*)RelativeObject);
 	}
 
-	inline void SetName(const TString& value)
+	inline void SetName(const String& value)
 	{
 		TargetInfo->Name = value;
 		TargetInfo->FullName = value;
 	}
 
-	TFieldInfo* AddField(const TString& name, void* offset, TType* fieldType )
+	TFieldInfo* AddField(const String& name, void* offset, TType* fieldType )
 	{
 		TFieldInfo* field = AddField(offset,fieldType);
 		field->Name = name;
@@ -60,7 +60,7 @@ public:
 		return field;
 	}
 
-	TFieldInfo* AddTemplateField(const TString& name, void* offset, TType* baseType, TType* templatedType)
+	TFieldInfo* AddTemplateField(const String& name, void* offset, TType* baseType, TType* templatedType)
 	{
 		TFieldInfo* field = AddField(name, offset, baseType->GetTemplatedType(templatedType) );
 		return field;

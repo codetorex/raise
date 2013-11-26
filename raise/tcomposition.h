@@ -9,7 +9,7 @@ class TCompositeConverter;
 class TComposition;
 typedef TComposition TBufferFormat;
 
-typedef TArray<TCompositionPrimitive*> PrimitiveArray;
+typedef Array<TCompositionPrimitive*> PrimitiveArray;
 
 /**
 * Holds multiple element information and unites as a group or format definition.
@@ -17,12 +17,12 @@ typedef TArray<TCompositionPrimitive*> PrimitiveArray;
 class TComposition: public TCompositionPrimitive
 {
 public:
-	TArray<TCompositionPrimitive*>* Elements;
-	TArray<TCompositeConverter*> Converters;
+	Array<TCompositionPrimitive*>* Elements;
+	Array<TCompositeConverter*> Converters;
 	int BytesPerItem;
 	int BitsPerItem;
 
-	void UseElementList(TArray<TCompositionPrimitive*>* _elements)
+	void UseElementList(Array<TCompositionPrimitive*>* _elements)
 	{
 		Elements = _elements;
 		BitsPerItem = CalculateBitsPerItem();
@@ -47,24 +47,24 @@ public:
 		BitsPerItem = BytesPerItem * 8;
 	}
 
-	TComposition(const TString& _Name, const TString& _short,TArray<TCompositionPrimitive*>* _elements): TCompositionPrimitive(_Name,_short, tc_group)
+	TComposition(const String& _Name, const String& _short,Array<TCompositionPrimitive*>* _elements): TCompositionPrimitive(_Name,_short, tc_group)
 	{
 		UseElementList(_elements);
 	}
 
-	void CreateElementList(TArray<TCompositionPrimitive*>* allElements, const TString& elementNames);
+	void CreateElementList(Array<TCompositionPrimitive*>* allElements, const String& elementNames);
 
 	/**
 	* With this constructor, just give pointer to all elements with zero pointer ending, then use a string that defines this format by short names of elements
 	* Like: TBufferFormat( "BGRA" , ptrToAllElements, 4 , "B8G8R8A8" )
 	* It automatically adds necessary elements by ordering that given.
 	*/
-	TComposition(const TString& _Name, const TString& _short,PrimitiveArray* _elements, const TString& elementNames): TCompositionPrimitive(_Name,_short,tc_group)
+	TComposition(const String& _Name, const String& _short,PrimitiveArray* _elements, const String& elementNames): TCompositionPrimitive(_Name,_short,tc_group)
 	{
 		CreateElementList(_elements,elementNames);
 	}
 
-	TComposition(const TString& _Name,PrimitiveArray* _elements, const TString& elementNames): TCompositionPrimitive(_Name,_Name,tc_group)
+	TComposition(const String& _Name,PrimitiveArray* _elements, const String& elementNames): TCompositionPrimitive(_Name,_Name,tc_group)
 	{
 		CreateElementList(_elements,elementNames);
 	}
@@ -101,7 +101,7 @@ public:
 
 	TCompositeBuffer* CreateBuffer(int _itemCapacity);
 
-	TString ToString();
+	String ToString();
 };
 
 #endif

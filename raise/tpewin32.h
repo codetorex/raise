@@ -36,11 +36,11 @@ public:
 	void LoadFromStream(TStream* stream);
 
 
-	void LoadFromLibraryName(const TString& libraryName);
+	void LoadFromLibraryName(const String& libraryName);
 
 	PIMAGE_DATA_DIRECTORY GetDataDirectories();
 
-	TArray<TString*>* GetExportedFunctionNames();
+	Array<String*>* GetExportedFunctionNames();
 };
 
 #endif // WIN32

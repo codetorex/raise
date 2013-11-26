@@ -9,7 +9,7 @@
 
 #include <Psapi.h>
 
-TString TProcess::GetModulePath()
+String TProcess::GetModulePath()
 {
 	ch16 Temp[4096];
 	Temp[0] = 0;
@@ -65,7 +65,7 @@ void TProcess::OpenProcessHandle( ui32 access )
 	Memory2.InitializeMemory2(this);
 }
 
-ui32 TProcessMemory::SearchAll( ui32 start, ui32 end, const void* needle, int length, TArray<ui32>& result )
+ui32 TProcessMemory::SearchAll( ui32 start, ui32 end, const void* needle, int length, Array<ui32>& result )
 {
 	int foundCount = 0;
 	for (ui32 addr=start;addr < end; addr += Buffer.Capacity)

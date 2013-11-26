@@ -14,7 +14,7 @@ public:
 		sb.AppendUnicode(chr);
 	}
 
-	inline void Write(const TString& value)
+	inline void Write(const String& value)
 	{
 		sb.Append(value);
 	}
@@ -24,7 +24,7 @@ public:
 		sb.InternalAppend(builder.Data,builder.ByteLength,builder.Length);
 	}
 
-	TString ToString()
+	String ToString()
 	{
 		return sb.ToString();
 	}

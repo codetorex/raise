@@ -10,10 +10,10 @@ public:
 	static TCultureInfo& CurrentCulture();
 	static TCultureInfo& InvariantCulture();
 
-	TString Name;
+	String Name;
 
-	TString ThreeLetterISOLanguageName;
-	TString TwoLetterISOLanguageName;
+	String ThreeLetterISOLanguageName;
+	String TwoLetterISOLanguageName;
 
 	TDateTimeFormatInfo DateTimeFormat;
 	TNumberFormatInfo NumberFormat;

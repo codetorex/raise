@@ -143,7 +143,7 @@ public:
 	/**
 	 * Writes a string but doesn't moves the caret.
 	 */
-	inline void Insert(const TString& value)
+	inline void Insert(const String& value)
 	{
 		GetPosition();
 		Write(value);
@@ -169,7 +169,7 @@ public:
 	/**
 	 * Blocking get string.
 	 */
-	virtual TString ReadLine()
+	virtual String ReadLine()
 	{
 		TStringBuilderStack<2048> sb;
 		while (1)
@@ -195,7 +195,7 @@ public:
 	 */
 	//virtual void BeginGetString( delegate1<void,const TString&>* callback ) = 0;
 
-	inline void WriteHeader(const TString& value, ui32 length = 50)
+	inline void WriteHeader(const String& value, ui32 length = 50)
 	{
 		int toRepeat = ((length - 4) - value.Length) / 2;
 		RepeatChar('-',toRepeat);

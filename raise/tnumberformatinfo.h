@@ -7,28 +7,28 @@ class TNumberFormatInfo
 {
 public:
 	int CurrencyDecimalDigits;
-	TString CurrencyDecimalSeparator;
-	TString CurrencyGroupSeparator;
+	String CurrencyDecimalSeparator;
+	String CurrencyGroupSeparator;
 	int CurrencyNegativePattern;
 	int CurrencyPositivePattern;
-	TString CurrencySymbol;
-	TString NaNSymbol;
+	String CurrencySymbol;
+	String NaNSymbol;
 	ch32* NativeDigits;
-	TString NegativeInfinitySymbol;
-	TString NegativeSign;
+	String NegativeInfinitySymbol;
+	String NegativeSign;
 	int NumberDecimalDigits;
-	TString NumberDecimalSeparator;
-	TString NumberGroupSeparator;
+	String NumberDecimalSeparator;
+	String NumberGroupSeparator;
 	int NumberNegativePattern;
 	int PercentDecimalDigits;
-	TString PercentDecimalSeparator;
-	TString PercentGroupSeparator;
+	String PercentDecimalSeparator;
+	String PercentGroupSeparator;
 	int PercentNegativePattern;
 	int PercentPositivePattern;
-	TString PercentSymbol;
-	TString PerMilleSymbol;
-	TString PositiveInfinitySymbol;
-	TString PositiveSign;
+	String PercentSymbol;
+	String PerMilleSymbol;
+	String PositiveInfinitySymbol;
+	String PositiveSign;
 };
 
 #endif

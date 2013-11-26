@@ -11,14 +11,14 @@ struct TCCState;
 class TCCompiler
 {
 public:
-	void AddIncludePath(const TString& path);
-	void AddSystemIncludePath(const TString& path);
-	void DefineSymbol(const TString& symbol, const TString& value);
-	void UndefineSymbol(const TString& symbol);
+	void AddIncludePath(const String& path);
+	void AddSystemIncludePath(const String& path);
+	void DefineSymbol(const String& symbol, const String& value);
+	void UndefineSymbol(const String& symbol);
 
-	void AddFile(const TString& path);
+	void AddFile(const String& path);
 	
-	void CompileString(const TString& code);
+	void CompileString(const String& code);
 
 
 

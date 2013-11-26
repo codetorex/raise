@@ -1,10 +1,10 @@
 #include "stdafx.h"
 #include "trmlwriter.h"
 
-const TString quot = "\"";
+const String quot = "\"";
 
-const TString txtTrue = "true";
-const TString txtFalse = "false";
+const String txtTrue = "true";
+const String txtFalse = "false";
 
 TRMLWriter::TRMLWriter( TStream* output )
 {
@@ -14,7 +14,7 @@ TRMLWriter::TRMLWriter( TStream* output )
 	JustClosedCurl = false;
 }
 
-void TRMLWriter::WriteElementStart( const TString& element )
+void TRMLWriter::WriteElementStart( const String& element )
 {
 	LineBuilder.Clear();
 	if (JustClosedCurl)
@@ -38,7 +38,7 @@ void TRMLWriter::WriteElementStart( const TString& element )
 
 
 
-void TRMLWriter::WriteKeyPart( const TString& key )
+void TRMLWriter::WriteKeyPart( const String& key )
 {
 	LineBuilder.Clear();
 	LineBuilder.AppendChar('\t',IndentLevel);
@@ -56,14 +56,14 @@ void TRMLWriter::FinishKeyValueLine()
 	UTF8Writer->Write(LineBuilder);
 }
 
-void TRMLWriter::WriteKeyValue( const TString& key, const TString& value )
+void TRMLWriter::WriteKeyValue( const String& key, const String& value )
 {
 	WriteKeyPart(key);
 	LineBuilder.Append(value);
 	FinishKeyValueLine();
 }
 
-void TRMLWriter::WriteKeyValue( const TString& key, int value )
+void TRMLWriter::WriteKeyValue( const String& key, int value )
 {
 	WriteKeyPart(key);
 	LineBuilder.Append(value);
@@ -118,7 +118,7 @@ void TRMLWriter::SerializeObject( TType* minfo, void* object )
 			}
 			else if (fi->FieldType == Types.ST_String)
 			{
-				TString* str = (TString*)value;
+				String* str = (String*)value;
 				LineBuilder.Append(*str);
 			}
 
@@ -136,7 +136,7 @@ void TRMLWriter::SerializeObject( TType* minfo, void* object )
 					TType* itemType = fi->FieldType->TemplateArguments[0];
 					if (itemType->IsClass)
 					{
-						TArray< void* >* arry = (TArray<void*>*)fi->GetPointer(object);
+						Array< void* >* arry = (Array<void*>*)fi->GetPointer(object);
 						TArrayEnumerator< void* > itms(*arry);
 						while(itms.MoveNext())
 						{

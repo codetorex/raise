@@ -2,7 +2,7 @@
 #include "tstringdriver.h"
 
 static const ch32 s_Whitespaces[] = { 0x20, 0x09, 0x0A, 0x0D, 0x0B, 0x0 };
-const TArray<ch32> StringDriver::Whitespaces(s_Whitespaces);
+const Array<ch32> StringDriver::Whitespaces(s_Whitespaces);
 
 static const ui32 MaximumChar = 0x7FFFFFFF;
 

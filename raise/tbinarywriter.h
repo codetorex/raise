@@ -35,9 +35,9 @@ public:
 		BaseStream->Write(value,1,length);
 	}
 
-	inline void WriteByteArray(TArray<byte>& value)
+	inline void WriteByteArray(Array<byte>& value)
 	{
-		WriteByteArray(value.Item,value.Count);
+		WriteByteArray(value.Items,value.Count);
 	}
 
 	inline void WriteDecimal()
@@ -70,7 +70,7 @@ public:
 		BaseStream->Write(&value,1,sizeof(value));
 	}
 
-	inline void WriteString(const TString& value)
+	inline void WriteString(const String& value)
 	{
 		WriteUInt32(value.ByteLength);
 		WriteByteArray(value.Data,value.ByteLength);	

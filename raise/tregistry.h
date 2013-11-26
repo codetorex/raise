@@ -9,7 +9,7 @@ class TRegistryKey
 public:
 	ui32 Handle;
 
-	string GetName();
+	String GetName();
 	int GetSubKeyCount();
 	int ValueCount();
 
@@ -17,7 +17,7 @@ public:
 	void Close();
 	void Flush();
 
-	TArray<string*> GetSubKeyNames();
+	Array<String*> GetSubKeyNames();
 };
 
 class TRegistry

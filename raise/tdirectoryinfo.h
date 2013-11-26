@@ -19,12 +19,12 @@ public:
 	virtual IFolderEnumerator*		EnumerateDirectories() = 0;
 	virtual IFileEnumerator*		EnumerateFiles() = 0;
 
-	virtual TArray<IFile*>*			GetFiles() = 0;
-	virtual TArray<IDirectory*>*	GetDirectories() = 0;
+	virtual Array<IFile*>*			GetFiles() = 0;
+	virtual Array<IDirectory*>*	GetDirectories() = 0;
 
 	virtual void					Create() = 0;
 	virtual bool					Delete(bool recursive) = 0;
-	virtual bool					MoveTo(TString& destDirName) = 0;
+	virtual bool					MoveTo(String& destDirName) = 0;
 
 	virtual	IDirectory*				GetParent() = 0;
 };

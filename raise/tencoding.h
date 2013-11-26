@@ -118,7 +118,7 @@ public:
 
 	//virtual TByteBuffer GetBytes ( ch32* chars, int charcount ) = 0;
 
-	virtual TString GetString(byte* bytes, int bytecount) const = 0;
+	virtual String GetString(byte* bytes, int bytecount) const = 0;
 };
 
 inline ch32 TEncoding::GetCharAdv( byte*& src ) const

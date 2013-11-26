@@ -13,8 +13,8 @@
 class TCSSElement
 {
 public:
-	TArray< TString* > Selectors;
-	TDictionary< TString* > Properties;
+	Array< String* > Selectors;
+	TDictionary< String* > Properties;
 };
 
 
@@ -30,7 +30,7 @@ public:
 
 	TCSSReader(TStream* readStream);
 
-	TArray< TCSSElement* > Elements;
+	Array< TCSSElement* > Elements;
 
 	void Parse(bool closeStream = true);
 };

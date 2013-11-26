@@ -11,7 +11,7 @@ class TDateTimeUnix;
 class TDateTimeExpanded
 {
 public:
-	static const TString DayNames[]; // TODO: make this culture specific
+	static const String DayNames[]; // TODO: make this culture specific
 
 	int MicroSecond;
 	int MilliSecond; // 10 bits
@@ -48,12 +48,12 @@ public:
 
 	void ToLocalTime();
 
-	inline TString GetDayName() const
+	inline String GetDayName() const
 	{
 		return DayNames[DayOfWeek];
 	}
 
-	TString ToString() const
+	String ToString() const
 	{
 		TStringBuilderStack<20> str;
 
@@ -69,12 +69,12 @@ public:
 		str.AppendChar(':');
 		str.AppendPadded(Second,2);
 
-		TString strresult = str.ToString();
+		String strresult = str.ToString();
 
 		return strresult;
 	}
 
-	TString ToStringFileName() const
+	String ToStringFileName() const
 	{
 		TStringBuilderStack<20> str;
 		
@@ -85,11 +85,11 @@ public:
 		str.AppendPadded(Minute,2);
 		str.AppendPadded(Second,2);
 		
-		TString strresult = str.ToString();
+		String strresult = str.ToString();
 		return strresult;
 	}
 
-	TString ToStringUniversal() const
+	String ToStringUniversal() const
 	{
 		TStringBuilderStack<20> str;
 		str.AppendPadded(Year,4);
@@ -104,11 +104,11 @@ public:
 		str.AppendChar(':');
 		str.AppendPadded(Second,2);
 
-		TString strresult = str.ToString();
+		String strresult = str.ToString();
 		return strresult;
 	}
 
-	TString ToString(const TString& format) const
+	String ToString(const String& format) const
 	{
 		if (format.Length == 1)
 		{

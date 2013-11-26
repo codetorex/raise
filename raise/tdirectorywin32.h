@@ -10,8 +10,8 @@
 class TDirectoryInfo: public IDirectory
 {
 public:
-	TString OriginalPath;
-	TString FullPath;
+	String OriginalPath;
+	String FullPath;
 
 	TDirectoryInfo()
 	{
@@ -19,7 +19,7 @@ public:
 		FullPath.Allocate(512);
 	}
 
-	TDirectoryInfo(const TString& path)
+	TDirectoryInfo(const String& path)
 	{
 		OriginalPath = path;
 		FullPath = TPath::GetFullPath(path);
@@ -29,10 +29,10 @@ public:
 	/**
 	* Creates all directories and subdirectories in the specified path.
 	*/
-	static TDirectoryInfo CreateDir(const TString& path)
+	static TDirectoryInfo CreateDir(const String& path)
 	{
 		char tmp[512];
-		TString tmpstr(tmp);
+		String tmpstr(tmp);
 		throw NotImplementedException(__FILE__,__LINE__);
 		//CreateDirSlient(path,tmpstr.Chars);
 		return TDirectoryInfo(tmpstr);
@@ -76,12 +76,12 @@ public:
 		}
 	}*/
 
-	TString GetFullName()
+	String GetFullName()
 	{
 		return FullPath;
 	}
 
-	inline TString GetName()
+	inline String GetName()
 	{
 		return TPath::GetDirectoryName(FullPath);
 	}
@@ -98,7 +98,7 @@ public:
 		throw "Not Implemented";
 	}
 
-	static bool Exists(const TString& path)
+	static bool Exists(const String& path)
 	{
 		ch16 tmp[1024];
 		Platform.RaiseToSystemString(path,(byte*)tmp,sizeof(tmp));
@@ -138,12 +138,12 @@ public:
 
 	IFileEnumerator* EnumerateFiles();
 
-	TArray<IFile*>* GetFiles() 
+	Array<IFile*>* GetFiles() 
 	{ 
 		throw "Not Implemented";
 	}
 
-	TArray<IDirectory*>* GetDirectories() 
+	Array<IDirectory*>* GetDirectories() 
 	{ 
 		throw "Not Implemented";
 	}
@@ -158,7 +158,7 @@ public:
 		throw "Not Implemented";
 	}
 
-	bool MoveTo(TString& destDirName) 
+	bool MoveTo(String& destDirName) 
 	{ 
 		throw "Not Implemented";
 	}

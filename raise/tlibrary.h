@@ -11,27 +11,27 @@ typedef void*	HMODULE;
 class TLibraryFunction
 {
 public:
-	TString		FunctionName;
+	String		FunctionName;
 	void*		FunctionPtr;
 };
 
 class TLibrary
 {
 private:
-	void RegisterFunction(const TString& funcName, void* funcPtr);
+	void RegisterFunction(const String& funcName, void* funcPtr);
 
 public:
 
 	~TLibrary();
 
-	TArray< TLibraryFunction* > Functions;
+	Array< TLibraryFunction* > Functions;
 
 	HMODULE		Library;
-	TString		Path;
+	String		Path;
 
-	void		Load(const TString& _path);
+	void		Load(const String& _path);
 	void		Unload();
-	void*		GetFunction(const TString& functionName);
+	void*		GetFunction(const String& functionName);
 };
 
 #endif

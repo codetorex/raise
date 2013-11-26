@@ -16,7 +16,7 @@ class WMVCApplication;
 class WController
 {
 public:
-	TString			Name; // controller name
+	String			Name; // controller name
 
 
 	WMVCApplication* MVCApplication;
@@ -27,7 +27,7 @@ public:
 
 	WAction*		CurrentAction;
 
-	TArray< WAction* > Actions; // TODO: make this dictionary or hash map
+	Array< WAction* > Actions; // TODO: make this dictionary or hash map
 
 	void RegisterAction(WAction* action)
 	{
@@ -43,7 +43,7 @@ public:
 		action->ViewPath = sb.ToString();
 	}
 
-	WAction* GetAction( const TString& actionName )
+	WAction* GetAction( const String& actionName )
 	{
 		for (int i=0;i<Actions.Count;i++)
 		{
@@ -58,7 +58,7 @@ public:
 	}
 
 
-	void ProcessRequest( WHttpContext* ctx , const TString& action ) 
+	void ProcessRequest( WHttpContext* ctx , const String& action ) 
 	{
 		Context = ctx;
 		Request = &ctx->Request;

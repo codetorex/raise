@@ -25,8 +25,8 @@ class TDateTime;
 class IPlatform
 {
 public:
-	virtual void RaiseToSystemString(const TString& raiseStr, byte* output, ui32 outputSize) = 0;
-	virtual TString SystemToRaiseString(byte* input, ui32 inputSize) = 0;
+	virtual void RaiseToSystemString(const String& raiseStr, byte* output, ui32 outputSize) = 0;
+	virtual String SystemToRaiseString(byte* input, ui32 inputSize) = 0;
 
 	virtual ui32 TickCount() = 0;
 	virtual TDateTime GetUtcTime() = 0;
@@ -37,9 +37,9 @@ public:
 
 
 	// The functions that I am not sure about their correctness comes here
-	virtual void ShowMessageBox(const TString& message) = 0;
-	virtual TString GetErrorDescription(ui32 systemErrorID) = 0;
-	virtual bool BrowseFolder(const TString& startPath, TString& selectedPath) = 0;
+	virtual void ShowMessageBox(const String& message) = 0;
+	virtual String GetErrorDescription(ui32 systemErrorID) = 0;
+	virtual bool BrowseFolder(const String& startPath, String& selectedPath) = 0;
 };
 
 #endif

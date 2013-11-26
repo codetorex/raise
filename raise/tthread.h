@@ -28,7 +28,7 @@ public:
 
 	};
 
-	TString		Name;
+	String		Name;
 	bool		IsAlive;
 	int			ThreadState;
 	Priorities	Priority;

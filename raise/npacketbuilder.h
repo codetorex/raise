@@ -71,12 +71,12 @@ public:
 	/**
 	 * Appends an utf-8 string to packet.
 	 */
-	inline void AppendString(const TString& value)
+	inline void AppendString(const String& value)
 	{
 		InternalAppend(value.Data,value.ByteLength);
 	}
 
-	inline void AppendLine(const TString& value)
+	inline void AppendLine(const String& value)
 	{
 		InternalAppend(value.Data,value.ByteLength+1);
 		Data[Index-1] = '\n';

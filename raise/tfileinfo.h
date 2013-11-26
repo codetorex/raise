@@ -32,8 +32,8 @@ enum FileAttributes
 class IFileSystemNode
 {
 public:
-	virtual TString				GetFullName() = 0;
-	virtual TString				GetName() = 0;
+	virtual String				GetFullName() = 0;
+	virtual String				GetName() = 0;
 
 	virtual bool				Exists() = 0;
 
@@ -51,7 +51,7 @@ public:
 class IFile: public IFileSystemNode
 {
 public:
-	virtual TString				GetExtension() = 0;
+	virtual String				GetExtension() = 0;
 
 	virtual	IDirectory*			GetParent() = 0;
 
@@ -60,7 +60,7 @@ public:
 	virtual TStream*			Open(FileMode mode) = 0;
 	virtual TStream*			Create() = 0;
 	virtual	bool				Delete() = 0;
-	virtual bool				MoveTo(TString& destFileName) = 0;
+	virtual bool				MoveTo(String& destFileName) = 0;
 };
 
 #ifdef WIN32

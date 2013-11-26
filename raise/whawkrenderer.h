@@ -19,18 +19,18 @@ public:
 		HFTYP_CODE,
 	};
 
-	TString Fragment;
+	String Fragment;
 	int Type;
 };
 
 class WHawkRenderer:public WViewRenderer
 {
 private:
-	void AddFragment(int type, const TString& content);
+	void AddFragment(int type, const String& content);
 
 public:
-	TString CodeStart;
-	TString CodeEnd;
+	String CodeStart;
+	String CodeEnd;
 
 	WHawkRenderer()
 	{
@@ -38,7 +38,7 @@ public:
 		CodeEnd = "$>";
 	}
 
-	TArray< WHawkFragment* > Fragments;
+	Array< WHawkFragment* > Fragments;
 
 	void ParseSource(TTextReader& source);
 	void CreateCode();

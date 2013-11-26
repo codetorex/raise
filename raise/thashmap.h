@@ -10,12 +10,12 @@
 
 
 template <class T>
-class RDLL THashKeyValue: public TKeyValue<TString,T>
+class RDLL THashKeyValue: public TKeyValue<String,T>
 {
 public:
 	ui32 Hash;
 
-	THashKeyValue(ui32 h,const TString& k, T v)
+	THashKeyValue(ui32 h,const String& k, T v)
 	{
 		this->Hash = h;
 		this->Key = k;
@@ -36,7 +36,7 @@ public:
 	int valueCount;
 	bool leaf; // true if its a leaf, false if branch
 
-	inline virtual THashKeyValue<T>* Get(ui32 h,const TString& key) = 0;
+	inline virtual THashKeyValue<T>* Get(ui32 h,const String& key) = 0;
 	inline virtual void Add(ui32 h,THashKeyValue<T>* value) = 0;
 };
 
@@ -52,7 +52,7 @@ public:
 
 	THashKeyValue<T>* values[4];
 
-	inline THashKeyValue<T>* Get(ui32 h,const TString& key)
+	inline THashKeyValue<T>* Get(ui32 h,const String& key)
 	{
 		int i=this->valueCount;
 		while(i--)
@@ -126,7 +126,7 @@ public:
 		delete oldLeaf;
 	}
 
-	inline THashKeyValue<T>* Get(ui32 h,const TString& key)
+	inline THashKeyValue<T>* Get(ui32 h,const String& key)
 	{
 		int i = (h >> branchShift) % 32;
 		//h >>= 8;
@@ -171,7 +171,7 @@ public:
 		Count = 0;
 	}
 
-	inline bool ContainsKey(const TString& key)
+	inline bool ContainsKey(const String& key)
 	{
 		ui32 h = TBasicHashCodeProvider::Instance.GetHashCode(key); // TString::GetHash(key);
 		THashKeyValue<T>* r = Root.Get(h,key);
@@ -182,14 +182,14 @@ public:
 		return true;
 	}
 
-	inline THashKeyValue<T>* Get(const TString& key)
+	inline THashKeyValue<T>* Get(const String& key)
 	{
 		ui32 h = TBasicHashCodeProvider::Instance.GetHashCode(key);
 		THashKeyValue<T>* r = Root.Get(h,key);
 		return r;
 	}
 
-	inline T GetValue(const TString& key)
+	inline T GetValue(const String& key)
 	{
 		THashKeyValue<T>* tkp = Get(key);
 		if (tkp == NULL)
@@ -199,7 +199,7 @@ public:
 		return tkp->Value;
 	}
 
-	inline T GetValueOrNull( const TString& key)
+	inline T GetValueOrNull( const String& key)
 	{
 		THashKeyValue<T>* tkp = Get(key);
 		if (tkp == NULL)
@@ -209,7 +209,7 @@ public:
 		return tkp->Value;
 	}
 
-	inline void Add(const TString& key,T value)
+	inline void Add(const String& key,T value)
 	{
 		ui32 h = TBasicHashCodeProvider::Instance.GetHashCode(key); // TString::GetHash(key);
 		THashKeyValue<T>* kvp = new THashKeyValue<T>(h,key,value);

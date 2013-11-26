@@ -5,7 +5,7 @@
 #include "tbinaryreader.h"
 #include "tbinarywriter.h"
 
-ui32 StringAsUInt32(const TString& input)
+ui32 StringAsUInt32(const String& input)
 {
 	if (input.ByteLength > 4)
 	{
@@ -36,7 +36,7 @@ public:
 	ui32 ChunkSize;
 	byte* ChunkData;
 
-	void SetChunkID(const TString& chunkId)
+	void SetChunkID(const String& chunkId)
 	{
 		ChunkID = StringAsUInt32(chunkId);
 	}

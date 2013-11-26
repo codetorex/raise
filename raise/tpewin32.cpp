@@ -5,7 +5,7 @@
 #include "tpewin32.h"
 #include "tplatform.h"
 
-void TPortableExecutableWin32::LoadFromLibraryName( const TString& libraryName )
+void TPortableExecutableWin32::LoadFromLibraryName( const String& libraryName )
 {
 	ch16 tmp[4096];
 	Platform.RaiseToSystemString(libraryName,(byte*)tmp,sizeof(tmp));
@@ -42,9 +42,9 @@ PIMAGE_DATA_DIRECTORY TPortableExecutableWin32::GetDataDirectories()
 	return 0;
 }
 
-TArray<string*>* TPortableExecutableWin32::GetExportedFunctionNames()
+Array<String*>* TPortableExecutableWin32::GetExportedFunctionNames()
 {
-	TArray<string*>* Result = new TArray<string*>();
+	Array<String*>* Result = new Array<String*>();
 
 	PIMAGE_DATA_DIRECTORY directories = GetDataDirectories();
 
@@ -62,7 +62,7 @@ TArray<string*>* TPortableExecutableWin32::GetExportedFunctionNames()
 
 		
 
-		TString* funcName = new TString(curPtr);
+		String* funcName = new String(curPtr);
 		Result->Add(funcName);
 	}
 

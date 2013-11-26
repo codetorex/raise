@@ -19,7 +19,7 @@ public:
 	ui32 Protect;
 	ui32 Type;
 
-	TString Path;
+	String Path;
 
 	TProcessMemoryRegion2()
 	{
@@ -44,8 +44,8 @@ class TProcessMemory2: public TProcessInfo
 public:
 	TProcess* Process;
 
-	TArray< TProcessMemoryRegion2* > Modules;
-	TArray< TProcessMemoryRegion2* > Regions;
+	Array< TProcessMemoryRegion2* > Modules;
+	Array< TProcessMemoryRegion2* > Regions;
 	ui64 CommitSize;
 	int CommitCount;
 	ui64 TotalSize;
@@ -102,11 +102,11 @@ public:
 	i16		ReadInt16( ui64 src ) { return Read<i16>(src); }
 	byte	ReadByte( ui64 src ) { return Read<byte>(src); }
 
-	int		FindAll( const void* needle, int length, TArray< ui64 >& result );
-	int		FindAll( ui64 start, ui64 end, const void* needle, int length, TArray< ui64 >& result );
+	int		FindAll( const void* needle, int length, Array< ui64 >& result );
+	int		FindAll( ui64 start, ui64 end, const void* needle, int length, Array< ui64 >& result );
 
-	int		FindAll( float needle, float epsilon, TArray< ui64 >& result );
-	int		FindAll( ui64 start, ui64 end, float needle, float epsilon, TArray< ui64 >& result );
+	int		FindAll( float needle, float epsilon, Array< ui64 >& result );
+	int		FindAll( ui64 start, ui64 end, float needle, float epsilon, Array< ui64 >& result );
 };
 
 

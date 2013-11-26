@@ -8,7 +8,7 @@ class TStringReader: public TTextReader
 {
 public:
 
-	TString SourceString;
+	String SourceString;
 	int CurrentIndex;
 	int CurrentByteIndex;
 
@@ -19,12 +19,12 @@ public:
 		EndOfStream = false;
 	}
 
-	TStringReader(const TString& srcString)
+	TStringReader(const String& srcString)
 	{
 		Initialize(srcString);
 	}
 
-	void Initialize(const TString& srcString)
+	void Initialize(const String& srcString)
 	{
 		SourceString = srcString;
 		CurrentIndex = 0;
@@ -84,19 +84,19 @@ public:
 		return i;
 	}
 
-	TString ReadLine() 
+	String ReadLine() 
 	{
 		int interrupt;
-		TString result = ReadUntil("\n","\r", interrupt);
+		String result = ReadUntil("\n","\r", interrupt);
 		return result;
 	}
 
-	TString ReadToEnd() 
+	String ReadToEnd() 
 	{
 		return SourceString;
 	}
 
-	TString ReadUntil( const TString& interrupChars, const TString& ignoreChars, int& interrupt ) 
+	String ReadUntil( const String& interrupChars, const String& ignoreChars, int& interrupt ) 
 	{
 		TStringBuilder result;
 
@@ -119,7 +119,7 @@ public:
 		return result.ToString();
 	}
 
-	TString ReadUntilString(const TString& matchString) 
+	String ReadUntilString(const String& matchString) 
 	{
 		TStringBuilder sb;
 		ch32 firstChar = matchString.GetFirst();

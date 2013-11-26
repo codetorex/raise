@@ -13,13 +13,13 @@ class WAction
 public:
 	typedef delegate1< WActionResult* , WModel* > ActionDelegate;
 
-	TString Name;
+	String Name;
 
-	TString ViewPath;
+	String ViewPath;
 
 	ActionDelegate* ModelAction;
 
-	WAction(const TString& name, ActionDelegate* modelaction )
+	WAction(const String& name, ActionDelegate* modelaction )
 	{
 		this->Name = name;
 		ModelAction = modelaction;

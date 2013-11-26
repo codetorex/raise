@@ -9,16 +9,16 @@
 
 void WFalconRenderer::Render( WController* c, WModel* model )
 {
-	TString fullPath = c->MVCApplication->ApplicationPath + c->CurrentAction->ViewPath;
+	String fullPath = c->MVCApplication->ApplicationPath + c->CurrentAction->ViewPath;
 
 	TStreamReader* sr = new TStreamReader(fullPath);
-	string content = sr->ReadToEnd();
+	String content = sr->ReadToEnd();
 	sr->Close();
 
 	c->Response->OutputStream->Write(content.Data,1,content.Length);
 }
 
-void WFalconRenderer::LoadSource( const TString& srcPath )
+void WFalconRenderer::LoadSource( const String& srcPath )
 {
 	SourcePath = srcPath;
 	TStreamReader sr(SourcePath);
@@ -33,7 +33,7 @@ void WFalconRenderer::ParseSource()
 	while (true)
 	{
 		int interrupt;
-		TString textPart = sr.ReadUntil("@",TString::Empty,interrupt);
+		String textPart = sr.ReadUntil("@",String::Empty,interrupt);
 		if (interrupt == '@')
 		{
 			ch32 nextChar = sr.Peek();
@@ -65,20 +65,20 @@ void WFalconRenderer::ParseSource()
 void WFalconRenderer::ParseCode( TStringReader& sr )
 {
 	int interrupt;
-	TString codePart = sr.ReadUntil("( \"><{", TString::Empty, interrupt);
+	String codePart = sr.ReadUntil("( \"><{", String::Empty, interrupt);
 
 	if (interrupt == '(' || interrupt == ' ')
 	{
 		if (IsKeyword(codePart))
 		{
 			// take whole line
-			TString rest = sr.ReadLine();
+			String rest = sr.ReadLine();
 		}
 	}
 
 }
 
-bool WFalconRenderer::IsKeyword( const TString& str )
+bool WFalconRenderer::IsKeyword( const String& str )
 {
 	if (str == "model")
 		return true;
@@ -91,7 +91,7 @@ bool WFalconRenderer::IsKeyword( const TString& str )
 
 
 
-void WFalconRenderer::AddFragment( int type, const TString& content )
+void WFalconRenderer::AddFragment( int type, const String& content )
 {
 	WFalconFragment* frg = new WFalconFragment();
 	frg->Fragment = content;

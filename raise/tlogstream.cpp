@@ -29,7 +29,7 @@ void TLogStream::Initialize(TStream* outputStream)
 
 	for (ui32 i=0;i<Application.Modules.Count;i++)
 	{
-		TModule* curMod = Application.Modules.Item[i];
+		TModule* curMod = Application.Modules.Items[i];
 		sb.Append("    + ");
 		sb.AppendLine(curMod->IdentifyText);
 	}
@@ -47,7 +47,7 @@ void TLogStream::Output(TLogEntry* entry)
 
 	if (WriteGroupName)
 	{
-		sb.Append(Log.Groups.Item[entry->GroupID]->ShortName);
+		sb.Append(Log.Groups.Items[entry->GroupID]->ShortName);
 		sb.AppendChar('|');
 		sb.AppendChar(' ');
 	}
@@ -74,7 +74,7 @@ void TLogStream::Output(TLogEntry* entry)
 	Writer.BaseStream->Flush();
 }
 
-TString TLogStream::GetLogFileName( const TString& prefix )
+String TLogStream::GetLogFileName( const String& prefix )
 {
 	TStringBuilderStack<48> sb;
 
@@ -85,6 +85,6 @@ TString TLogStream::GetLogFileName( const TString& prefix )
 	sb.Append(now.ToStringFileName());
 	sb.Append(".txt");
 
-	TString resultstr = sb.ToString();
+	String resultstr = sb.ToString();
 	return resultstr;
 }

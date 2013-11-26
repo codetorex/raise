@@ -38,7 +38,7 @@ int TConvert::ToCharArrayInt( int value, char* dst , int dstCap )
 	return (dstw - dst);
 }
 
-int TConvert::ToInt32Split( const TString& value, ch32 splitChar, TArray<int>& results )
+int TConvert::ToInt32Split( const String& value, ch32 splitChar, Array<int>& results )
 {
 	if (!value.IsASCII())
 	{
@@ -83,7 +83,7 @@ int TConvert::ToInt32Split( const TString& value, ch32 splitChar, TArray<int>& r
 	return matchCount;
 }
 
-int TConvert::ToInt32Ambiguous( const TString& value, int startIndex,int* numLength, bool skipBegin )
+int TConvert::ToInt32Ambiguous( const String& value, int startIndex,int* numLength, bool skipBegin )
 {
 	TCharacterEnumerator schars(value);
 
@@ -134,7 +134,7 @@ int TConvert::ToInt32( char* value )
 	return atoi(value);
 }
 
-int TConvert::ToInt32( const TString& value )
+int TConvert::ToInt32( const String& value )
 {
 	if(value.IsASCII() )
 	{
@@ -143,7 +143,7 @@ int TConvert::ToInt32( const TString& value )
 	throw Exception("Problem in int");
 }
 
-ui32 TConvert::ToUInt32Hex( const TString& value )
+ui32 TConvert::ToUInt32Hex( const String& value )
 {
 	if (!value.IsASCII())
 	{

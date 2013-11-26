@@ -18,7 +18,7 @@ public:
 class TKeyboard: public TInputDevice
 {
 public:
-	TArray< IKeyboardObserver* > Observers;
+	Array< IKeyboardObserver* > Observers;
 
 	TKeyboard()
 	{
@@ -40,7 +40,7 @@ public:
 		int i = Observers.Count;
 		while(i--)
 		{
-			Observers.Item[i]->KeyDown(keyID);
+			Observers.Items[i]->KeyDown(keyID);
 		}
 	}
 
@@ -49,7 +49,7 @@ public:
 		int i = Observers.Count;
 		while(i--)
 		{
-			Observers.Item[i]->KeyUp(keyID);
+			Observers.Items[i]->KeyUp(keyID);
 		}
 	}
 
@@ -58,7 +58,7 @@ public:
 		int i = Observers.Count;
 		while(i--)
 		{
-			Observers.Item[i]->KeyUnicode(keyChar);
+			Observers.Items[i]->KeyUnicode(keyChar);
 		}
 	}
 };

@@ -5,9 +5,9 @@
 
 #include "tstringformat.h"
 
-TString TString::Empty("");
+String String::Empty("");
 
-bool TString::Have( ch32 character ) const
+bool String::Have( ch32 character ) const
 {
 	TCharacterEnumerator schars(*this);
 	while(schars.MoveNext())
@@ -33,7 +33,7 @@ bool TString::Have( ch32 character ) const
 	return false;*/
 }
 
-bool TString::Have( const TString& any ) const
+bool String::Have( const String& any ) const
 {
 	byte* start = Data;
 	byte* tstart;
@@ -56,9 +56,9 @@ bool TString::Have( const TString& any ) const
 	return false;
 }
 
-TString TString::ToLower() const
+String String::ToLower() const
 {
-	TString result (Capacity + (Capacity / 2)); // 1.5x cap
+	String result (Capacity + (Capacity / 2)); // 1.5x cap
 	byte* src = Data;
 	byte* end = src + ByteLength;
 
@@ -74,9 +74,9 @@ TString TString::ToLower() const
 	return result;
 }
 
-TString TString::ToUpper() const
+String String::ToUpper() const
 {
-	TString result (Capacity + (Capacity / 2)); // 1.5x cap
+	String result (Capacity + (Capacity / 2)); // 1.5x cap
 	byte* src = Data;
 	byte* end = src + ByteLength;
 
@@ -91,7 +91,7 @@ TString TString::ToUpper() const
 	return result;
 }
 
-TString TString::Substring( ui32 startIndex, ui32 lengt ) const
+String String::Substring( ui32 startIndex, ui32 lengt ) const
 {
 	if (startIndex + lengt > Length)
 	{
@@ -114,7 +114,7 @@ TString TString::Substring( ui32 startIndex, ui32 lengt ) const
 	byte* cpyEnd = StringDriver::Count(cpyStart,lengt);
 	int copyLength = cpyEnd - cpyStart;
 
-	TString result(copyLength);
+	String result(copyLength);
 	MemoryDriver::Copy(result.Data,cpyStart,copyLength);
 	result.ByteLength = copyLength;
 	result.Length = lengt;
@@ -122,7 +122,7 @@ TString TString::Substring( ui32 startIndex, ui32 lengt ) const
 	return result;
 }
 
-TString TString::Substring( ui32 startIndex ) const
+String String::Substring( ui32 startIndex ) const
 {
 	if (startIndex == 0)
 	{
@@ -138,7 +138,7 @@ TString TString::Substring( ui32 startIndex ) const
 	int skipLength = cpyStart - Data;
 	int copyLength = ByteLength - skipLength;
 
-	TString result(copyLength);
+	String result(copyLength);
 	MemoryDriver::Copy(result.Data,cpyStart,copyLength);
 	result.ByteLength = copyLength;
 	result.Length = Length - startIndex;
@@ -146,13 +146,13 @@ TString TString::Substring( ui32 startIndex ) const
 	return result;
 }
 
-TArray<TString*> TString::Split( const TArray<ch32>& seprators, bool removeEmpty /*= false*/ ) const
+Array<String*> String::Split( const Array<ch32>& seprators, bool removeEmpty /*= false*/ ) const
 {
-	TArray<TString*> result;
+	Array<String*> result;
 
 	if (seprators.Count == 0)
 	{
-		result.Add( (TString*)this );
+		result.Add( (String*)this );
 		return result;
 	}
 
@@ -166,7 +166,7 @@ TArray<TString*> TString::Split( const TArray<ch32>& seprators, bool removeEmpty
 		int k = seprators.Count;
 		while(k--)
 		{
-			if (schars.Current == seprators.Item[k])
+			if (schars.Current == seprators.Items[k])
 			{
 				int seprationByteIndex = PreviousChar - Data;
 				int seprationLength =  seprationByteIndex - LastSeprationByteIndex;
@@ -178,7 +178,7 @@ TArray<TString*> TString::Split( const TArray<ch32>& seprators, bool removeEmpty
 				}
 				else
 				{
-					TString* sepration = new TString(Data + LastSeprationByteIndex, seprationLength, (schars.CharIndex - LastSeprationCharIndex));
+					String* sepration = new String(Data + LastSeprationByteIndex, seprationLength, (schars.CharIndex - LastSeprationCharIndex));
 					result.Add(sepration);
 					LastSeprationByteIndex = schars.StrData - Data;
 					LastSeprationCharIndex = schars.CharIndex+1;
@@ -191,7 +191,7 @@ TArray<TString*> TString::Split( const TArray<ch32>& seprators, bool removeEmpty
 
 	if (LastSeprationByteIndex != ByteLength)
 	{
-		TString* sepration = new TString();
+		String* sepration = new String();
 		*sepration = Substring(LastSeprationByteIndex);
 		result.Add(sepration);
 	}
@@ -199,13 +199,13 @@ TArray<TString*> TString::Split( const TArray<ch32>& seprators, bool removeEmpty
 	return result;
 }
 
-TArray<TString*> TString::Split( const TArray<TString*>& seprators, bool removeEmpty /*= false*/ ) const
+Array<String*> String::Split( const Array<String*>& seprators, bool removeEmpty /*= false*/ ) const
 {
 	throw NotImplementedException(__FILE__,__LINE__);
 }
 
 
-int TString::GetTrimStartPoint( const TArray<ch32>& trimChars , int& bytesToSkip)
+int String::GetTrimStartPoint( const Array<ch32>& trimChars , int& bytesToSkip)
 {
 	TCharacterEnumerator schars(*this);
 	int trimpoint = 0;
@@ -217,7 +217,7 @@ int TString::GetTrimStartPoint( const TArray<ch32>& trimChars , int& bytesToSkip
 		cont = false;
 		while(i--)
 		{
-			if (schars.Current == trimChars.Item[i])
+			if (schars.Current == trimChars.Items[i])
 			{
 				trimpoint++;
 				cont = true;
@@ -234,7 +234,7 @@ int TString::GetTrimStartPoint( const TArray<ch32>& trimChars , int& bytesToSkip
 	return trimpoint;
 }
 
-void TString::TrimStartInplace( const TArray<ch32>& trimChars )
+void String::TrimStartInplace( const Array<ch32>& trimChars )
 {
 	int trimBytes;
 	int trimpoint = GetTrimStartPoint(trimChars,trimBytes);
@@ -254,7 +254,7 @@ void TString::TrimStartInplace( const TArray<ch32>& trimChars )
 	Data[ByteLength] = 0;
 }
 
-void TString::TrimEndInplace( const TArray<ch32>& trimChars )
+void String::TrimEndInplace( const Array<ch32>& trimChars )
 {
 	int trimBytes;
 	int trimpoint = GetTrimEndPoint(trimChars,trimBytes);
@@ -266,14 +266,14 @@ void TString::TrimEndInplace( const TArray<ch32>& trimChars )
 	Data[ByteLength] = 0;
 }
 
-void TString::TrimInplace( const TArray<ch32>& trimChars )
+void String::TrimInplace( const Array<ch32>& trimChars )
 {
 	TrimEndInplace(trimChars);
 	TrimStartInplace(trimChars);
 }
 
 
-TString TString::TrimStart( const TArray<ch32>& trimChars  )
+String String::TrimStart( const Array<ch32>& trimChars  )
 {
 	int trimBytes;
 	int trimpoint = GetTrimStartPoint(trimChars,trimBytes);
@@ -283,10 +283,10 @@ TString TString::TrimStart( const TArray<ch32>& trimChars  )
 		return *this;
 	}
 
-	return TString(Data+trimBytes,ByteLength-trimBytes,Length-trimpoint);
+	return String(Data+trimBytes,ByteLength-trimBytes,Length-trimpoint);
 }
 
-int TString::GetTrimEndPoint( const TArray<ch32>& trimChars , int& bytesToSkip)
+int String::GetTrimEndPoint( const Array<ch32>& trimChars , int& bytesToSkip)
 {
 	TCharacterReverseEnumerator schars(*this);
 	int trimpoint = Length;
@@ -298,7 +298,7 @@ int TString::GetTrimEndPoint( const TArray<ch32>& trimChars , int& bytesToSkip)
 		cont = false;
 		while(i--)
 		{
-			if (schars.Current == trimChars.Item[i])
+			if (schars.Current == trimChars.Items[i])
 			{
 				trimpoint--;
 				cont = true;
@@ -317,7 +317,7 @@ int TString::GetTrimEndPoint( const TArray<ch32>& trimChars , int& bytesToSkip)
 	return trimpoint;
 }
 
-TString TString::TrimEnd( const TArray<ch32>& trimChars )
+String String::TrimEnd( const Array<ch32>& trimChars )
 {
 	int trimBytes;
 	int trimpoint = GetTrimEndPoint(trimChars,trimBytes);
@@ -327,10 +327,10 @@ TString TString::TrimEnd( const TArray<ch32>& trimChars )
 		return *this;
 	}
 
-	return TString(Data,trimBytes,trimpoint);
+	return String(Data,trimBytes,trimpoint);
 }
 
-void TString::ToLowerInplace()
+void String::ToLowerInplace()
 {
 	DetachToEdit();
 	byte* src = Data;
@@ -347,7 +347,7 @@ void TString::ToLowerInplace()
 	}
 }
 
-void TString::ToUpperInplace()
+void String::ToUpperInplace()
 {
 	DetachToEdit();
 	byte* src = Data;
@@ -364,7 +364,7 @@ void TString::ToUpperInplace()
 	}
 }
 
-TString TString::Format( const TString& format,int argc , const TStringFormatElementBase** args )
+String String::Format( const String& format,int argc , const TStringFormatElementBase** args )
 {
 	TStringBuilderStack<512> sb;
 
@@ -413,7 +413,7 @@ TString TString::Format( const TString& format,int argc , const TStringFormatEle
 	return sb.ToString();
 }
 
-TString TString::SubstringUntil( ui32 startIndex, ch32 matchCharacter ) const
+String String::SubstringUntil( ui32 startIndex, ch32 matchCharacter ) const
 {
 	if (!IsASCII())
 	{
@@ -423,14 +423,14 @@ TString TString::SubstringUntil( ui32 startIndex, ch32 matchCharacter ) const
 
 }
 
-ui32 TString::SubstringUntil( ui32 startIndex, ch32 matchCharacter, TArray<byte>& output ) const
+ui32 String::SubstringUntil( ui32 startIndex, ch32 matchCharacter, Array<byte>& output ) const
 {
 	throw NotImplementedException(__FILE__,__LINE__);
 }
 
-TArray<TString*> TString::SplitInplace( TChar character, bool removeEmpty /*= false*/ )
+Array<String*> String::SplitInplace( TChar character, bool removeEmpty /*= false*/ )
 {
-	TArray<TString*> result;
+	Array<String*> result;
 
 	if (ByteLength != Length)
 	{
@@ -447,13 +447,13 @@ TArray<TString*> TString::SplitInplace( TChar character, bool removeEmpty /*= fa
 			int curWordLength = i-lastWordStart;
 			if (curWordLength > 0 )
 			{
-				result.Add( new TString(Data+lastWordStart, curWordLength,curWordLength));
+				result.Add( new String(Data+lastWordStart, curWordLength,curWordLength));
 			}
 			else
 			{
 				if (!removeEmpty)
 				{
-					result.Add( &TString::Empty );
+					result.Add( &String::Empty );
 				}
 			}
 			Data[i] = 0;

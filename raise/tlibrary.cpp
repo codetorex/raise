@@ -6,7 +6,7 @@ TLibrary::~TLibrary()
 	Functions.DeletePointers();
 }
 
-void TLibrary::RegisterFunction(const TString& funcName, void* funcPtr)
+void TLibrary::RegisterFunction(const String& funcName, void* funcPtr)
 {
 	TLibraryFunction* fnc = new TLibraryFunction();
 	fnc->FunctionName = funcName;
@@ -18,7 +18,7 @@ void TLibrary::RegisterFunction(const TString& funcName, void* funcPtr)
 
 #include "tplatform.h"
 
-void TLibrary::Load(const TString& _path)
+void TLibrary::Load(const String& _path)
 {
 	ch16 tmp[1024];
 	Platform.RaiseToSystemString(_path,(byte*)tmp,sizeof(tmp));
@@ -42,7 +42,7 @@ void TLibrary::Unload()
 	}
 }
 
-void* TLibrary::GetFunction( const TString& functionName )
+void* TLibrary::GetFunction( const String& functionName )
 {
 	if (!functionName.IsASCII())
 	{

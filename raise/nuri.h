@@ -16,25 +16,25 @@ class NUri
 public:
 	// THINK LIKE http://www.contoso.com/catalog/shownew.htm?date=today
 
-	TString AbsoluteUri; // "http://www.contoso.com/catalog/shownew.htm?date=today"
+	String AbsoluteUri; // "http://www.contoso.com/catalog/shownew.htm?date=today"
 
-	TString AbsolutePath; // "/catalog/shownew.htm"
+	String AbsolutePath; // "/catalog/shownew.htm"
 
-	TString Host; // "www.contoso.com"
+	String Host; // "www.contoso.com"
 
 	int Port; // If uri doesnt has the port information, this should be set to default port. for http its 80
 
-	TString Query; // "?date=today"
+	String Query; // "?date=today"
 
-	TString Scheme; //  "http"
+	String Scheme; //  "http"
 
-	TString OriginalString; // orginal entry
+	String OriginalString; // orginal entry
 
-	TString Fragment;
+	String Fragment;
 
-	TString UserInfo; // "userName:password"
+	String UserInfo; // "userName:password"
 
-	inline NUri( const TString& value )
+	inline NUri( const String& value )
 	{
 		Parse(value);
 	}
@@ -44,11 +44,11 @@ public:
 
 	}
 	
-	inline TString PathAndQuery();
+	inline String PathAndQuery();
 
-	void Parse(const TString& value);
+	void Parse(const String& value);
 
-	inline NUri& operator = ( const TString& value)
+	inline NUri& operator = ( const String& value)
 	{
 		Parse(value);
 		return *this;

@@ -71,7 +71,7 @@ TBreakpoint* TProcessDebug::GetBreakpoint( ui32 addr )
 	int i = Breakpoints.Count;
 	while(i--)
 	{
-		TBreakpoint* tb = Breakpoints.Item[i];
+		TBreakpoint* tb = Breakpoints.Items[i];
 		if ((ui32)tb->Address == addr)
 		{
 			return tb;
@@ -92,7 +92,7 @@ void TProcessDebug::RemoveBreakpoints()
 	int i=Breakpoints.Count;
 	while(i--)
 	{ 
-		TBreakpoint* bp = Breakpoints.Item[i];
+		TBreakpoint* bp = Breakpoints.Items[i];
 		delete bp;
 	}
 	Breakpoints.Clear();
@@ -104,7 +104,7 @@ void TProcessDebug::DisableBreakpoints()
 	int i=Breakpoints.Count;
 	while(i--)
 	{ 
-		TBreakpoint* bp = Breakpoints.Item[i];
+		TBreakpoint* bp = Breakpoints.Items[i];
 		bp->UnsetBreakpoint();
 	}
 }
@@ -115,7 +115,7 @@ void TProcessDebug::EnableBreakpoints()
 	int i=Breakpoints.Count;
 	while(i--)
 	{ 
-		TBreakpoint* bp = Breakpoints.Item[i];
+		TBreakpoint* bp = Breakpoints.Items[i];
 		bp->SetBreakpoint();
 	}
 }
@@ -161,7 +161,7 @@ void TProcessDebug::EndDebugging()
 	if ( !ExitDebugMode() )
 	{
 		DWORD err = GetLastError();
-		TString r = Platform.GetErrorDescription(err);
+		String r = Platform.GetErrorDescription(err);
 		throw Exception("Failed to leave debug mode: %", sfs(r));
 	}
 	IsDebug = 0;

@@ -19,9 +19,9 @@ public:
 class WRedirectResult: public WActionResult
 {
 public:
-	TString RedirectPath;
+	String RedirectPath;
 
-	WRedirectResult(const TString& newPath)
+	WRedirectResult(const String& newPath)
 	{
 		RedirectPath = newPath;
 	}

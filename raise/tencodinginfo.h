@@ -8,10 +8,10 @@ class TEncodingInfo
 {
 public:
 	/// The encoding name
-	TString Name;
+	String Name;
 
 	/// Encoding name in human readable form.
-	TString DisplayName;
+	String DisplayName;
 	
 	/// The minimum bit length per character
 	int MinLengthPerChar;
@@ -33,7 +33,7 @@ public:
 	 * @param _max The maximum bit per character.
 	 * @param _cp The code page.
 	 */
-	TEncodingInfo(const TString& encName, const TString& _displayName, int _min, int _max, int _cp)
+	TEncodingInfo(const String& encName, const String& _displayName, int _min, int _max, int _cp)
 	{
 		Name = encName;
 		DisplayName = _displayName;

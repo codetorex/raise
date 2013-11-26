@@ -108,7 +108,7 @@ public:
 		Data += sizeof(float);
 	}
 
-	inline void WriteString(const TString& value)
+	inline void WriteString(const String& value)
 	{
 		WriteUInt32(value.ByteLength);
 		WriteByteArray(value.Data,value.ByteLength);

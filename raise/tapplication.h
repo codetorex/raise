@@ -10,8 +10,8 @@ class TVersionPhase
 {
 public:
 	int		ID;
-	TString Name;
-	TString ShortName;
+	String Name;
+	String ShortName;
 
 	static TVersionPhase PreAlpha;
 	static TVersionPhase Alpha;
@@ -19,7 +19,7 @@ public:
 	static TVersionPhase ReleaseCandidate;
 	static TVersionPhase Release;
 
-	TVersionPhase(int _id, const TString& _name, const TString& _shortname)
+	TVersionPhase(int _id, const String& _name, const String& _shortname)
 	{
 		ID = _id;
 		Name = _name;
@@ -50,10 +50,10 @@ public:
 
 	TVersionScheme Scheme;
 
-	TString BuildText; // like "build 512"
-	TString BuildPhaseText; // like "build 512 alpha"
-	TString VersionText; // like 0.1.512
-	TString VersionPhaseText; // like 0.1.512 alpha
+	String BuildText; // like "build 512"
+	String BuildPhaseText; // like "build 512 alpha"
+	String VersionText; // like 0.1.512
+	String VersionPhaseText; // like 0.1.512 alpha
 
 	void Initialize(int _build, const TVersionPhase* _phase);
 
@@ -88,18 +88,18 @@ public:
 class TModule
 {
 public:
-	TString Name;
-	TString Company;
+	String Name;
+	String Company;
 	TVersion Version;
 
-	TString IdentifyText;
-	TString IdentifyBuildText;
+	String IdentifyText;
+	String IdentifyBuildText;
 
 	TModule() {};
 
-	TModule(const TString& _Name, const TVersion& _Version, const TString& _Company);
+	TModule(const String& _Name, const TVersion& _Version, const String& _Company);
 
-	TModule(const TString& _Name, const TVersion& _Version);
+	TModule(const String& _Name, const TVersion& _Version);
 
 	void SetIdentifyText();
 };
@@ -107,24 +107,24 @@ public:
 class TApplication: public TModule
 {
 public:
-	TString ExecutablePath;
-	TString StartupPath;
+	String ExecutablePath;
+	String StartupPath;
 
 	static TCultureInfo& CurrenctCulture();
 
-	TArray< TModule* > Modules;
+	Array< TModule* > Modules;
 
 	void Exit();
 
 	/**
 	 * Easier setup for initializing application data.
 	 */
-	void Begin( TString _Name, const TVersion& _Version, TString _Company );
+	void Begin( String _Name, const TVersion& _Version, String _Company );
 	
 	/**
 	 * Uses default company name while initializing application data.
 	 */
-	void Begin( TString _Name, const TVersion& _Version );
+	void Begin( String _Name, const TVersion& _Version );
 
 	void PrintIdentifierToConsole(bool printModules = false);
 };

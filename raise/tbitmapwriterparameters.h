@@ -19,7 +19,7 @@ public:
 class TBitmapWriterParameters
 {
 public:
-	TArray<TBitmapWriterParameter> Parameters;
+	Array<TBitmapWriterParameter> Parameters;
 
 	inline void SetFloatParameter(ui32 ParameterID, float value)
 	{
@@ -49,7 +49,7 @@ public:
 	{
 		for (ui32 i=0;i<Parameters.Count;i++)
 		{
-			TBitmapWriterParameter& curParam = Parameters.Item[i];
+			TBitmapWriterParameter& curParam = Parameters.Items[i];
 			if (curParam.ParameterID == ParameterID)
 			{
 				return &curParam;

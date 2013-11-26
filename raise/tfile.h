@@ -10,17 +10,17 @@ class TFile
 {
 public:
 
-	static inline TFileStream* Open(const TString& path,FileMode mode)
+	static inline TFileStream* Open(const String& path,FileMode mode)
 	{
 		return new TFileStream(path, mode);
 	}
 
-	static inline TFileStream* OpenRead(const TString& path)
+	static inline TFileStream* OpenRead(const String& path)
 	{
 		return new TFileStream(path, fm_Read);
 	}
 
-	static inline TFileStream* OpenWrite(const TString& path)
+	static inline TFileStream* OpenWrite(const String& path)
 	{
 		return new TFileStream(path, fm_Write);
 	}
@@ -28,12 +28,12 @@ public:
 	/**
 	 * Reads contents of a file and returns how much bytes read.
 	 */
-	static ui32 ReadAllBytes(const TString& path, void* target, ui32 capacity);
+	static ui32 ReadAllBytes(const String& path, void* target, ui32 capacity);
 
 	/**
 	 * Reads contents of a file to a buffer object. Returns how much bytes read.
 	 */
-	static ui32 ReadAllBytes(const TString& path, TBuffer& buffer);
+	static ui32 ReadAllBytes(const String& path, TBuffer& buffer);
 };
 
 typedef TFile File;

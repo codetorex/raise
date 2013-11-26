@@ -25,12 +25,12 @@ class WQueryString: public NameValueCollection
 {
 public:
 
-	void ParseQueryString(const TString& queryString)
+	void ParseQueryString(const String& queryString)
 	{
 
 	}
 
-	TString ToString()
+	String ToString()
 	{
 
 	}
@@ -43,16 +43,16 @@ class WHttpRequest
 public:
 	TStream*	InputStream;
 
-	string		Method;
+	String		Method;
 
 	int			ContentLength;
 	Encoding*	ContentEncoding;
-	string		ContentType;
+	String		ContentType;
 
-	string		RawUrl;
-	string		Path;
+	String		RawUrl;
+	String		Path;
 	
-	string		UserAgent;
+	String		UserAgent;
 
 	NameValueCollection Cookies;
 	WQueryString QueryString;
@@ -62,12 +62,12 @@ public:
 	/**
 	 * Parses request information from incoming packet
 	 */
-	void ParseRequest(const TString& request);
+	void ParseRequest(const String& request);
 
 	/**
 	 * Creates request packet from given information
 	 */
-	void CreateRequest(TArray<byte> data);
+	void CreateRequest(Array<byte> data);
 
 
 };

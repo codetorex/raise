@@ -12,7 +12,7 @@ public:
 	ui32 ReadExtension;
 	virtual void ReadSound(TSound* snd, Stream* src) = 0;
 
-	static TArray< TSoundReader* > Readers;
+	static Array< TSoundReader* > Readers;
 
 	/**
 	 * Every instance of a reader automatically adds itself to readers list
@@ -27,9 +27,9 @@ public:
 		int i= Readers.Count;
 		while(i--)
 		{
-			if (Readers.Item[i]->ReadExtension == extension)
+			if (Readers.Items[i]->ReadExtension == extension)
 			{
-				return Readers.Item[i];
+				return Readers.Items[i];
 			}
 		}
 		return 0;

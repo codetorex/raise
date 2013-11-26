@@ -7,7 +7,7 @@ class MGenSourceLine
 {
 public:
 	int				LineNumber;
-	TString			Line;
+	String			Line;
 };
 
 class MGenDatabase;
@@ -17,8 +17,8 @@ class MGenToken
 public:
 
 	MGenToken*			Parent;
-	TString				Token;
-	TArray<MGenToken*>	Childs;
+	String				Token;
+	Array<MGenToken*>	Childs;
 
 	inline void AddChild(MGenToken* child)
 	{
@@ -26,7 +26,7 @@ public:
 		child->Parent = this;
 	}
 
-	inline MGenToken* AddChild(const TString& value)
+	inline MGenToken* AddChild(const String& value)
 	{
 		MGenToken* nchild = new MGenToken();
 		nchild->Token = value;
@@ -41,16 +41,16 @@ class MGenSource
 public:
 	MGenDatabase* Parent;
 
-	TString SourcePath;
+	String SourcePath;
 
-	TArray<MGenSourceLine*> Lines;
+	Array<MGenSourceLine*> Lines;
 
 	/// Holds source pointers that this source done #include
-	TArray<MGenSource*> Includes;
+	Array<MGenSource*> Includes;
 
-	TArray<MGenClass*>	Classes;
+	Array<MGenClass*>	Classes;
 
-	TArray<MGenEnum*>	Enums;
+	Array<MGenEnum*>	Enums;
 
 	MGenToken			Root;
 };

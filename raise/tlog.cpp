@@ -52,12 +52,12 @@ TLog::TLog()
 	Groups.Add(traceGroup);
 }
 
-void TLog::Output( int group, const TString& value )
+void TLog::Output( int group, const String& value )
 {
 	TLogEntry curEntry;
 	curEntry.Content = value;
 	curEntry.GroupID = group;
-	curEntry.Color = Groups.Item[group]->DefaultColor;
+	curEntry.Color = Groups.Items[group]->DefaultColor;
 	curEntry.Tick = Platform.TickCount() - StartTick;
 
 	Notify(&curEntry);

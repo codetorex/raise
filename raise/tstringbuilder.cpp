@@ -2,11 +2,11 @@
 #include "tstring.h"
 
 
-string TStringBuilder::ToString( int startIndex, int length )
+String TStringBuilder::ToString( int startIndex, int length )
 {
 	if ( ByteLength == Length)
 	{
-		TString result(length+1);
+		String result(length+1);
 		MemoryDriver::Copy(result.Data,Data+startIndex,length);
 		result.ByteLength = length;
 		result.Length = length;
@@ -21,9 +21,9 @@ string TStringBuilder::ToString( int startIndex, int length )
 	throw NotImplementedException(__FILE__,__LINE__);
 }
 
-string TStringBuilder::ToString()
+String TStringBuilder::ToString()
 {
-	TString result(ByteLength);
+	String result(ByteLength);
 	MemoryDriver::Copy(result.Data,Data,ByteLength);
 	result.ByteLength = ByteLength;
 	result.Length = Length;

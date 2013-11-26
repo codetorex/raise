@@ -12,7 +12,7 @@ public:
 	ui32 Length;
 	ui32 ByteLength;
 
-	friend class TString;
+	friend class String;
 	friend class TStringWriter;
 
 protected:
@@ -115,7 +115,7 @@ public:
 	/**
 	 * Uses string as a buffer.
 	 */
-	TStringBuilder(TString& stringBuffer)
+	TStringBuilder(String& stringBuffer)
 	{
 		Data = stringBuffer.Data;
 		Capacity = stringBuffer.Capacity;
@@ -154,7 +154,7 @@ public:
 		Data = 0;
 	}
 
-	inline void UnbindStringBuffer(TString& stringBuffer)
+	inline void UnbindStringBuffer(String& stringBuffer)
 	{
 		Data = 0;
 		stringBuffer.Length = Length;
@@ -237,32 +237,32 @@ public:
 		InternalRepeatChar(c,repeatCount);
 	}
 
-	inline void Append(const TString& value)
+	inline void Append(const String& value)
 	{
 		InternalAppend(value.Data,value.ByteLength,value.Length);
 	}
 
-	inline void Append(const TString& fmt, sfp arg0)
+	inline void Append(const String& fmt, sfp arg0)
 	{
-		TString result = TString::Format(fmt,arg0);
+		String result = String::Format(fmt,arg0);
 		Append(result);
 	}
 
-	inline void Append(const TString& fmt, sfp arg0, sfp arg1)
+	inline void Append(const String& fmt, sfp arg0, sfp arg1)
 	{
-		TString result = TString::Format(fmt,arg0,arg1);
+		String result = String::Format(fmt,arg0,arg1);
 		Append(result);
 	}
 
-	inline void Append(const TString& fmt, sfp arg0, sfp arg1,sfp arg2)
+	inline void Append(const String& fmt, sfp arg0, sfp arg1,sfp arg2)
 	{
-		TString result = TString::Format(fmt,arg0,arg1,arg2);
+		String result = String::Format(fmt,arg0,arg1,arg2);
 		Append(result);
 	}
 
-	inline void Append(const TString& fmt, sfp arg0, sfp arg1,sfp arg2,sfp arg3)
+	inline void Append(const String& fmt, sfp arg0, sfp arg1,sfp arg2,sfp arg3)
 	{
-		TString result = TString::Format(fmt,arg0,arg1,arg2,arg3);
+		String result = String::Format(fmt,arg0,arg1,arg2,arg3);
 		Append(result);
 	}
 
@@ -299,7 +299,7 @@ public:
 	/**
 	 * Appends string value left padded.
 	 */
-	inline void AppendPadded(const TString& value,int padlength, char padchar = ' ', bool truncate = false)
+	inline void AppendPadded(const String& value,int padlength, char padchar = ' ', bool truncate = false)
 	{
 		InternalAppendPadded(value.Data,value.ByteLength,value.Length,padlength,padchar,truncate);
 	}
@@ -317,33 +317,33 @@ public:
 		AppendChar('\n');
 	}
 
-	inline void AppendLine(const TString& value)
+	inline void AppendLine(const String& value)
 	{
 		InternalAppend(value.Data,value.ByteLength,value.Length);
 		AppendLine();
 	}
 
-	inline void AppendLine(const TString& fmt, sfp arg0)
+	inline void AppendLine(const String& fmt, sfp arg0)
 	{
-		TString result = TString::Format(fmt,arg0);
+		String result = String::Format(fmt,arg0);
 		AppendLine(result);
 	}
 
-	inline void AppendLine(const TString& fmt, sfp arg0, sfp arg1)
+	inline void AppendLine(const String& fmt, sfp arg0, sfp arg1)
 	{
-		TString result = TString::Format(fmt,arg0,arg1);
+		String result = String::Format(fmt,arg0,arg1);
 		AppendLine(result);
 	}
 
-	inline void AppendLine(const TString& fmt, sfp arg0, sfp arg1,sfp arg2)
+	inline void AppendLine(const String& fmt, sfp arg0, sfp arg1,sfp arg2)
 	{
-		TString result = TString::Format(fmt,arg0,arg1,arg2);
+		String result = String::Format(fmt,arg0,arg1,arg2);
 		AppendLine(result);
 	}
 
-	inline void AppendLine(const TString& fmt, sfp arg0, sfp arg1,sfp arg2,sfp arg3)
+	inline void AppendLine(const String& fmt, sfp arg0, sfp arg1,sfp arg2,sfp arg3)
 	{
-		TString result = TString::Format(fmt,arg0,arg1,arg2,arg3);
+		String result = String::Format(fmt,arg0,arg1,arg2,arg3);
 		AppendLine(result);
 	}
 
@@ -395,9 +395,9 @@ public:
 		}
 	}
 
-	string ToString();
+	String ToString();
 
-	string ToString(int startIndex, int length);
+	String ToString(int startIndex, int length);
 
 };
 

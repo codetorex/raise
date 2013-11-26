@@ -16,7 +16,7 @@ public:
 class TMouse: public TInputDevice
 {
 public:
-	TArray< IMouseObserver* > Observers;
+	Array< IMouseObserver* > Observers;
 
 	TMouse()
 	{
@@ -38,7 +38,7 @@ public:
 		int i = Observers.Count;
 		while(i--)
 		{
-			Observers.Item[i]->MouseMove(_x,_y);
+			Observers.Items[i]->MouseMove(_x,_y);
 		}
 	}
 
@@ -47,7 +47,7 @@ public:
 		int i = Observers.Count;
 		while(i--)
 		{
-			Observers.Item[i]->MouseDown(_x,_y,_button);
+			Observers.Items[i]->MouseDown(_x,_y,_button);
 		}
 	}
 
@@ -56,7 +56,7 @@ public:
 		int i = Observers.Count;
 		while(i--)
 		{
-			Observers.Item[i]->MouseUp(_x,_y,_button);
+			Observers.Items[i]->MouseUp(_x,_y,_button);
 		}
 	}
 
@@ -65,7 +65,7 @@ public:
 		int i = Observers.Count;
 		while(i--)
 		{
-			Observers.Item[i]->MouseWheel(_x,_y,_delta);
+			Observers.Items[i]->MouseWheel(_x,_y,_delta);
 		}
 	}
 };

@@ -75,7 +75,7 @@ public:
 		return value;
 	}
 
-	inline TString ToString()
+	inline String ToString()
 	{
 		return TBinary::ToString(bin);
 	}

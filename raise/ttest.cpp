@@ -1,7 +1,7 @@
 #include "stdafx.h"
 #include "ttest.h"
 
-void UnitTest::Result( bool passed, const string& comment )
+void UnitTest::Result( bool passed, const String& comment )
 {
 	TTestResult* tr = new TTestResult();
 	tr->Result = passed ? TEST_PASS : TEST_FAILED;
@@ -19,7 +19,7 @@ void UnitTest::Result( bool passed, const string& comment )
 	}
 }
 
-void UnitTest::Output( const string& comment )
+void UnitTest::Output( const String& comment )
 {
 	TTestResult* tr = new TTestResult();
 	tr->Result = TEST_OUTPUT;
@@ -48,7 +48,7 @@ void TTestSuite::RunSuite( ui32 tests /*= TEST_CHECK*/ )
 {
 	for (ui32 i=0;i<Tests.Count;i++)
 	{
-		TTest* curTest = Tests.Item[i];
+		TTest* curTest = Tests.Items[i];
 		if ( (curTest->TestType & tests))
 		{
 			curTest->Execute();

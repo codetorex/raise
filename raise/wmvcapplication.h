@@ -11,9 +11,9 @@ class WMVCApplication: public WHttpHandler
 {
 public:
 
-	TString ApplicationPath; // like /var/www/codetorex.com/
+	String ApplicationPath; // like /var/www/codetorex.com/
 
-	TArray< WController* > Controllers; // TODO: make this dictionary or hashset?
+	Array< WController* > Controllers; // TODO: make this dictionary or hashset?
 
 
 	WController* RegisterController(WController* controller)
@@ -23,7 +23,7 @@ public:
 		return controller;
 	}
 
-	WController* GetController(const TString& controllerName)
+	WController* GetController(const String& controllerName)
 	{
 		for (int i=0;i < Controllers.Count;i++)
 		{
@@ -40,13 +40,13 @@ public:
 
 	void ProcessRequest( WHttpContext* ctx ) 
 	{
-		TString result = ApplicationPath + ctx->Request.Path;
+		String result = ApplicationPath + ctx->Request.Path;
 		if ( TFileInfo::Exists(result) )
 		{
 			// STREAM THAT FILE
 		}
 
-		TString mvcPath;
+		String mvcPath;
 
 		if (ctx->Request.Path == "/")
 		{
@@ -57,16 +57,16 @@ public:
 			mvcPath = ctx->Request.Path;
 		}
 
-		TArray< TString* >  folders = mvcPath.Split('/',true);
+		Array< String* >  folders = mvcPath.Split('/',true);
 		
 		if (folders.Count > 0)
 		{
 			if (folders.Count == 1)
 			{
-				folders.Add(new TString("Index"));
+				folders.Add(new String("Index"));
 			}
 
-			TString currentControllerName = *folders[0];
+			String currentControllerName = *folders[0];
 			WController* controller = GetController(currentControllerName);
 
 			if (controller == NULL)
@@ -74,7 +74,7 @@ public:
 				throw Exception("No controller to handle this request");
 			}
 
-			TString currentActionName = *folders[1];
+			String currentActionName = *folders[1];
 
 			controller->ProcessRequest(ctx, currentActionName);
 		}

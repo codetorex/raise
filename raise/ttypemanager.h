@@ -23,7 +23,7 @@ public:
 	TType* ST_Array;
 	TType* ST_String;
 
-	TArray< TType* > TypeRegistry;
+	Array< TType* > TypeRegistry;
 
 	TTypeManager()
 	{
@@ -51,7 +51,7 @@ public:
 		ST_String->IsSimple = true; // TODO: HMM NOT LEGIT BUT... REMOVE THIS WHEN YOU IMPLEMENT SERIALIZING CLASS
 	}
 
-	TType* GetType(const TString& name)
+	TType* GetType(const String& name)
 	{
 		return 0;
 	}

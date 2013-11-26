@@ -19,9 +19,9 @@ bool MGenSourceParser::IsIdentifierCharacter( ch32 chr )
 	return false;
 }
 
-TString MGenSourceParser::ParseWord()
+String MGenSourceParser::ParseWord()
 {
-	TString result(64);
+	String result(64);
 
 	while(Column.MoveNext())
 	{
@@ -157,7 +157,7 @@ TString MGenSourceParser::ParseWord()
 	if ( !LoadNextLine() )
 	{
 		NoMoreWords = true;
-		return TString::Empty;
+		return String::Empty;
 	}
 	return ParseWord();
 }
@@ -173,7 +173,7 @@ void MGenSourceParser::Parse()
 	LoadLine(0);
 	while(!NoMoreWords)
 	{
-		TString curWord = ParseWord();
+		String curWord = ParseWord();
 		if (NoMoreWords)
 			break;
 

@@ -29,14 +29,14 @@ enum RDBTypes
 class RDBBFieldType
 {
 public:
-	TString ToString(void* dataPtr);
-	void Parse(const TString& value, void* output);
+	String ToString(void* dataPtr);
+	void Parse(const String& value, void* output);
 };
 
 class RDBField
 {
 public:
-	TString Name;
+	String Name;
 	int TypeId;
 	int Length;
 };
@@ -44,11 +44,11 @@ public:
 class RDBRelation
 {
 public:
-	TString FirstSet;
-	TString FirstField;
+	String FirstSet;
+	String FirstField;
 
-	TString SecondSet;
-	TString SecondField;
+	String SecondSet;
+	String SecondField;
 
 	int RelationType;
 };
@@ -69,9 +69,9 @@ public:
 class RDBScheme
 {
 public:
-	TArray< RDBField* > Fields;
-	TArray< RDBRelation* > Relations;
-	TArray< RDBObjectMap* > Maps;
+	Array< RDBField* > Fields;
+	Array< RDBRelation* > Relations;
+	Array< RDBObjectMap* > Maps;
 
 	int MinSize;
 };
@@ -86,9 +86,9 @@ class TestUser
 {
 public:
 	int UserId;
-	TString Username;
-	TString Password;
-	TString Email;
+	String Username;
+	String Password;
+	String Email;
 
 	static RDBScheme UserScheme;
 

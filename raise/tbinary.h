@@ -204,15 +204,15 @@ public:
 	/**
 	* Returns string representation of binary.
 	*/
-	inline TString ToString()
+	inline String ToString()
 	{
 		return ToString(Value);
 	}
 
-	static inline TString ToString(ui32 binvalue)
+	static inline String ToString(ui32 binvalue)
 	{
 		register ui32 v = binvalue;
-		TString result(32);
+		String result(32);
 		for (int i=0;i<32;i++)
 		{
 			result.AppendASCIIFast('0' + (v & 1));

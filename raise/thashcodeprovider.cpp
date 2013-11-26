@@ -5,7 +5,7 @@
 
 TBasicHashCodeProvider TBasicHashCodeProvider::Instance;
 
-ui32 TBasicHashCodeProvider::GetHashCode( const TString& value )
+ui32 TBasicHashCodeProvider::GetHashCode( const String& value )
 {
 	register ui32 hash = 0;
 	int i = value.ByteLength;

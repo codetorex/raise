@@ -12,7 +12,7 @@
 class TPathDriver
 {
 public:
-	static TString CurrentDirectory()
+	static String CurrentDirectory()
 	{
 		ch16 tmp[512];
 		int tmplength = GetCurrentDirectoryW(512,tmp);
@@ -26,14 +26,14 @@ public:
 		return Platform.RaiseString(tmp);
 	}
 
-	static TString TempDirectory()
+	static String TempDirectory()
 	{
 		ch16 tmp[1024];
 		GetTempPathW(1024,tmp);
 		return Platform.RaiseString(tmp);
 	}
 
-	static void CreateFolder(const TString& path)
+	static void CreateFolder(const String& path)
 	{
 		ch16 tmp[1024];
 		Platform.RaiseToSystemString(path,(byte*)tmp,sizeof(tmp));
@@ -59,9 +59,9 @@ public:
 class TPathDriver
 {
 public:
-	static TString CurrentDirectory()
+	static String CurrentDirectory()
 	{
-		TString result(1024);
+		String result(1024);
 		char* opr = getcwd((char*)result.Data,result.Capacity); // TODO: Not forget to set string length after loading.
 		if (opr == NULL)
 		{
@@ -71,13 +71,13 @@ public:
 		return result;
 	}
 
-	static TString TempDirectory()
+	static String TempDirectory()
 	{
-		TString result = "/tmp/";
+		String result = "/tmp/";
 		return result;
 	}
 
-	static void CreateFolder(TString& path)
+	static void CreateFolder(String& path)
 	{
 		if ( mkdir((char*)path.Data,NULL) == 0 )
 		{
@@ -109,7 +109,7 @@ private:
 		return false;
 	}
 
-	inline static bool IsRelativePathWin32(const TString& path)
+	inline static bool IsRelativePathWin32(const String& path)
 	{
 		TCharacterEnumerator schars(path);
 		if (schars.ReadChar() == '.') return true;
@@ -121,7 +121,7 @@ private:
 		return true;			
 	}
 
-	inline static bool IsRelativePathLinux(const TString& path)
+	inline static bool IsRelativePathLinux(const String& path)
 	{
 		if (path.GetFirst() == '.')
 		{
@@ -142,10 +142,10 @@ public:
 	static ch32 AltDirectorySeprator;
 	static ch32 DirectorySeprator;
 
-	static TString TempFolder;
-	static TString CurrentFolder;
+	static String TempFolder;
+	static String CurrentFolder;
 
-	static ui32 GetExtensionAsDword(const TString& path)
+	static ui32 GetExtensionAsDword(const String& path)
 	{
 		if (!path.IsASCII())
 		{
@@ -167,7 +167,7 @@ public:
 		return *(ui32*)dw;
 	}
 
-	static void CorrectSepratorsInplace(TString& path)
+	static void CorrectSepratorsInplace(String& path)
 	{
 		path.DetachToEdit();
 		for (ui32 i=0;i< path.Length;i++)
@@ -179,7 +179,7 @@ public:
 		}
 	}
 
-	static bool IsDirectory(const TString& path)
+	static bool IsDirectory(const String& path)
 	{
 		if (IsDirectorySeprator(path.GetLast()))
 		{
@@ -188,9 +188,9 @@ public:
 		return false;
 	}
 
-	static TString ChangeExtension(const TString& path, const TString& extension)
+	static String ChangeExtension(const String& path, const String& extension)
 	{
-		TString tempStr(path.Length + extension.Length + 8);
+		String tempStr(path.Length + extension.Length + 8);
 		TCharacterReverseEnumerator schars(path);
 		while(schars.MoveNext())
 		{
@@ -225,7 +225,7 @@ public:
 		return tempStr;*/
 	}
 
-	static TString GetExtension(const TString& path)
+	static String GetExtension(const String& path)
 	{
 		TCharacterReverseEnumerator schars(path);
 		while(schars.MoveNext())
@@ -236,10 +236,10 @@ public:
 			}
 			else if (IsDirectorySeprator(schars.Current))
 			{
-				return TString::Empty;
+				return String::Empty;
 			}
 		}
-		return TString::Empty;
+		return String::Empty;
 
 		/*int i = path.Length;
 		while(i--)
@@ -261,7 +261,7 @@ public:
 	 * Strips filename from path.
 	 * Example: for given path "c:\windows\system32\test.dll" it will return "c:\windows\system32\"
 	 */
-	static TString StripFilename(const TString& path)
+	static String StripFilename(const String& path)
 	{
 		TCharacterReverseEnumerator schars(path);
 
@@ -275,13 +275,13 @@ public:
 
 		if (schars.CharIndex == 0)
 		{
-			return TString::Empty;
+			return String::Empty;
 		}
 
 		return path.Substring(0,schars.CharIndex+1);
 	}
 
-	static TString GetDirectoryName(TString& path)
+	static String GetDirectoryName(String& path)
 	{
 		int f = path.Length;
 		TCharacterReverseEnumerator schars(path);
@@ -302,7 +302,7 @@ public:
 		return path.Substring(schars.CharIndex+1,(f-schars.CharIndex)-1);
 	}
 
-	static TString GetFileName(TString& path)
+	static String GetFileName(String& path)
 	{
 		TCharacterReverseEnumerator schars(path);
 		while(schars.MoveNext())
@@ -315,7 +315,7 @@ public:
 		return path; // path is already filename?
 	}
 
-	static TString GetFileNameWithoutExtension(const TString& path) // correct usage is const
+	static String GetFileNameWithoutExtension(const String& path) // correct usage is const
 	{
 		/*if (path == TString::Empty)
 		{
@@ -348,7 +348,7 @@ public:
 	/**
 	* If path starts or ends with separator, this function will remove them.
 	*/
-	static TString GetPathCleared(TString& path)
+	static String GetPathCleared(String& path)
 	{
 		int start = 0;
 		int end = path.Length;
@@ -362,7 +362,7 @@ public:
 		return path.Substring(start,end-start);
 	}
 
-	static bool HasParents(const TString& path)
+	static bool HasParents(const String& path)
 	{
 		TCharacterReverseEnumerator schars(path);
 		while(schars.MoveNext())
@@ -381,39 +381,39 @@ public:
 		return false;
 	}
 
-	static TString EliminateParents(TString& path)
+	static String EliminateParents(String& path)
 	{
 		ch32 seprators[3] = {DirectorySeprator,AltDirectorySeprator,0};
-		TString cleared = GetPathCleared(path);
+		String cleared = GetPathCleared(path);
 
-		TArray<TString*> psplit = cleared.Split(seprators);
-		TArray<TString*> ary;
+		Array<String*> psplit = cleared.Split(seprators);
+		Array<String*> ary;
 
 		for (ui32 i=0;i<psplit.Count;i++)
 		{
-			TString* curpart = psplit.Item[i]; 
+			String* curpart = psplit.Items[i]; 
 			if (*curpart == "..")
 			{
 				ary.RemoveLast();
 			}
 			else
 			{
-				ary.Add(psplit.Item[i]);
+				ary.Add(psplit.Items[i]);
 			}
 		}
 
-		TString result(path.Length+16);
+		String result(path.Length+16);
 
 		for (ui32 i=0;i<ary.Count;i++)
 		{
-			result += *ary.Item[i];
+			result += *ary.Items[i];
 			result += DirectorySeprator;
 		}
 
 		return result;
 	}
 
-	static bool IsEndsWithDirectorySeprator(const TString& path)
+	static bool IsEndsWithDirectorySeprator(const String& path)
 	{
 		if ( IsDirectorySeprator(path.GetLast()) )
 		{
@@ -422,7 +422,7 @@ public:
 		return false;
 	}
 
-	static void AppendDirectorySeprator(TString& path)
+	static void AppendDirectorySeprator(String& path)
 	{
 		if (IsDirectorySeprator(path.GetLast()))
 		{
@@ -434,14 +434,14 @@ public:
 	/**
 	 * Retrieves full path for given relative path
 	 */
-	static TString GetFullPath(const TString& path)
+	static String GetFullPath(const String& path)
 	{	
 		// TODO: resolve relativity.
 		if (CurrentFolder.Length == 0)
 		{
 			CurrentFolder = TPathDriver::CurrentDirectory();
 		}
-		TString tmpPath(CurrentFolder.Length + path.Length + 16);
+		String tmpPath(CurrentFolder.Length + path.Length + 16);
 		tmpPath += CurrentFolder;
 		
 		if (!IsEndsWithDirectorySeprator(tmpPath))
@@ -465,7 +465,7 @@ public:
 		return tmpPath;
 	}
 
-	static TString GetTempFileName()
+	static String GetTempFileName()
 	{
 		// TODO: implement something that uses system api. GetTempFileName for win.tempnam for linux.
 		CheckTempFolder();
@@ -473,7 +473,7 @@ public:
 		//return TempFolder + TString::Random(8);
 	}
 
-	static TString GetTempPath()
+	static String GetTempPath()
 	{
 		CheckTempFolder();
 		return TempFolder;

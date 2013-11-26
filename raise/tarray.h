@@ -12,30 +12,30 @@
 * Order not preserved in this implementation.
 */
 template <class T>
-class TArray
+class Array
 {
 public:
-	T*		Item;
+	T*		Items;
 	ui32	Count;
 	ui32	Capacity;
 
-	inline TArray()
+	inline Array()
 	{
-		Item = 0;
+		Items = 0;
 		Capacity = 0;
 		Count = 0;
 	}
 
-	inline TArray(int size)
+	inline Array(int size)
 	{
-		Item = 0;
+		Items = 0;
 		Allocate(size);
 		Count = 0;
 	}
 	
-	inline TArray( const T* data )
+	inline Array( const T* data )
 	{
-		Item = (T*)data;
+		Items = (T*)data;
 		Count = CountOfZeroEnding(data);
 		Capacity = 0;
 	}
@@ -43,16 +43,16 @@ public:
 	/**
 	 * Constructs a static array.
 	 */
-	inline TArray( T* data, int dataCount)
+	inline Array( T* data, int dataCount)
 	{
-		Item = data;
+		Items = data;
 		Count = dataCount;
 		Capacity = 0;
 	}
 
-	inline TArray( const TArray<T>& cpy )
+	inline Array( const Array<T>& cpy )
 	{
-		Item = 0;
+		Items = 0;
 		Count = 0;
 		if (cpy.Count)
 		{
@@ -65,7 +65,7 @@ public:
 				Allocate(cpy.Count);
 			}
 			
-			MemoryDriver::Copy(Item,cpy.Item,sizeof(T) * cpy.Count);
+			MemoryDriver::Copy(Items,cpy.Items,sizeof(T) * cpy.Count);
 			Count = cpy.Count;
 		}
 		else
@@ -74,10 +74,10 @@ public:
 		}
 	}
 
-	inline ~TArray()
+	inline ~Array()
 	{
 		Free();
-		Item = 0;
+		Items = 0;
 		Count = 0;
 		Capacity = 0;
 	}
@@ -86,7 +86,7 @@ public:
 	{
 		for (ui32 i=0;i<Count;i++)
 		{
-			delete Item[i];
+			delete Items[i];
 		}
 		Count = 0;
 	}
@@ -109,7 +109,7 @@ public:
 		int remaining = Count - rstart;
 		for (int i=0;i<remaining;i++)
 		{
-			Item[startIndex+i] = Item[rstart+i];
+			Items[startIndex+i] = Items[rstart+i];
 		}
 
 		Count -= length;
@@ -132,10 +132,10 @@ public:
 		int i = (int)Count;
 		while( i-- >= (int)index)
 		{
-			Item[i+1] = Item[i];
+			Items[i+1] = Items[i];
 		}
 
-		Item[index] = value;
+		Items[index] = value;
 		Count++;
 	}
 
@@ -162,7 +162,7 @@ public:
 	{
 		for (ui32 i=0;i<Count;i++)
 		{
-			if (Item[i] == value)
+			if (Items[i] == value)
 			{
 				return i;
 			}
@@ -175,7 +175,7 @@ public:
 		int c = Count;
 		while(c--)
 		{
-			if (Item[c] == value)
+			if (Items[c] == value)
 			{
 				return c;
 			}
@@ -210,7 +210,7 @@ public:
 		int rem = Count - index;
 		while(rem--)
 		{
-			Item[index] = Item[index+1];
+			Items[index] = Items[index+1];
 			index++;
 		}
 		Count--;
@@ -234,9 +234,9 @@ public:
 
 	inline void Swap(ui32 srcIndex, ui32 dstIndex)
 	{
-		T tmp = Item[dstIndex];
-		Item[dstIndex] = Item[srcIndex];
-		Item[srcIndex] = tmp;
+		T tmp = Items[dstIndex];
+		Items[dstIndex] = Items[srcIndex];
+		Items[srcIndex] = tmp;
 	}
 
 	/**
@@ -252,7 +252,7 @@ public:
 			Count--;
 			return;
 		}
-		Item[index] = Item[--Count];
+		Items[index] = Items[--Count];
 	}
 
 	inline void RemoveLast()
@@ -269,7 +269,7 @@ public:
 		//assert(Capacity != 0);
 		if (Capacity)
 		{
-			memset(Item,NULL, sizeof(T) * Count);
+			memset(Items,NULL, sizeof(T) * Count);
 		}
 		Count = 0;
 	}
@@ -281,7 +281,7 @@ public:
 			if (Capacity == 0) Capacity = 2;
 			Allocate(Capacity * 2); // Multiply the cache
 		}
-		Item[Count++] = value;
+		Items[Count++] = value;
 	}
 
 	/**
@@ -289,7 +289,7 @@ public:
 	*/
 	inline void UnsafeAdd(T value)
 	{
-		Item[Count++] = value;
+		Items[Count++] = value;
 	}
 
 	inline bool Contains(T value)
@@ -307,9 +307,9 @@ public:
 
 	inline virtual void Free()
 	{
-		if (Item && Capacity > 0) // if capacity is 0 then this means data is static
+		if (Items && Capacity > 0) // if capacity is 0 then this means data is static
 		{
-			delete [] Item;
+			delete [] Items;
 		}
 	}
 
@@ -319,14 +319,14 @@ public:
 		{
 			throw Exception("Index out of bounds");
 		}
-		return Item[index];
+		return Items[index];
 	}
 
 	inline T& GetLast()
 	{
 		if (Count > 0)
 		{
-			return Item[Count-1];
+			return Items[Count-1];
 		}
 		
 		throw Exception("Index out of bounds");
@@ -339,7 +339,7 @@ public:
 	{
 		if (Count > 0)
 		{
-			T k = Item[Count-1];
+			T k = Items[Count-1];
 			Count--;
 			return k;
 		}
@@ -350,14 +350,14 @@ public:
 	/**
 	* Assigning of arrays will destroy other.
 	*/
-	TArray<T>& operator = (TArray<T>& other)
+	Array<T>& operator = (Array<T>& other)
 	{
 		// TODO: USE SHARED STUFF LIKE TSTRING HERE
 		Free();
-		Item = other.Item;
+		Items = other.Items;
 		Count = other.Count;
 		Capacity = other.Capacity;
-		other.Item = 0;
+		other.Items = 0;
 		other.Capacity = 0;
 		other.Count = 0;
 		return *this;
@@ -370,7 +370,7 @@ public:
 			Free();
 
 			Capacity = 0;
-			Item = 0;
+			Items = 0;
 			Count = 0;
 			
 			throw Exception("Allocate 0 for array is unnecessary maybe bug?");
@@ -379,40 +379,40 @@ public:
 		}
 
 		T* NItem = new T [newsize];
-		if (Item)
+		if (Items)
 		{
-			MemoryDriver::Copy(NItem,Item,sizeof(T) * Count);
+			MemoryDriver::Copy(NItem,Items,sizeof(T) * Count);
 			Free();
 		}
-		Item = NItem;
+		Items = NItem;
 		Capacity = newsize;
 	}
 };
 
 
 template <class T, int K>
-class TArrayStack: public TArray<T>
+class TArrayStack: public Array<T>
 {
 public:
 	T Temp[K];
 
-	TArrayStack<T,K>(): TArray<T>(Temp,0)
+	TArrayStack<T,K>(): Array<T>(Temp,0)
 	{
 		this->Capacity = K;
 	}
 
 	void Free()
 	{
-		if (this->Item == this->Temp)
+		if (this->Items == this->Temp)
 		{
-			this->Item = 0; // shouldn't delete stack ptr
+			this->Items = 0; // shouldn't delete stack ptr
 		}
-		this->TArray<T>::Free();
+		this->Array<T>::Free();
 	}
 
 	~TArrayStack<T,K>()
 	{
-		this->Item = 0;
+		this->Items = 0;
 		this->Capacity = 0;
 	}
 };
@@ -421,10 +421,10 @@ template <class T>
 class TArrayEnumerator: public TEnumerator<T>
 {
 public:
-	TArray<T>& CurrentArray;
+	Array<T>& CurrentArray;
 	ui32 Index;
 
-	inline TArrayEnumerator( TArray<T>& curArray ):CurrentArray(curArray)
+	inline TArrayEnumerator( Array<T>& curArray ):CurrentArray(curArray)
 	{
 		Reset();
 	}
@@ -439,7 +439,7 @@ public:
 		if (Index >= CurrentArray.Count)
 			return false;
 
-		this->Current = CurrentArray.Item[Index];
+		this->Current = CurrentArray.Items[Index];
 		Index++;
 		return true;
 	}
@@ -449,10 +449,10 @@ template <class T>
 class TArrayEnumeratorReverse: public TEnumerator<T>
 {
 public:
-	TArray<T>& CurrentArray;
+	Array<T>& CurrentArray;
 	ui32 Index;
 
-	TArrayEnumeratorReverse( TArray<T>& curArray ):CurrentArray(curArray)
+	TArrayEnumeratorReverse( Array<T>& curArray ):CurrentArray(curArray)
 	{
 		Reset();
 	}
@@ -467,7 +467,7 @@ public:
 		if (Index == (ui32)-1)
 			return false;
 
-		this->Current = CurrentArray.Item[Index];
+		this->Current = CurrentArray.Items[Index];
 		Index--;
 		return true;
 	}

@@ -30,7 +30,7 @@ enum TInputActionTypes
 class TInputAction
 {
 public:
-	TString Name; // name of input, like FlyCamX, FlyCamY, FlyCamAscend ?
+	String Name; // name of input, like FlyCamX, FlyCamY, FlyCamAscend ?
 	int ActionType;
 };
 
@@ -126,10 +126,10 @@ public:
 class TInputModeBase
 {
 public:
-	TString Name;
-	TArray< TInputAction* > Actions; // actions that uses this mode
+	String Name;
+	Array< TInputAction* > Actions; // actions that uses this mode
 
-	TTriggerAction* CreateBoolAction(const TString& name, bool* boolPtr)
+	TTriggerAction* CreateBoolAction(const String& name, bool* boolPtr)
 	{
 		TTriggerActionBool* ta = new TTriggerActionBool();
 		ta->Name = name;
@@ -138,7 +138,7 @@ public:
 		return ta;
 	}
 
-	TTriggerAction* CreateEventAction(const TString& name, TTriggerActionEvent::BoolEvent* handler)
+	TTriggerAction* CreateEventAction(const String& name, TTriggerActionEvent::BoolEvent* handler)
 	{
 		TTriggerActionEvent* ta = new TTriggerActionEvent();
 		ta->Name = name;
@@ -147,7 +147,7 @@ public:
 		return ta;
 	}
 
-	TTriggerAction* CreateTriggerAction(const TString& name)
+	TTriggerAction* CreateTriggerAction(const String& name)
 	{
 		TTriggerAction* newAction = new TTriggerAction();
 		newAction->Name = name;
@@ -155,7 +155,7 @@ public:
 		return newAction;
 	}
 
-	TMoveAction* CreateMoveAction(const TString& name)
+	TMoveAction* CreateMoveAction(const String& name)
 	{
 		TMoveAction* newAction = new TMoveAction();
 		newAction->Name = name;
@@ -163,7 +163,7 @@ public:
 		return newAction;
 	}
 
-	TInputAction* GetAction(const TString& name, int actionType)
+	TInputAction* GetAction(const String& name, int actionType)
 	{
 		TArrayEnumerator<TInputAction*> e(Actions);
 		while(e.MoveNext())
@@ -180,12 +180,12 @@ public:
 		return 0;
 	}
 
-	TTriggerAction* GetTriggerAction(const TString& name)
+	TTriggerAction* GetTriggerAction(const String& name)
 	{
 		return (TTriggerAction*)GetAction(name,IA_BUTTON);
 	}
 
-	TMoveAction* GetMoveAction(const TString& name)
+	TMoveAction* GetMoveAction(const String& name)
 	{
 		return (TMoveAction*)GetAction(name,IA_POSITION);
 	}

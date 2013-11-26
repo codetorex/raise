@@ -11,7 +11,7 @@ void TCommandLine::ParseCommandLine()
 
 		for (ui32 h=0;h<Handlers.Count;h++)
 		{
-			Result = Handlers.Item[h]->HandleParameter(this);
+			Result = Handlers.Items[h]->HandleParameter(this);
 			if ( Result == TCommandLineHandler::HR_Handled )
 			{
 				MoveNextParameter();
@@ -41,7 +41,7 @@ void TCommandLine::RegisterHandler( TCommandLineHandler* Handler )
 
 TCommandLineHandler::HandleResult TCommandLineHandlerSimple::HandleParameter( TCommandLine* cmd )
 {
-	TString& curPrm = cmd->GetCurrentParameter();
+	String& curPrm = cmd->GetCurrentParameter();
 	if (curPrm == Parameter || curPrm == ShortParameter)
 	{
 		ProcessParameter(cmd);

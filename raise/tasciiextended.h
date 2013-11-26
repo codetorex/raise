@@ -121,9 +121,9 @@ public:
 		throw NotImplementedException(__FILE__,__LINE__);
 	}
 
-	TString GetString(byte* bytes, int bytecount) const
+	String GetString(byte* bytes, int bytecount) const
 	{
-		TString result(bytecount*3);
+		String result(bytecount*3);
 		while(bytecount--)
 		{
 			UTF8Mapping curchar = EncodedMapping[*bytes++];

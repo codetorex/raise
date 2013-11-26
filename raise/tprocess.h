@@ -112,8 +112,8 @@ public:
 class TProcessMemoryRegion
 {
 public:
-	TString ModuleName;
-	TString FileName;
+	String ModuleName;
+	String FileName;
 
 	//dword BaseAddress; ?
 	ui32 StartAddress;
@@ -130,27 +130,27 @@ public:
 
 	TProcessMemoryRegion();
 	TProcessMemoryRegion( ui32 _start,ui32 _end,TProcessMemory* prn);
-	TProcessMemoryRegion( const TString& _name, ui32 _start,ui32 _end,TProcessMemory* _prn);
-	TProcessMemoryRegion( const TString& _name, const TString& _file,ui32 _start,ui32 _end,TProcessMemory* _prn);
+	TProcessMemoryRegion( const String& _name, ui32 _start,ui32 _end,TProcessMemory* _prn);
+	TProcessMemoryRegion( const String& _name, const String& _file,ui32 _start,ui32 _end,TProcessMemory* _prn);
 
-	void Initialize(const TString& _name, ui32 _start,ui32 _end,TProcessMemory* _prn);
+	void Initialize(const String& _name, ui32 _start,ui32 _end,TProcessMemory* _prn);
 
 	/**
 	 * Searches an ASCII string.
 	 */
-	ui32 FindString(const TString& src);
+	ui32 FindString(const String& src);
 
 	/**
 	 * Finds an unicode (utf-16) string.
 	 */
-	ui32 FindUnicodeString(const TString& src);
+	ui32 FindUnicodeString(const String& src);
 	ui32 FindXref(ui32 addr);
 	ui32 FindFunctionBegin(ui32 addr,int intCount = 3);
-	ui32 FindFunctionFromString(const TString& src);
-	ui32 FindFunctionFromString(const TString& src, byte firstByte);
+	ui32 FindFunctionFromString(const String& src);
+	ui32 FindFunctionFromString(const String& src, byte firstByte);
 
-	ui32 SearchAll( const void* needle, int length, TArray<ui32>& result ); 
-	ui32 SearchAll( float needle, float epsilon, TArray<ui32>& result ); 
+	ui32 SearchAll( const void* needle, int length, Array<ui32>& result ); 
+	ui32 SearchAll( float needle, float epsilon, Array<ui32>& result ); 
 
 	ui32 Search( const void* needle, int length);
 	ui32 SearchPattern(const void* needle, const byte* pattern, int length);
@@ -170,17 +170,17 @@ public:
 
 	void InitializeMemory(TProcess* pprocess);
 
-	inline TString ReadString(ui32 address)
+	inline String ReadString(ui32 address)
 	{
-		TString result(512);
+		String result(512);
 		Read(address,result.Data,512);
 		result.CountCharsAndBytes();
 		return result;
 	}
 
-	inline TString ReadLongString(ui32 address, int size)
+	inline String ReadLongString(ui32 address, int size)
 	{
-		TString result(size+1);
+		String result(size+1);
 		Read(address,result.Data,size);
 		result.CountCharsAndBytes();
 		return result;
@@ -266,11 +266,11 @@ public:
 
 	ui32 Search(const void* needle, int length);
 	
-	ui32 SearchAll( const void* needle, int length, TArray<ui32>& result ); 
-	ui32 SearchAll( ui32 start, ui32 end, const void* needle, int length, TArray<ui32>& result ); 
+	ui32 SearchAll( const void* needle, int length, Array<ui32>& result ); 
+	ui32 SearchAll( ui32 start, ui32 end, const void* needle, int length, Array<ui32>& result ); 
 
-	ui32 SearchAll( float needle, float epsilon , TArray<ui32>& result );
-	ui32 SearchAll( ui32 start, ui32 end, float needle, float epsilon , TArray<ui32>& result );
+	ui32 SearchAll( float needle, float epsilon , Array<ui32>& result );
+	ui32 SearchAll( ui32 start, ui32 end, float needle, float epsilon , Array<ui32>& result );
 
 	ui32 Search(ui32 start,ui32 end, const void* needle, int length);
 	ui32 SearchPattern(ui32 start,ui32 end, const void* needle, const byte* pattern, int length);
@@ -357,7 +357,7 @@ public:
 
 	TProcessDebug();
 
-	TArray<TBreakpoint*> Breakpoints;
+	Array<TBreakpoint*> Breakpoints;
 
 	void InitializeDebug(TProcess* pprocess);
 
@@ -462,7 +462,7 @@ public:
 		processHandle = 0;
 	}
 
-	TString GetModulePath();
+	String GetModulePath();
 
 	ui32 GetBaseAddress();
 
@@ -486,21 +486,21 @@ class TProcessManager
 public:
 	static TProcess FindByWindow(const TWindowHandle& winHandle);
 
-	static TProcess FindByWindowName(const TString& windowname);
+	static TProcess FindByWindowName(const String& windowname);
 
-	static TProcess FindByClassName(const TString& className);
+	static TProcess FindByClassName(const String& className);
 
 	/**
 	 * Enter part of a window title and it will finds process of that window
 	 */
-	static TProcess FindByWindowNamePart(const TString& windownamePart);
+	static TProcess FindByWindowNamePart(const String& windownamePart);
 
 	/**
 	 * Part of window name and exe name is required by this function
 	 */
-	static TProcess FindByWindowNamePartExePathPart(const TString& windownamePart, const TString& exenamePart);
+	static TProcess FindByWindowNamePartExePathPart(const String& windownamePart, const String& exenamePart);
 
-	static TProcess CreateFromExecutable(const TString& exepath,const TString& params = TString::Empty);
+	static TProcess CreateFromExecutable(const String& exepath,const String& params = String::Empty);
 };
 
 

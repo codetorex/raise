@@ -10,11 +10,11 @@
 class TINIClass
 {
 public:
-	TString Name;
+	String Name;
 
-	THashMap<TString*> Variables;
+	THashMap<String*> Variables;
 
-	TINIClass(const TString& _name)
+	TINIClass(const String& _name)
 	{
 		Name = _name;
 	}
@@ -39,22 +39,22 @@ public:
 	void SetSource(TStream* readStream);
 	void Parse(bool closeStream = true);
 
-	TString* GetValue(const TString& className, const TString& key);
+	String* GetValue(const String& className, const String& key);
 
 	/**
 	* @return TINIClass if available, throws if not.
 	*/
-	inline TINIClass* GetClass(const TString& className)
+	inline TINIClass* GetClass(const String& className)
 	{
 		return Classes.GetValue(className);
 	}
 
-	TINIClass* FindClass(const TString& className)
+	TINIClass* FindClass(const String& className)
 	{
 		TINIClass* result;
 		if (LowerCaseKeys)
 		{
-			TString lowered = className.ToLower();
+			String lowered = className.ToLower();
 			result = Classes.GetValue(lowered);
 		}
 		else
@@ -64,7 +64,7 @@ public:
 		return result;
 	}
 
-	inline bool ContainsClass(const TString& className)
+	inline bool ContainsClass(const String& className)
 	{
 		return Classes.ContainsKey(className);	
 	}

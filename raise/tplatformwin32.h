@@ -10,26 +10,26 @@ class TPlatformWin32: public IPlatform
 {
 public:
 
-	inline void RaiseToSystemString( const TString& raiseStr, byte* output, ui32 outputSize ) 
+	inline void RaiseToSystemString( const String& raiseStr, byte* output, ui32 outputSize ) 
 	{
 		Encodings.UTF16.ConvertString(raiseStr,output,outputSize);
 	}
 
-	inline TString SystemToRaiseString( byte* input, ui32 inputSize ) 
+	inline String SystemToRaiseString( byte* input, ui32 inputSize ) 
 	{
 		return Encodings.UTF16.GetString(input,inputSize);
 	}
 
-	void ShowMessageBox( const TString& message );
+	void ShowMessageBox( const String& message );
 
-	inline TString RaiseString(const ch16* systemStr)
+	inline String RaiseString(const ch16* systemStr)
 	{
 		return Encodings.UTF16.GetString(systemStr);
 	}
 
-	TString GetErrorDescription( ui32 systemErrorID );
+	String GetErrorDescription( ui32 systemErrorID );
 
-	bool BrowseFolder( const TString& startPath, TString& selectedPath );
+	bool BrowseFolder( const String& startPath, String& selectedPath );
 
 	TDateTime GetUtcTime();
 

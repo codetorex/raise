@@ -33,12 +33,12 @@ extern char* PrimitiveNames[];
 class TCompositionPrimitive
 {
 public:
-	TString Name;
-	TString ShortName;
+	String Name;
+	String ShortName;
 	int DataType;
 
 	
-	inline void Set(const TString& _name, const TString& _short, int _dataType)
+	inline void Set(const String& _name, const String& _short, int _dataType)
 	{
 		Name = _name;
 		ShortName = _short;
@@ -50,7 +50,7 @@ public:
 		DataType = tc_notdefined;
 	}
 
-	TCompositionPrimitive(const TString& _name, const TString& _short, int _dataType)
+	TCompositionPrimitive(const String& _name, const String& _short, int _dataType)
 	{
 		Set(_name,_short,_dataType);
 	}

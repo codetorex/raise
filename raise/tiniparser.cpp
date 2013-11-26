@@ -26,7 +26,7 @@ void TINIParser::Parse(bool closeStream)
 {
 	while(!TextStream->EndOfStream)
 	{
-		TString currentLine = TextStream->ReadLine();
+		String currentLine = TextStream->ReadLine();
 		if (currentLine.StartsWith(";"))
 		{
 			continue;
@@ -52,10 +52,10 @@ void TINIParser::Parse(bool closeStream)
 			continue; // skip that line if no equality
 		}
 
-		TString keyName = currentLine.Substring(0,EqualityOperator);
+		String keyName = currentLine.Substring(0,EqualityOperator);
 		keyName.TrimStartInplace();
 
-		TString* value = new TString(currentLine.Substring(EqualityOperator+1,currentLine.Length-EqualityOperator-1));
+		String* value = new String(currentLine.Substring(EqualityOperator+1,currentLine.Length-EqualityOperator-1));
 		value->TrimInplace();
 
 		if (LowerCaseKeys)
@@ -73,9 +73,9 @@ void TINIParser::Parse(bool closeStream)
 	}
 }
 
-TString* TINIParser::GetValue( const TString& className, const TString& key )
+String* TINIParser::GetValue( const String& className, const String& key )
 {
 	TINIClass* keyClass = Classes.GetValue(className);
-	TString* value = keyClass->Variables.GetValue(key);
+	String* value = keyClass->Variables.GetValue(key);
 	return value;
 }

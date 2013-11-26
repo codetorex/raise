@@ -6,7 +6,7 @@
 class RDLL TInputDevice
 {
 public:
-	TString inputName;
+	String inputName;
 	bool connected;
 
 	TInputDevice()

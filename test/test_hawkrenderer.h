@@ -12,7 +12,7 @@ public:
 	TestHawkRenderer(): UnitTest("WHawkRenderer check") {};
 
 
-	bool CheckFragment(WHawkFragment* frg, int typ, const TString& val)
+	bool CheckFragment(WHawkFragment* frg, int typ, const String& val)
 	{
 		if (frg->Type == typ && frg->Fragment == val)
 		{

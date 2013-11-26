@@ -12,7 +12,7 @@ public:
 	ui32 WriteExtension;
 	virtual void WriteSound(TSound* snd, Stream* dst) = 0;
 
-	static TArray< TSoundWriter* > Writers;
+	static Array< TSoundWriter* > Writers;
 
 	/**
 	 * Every instance of a writer automatically adds itself to writers list
@@ -27,9 +27,9 @@ public:
 		int i= Writers.Count;
 		while(i--)
 		{
-			if (Writers.Item[i]->WriteExtension == extension)
+			if (Writers.Items[i]->WriteExtension == extension)
 			{
-				return Writers.Item[i];
+				return Writers.Items[i];
 			}
 		}
 		return 0;

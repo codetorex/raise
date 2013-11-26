@@ -47,7 +47,7 @@ void TProcessMemory2::UpdateMemoryRegions()
 	}
 }
 
-int TProcessMemory2::FindAll( ui64 start, ui64 end, const void* needle, int length, TArray< ui64 >& result )
+int TProcessMemory2::FindAll( ui64 start, ui64 end, const void* needle, int length, Array< ui64 >& result )
 {
 	// allocate in stack
 	byte cache[65536];
@@ -80,12 +80,12 @@ int TProcessMemory2::FindAll( ui64 start, ui64 end, const void* needle, int leng
 	return foundCount;
 }
 
-int TProcessMemory2::FindAll( const void* needle, int length, TArray< ui64 >& result )
+int TProcessMemory2::FindAll( const void* needle, int length, Array< ui64 >& result )
 {
 	int foundCount = 0;
 	for (int i=0;i< Regions.Count;i++)
 	{
-		TProcessMemoryRegion2* curRegion = Regions.Item[i];
+		TProcessMemoryRegion2* curRegion = Regions.Items[i];
 		if (curRegion->State == MEM_COMMIT)
 		{
 			foundCount += FindAll(curRegion->Start, curRegion->End, needle,length,result);
@@ -94,7 +94,7 @@ int TProcessMemory2::FindAll( const void* needle, int length, TArray< ui64 >& re
 	return foundCount;
 }
 
-int TProcessMemory2::FindAll( ui64 start, ui64 end, float needle, float epsilon, TArray< ui64 >& result )
+int TProcessMemory2::FindAll( ui64 start, ui64 end, float needle, float epsilon, Array< ui64 >& result )
 {
 	// allocate in stack
 	byte cache[65536];
@@ -128,12 +128,12 @@ int TProcessMemory2::FindAll( ui64 start, ui64 end, float needle, float epsilon,
 	return foundCount;
 }
 
-int TProcessMemory2::FindAll( float needle, float epsilon, TArray< ui64 >& result )
+int TProcessMemory2::FindAll( float needle, float epsilon, Array< ui64 >& result )
 {
 	int foundCount = 0;
 	for (int i=0;i< Regions.Count;i++)
 	{
-		TProcessMemoryRegion2* curRegion = Regions.Item[i];
+		TProcessMemoryRegion2* curRegion = Regions.Items[i];
 		if (curRegion->State == MEM_COMMIT)
 		{
 			foundCount += FindAll(curRegion->Start, curRegion->End, needle,epsilon,result);

@@ -131,7 +131,7 @@ public:
 		return bcstart;
 	}
 
-	TString GetString(byte* bytes, int bytecount) const
+	String GetString(byte* bytes, int bytecount) const
 	{
 		throw NotImplementedException(__FILE__,__LINE__);
 	}

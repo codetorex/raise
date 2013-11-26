@@ -9,7 +9,7 @@
 class TFileInfo: public IFile
 {
 public:
-	static bool Exists(const TString& path)
+	static bool Exists(const String& path)
 	{
 		struct stat sb;
 		if (stat((char*)path.Data, &sb) == -1) 
@@ -19,7 +19,7 @@ public:
 		return true;
 	}
 
-	TString GetExtension() 
+	String GetExtension() 
 	{
 		throw NotImplementedException(__FILE__,__LINE__);
 	}
@@ -49,17 +49,17 @@ public:
 		throw NotImplementedException(__FILE__,__LINE__);
 	}
 
-	bool MoveTo( TString& destFileName ) 
+	bool MoveTo( String& destFileName ) 
 	{
 		throw NotImplementedException(__FILE__,__LINE__);
 	}
 
-	TString GetFullName() 
+	String GetFullName() 
 	{
 		throw NotImplementedException(__FILE__,__LINE__);
 	}
 
-	TString GetName() 
+	String GetName() 
 	{
 		throw NotImplementedException(__FILE__,__LINE__);
 	}

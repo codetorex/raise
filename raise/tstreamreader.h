@@ -144,7 +144,7 @@ public:
 	 * @param path Full pathname of the file.
 	 * @param bufferSize Size of the buffer.
 	 */
-	TStreamReader(const TString& path,int bufferSize = 8192): CurrentEncoding( (TEncoding&)Encodings.Latin1 ) 
+	TStreamReader(const String& path,int bufferSize = 8192): CurrentEncoding( (TEncoding&)Encodings.Latin1 ) 
 	{
 		LoadStream(File::OpenRead(path),CurrentEncoding,true,bufferSize);
 	}
@@ -189,9 +189,9 @@ public:
 		// TODO: This function should read as char.
 	}
 
-	TString ReadLine()
+	String ReadLine()
 	{
-		TString result(1024); 
+		String result(1024); 
 		ch32 d;
 
 		int i;
@@ -235,10 +235,10 @@ public:
 		return result;
 	}
 
-	TString ReadToEnd()
+	String ReadToEnd()
 	{
 		// TODO: this function can be optimized but who cares?
-		TString result(1024);
+		String result(1024);
 
 		ch32 d = Read();
 		while(!EndOfStream)
@@ -252,9 +252,9 @@ public:
 		return result;
 	}
 
-	TString ReadUntil(const TString& interrupChars, const TString& ignoreChars, int& interrupt)
+	String ReadUntil(const String& interrupChars, const String& ignoreChars, int& interrupt)
 	{
-		TString readed(512);
+		String readed(512);
 		ch32 d = Read();
 		while(!EndOfStream)
 		{
@@ -274,9 +274,9 @@ public:
 		return readed;
 	}
 
-	TString ReadWord(const TString& trimCharacters)
+	String ReadWord(const String& trimCharacters)
 	{
-		TString readed(512);
+		String readed(512);
 		ch32 d = Read();
 
 		int mode = 0;

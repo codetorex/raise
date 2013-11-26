@@ -13,7 +13,7 @@ private:
 	int IndentLevel;
 	bool JustClosedCurl;
 	
-	void WriteKeyPart(const TString& key);
+	void WriteKeyPart(const String& key);
 	void FinishKeyValueLine();
 
 public:
@@ -22,9 +22,9 @@ public:
 
 	TRMLWriter(TStream* output);
 
-	void WriteElementStart(const TString& element);
-	void WriteKeyValue(const TString& key, const TString& value);
-	void WriteKeyValue(const TString& key, int value);
+	void WriteElementStart(const String& element);
+	void WriteKeyValue(const String& key, const String& value);
+	void WriteKeyValue(const String& key, int value);
 	void WriteElementEnd();
 
 	void Close();

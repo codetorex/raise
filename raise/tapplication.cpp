@@ -12,14 +12,14 @@ TVersionPhase TVersionPhase::Release			(4, "Release",			"r");
 
 void TVersion::SetBuildText()
 {
-	BuildText			= TString::Format("build %", sfi(Build));
-	BuildPhaseText		= TString::Format("build % %", sfi(Build), sfs(Phase->ShortName));
+	BuildText			= String::Format("build %", sfi(Build));
+	BuildPhaseText		= String::Format("build % %", sfi(Build), sfs(Phase->ShortName));
 }
 
 void TVersion::SetVersionText()
 {
-	VersionText			= TString::Format("%.%.%",sfi(Major),sfi(Minor),sfi(SubMinor));
-	VersionPhaseText	= TString::Format("% %", sfs(VersionText), sfs(Phase->ShortName));
+	VersionText			= String::Format("%.%.%",sfi(Major),sfi(Minor),sfi(SubMinor));
+	VersionPhaseText	= String::Format("% %", sfs(VersionText), sfs(Phase->ShortName));
 }
 
 void TVersion::Initialize( int _build, const TVersionPhase* _phase )
@@ -73,7 +73,7 @@ TVersion::TVersion( int _maj, int _min, int _sub, int _build, const TVersionPhas
 	Initialize(_maj,_min,_sub,_build,_phase);
 }
 
-TModule::TModule( const TString& _Name, const TVersion& _Version, const TString& _Company )
+TModule::TModule( const String& _Name, const TVersion& _Version, const String& _Company )
 {
 	Name = _Name;
 	Version = _Version;
@@ -81,25 +81,25 @@ TModule::TModule( const TString& _Name, const TVersion& _Version, const TString&
 	SetIdentifyText();
 }
 
-TModule::TModule( const TString& _Name, const TVersion& _Version )
+TModule::TModule( const String& _Name, const TVersion& _Version )
 {
 	Name = _Name;
 	Version = _Version;
-	Company = TString::Empty;
+	Company = String::Empty;
 	SetIdentifyText();
 }
 
 void TModule::SetIdentifyText()
 {
-	IdentifyText = TString::Format("% - % - %", sfs(Name), sfs(Version.VersionPhaseText), sfs(Company));
-	IdentifyBuildText = TString::Format("% - % - %", sfs(Name), sfs(Version.BuildPhaseText), sfs(Company));
+	IdentifyText = String::Format("% - % - %", sfs(Name), sfs(Version.VersionPhaseText), sfs(Company));
+	IdentifyBuildText = String::Format("% - % - %", sfs(Name), sfs(Version.BuildPhaseText), sfs(Company));
 }
 
 TApplication Application;
 
 #include "tplatform.h"
 
-void TApplication::Begin( TString _Name, const TVersion& _Version, TString _Company )
+void TApplication::Begin( String _Name, const TVersion& _Version, String _Company )
 {
 	StartupPath = TPathDriver::CurrentDirectory();
 	ExecutablePath = "Not Implemented";
@@ -113,14 +113,14 @@ void TApplication::Begin( TString _Name, const TVersion& _Version, TString _Comp
 	Platform.Initialize(); // TODO: move this to better place
 }
 
-void TApplication::Begin( TString _Name, const TVersion& _Version )
+void TApplication::Begin( String _Name, const TVersion& _Version )
 {
-	Begin( _Name,_Version, TString::Empty );
+	Begin( _Name,_Version, String::Empty );
 }
 
 void TApplication::PrintIdentifierToConsole(bool printModules)
 {
-	TString str = TString::Format("% (R) % Version %", sfs(Company), sfs(Name), sfs(Version.VersionPhaseText));
+	String str = String::Format("% (R) % Version %", sfs(Company), sfs(Name), sfs(Version.VersionPhaseText));
 	Console.WriteLine(str);
 
 	if (!printModules) return;
@@ -129,8 +129,8 @@ void TApplication::PrintIdentifierToConsole(bool printModules)
 
 	for (ui32 i=0;i<Modules.Count;i++)
 	{
-		TModule* CurModule = Modules.Item[i];
-		TString str = TString::Format("% (R) % Version %", sfs(CurModule->Company), sfs(CurModule->Name), sfs(CurModule->Version.VersionPhaseText));
+		TModule* CurModule = Modules.Items[i];
+		String str = String::Format("% (R) % Version %", sfs(CurModule->Company), sfs(CurModule->Name), sfs(CurModule->Version.VersionPhaseText));
 		Console.WriteLine(str);
 	}
 }

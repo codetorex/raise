@@ -1,8 +1,8 @@
 #include "stdafx.h"
 #include "tpath.h"
 
-TString TPath::CurrentFolder;
-TString TPath::TempFolder;
+String TPath::CurrentFolder;
+String TPath::TempFolder;
 
 #ifdef WIN32
 

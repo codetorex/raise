@@ -12,8 +12,8 @@ public:
 	ui32 ObjectLength;
 	ui32 TotalObjects;
 
-	TArray<T*> ObjectArray;
-	TArray<T*> Allocations;
+	Array<T*> ObjectArray;
+	Array<T*> Allocations;
 
 	TBasePool()
 	{
@@ -48,7 +48,7 @@ public:
 	{
 		if (this->ObjectArray.Count)
 		{
-			return ObjectArray.Item[--ObjectArray.Count];
+			return ObjectArray.Items[--ObjectArray.Count];
 		}
 		
 		DoubleObjectCount(); // LOG this situation?

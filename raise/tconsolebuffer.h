@@ -136,7 +136,7 @@ public:
 	bool Escaped;
 	IPosition SavedPosition;
 
-	TString EscapeSequence;
+	String EscapeSequence;
 
 	TConsoleEmulator()
 	{
@@ -155,7 +155,7 @@ public:
 		}
 	}
 
-	void Write(const TString& value)
+	void Write(const String& value)
 	{
 
 		TCharacterEnumerator ce(value);

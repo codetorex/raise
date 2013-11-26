@@ -10,13 +10,13 @@ class TestTBitmap: public UnitTest
 public:
 	TestTBitmap(): UnitTest("TBitmap check") {};
 
-	void TestFormat(const TString& path)
+	void TestFormat(const String& path)
 	{
 		TBitmap bload(path); // first color of these files is TEST color
-		TString border = MathColor::ChannelOrder(bload.Data, bload.BufferFormat->BytesPerItem);
+		String border = MathColor::ChannelOrder(bload.Data, bload.BufferFormat->BytesPerItem);
 		bool result = border == bload.BufferFormat->ShortName;
 
-		TString fext = TPath::GetExtension(path).Substring(1);
+		String fext = TPath::GetExtension(path).Substring(1);
 		fext.ToUpperInplace();
 
 		TStringBuilderStack<512> sb;

@@ -3,7 +3,7 @@
 #include "mmathdriver.h"
 #include "tbuffer.h"
 
-ui32 TFile::ReadAllBytes( const TString& path, void* target, ui32 capacity )
+ui32 TFile::ReadAllBytes( const String& path, void* target, ui32 capacity )
 {
 	if (capacity == 0) return 0;
 
@@ -17,7 +17,7 @@ ui32 TFile::ReadAllBytes( const TString& path, void* target, ui32 capacity )
 	return readed;
 }
 
-ui32 TFile::ReadAllBytes( const TString& path, TBuffer& buffer )
+ui32 TFile::ReadAllBytes( const String& path, TBuffer& buffer )
 {
 	TFileStream* fs = new TFileStream(path,fm_Read);
 	

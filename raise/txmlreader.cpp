@@ -21,14 +21,14 @@ void TXMLReader::Parse( bool closeStream /*= true*/ )
 
 int TXMLReader::ParseAttributes( TXMLNode& node )
 {
-	TString attributeInterrupt = "=\"/>";
-	TString attributeIgnore = " ";
-	TString valueInterrupt = "\"";
+	String attributeInterrupt = "=\"/>";
+	String attributeIgnore = " ";
+	String valueInterrupt = "\"";
 
-	TString data;
+	String data;
 	int interrupt;
 
-	TString attributeName;
+	String attributeName;
 
 	while(1)
 	{
@@ -41,8 +41,8 @@ int TXMLReader::ParseAttributes( TXMLNode& node )
 			break;
 
 		case '"':
-			data = TextStream->ReadUntil(valueInterrupt,TString::Empty,interrupt);
-			node.Attributes.Add(attributeName, new TString(data));
+			data = TextStream->ReadUntil(valueInterrupt,String::Empty,interrupt);
+			node.Attributes.Add(attributeName, new String(data));
 			break;
 
 		case '/':
@@ -54,17 +54,17 @@ int TXMLReader::ParseAttributes( TXMLNode& node )
 
 int TXMLReader::ParseNode( TXMLNode& node )
 {
-	TString nameInterrupt = " />";
-	TString mainIgnore = "> \t";
+	String nameInterrupt = " />";
+	String mainIgnore = "> \t";
 
-	TString endInterrupt = ">";
-	TString endIgnore = "/";
+	String endInterrupt = ">";
+	String endIgnore = "/";
 
-	TString data;
-	TString nodeName;
+	String data;
+	String nodeName;
 	int interrupt;
 	
-	nodeName = TextStream->ReadUntil(nameInterrupt,TString::Empty,interrupt);
+	nodeName = TextStream->ReadUntil(nameInterrupt,String::Empty,interrupt);
 
 	if (nodeName == "?xml")
 	{
@@ -125,24 +125,24 @@ TXMLReader::~TXMLReader()
 
 }
 
-TString TXMLReader::SkipToNodeStart()
+String TXMLReader::SkipToNodeStart()
 {
-	TString mainInterrupt = "<";
+	String mainInterrupt = "<";
 	int interrupt;
-	return TextStream->ReadUntil(mainInterrupt,TString::Empty,interrupt);
+	return TextStream->ReadUntil(mainInterrupt,String::Empty,interrupt);
 }
 
-TXMLNode* TXMLNode::SelectSingleNode( const TString& xpath )
+TXMLNode* TXMLNode::SelectSingleNode( const String& xpath )
 {
 	if (xpath.IndexOf("/") > -1)
 	{
 		// split it and find it
-		TArray< TString* > splitResult =  xpath.Split('/');
+		Array< String* > splitResult =  xpath.Split('/');
 
 		TXMLNode* curNode = this;
 		for (int i=0;i<splitResult.Count;i++)
 		{
-			curNode = curNode->SelectSingleNode(*splitResult.Item[i]);
+			curNode = curNode->SelectSingleNode(*splitResult.Items[i]);
 			if (curNode == 0)
 			{
 				return 0; // not found
@@ -151,7 +151,7 @@ TXMLNode* TXMLNode::SelectSingleNode( const TString& xpath )
 		return curNode;
 	}
 
-	TString find = xpath;
+	String find = xpath;
 	TXMLNode* result = 0;
 
 	TArrayEnumerator<TXMLNode*> ae(Nodes);

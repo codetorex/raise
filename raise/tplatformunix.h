@@ -14,14 +14,14 @@ class TPlatformUnix: public IPlatform
 public:
 
 	/// THESE FUNCTIONS SHOULD BE REMOVED FROM FUCKING EXISTENCE
-	void RaiseToSystemString( const TString& raiseStr, byte* output, ui32 outputSize ) 
+	void RaiseToSystemString( const String& raiseStr, byte* output, ui32 outputSize ) 
 	{
 		memcpy(output,raiseStr.Data,raiseStr.ByteLength);
 	}
 
-	TString SystemToRaiseString( byte* input, ui32 inputSize ) 
+	String SystemToRaiseString( byte* input, ui32 inputSize ) 
 	{
-		TString result(inputSize);
+		String result(inputSize);
 		memcpy(result.Data,input,inputSize);
 	}
 
@@ -74,17 +74,17 @@ public:
 		throw NotImplementedException(__FILE__,__LINE__);
 	}
 
-	void ShowMessageBox( const TString& message ) 
+	void ShowMessageBox( const String& message ) 
 	{
 		throw NotImplementedException(__FILE__,__LINE__);
 	}
 
-	TString GetErrorDescription( ui32 systemErrorID ) 
+	String GetErrorDescription( ui32 systemErrorID ) 
 	{
 		throw NotImplementedException(__FILE__,__LINE__);
 	}
 
-	bool BrowseFolder( const TString& startPath, TString& selectedPath ) 
+	bool BrowseFolder( const String& startPath, String& selectedPath ) 
 	{
 		throw NotImplementedException(__FILE__,__LINE__);
 	}

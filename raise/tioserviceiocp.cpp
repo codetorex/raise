@@ -256,7 +256,7 @@ void TIOServiceIOCP::Stop()
 	HANDLE tHandles[64];
 	for (ui32 i=0;i<Workers.Count;i++)
 	{
-		tHandles[i] = Workers.Item[i]->ThreadHandle;
+		tHandles[i] = Workers.Items[i]->ThreadHandle;
 	}
 
 	if( WAIT_OBJECT_0 != WaitForMultipleObjects(Workers.Count,  tHandles, TRUE, 1000) )
@@ -267,7 +267,7 @@ void TIOServiceIOCP::Stop()
 	{
 		for( ui32 i=0; i< Workers.Count ; i++ ) 
 		{
-			TThread* curThread = Workers.Item[i];
+			TThread* curThread = Workers.Items[i];
 			if( tHandles[i] != INVALID_HANDLE_VALUE )
 			{
 				CloseHandle(tHandles[i]);

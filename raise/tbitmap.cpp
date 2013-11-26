@@ -24,7 +24,7 @@ TBitmap::TBitmap( int _width, int _height )
 	Create(_width,_height, BitmapFormats->fRGBA);
 }
 
-TBitmap::TBitmap( const TString& path ): TCompositeBuffer()
+TBitmap::TBitmap( const String& path ): TCompositeBuffer()
 {
 	Load(path);
 }
@@ -52,7 +52,7 @@ void TBitmap::Save( Stream* s, TBitmapWriter& format, TBitmapWriterParameters* p
 	format.WriteBitmap(this,s, params);
 }
 
-void TBitmap::Save( const TString& path )
+void TBitmap::Save( const String& path )
 {
 	ui32 ext = TPath::GetExtensionAsDword(path);
 	TBitmapWriter* bw = TBitmapWriter::GetWriter(ext);
@@ -73,7 +73,7 @@ void TBitmap::Load( Stream* s, TBitmapReader& format )
 	format.ReadBitmap(this,s);
 }
 
-void TBitmap::Load( const TString& path )
+void TBitmap::Load( const String& path )
 {
 	ui32 ext = TPath::GetExtensionAsDword(path);
 	TBitmapReader* br = TBitmapReader::GetReader(ext);

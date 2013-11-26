@@ -12,8 +12,8 @@
 class TFileInfo: public IFile
 {
 public:
-	TString OriginalPath;
-	TString FullPath;
+	String OriginalPath;
+	String FullPath;
 
 	/// These values will be set after first request of them.
 	bool FileAttributeCache;
@@ -32,7 +32,7 @@ public:
 		FileAttributeCache = false;
 	}
 
-	TFileInfo(const TString& path)
+	TFileInfo(const String& path)
 	{
 		OriginalPath = path;
 		FullPath = TPath::GetFullPath(OriginalPath);
@@ -62,7 +62,7 @@ public:
 		}
 	}
 
-	TString GetFullName()
+	String GetFullName()
 	{
 		return FullPath;
 	}
@@ -73,7 +73,7 @@ public:
 		return FileSize;
 	}
 
-	inline TString GetExtension()
+	inline String GetExtension()
 	{
 		return TPath::GetExtension(FullPath);
 	}
@@ -83,7 +83,7 @@ public:
 		throw "Not Implemented";
 	}
 
-	bool MoveTo(TString& destFileName)
+	bool MoveTo(String& destFileName)
 	{
 		throw "Not Implemented";
 	}
@@ -113,7 +113,7 @@ public:
 		return tf;
 	}
 
-	inline TString GetName()
+	inline String GetName()
 	{
 		return TPath::GetFileName(FullPath);
 	}
@@ -147,7 +147,7 @@ public:
 		return TDateTime(LastWriteTime);
 	}
 
-	static bool Exists(const TString& path)
+	static bool Exists(const String& path)
 	{
 		ch16 tmp[1024];
 		Platform.RaiseToSystemString(path,(byte*)tmp,sizeof(tmp));

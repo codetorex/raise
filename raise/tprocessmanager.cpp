@@ -4,7 +4,7 @@
 
 #ifdef WIN32
 
-TProcess TProcessManager::FindByWindowName( const TString& windowname )
+TProcess TProcessManager::FindByWindowName( const String& windowname )
 {
 	if (!windowname.IsASCII())
 	{
@@ -19,7 +19,7 @@ TProcess TProcessManager::FindByWindowName( const TString& windowname )
 	return FindByWindow(wnd);
 }
 
-TProcess TProcessManager::FindByClassName( const TString& className )
+TProcess TProcessManager::FindByClassName( const String& className )
 {
 	if (!className.IsASCII())
 	{
@@ -46,19 +46,19 @@ TProcess TProcessManager::FindByWindow( const TWindowHandle& winHandle )
 	return TProcess(processID);
 }
 
-TProcess TProcessManager::CreateFromExecutable( const TString& exepath, const TString& params /*= 0*/ )
+TProcess TProcessManager::CreateFromExecutable( const String& exepath, const String& params /*= 0*/ )
 {
 	throw NotImplementedException(__FILE__,__LINE__);
 	return TProcess(0);
 }
 
-TProcess TProcessManager::FindByWindowNamePart( const TString& windowname )
+TProcess TProcessManager::FindByWindowNamePart( const String& windowname )
 {
 	throw NotImplementedException(__FILE__,__LINE__);
 	return TProcess(0);
 }
 
-TProcess TProcessManager::FindByWindowNamePartExePathPart( const TString& windownamePart, const TString& exenamePart )
+TProcess TProcessManager::FindByWindowNamePartExePathPart( const String& windownamePart, const String& exenamePart )
 {
 	TWindowList windows;
 	windows.CaptureWindowList();
@@ -71,7 +71,7 @@ TProcess TProcessManager::FindByWindowNamePartExePathPart( const TString& window
 		TWindowHandle* win = we.Current;
 		if (win->Title.IndexOf(windownamePart) > 0)
 		{
-			TString windowExe = win->GetModulePath();
+			String windowExe = win->GetModulePath();
 			if (windowExe.IndexOf(exenamePart) > 0)
 			{
 				foundItem = win;

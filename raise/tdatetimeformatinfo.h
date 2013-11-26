@@ -13,30 +13,30 @@ enum TCalendarWeekRule
 class TDateTimeFormatInfo
 {
 public:
-	static TString UniversalSortableDateTimePattern;
+	static String UniversalSortableDateTimePattern;
 
-	TString DayNames[7];
-	TString AbbreviatedDayNames[7];
-	TString ShortestDayNames[7];
+	String DayNames[7];
+	String AbbreviatedDayNames[7];
+	String ShortestDayNames[7];
 
-	TString MonthNames[12];
-	TString AbbreviatedMonthNames[12];
+	String MonthNames[12];
+	String AbbreviatedMonthNames[12];
 
 
-	TString AMDesignator;
-	TString PMDesignator;
+	String AMDesignator;
+	String PMDesignator;
 
 	TCalendarWeekRule WeekRule;
-	TString DateSeparator;
-	TString TimeSeparator;
+	String DateSeparator;
+	String TimeSeparator;
 
-	TString FullDateTimePattern;
-	TString LongDatePattern;
-	TString LongTimePattern;
-	TString MonthDayPattern;
-	TString ShortDatePattern;
-	TString ShortTimePattern;
-	TString YearMonthPatter;
+	String FullDateTimePattern;
+	String LongDatePattern;
+	String LongTimePattern;
+	String MonthDayPattern;
+	String ShortDatePattern;
+	String ShortTimePattern;
+	String YearMonthPatter;
 };
 
 #endif

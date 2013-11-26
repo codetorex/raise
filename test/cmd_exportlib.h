@@ -13,7 +13,7 @@ class TExportLibApplet: public TApplet
 {
 public:
 
-	ui32 SimpleHash( const TString& str )
+	ui32 SimpleHash( const String& str )
 	{
 		unsigned char *p = str.Data;
 		unsigned h = 2166136261;
@@ -40,7 +40,7 @@ public:
 
 		Console.WriteLine("Getting exported function names...");
 
-		TArray<TString*>* funcNames = libPe.GetExportedFunctionNames();
+		Array<String*>* funcNames = libPe.GetExportedFunctionNames();
 
 		Console.WriteLine("Opening output file for write...");
 		TFileStream* fs = new TFileStream(prm->OutputFile, fm_Write);
@@ -48,9 +48,9 @@ public:
 		
 		for (int i=0;i< funcNames->Count;i++ )
 		{
-			TString* currentFunction = funcNames->Item[i];
+			String* currentFunction = funcNames->Items[i];
 
-			TString line = TString::Format("%_hash equ 0x%\r\n", sfs(*currentFunction), sfx(SimpleHash(*currentFunction)));
+			String line = String::Format("%_hash equ 0x%\r\n", sfs(*currentFunction), sfx(SimpleHash(*currentFunction)));
 			sw->Write(line);
 
 			Console.Insert(line);

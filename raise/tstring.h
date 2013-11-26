@@ -14,7 +14,7 @@ class TStringFormatElementBase;
 typedef const TStringFormatElementBase&			sfp; // parameter version
 
 template <class T>
-class TArray;
+class Array;
 
 /**
  * I HAVE AN IDEA OF USING TARRAY<BYTE> instead of TByteArray
@@ -31,7 +31,7 @@ class TArray;
  * UTF-8 based string class.
  * Uses copy on write technique to avoid unnecessary copies.
  */
-class TString
+class String
 {
 public:
 	/// The character data
@@ -105,8 +105,8 @@ private:
 		Ref = new TSharedByteArray(Data,Capacity);
 	}
 
-	inline int GetTrimStartPoint(const TArray<ch32>& trimChars, int& bytesToSkip);
-	inline int GetTrimEndPoint(const TArray<ch32>& trimChars, int& bytesToSkip);
+	inline int GetTrimStartPoint(const Array<ch32>& trimChars, int& bytesToSkip);
+	inline int GetTrimEndPoint(const Array<ch32>& trimChars, int& bytesToSkip);
 
 public:
 	/**
@@ -200,13 +200,13 @@ public:
 	}
 
 	/// Empty string holder
-	static TString Empty;
+	static String Empty;
 
 	/**
 	 * @brief String literal constructor.
 	 * @param value The value.
 	 */
-	TString(const char* value)
+	String(const char* value)
 	{
 		Data = (byte*)value;
 		UpdateLengths();
@@ -218,7 +218,7 @@ public:
 	 * @brief Capacity based constructor for faster operations.
 	 * @param _Capacity The capacity + 1 for trailing zero.
 	 */
-	TString(ui32 ByteCapacity)
+	String(ui32 ByteCapacity)
 	{
 		StringAllocateEmpty(ByteCapacity);
 		Length = 0;
@@ -227,7 +227,7 @@ public:
 	}
 
 
-	~TString()
+	~String()
 	{
 		DetachToDestroy();
 	}
@@ -269,7 +269,7 @@ public:
 	/**
 	 * Checks if this string have any character of given string.
 	 */
-	bool Have(const TString& any) const;
+	bool Have(const String& any) const;
 
 	/**
 	 * Truncates this string, without copying new.
@@ -300,7 +300,7 @@ public:
 	/**
 	 * Simpler version of Truncate(dword newLength, dword newByteLength).
 	 */
-	inline void TruncateDerived(const TString& other)
+	inline void TruncateDerived(const String& other)
 	{
 		Truncate(other.Length,other.ByteLength);
 	}
@@ -342,19 +342,19 @@ public:
 		Append(tmp,ln,1); // already detaches
 	}
 
-	inline TString& operator += ( ch32 chr )
+	inline String& operator += ( ch32 chr )
 	{
 		AppendUnicode(chr);
 		return *this;
 	}
 
-	inline TString& operator += ( const TChar& chr )
+	inline String& operator += ( const TChar& chr )
 	{
 		AppendUnicode(chr.Character);
 		return *this;
 	}
 
-	TString& operator += (const ch16* value)
+	String& operator += (const ch16* value)
 	{
 		while(*value > 0)
 		{
@@ -364,8 +364,8 @@ public:
 		return *this;
 	}
 
-	TString ToLower() const;
-	TString ToUpper() const;
+	String ToLower() const;
+	String ToUpper() const;
 
 	void ToLowerInplace();
 	void ToUpperInplace();
@@ -375,7 +375,7 @@ public:
 	 * @param value string to search.
 	 * @return Index of found string. -1 when not found.
 	 */
-	inline int IndexOf(const TString& value) const
+	inline int IndexOf(const String& value) const
 	{
 		return InternalIndexOf(value.Data,value.ByteLength,0,ByteLength);
 	}
@@ -386,7 +386,7 @@ public:
 	 * @param startIndex start point.
 	 * @return Index of found string. -1 when not found.
 	 */
-	inline int IndexOf(const TString& value, int startIndex) const
+	inline int IndexOf(const String& value, int startIndex) const
 	{
 		if (IsASCII())
 		{
@@ -413,7 +413,7 @@ public:
 	 * @param count search length.
 	 * @return Index of found string. -1 when not found.
 	 */
-	inline int IndexOf(const TString& value, int startIndex, int count) const
+	inline int IndexOf(const String& value, int startIndex, int count) const
 	{
 		if (IsASCII())
 		{
@@ -439,13 +439,13 @@ public:
 	 * @param startIndex Start index to compare to self. So you can test "burak" string with ("rak", 2) will return true.
 	 * @return true if it succeeds, false if it fails.
 	 */
-	inline bool StartsWith(const TString& value, int startIndex = 0) const
+	inline bool StartsWith(const String& value, int startIndex = 0) const
 	{
 		if (value.ByteLength > ByteLength) return false;
 		return MemoryDriver::Compare(Data + startIndex,value.Data,value.Length) == 0;
 	}
 	 
-	inline bool EndsWith(const TString& value ) const
+	inline bool EndsWith(const String& value ) const
 	{
 		if (value.ByteLength > ByteLength) return false;
 		return MemoryDriver::Compare((Data + ByteLength) - value.ByteLength,value.Data,value.Length) == 0;
@@ -454,47 +454,47 @@ public:
 	/**
 	 * Gets a part of string from this object. Index is zero based.
 	 */
-	TString Substring( ui32 startIndex, ui32 lengt ) const;
+	String Substring( ui32 startIndex, ui32 lengt ) const;
 
-	TString Substring( ui32 startIndex ) const;
+	String Substring( ui32 startIndex ) const;
 
 	/**
 	 * Gets a part of string from start index until it matches a character
 	 */
-	TString SubstringUntil(ui32 startIndex, ch32 matchCharacter) const;
+	String SubstringUntil(ui32 startIndex, ch32 matchCharacter) const;
 
 	/**
 	 * Gets a part of a string from start index until it matches a character, result is copied to byte array, returns copied byte count
 	 */
-	ui32 SubstringUntil(ui32 startIndex, ch32 matchCharacter, TArray<byte>& output) const;
+	ui32 SubstringUntil(ui32 startIndex, ch32 matchCharacter, Array<byte>& output) const;
 
-	inline TString Trim()
+	inline String Trim()
 	{
 		return Trim(StringDriver::Whitespaces);
 	}
 
-	inline TString TrimStart()
+	inline String TrimStart()
 	{
 		return TrimStart(StringDriver::Whitespaces);
 	}
 
-	inline TString TrimEnd()
+	inline String TrimEnd()
 	{
 		return TrimEnd(StringDriver::Whitespaces);
 	}
 
-	inline TString Trim(const TArray<ch32>& trimChars)
+	inline String Trim(const Array<ch32>& trimChars)
 	{
 		return TrimStart().TrimEnd();
 	}
 
-	TString TrimStart(const TArray<ch32>& trimChars);
+	String TrimStart(const Array<ch32>& trimChars);
 
-	TString TrimEnd(const TArray<ch32>& trimChars);
+	String TrimEnd(const Array<ch32>& trimChars);
 
-	void TrimStartInplace(const TArray<ch32>& trimChars);
-	void TrimEndInplace(const TArray<ch32>& trimChars);
-	void TrimInplace(const TArray<ch32>& trimChars);
+	void TrimStartInplace(const Array<ch32>& trimChars);
+	void TrimEndInplace(const Array<ch32>& trimChars);
+	void TrimInplace(const Array<ch32>& trimChars);
 
 	void TrimStartInplace()
 	{
@@ -542,19 +542,19 @@ public:
 		return 0;
 	}
 
-	TArray<TString*> SplitInplace(TChar character, bool removeEmpty = false);
+	Array<String*> SplitInplace(TChar character, bool removeEmpty = false);
 
-	TArray<TString*> Split(const TArray<ch32>& seprators, bool removeEmpty = false) const;
+	Array<String*> Split(const Array<ch32>& seprators, bool removeEmpty = false) const;
 
-	TArray<TString*> Split(const TArray<TString*>& seprators, bool removeEmpty = false) const;
+	Array<String*> Split(const Array<String*>& seprators, bool removeEmpty = false) const;
 
 	/**
 	 * Splits by single char.
 	 */
-	TArray<TString*> Split(ch32 c, bool removeEmpty = false) const
+	Array<String*> Split(ch32 c, bool removeEmpty = false) const
 	{
 		ch32 sepratorChar = c;
-		TArray<ch32> seps(&sepratorChar, 1);
+		Array<ch32> seps(&sepratorChar, 1);
 		return Split(seps,removeEmpty);
 	}
 
@@ -570,7 +570,7 @@ public:
 	 * This function should be tested,
 	 * Implemented for usage of stack stored char* arrays to be correctly assigned to current string.
 	 */
-	inline TString& operator = (char* value)
+	inline String& operator = (char* value)
 	{
 		throw Exception("Used string assign with non constant char array");
 
@@ -584,7 +584,7 @@ public:
 		return *this;
 	}
 	
-	inline TString& operator = (const char* value)
+	inline String& operator = (const char* value)
 	{
 		DetachToDestroy();
 		Data = (byte*)value;
@@ -597,7 +597,7 @@ public:
 		return *this;
 	}
 
-	inline TString& operator = (const TString& value)
+	inline String& operator = (const String& value)
 	{
 		//FastCopyDword((dword*)this,(dword*)&value,sizeof(TString) / sizeof(dword));
 		DetachToDestroy();
@@ -614,19 +614,19 @@ public:
 		return *this;
 	}
 
-	TString()
+	String()
 	{
 		Ref = 0;
 		*this = Empty;
 	}
 
-	TString(const TString& value)
+	String(const String& value)
 	{
 		Ref = 0;
 		*this = value;
 	}
 
-	TString(const byte* value, int length)
+	String(const byte* value, int length)
 	{
 		StringAllocateEmpty(length);
 		CreateRef();
@@ -636,7 +636,7 @@ public:
 		Data[ByteLength] = 0;
 	}
 
-	TString(const byte* value, int length, int charlength)
+	String(const byte* value, int length, int charlength)
 	{
 		StringAllocateEmpty(length);
 		CreateRef();
@@ -646,7 +646,7 @@ public:
 		Data[ByteLength] = 0;
 	}
 
-	inline TString& operator += (const TString& value)
+	inline String& operator += (const String& value)
 	{
 		// this function automaticly detaches, increases capacity when necessary and appends data
 		Append(value.Data,value.ByteLength,value.Length);
@@ -661,12 +661,12 @@ public:
 		return result;
 	}*/
 
-	inline bool operator != (const TString& value) const
+	inline bool operator != (const String& value) const
 	{
 		return !(*this == value);
 	}
 
-	inline bool operator == (const TString& value) const
+	inline bool operator == (const String& value) const
 	{
 		if (value.ByteLength != ByteLength)
 		{
@@ -685,16 +685,16 @@ public:
 	 * Just use % for placement, and parameters will decide how to format.
 	 * Use sfi for integer, sfx for hex and so on...
 	 */
-	static TString Format(const TString& format, int argc , const TStringFormatElementBase** args );
+	static String Format(const String& format, int argc , const TStringFormatElementBase** args );
 
-	inline static TString Format(const TString& format, sfp arg0 )
+	inline static String Format(const String& format, sfp arg0 )
 	{
 		const TStringFormatElementBase* elemarray[1];
 		elemarray[0] = &arg0;
 		return Format(format,1,elemarray);
 	}
 
-	inline static TString Format(const TString& format, sfp arg0 , sfp arg1)
+	inline static String Format(const String& format, sfp arg0 , sfp arg1)
 	{
 		const TStringFormatElementBase* elemarray[2];
 		elemarray[0] = &arg0;
@@ -702,7 +702,7 @@ public:
 		return Format(format,2,elemarray);
 	}
 
-	inline static TString Format(const TString& format, sfp arg0 , sfp arg1 , sfp arg2)
+	inline static String Format(const String& format, sfp arg0 , sfp arg1 , sfp arg2)
 	{
 		const TStringFormatElementBase* elemarray[3];
 		elemarray[0] = &arg0;
@@ -711,7 +711,7 @@ public:
 		return Format(format,3,elemarray);
 	}
 
-	inline static TString Format(const TString& format, sfp arg0 , sfp arg1 , sfp arg2 , sfp arg3 )
+	inline static String Format(const String& format, sfp arg0 , sfp arg1 , sfp arg2 , sfp arg3 )
 	{
 		const TStringFormatElementBase* elemarray[4];
 		elemarray[0] = &arg0;
@@ -747,14 +747,12 @@ public:
 /**
  * Can add char* + tstring, or tstring + char* brilliant isn't it?
  */
-inline TString operator + (const TString& value, const TString& value2 )
+inline String operator + (const String& value, const String& value2 )
 {
-	TString tmp = value;
+	String tmp = value;
 	tmp += value2;
 	return tmp;
 }
-
-typedef TString string;
 
 #include "tconvert.h"
 #include "tstringformat.h"
@@ -790,13 +788,13 @@ public:
 		return Current;
 	}
 
-	TCharacterReverseEnumerator(const TString& src)
+	TCharacterReverseEnumerator(const String& src)
 	{
 		SrcString = &src;
 		Reset();
 	}
 
-	const TString* SrcString;
+	const String* SrcString;
 	byte* StrData;
 	byte* EndData;
 	int CharIndex;
@@ -874,7 +872,7 @@ public:
 		Reset();
 	}
 
-	inline void Initialize(const TString& src)
+	inline void Initialize(const String& src)
 	{
 		Initialize(src.Data,src.ByteLength);
 		SrcString = &src;
@@ -885,7 +883,7 @@ public:
 		RealStart = 0;
 	}
 
-	TCharacterEnumerator(const TString& src)
+	TCharacterEnumerator(const String& src)
 	{
 		Initialize(src);
 	}
@@ -911,7 +909,7 @@ public:
 	const byte* RealStart;
 	ui32 ByteLenth;
 
-	const TString* SrcString;
+	const String* SrcString;
 	byte* StrData;
 	byte* EndData;
 	int CharIndex; // first char will be 0 and so on, if no chars its -1

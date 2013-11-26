@@ -10,23 +10,23 @@ TRMLReader::TRMLReader( TStream* readStream )
 
 void TRMLReader::Parse( bool closeStream )
 {
-	TString data;
+	String data;
 	int interrupt;
 
 	bool keySet = false;
-	TString curKey;
+	String curKey;
 
 	bool valueSet = false;
-	TString curValue;
+	String curValue;
 
 	TRMLNode* curNode;
 	bool waitingValue = false;
 	bool waitingEnd = false;
 
-	TString interruptChars = "{}:;/\"";
-	TString ignoreChars = "\x20\x09\x0A\x0D\0x0B";
+	String interruptChars = "{}:;/\"";
+	String ignoreChars = "\x20\x09\x0A\x0D\0x0B";
 	
-	TString quotChars = "\x22";
+	String quotChars = "\x22";
 
 	TStack<TRMLNode*> nodeStack(128);
 	nodeStack.Push(&BaseNode);
@@ -59,7 +59,7 @@ void TRMLReader::Parse( bool closeStream )
 			if (waitingValue)
 			{
 				if (!valueSet) curValue = data;
-				curNode->Values.Add(curKey,new TString(curValue));
+				curNode->Values.Add(curKey,new String(curValue));
 				valueSet = false;
 				keySet = false;
 				waitingValue = false;
@@ -67,7 +67,7 @@ void TRMLReader::Parse( bool closeStream )
 			break;
 
 		case '"':
-			data = TextStream->ReadUntil(quotChars,TString::Empty,interrupt);
+			data = TextStream->ReadUntil(quotChars,String::Empty,interrupt);
 			if (waitingValue)
 			{
 				curValue = data;

@@ -34,8 +34,8 @@ public:
 class TCommandLineHandlerSimple: public TCommandLineHandler
 {
 public:
-	TString Parameter;
-	TString ShortParameter;
+	String Parameter;
+	String ShortParameter;
 
 	virtual void ProcessParameter(TCommandLine* cmd) = 0;
 
@@ -60,19 +60,19 @@ class TCommandLine
 public:
 	void* OptionObject;
 
-	TArray< TCommandLineHandler* > Handlers;
+	Array< TCommandLineHandler* > Handlers;
 
-	TArray< TString* > Parameters;
+	Array< String* > Parameters;
 	
 	/// Current parameter index that being processing
 	ui32 ParameterIndex;
 
-	inline TString& GetCurrentParameter()
+	inline String& GetCurrentParameter()
 	{
-		return *Parameters.Item[ParameterIndex];
+		return *Parameters.Items[ParameterIndex];
 	}
 
-	inline TString& GetNextParameter()
+	inline String& GetNextParameter()
 	{
 		MoveNextParameter();
 		return GetCurrentParameter();
@@ -91,7 +91,7 @@ public:
 	{
 		for (int i=0;i<parameterCount;i++)
 		{
-			TString* nstring = new TString(params[i]);
+			String* nstring = new String(params[i]);
 			Parameters.Add(nstring);
 		}
 	}
@@ -100,13 +100,13 @@ public:
 	{
 		for (int i=0;i<parameterCount;i++)
 		{
-			TString* nstring = new TString();
+			String* nstring = new String();
 			*nstring = Encodings.UTF16.GetString(params[i]);
 			Parameters.Add( nstring );
 		}
 	}
 
-	void Initialize(const TString& fullLine);
+	void Initialize(const String& fullLine);
 
 	TCommandLine(void* _optionObject = 0) /*, bool registerAllHandlers = true )
 	{

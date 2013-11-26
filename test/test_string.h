@@ -12,7 +12,7 @@ public:
 
 	void Execute()
 	{
-		string str_test = "Hello";
+		String str_test = "Hello";
 
 		Result( str_test == "Hello" ,"String creation from char* and equality test");
 		Result( str_test.Length == 5, "String length test");
@@ -31,7 +31,7 @@ public:
 		Result( str_test.StartsWith("Hello") , "StartsWith function test");
 		Result( !str_test.StartsWith("!hello"), "Starts with function test 2");
 
-		string test2 = str_test;
+		String test2 = str_test;
 		Result(test2.Ref == str_test.Ref, "String re assign reference equality test");
 		Result(test2.Data == str_test.Data, "String re assign data equality test");
 		Result(test2.Length == str_test.Length, "String re assign length test");
@@ -55,7 +55,7 @@ public:
 
 		// TODO: test other index of functions because they are more complex!
 
-		string sub = str_test.Substring(6);
+		String sub = str_test.Substring(6);
 		Result(str_test.Substring(1) == "ello, World!","String sub string test 1");
 		Result(str_test.Substring(0) == "Hello, World!","String sub string test 2");
 		Result(sub == " World!", "String sub string test 3");
@@ -96,50 +96,50 @@ public:
 		Result(sub.Length == 3, "String trim length (inplace)");
 		Result(sub.ByteLength == 3, "String trim byte length (inplace)");
 
-		string splittest = "01/12/2011";
-		TArray<ch32> splitchars;
+		String splittest = "01/12/2011";
+		Array<ch32> splitchars;
 		splitchars.Add('/');
 
 #ifdef WIN32
 		// TODO: fix bugs in here
 
 
-		TArray<TString*> SplitResult = splittest.Split( splitchars);
+		Array<String*> SplitResult = splittest.Split( splitchars);
 		Result(SplitResult.Count == 3, "String split result count");
-		Result(*SplitResult.Item[0] == "01", "String split first element");
-		Result(*SplitResult.Item[1] == "12", "String split second element");
-		Result(*SplitResult.Item[2] == "2011", "String split third element");
+		Result(*SplitResult.Items[0] == "01", "String split first element");
+		Result(*SplitResult.Items[1] == "12", "String split second element");
+		Result(*SplitResult.Items[2] == "2011", "String split third element");
 
 		splitchars.Add('\\');
 
 		splittest = "01\\12/2011";
 		SplitResult = splittest.Split( splitchars );
 		Result(SplitResult.Count == 3, "String split multi result count");
-		Result(*SplitResult.Item[0] == "01", "String split multi first element");
-		Result(*SplitResult.Item[1] == "12", "String split multi second element");
-		Result(*SplitResult.Item[2] == "2011", "String split multi third element");
+		Result(*SplitResult.Items[0] == "01", "String split multi first element");
+		Result(*SplitResult.Items[1] == "12", "String split multi second element");
+		Result(*SplitResult.Items[2] == "2011", "String split multi third element");
 
 		splittest = "01//2011";
 		SplitResult = splittest.Split( splitchars );
 		Result(SplitResult.Count == 3, "String split multi result count, not remove empty");
-		Result(*SplitResult.Item[0] == "01", "String split multi first element, not remove empty");
-		Result(*SplitResult.Item[1] == TString::Empty, "String split multi second element, not remove empty");
-		Result(*SplitResult.Item[2] == "2011", "String split multi third element, not remove empty");
+		Result(*SplitResult.Items[0] == "01", "String split multi first element, not remove empty");
+		Result(*SplitResult.Items[1] == String::Empty, "String split multi second element, not remove empty");
+		Result(*SplitResult.Items[2] == "2011", "String split multi third element, not remove empty");
 
 		splittest = "01//2011";
 		SplitResult = splittest.Split( splitchars, true );
 		Result(SplitResult.Count == 2, "String split multi result count, remove empty");
-		Result(*SplitResult.Item[0] == "01", "String split multi first element, remove empty");
-		Result(*SplitResult.Item[1] == "2011", "String split multi second element, remove empty");
+		Result(*SplitResult.Items[0] == "01", "String split multi first element, remove empty");
+		Result(*SplitResult.Items[1] == "2011", "String split multi second element, remove empty");
 #endif // WIN32
 
-		TString fmttest = TString::Format("Test % % %", sfi(5), sfi(4), sfi(3));
+		String fmttest = String::Format("Test % % %", sfi(5), sfi(4), sfi(3));
 		Result(fmttest == "Test 5 4 3", "String basic format test");
 
-		fmttest = TString::Format("Test % % %", sfi(5,2,'0'),sfi(4,2,'0'),sfi(3,3,'0'));
+		fmttest = String::Format("Test % % %", sfi(5,2,'0'),sfi(4,2,'0'),sfi(3,3,'0'));
 		Result(fmttest == "Test 05 04 003", "String padded basic format test");
 
-		fmttest = TString::Format("Test %", sfx(64));
+		fmttest = String::Format("Test %", sfx(64));
 		Result(fmttest == "Test 40", "String format hex test");
 
 		// TODO: test unicode stuff here

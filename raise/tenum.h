@@ -13,10 +13,10 @@ class TEnum
 public:
 	T Value;
 
-	static TArray< TString > Names;
-	static TArray< T > Values;
+	static Array< String > Names;
+	static Array< T > Values;
 
-	static TString GetName(T val)
+	static String GetName(T val)
 	{
 		int index = -1;
 
@@ -38,7 +38,7 @@ public:
 		return Names[index];
 	}
 
-	static T GetValue( const TString& name )
+	static T GetValue( const String& name )
 	{
 		int index = -1;
 
@@ -60,22 +60,22 @@ public:
 		return Values[index];
 	}
 
-	static inline TArray< TString >& GetNames()
+	static inline Array< String >& GetNames()
 	{
 		return Names;
 	}
 
-	static inline TArray< T >& GetValues()
+	static inline Array< T >& GetValues()
 	{
 		return Values;
 	}
 
-	inline TString ToString()
+	inline String ToString()
 	{
 		GetName(Value);
 	}
 
-	inline T Parse(const TString& name)
+	inline T Parse(const String& name)
 	{
 		GetValue(name);
 	}

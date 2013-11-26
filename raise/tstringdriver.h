@@ -19,7 +19,7 @@ class StringDriver
 {
 public:
 
-	const static TArray<ch32> Whitespaces;
+	const static Array<ch32> Whitespaces;
 
 	/**
 	 * @brief Decodes a character from UTF-8 string.

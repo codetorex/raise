@@ -109,10 +109,10 @@ public:
 		return Decode(hi,lo);
 	}
 
-	TString GetString(const ch16* src) const
+	String GetString(const ch16* src) const
 	{
 		int ln;
-		TString result(64);
+		String result(64);
 		byte* bsrc = (byte*)src;
 		ch32 curChar = GetChar(bsrc,ln);
 		bsrc += ln;
@@ -133,7 +133,7 @@ public:
 	 * @param dst wide character destination
 	 * @param dstcapacity byte length of destination
 	 */
-	void ConvertString(const TString& src,byte* dst, int dstcapacity) const
+	void ConvertString(const String& src,byte* dst, int dstcapacity) const
 	{
 		ch16 tmp[4];
 
@@ -216,10 +216,10 @@ public:
 		throw NotImplementedException(__FILE__,__LINE__);
 	}
 
-	TString GetString(byte* bytes, int bytecount) const
+	String GetString(byte* bytes, int bytecount) const
 	{
 		int ln;
-		TString result(64);
+		String result(64);
 		ch32 curChar = 0;
 		byte* src = bytes;
 		int rcount = bytecount;

@@ -28,7 +28,7 @@ public:
 
 	// TODO: implement other functions like ones that writes the ui32 and float numbers and stuff like that as in .net framework one
 
-	inline virtual void Write(const TString& value)
+	inline virtual void Write(const String& value)
 	{
 		TCharacterEnumerator ce(value);
 		WriteCharEnumerator(ce);
@@ -40,7 +40,7 @@ public:
 		WriteCharEnumerator(ce);
 	}
 
-	inline virtual void Write(TArray<ch32>& CharArray)
+	inline virtual void Write(Array<ch32>& CharArray)
 	{
 		TArrayEnumerator<ch32> ae(CharArray);
 		while(ae.MoveNext())
@@ -49,44 +49,44 @@ public:
 		}
 	}
 
-	inline void Write(const TString& fmt, sfp arg0)
+	inline void Write(const String& fmt, sfp arg0)
 	{
-		Write(TString::Format(fmt,arg0));
+		Write(String::Format(fmt,arg0));
 	}
 
-	inline void Write(const TString& fmt, sfp arg0, sfp arg1)
+	inline void Write(const String& fmt, sfp arg0, sfp arg1)
 	{
-		Write(TString::Format(fmt,arg0,arg1));
+		Write(String::Format(fmt,arg0,arg1));
 	}
 
-	inline void Write(const TString& fmt, sfp arg0, sfp arg1, sfp arg2)
+	inline void Write(const String& fmt, sfp arg0, sfp arg1, sfp arg2)
 	{
-		Write(TString::Format(fmt,arg0,arg1,arg2));
+		Write(String::Format(fmt,arg0,arg1,arg2));
 	}
 
-	inline void Write(const TString& fmt, sfp arg0, sfp arg1, sfp arg2,sfp arg3)
+	inline void Write(const String& fmt, sfp arg0, sfp arg1, sfp arg2,sfp arg3)
 	{
-		Write(TString::Format(fmt,arg0,arg1,arg2,arg3));
+		Write(String::Format(fmt,arg0,arg1,arg2,arg3));
 	}
 
-	inline void WriteLine(const TString& fmt, sfp arg0)
+	inline void WriteLine(const String& fmt, sfp arg0)
 	{
-		WriteLine(TString::Format(fmt,arg0));
+		WriteLine(String::Format(fmt,arg0));
 	}
 
-	inline void WriteLine(const TString& fmt, sfp arg0, sfp arg1)
+	inline void WriteLine(const String& fmt, sfp arg0, sfp arg1)
 	{
-		WriteLine(TString::Format(fmt,arg0,arg1));
+		WriteLine(String::Format(fmt,arg0,arg1));
 	}
 
-	inline void WriteLine(const TString& fmt, sfp arg0, sfp arg1, sfp arg2)
+	inline void WriteLine(const String& fmt, sfp arg0, sfp arg1, sfp arg2)
 	{
-		WriteLine(TString::Format(fmt,arg0,arg1,arg2));
+		WriteLine(String::Format(fmt,arg0,arg1,arg2));
 	}
 
-	inline void WriteLine(const TString& fmt, sfp arg0, sfp arg1, sfp arg2,sfp arg3)
+	inline void WriteLine(const String& fmt, sfp arg0, sfp arg1, sfp arg2,sfp arg3)
 	{
-		WriteLine(TString::Format(fmt,arg0,arg1,arg2,arg3));
+		WriteLine(String::Format(fmt,arg0,arg1,arg2,arg3));
 	}
 
 	inline virtual void WriteLine()
@@ -105,19 +105,19 @@ public:
 		}
 	}
 
-	inline virtual void WriteLine(const TString& value)
+	inline virtual void WriteLine(const String& value)
 	{
 		Write(value);
 		WriteLine();
 	}
 
 
-	inline virtual TString& get_NewLine()
+	inline virtual String& get_NewLine()
 	{
 		return NewLine;
 	}
 
-	inline virtual void set_NewLine(const TString& value)
+	inline virtual void set_NewLine(const String& value)
 	{
 		NewLine = value;
 		TCharacterEnumerator ce(value);
@@ -134,7 +134,7 @@ public:
 	}
 
 protected:
-	TString NewLine;
+	String NewLine;
 	ch32 CoreNewLine[16];
 	int CoreNewLineLength;
 };

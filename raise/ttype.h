@@ -19,8 +19,8 @@ public:
 class TTypeSerializer
 {
 public:
-	virtual TString SerializeString(void* object) = 0;
-	virtual void DeserializeString(void* object, TString& output) = 0;
+	virtual String SerializeString(void* object) = 0;
+	virtual void DeserializeString(void* object, String& output) = 0;
 
 	virtual void SerializeBinary(void* object, byte* output, ui32 outputCapacity) = 0;
 	virtual void DeserializeBinary(void* object, byte* input, ui32 inputLength) = 0;
@@ -33,10 +33,10 @@ public:
 class TType
 {
 public:
-	TString Name;
-	TString FullName;
+	String Name;
+	String FullName;
 
-	TArray< TFieldInfo* > Fields;
+	Array< TFieldInfo* > Fields;
 
 	bool IsSimple;
 
@@ -53,7 +53,7 @@ public:
 	/// Template related stuff
 	bool IsTemplate;
 	TType* TemplateBase;
-	TArray< TType* > TemplateArguments;
+	Array< TType* > TemplateArguments;
 
 	/// If this is derived from something else, it should be given in BaseClass
 	TType* BaseClass;
@@ -69,7 +69,7 @@ public:
 	/**
 	 * Just initializes the type
 	 */
-	TType( const TString& name )
+	TType( const String& name )
 	{
 		InitializeType();
 		this->Name = name;
@@ -79,7 +79,7 @@ public:
 	/**
 	 * Simple system type constructor.
 	 */
-	TType( const TString& name, ui32 size )
+	TType( const String& name, ui32 size )
 	{
 		InitializeType();
 		this->Name = name;
@@ -113,7 +113,7 @@ public:
 		TStringBuilderStack<256> sb;
 		sb.Append(Name);
 		sb.AppendChar('*');
-		TString templateName = sb.ToString();
+		String templateName = sb.ToString();
 
 		TType* tempType = new TType();
 		tempType->Name = templateName;
@@ -130,7 +130,7 @@ public:
 		sb.AppendChar('<');
 		sb.Append(temType->Name);
 		sb.AppendChar('>');
-		TString templateName = sb.ToString();
+		String templateName = sb.ToString();
 
 		TType* tempType = new TType();
 		tempType->Name = templateName;
@@ -150,7 +150,7 @@ class TFieldInfo
 public:
 	int Offset;
 	TType* FieldType;
-	TString Name;
+	String Name;
 	ui32 ID;
 
 	inline void* GetPointer(void* object)

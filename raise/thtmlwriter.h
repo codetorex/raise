@@ -24,17 +24,17 @@ public:
 		XmlWriter->UTF8Writer = (TStreamWriterUTF8*)&textWriter;
 	}
 
-	void WriteBeginTag(const TString& tag)
+	void WriteBeginTag(const String& tag)
 	{
 		XmlWriter->WriteStartElement(tag);
 	}
 
-	void WriteAttribute(const TString& attribute, const TString& value)
+	void WriteAttribute(const String& attribute, const String& value)
 	{
 		XmlWriter->WriteAttributeString(attribute,value);
 	}
 
-	void Write(const TString& value)
+	void Write(const String& value)
 	{
 		XmlWriter->WriteString(value);
 	}

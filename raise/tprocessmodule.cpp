@@ -4,7 +4,7 @@
 #ifdef WIN32
 #include "tprocess.h"
 
-ui32 TProcessMemoryRegion::FindString( const TString& src )
+ui32 TProcessMemoryRegion::FindString( const String& src )
 {
 	if (src.Length != src.ByteLength)
 	{
@@ -45,7 +45,7 @@ ui32 TProcessMemoryRegion::FindFunctionBegin( ui32 addr ,int intCount)
 	return NFOUND;
 }
 
-ui32 TProcessMemoryRegion::FindFunctionFromString( const TString& src )
+ui32 TProcessMemoryRegion::FindFunctionFromString( const String& src )
 {
 	ui32 strAddr = FindString(src);
 	if (strAddr == NFOUND)
@@ -67,7 +67,7 @@ ui32 TProcessMemoryRegion::FindFunctionFromString( const TString& src )
 	return fncBegin;
 }
 
-ui32 TProcessMemoryRegion::FindFunctionFromString( const TString& src, byte firstByte)
+ui32 TProcessMemoryRegion::FindFunctionFromString( const String& src, byte firstByte)
 {
 	ui32 fncAddr = FindFunctionFromString(src);
 	byte RealFirstByte = Memory->ReadByte(fncAddr);
@@ -78,7 +78,7 @@ ui32 TProcessMemoryRegion::FindFunctionFromString( const TString& src, byte firs
 	return fncAddr;
 }
 
-void TProcessMemoryRegion::Initialize( const TString& _name, ui32 _start,ui32 _end,TProcessMemory* _prn )
+void TProcessMemoryRegion::Initialize( const String& _name, ui32 _start,ui32 _end,TProcessMemory* _prn )
 {
 	ModuleName = _name;
 	StartAddress = _start;
@@ -88,13 +88,13 @@ void TProcessMemoryRegion::Initialize( const TString& _name, ui32 _start,ui32 _e
 	Memory = _prn;
 }
 
-TProcessMemoryRegion::TProcessMemoryRegion( const TString& _name, const TString& _file,ui32 _start,ui32 _end,TProcessMemory* _prn )
+TProcessMemoryRegion::TProcessMemoryRegion( const String& _name, const String& _file,ui32 _start,ui32 _end,TProcessMemory* _prn )
 {
 	Initialize(_name,_start,_end,_prn);
 	FileName = _file;
 }
 
-TProcessMemoryRegion::TProcessMemoryRegion( const TString& _name, ui32 _start,ui32 _end,TProcessMemory* _prn )
+TProcessMemoryRegion::TProcessMemoryRegion( const String& _name, ui32 _start,ui32 _end,TProcessMemory* _prn )
 {
 	Initialize(_name,_start,_end,_prn);
 }
@@ -127,7 +127,7 @@ ui32 TProcessMemoryRegion::SearchPattern( const void* needle, const byte* patter
 	return Memory->SearchPattern(StartAddress,EndAddress,needle,pattern,length);
 }
 
-ui32 TProcessMemoryRegion::SearchAll( const void* needle, int length, TArray<ui32>& result )
+ui32 TProcessMemoryRegion::SearchAll( const void* needle, int length, Array<ui32>& result )
 {
 	return Memory->SearchAll(StartAddress,EndAddress, needle, length, result);
 }

@@ -168,7 +168,7 @@ public:
 class TStringFormatElementString: public TStringFormatElementBase
 {
 public:
-	inline TStringFormatElementString(const TString& _value)
+	inline TStringFormatElementString(const String& _value)
 	{
 		PadWidth = 0;
 		ByteLength = _value.ByteLength;
@@ -176,7 +176,7 @@ public:
 		Source = _value.Data;
 	}
 
-	inline TStringFormatElementString(const TString& _value, int _padwidth, char _padchar = ' ')
+	inline TStringFormatElementString(const String& _value, int _padwidth, char _padchar = ' ')
 	{
 		PadWidth = _padwidth;
 		PadChar = _padchar;

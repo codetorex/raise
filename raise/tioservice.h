@@ -17,7 +17,7 @@ class TIOStatus
 {
 public:
 	bool NoError;
-	TString Message;
+	String Message;
 
 	void Set(ui32 ErrorCode)
 	{
@@ -28,7 +28,7 @@ public:
 	void Unset()
 	{
 		NoError = true;
-		Message = TString::Empty;
+		Message = String::Empty;
 	}
 };
 
@@ -60,9 +60,9 @@ public:
 
 	bool						Running;
 	ServiceStatus				Status;
-	TArray<TThread*>			Workers;
-	TString						Name;
-	TArray< NSocketAsync* >		Sockets;
+	Array<TThread*>			Workers;
+	String						Name;
+	Array< NSocketAsync* >		Sockets;
 	event<StatusChangedEvent>	StatusChanged;
 
 	/**

@@ -20,16 +20,16 @@ void NHTTPSession::HandleReceive( const TIOStatus& err, ui32 dataReaded )
 
 	Log.Output(LG_INF,"HTTP Client request");
 
-	TString header(ReceivePacket.Data,ReceivePacket.Length);
+	String header(ReceivePacket.Data,ReceivePacket.Length);
 
 
-	TArray<TString*> headerLines = header.Split('\n');
+	Array<String*> headerLines = header.Split('\n');
 
-	Log.Output(LG_INF,*headerLines.Item[0]);
+	Log.Output(LG_INF,*headerLines.Items[0]);
 
-	TString RequestLine = *headerLines.Item[0];
+	String RequestLine = *headerLines.Items[0];
 
-	TString RequestPath;
+	String RequestPath;
 
 	if (RequestLine.StartsWith("GET"))
 	{
@@ -51,7 +51,7 @@ void NHTTPSession::HandleReceive( const TIOStatus& err, ui32 dataReaded )
 				RequestPath = "/index.htm";
 			}
 
-			TString totalPath = Server->RootFolder + RequestPath;
+			String totalPath = Server->RootFolder + RequestPath;
 
 			if (TFileInfo::Exists(totalPath))
 			{
@@ -67,7 +67,7 @@ void NHTTPSession::HandleReceive( const TIOStatus& err, ui32 dataReaded )
 					appendfilecontent = true;
 				}
 
-				TString extension = TPath::GetExtension(totalPath);
+				String extension = TPath::GetExtension(totalPath);
 				extension.ToLowerInplace();
 
 				npb.AppendLine("HTTP/1.1 200 OK");
@@ -220,5 +220,5 @@ NHTTPServer::NHTTPServer( TIOService* _Service, ui16 _Port ): MyCallback(this, &
 	Port = _Port;
 
 	ServerName = "Basic HTTP Server";
-	ServerVersion = TString::Format("Server: raise/%", sfs(Application.Version.VersionText));
+	ServerVersion = String::Format("Server: raise/%", sfs(Application.Version.VersionText));
 }

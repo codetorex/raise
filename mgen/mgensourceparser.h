@@ -7,7 +7,7 @@ class MGenSourceParser
 {
 public:
 
-	TString ignoreChars;
+	String ignoreChars;
 	MGenSource* Source;
 	MGenToken* CurrentLevel;
 
@@ -42,7 +42,7 @@ public:
 			// TODO: there is a bug if string starts with % wtf?
 			//throw Exception("LoadLine out of bounds Source: % Request: %", sfs(Source->SourcePath), sfi(index));
 		}
-		Line = Source->Lines.Item[index];
+		Line = Source->Lines.Items[index];
 		Column.Initialize(Line->Line);
 
 		return true;
@@ -63,7 +63,7 @@ public:
 		CurrentLevel = CurrentLevel->Parent;
 	}
 
-	TString ParseWord();
+	String ParseWord();
 
 	void Parse();
 

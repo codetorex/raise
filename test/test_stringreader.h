@@ -19,7 +19,7 @@ public:
 	{
 		Should("Let you peek a char");
 		{
-			TString testString = "Test String";
+			String testString = "Test String";
 			TStringReader sr(testString);
 			ch32 result = sr.Peek();
 			Result(result == 'T' && sr.CurrentIndex == 0 && sr.CurrentByteIndex == 0); // its not advanced the index
@@ -27,7 +27,7 @@ public:
 
 		Should("Read a character");
 		{
-			TString testString = "Test String";
+			String testString = "Test String";
 			TStringReader sr(testString);
 			ch32 result = sr.Read();
 			Result(result == 'T' && sr.CurrentIndex == 1 && sr.CurrentByteIndex == 1); // its not advanced the index
@@ -43,38 +43,38 @@ public:
 
 		Should("Read a line");
 		{
-			TString testString = "First line\nSecond Line\nThird Line";
+			String testString = "First line\nSecond Line\nThird Line";
 			TStringReader sr(testString);
-			TString firstLine = sr.ReadLine();
+			String firstLine = sr.ReadLine();
 			Result(firstLine == "First line");
 
 			Should("Read second line");
-			TString secondLine = sr.ReadLine();
+			String secondLine = sr.ReadLine();
 			Result(secondLine == "Second Line");
 
 			Should("Read third line");
-			TString thirdLine = sr.ReadLine();
+			String thirdLine = sr.ReadLine();
 			Result(thirdLine == "Third Line");
 		}
 
 		Should("Read until encountering some character");
 		{
-			TString testString = "Test string @Data.Load(\"test\")";
+			String testString = "Test string @Data.Load(\"test\")";
 			TStringReader sr(testString);
 			int interrupt;
-			TString firstPart = sr.ReadUntil("@", TString::Empty,interrupt);
+			String firstPart = sr.ReadUntil("@", String::Empty,interrupt);
 			Result(firstPart == "Test string " && interrupt == '@');
 
 			Should("Read second part");
-			TString secondPart = sr.ReadUntil(" ", TString::Empty, interrupt);
+			String secondPart = sr.ReadUntil(" ", String::Empty, interrupt);
 			Result(secondPart == "Data.Load(\"test\")" && interrupt == -1);
 		}
 
 		Should("Read until matching a given string");
 		{
-			TString testString = "Test string @Data.Load(\"test\")";
+			String testString = "Test string @Data.Load(\"test\")";
 			TStringReader sr(testString);
-			TString firstPart = sr.ReadUntilString("@Data");
+			String firstPart = sr.ReadUntilString("@Data");
 			Result(firstPart == "Test string ");
 
 
@@ -84,8 +84,8 @@ public:
 		Should("Omit search pattern from original text");
 		{
 			TStringReader sr("Test text <$ Test Code $> End Text");
-			TString textPart = sr.ReadUntilString("<$");
-			TString codePart = sr.ReadUntilString("$>");
+			String textPart = sr.ReadUntilString("<$");
+			String codePart = sr.ReadUntilString("$>");
 
 		
 			Result(textPart == "Test text ");

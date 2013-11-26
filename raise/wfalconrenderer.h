@@ -16,27 +16,27 @@ enum FalconFragmentTypes
 class WFalconFragment
 {
 public:
-	TString Fragment;
+	String Fragment;
 	int Type;
 };
 
 class WFalconRenderer:public WViewRenderer
 {
 protected:
-	void AddFragment(int type, const TString& content);
+	void AddFragment(int type, const String& content);
 	void ParseCode(TStringReader& sr);
 	void ParseParens(TStringReader& sr);
-	bool IsKeyword(const TString& str);
+	bool IsKeyword(const String& str);
 
 public:
-	TString Source;
-	TString SourcePath;
+	String Source;
+	String SourcePath;
 
-	TArray< WFalconFragment* > Fragments;
+	Array< WFalconFragment* > Fragments;
 
-	void LoadSource(const TString& srcPath);
+	void LoadSource(const String& srcPath);
 
-	inline void SetSource(const TString& src)
+	inline void SetSource(const String& src)
 	{
 		Source = src;
 	}

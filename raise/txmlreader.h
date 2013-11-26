@@ -9,11 +9,11 @@
 class TXMLNode: public TDeserializer
 {
 public:
-	TString Name;
-	TString Value;
+	String Name;
+	String Value;
 	
-	TDictionary< TString* > Attributes;
-	TArray< TXMLNode* > Nodes;
+	TDictionary< String* > Attributes;
+	Array< TXMLNode* > Nodes;
 
 	TXMLNode* Parent;
 
@@ -28,12 +28,12 @@ public:
 	/**
 	 * Currently only supports simple node stuff like y/x/z
 	 */
-	TXMLNode* SelectSingleNode(const TString& xpath);
+	TXMLNode* SelectSingleNode(const String& xpath);
 };
 
 class TXMLReader
 {
-	TString SkipToNodeStart();
+	String SkipToNodeStart();
 
 public:
 	TStream* BaseStream;

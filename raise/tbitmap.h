@@ -33,7 +33,7 @@ public:
 	/**
 	 * Create bitmap out of file given in paramater 'path'.
 	 */
-	TBitmap(const TString& path);
+	TBitmap(const String& path);
 
 
 	/**
@@ -108,11 +108,11 @@ public:
 	/**
 	 * Path length should be bigger than 4.
 	 */
-	void Save(const TString& path );
+	void Save(const String& path );
 
 	void Load(Stream* s, TBitmapReader& format);
 
-	void Load(const TString& path);
+	void Load(const String& path);
 };
 
 #endif

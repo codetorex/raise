@@ -26,17 +26,17 @@ char* PrimitiveNames[] =
 
 TCompositeFormatFactoryGeneric TCompositeFormatFactoryGeneric::Instance;
 
-void TComposition::CreateElementList( TArray<TCompositionPrimitive*>* allElements, const TString& elementNames )
+void TComposition::CreateElementList( Array<TCompositionPrimitive*>* allElements, const String& elementNames )
 {
 	ui32 curPos = 0;
 
-	TArray<TCompositionPrimitive*>* newList = new TArray<TCompositionPrimitive*>();
+	Array<TCompositionPrimitive*>* newList = new Array<TCompositionPrimitive*>();
 	while (curPos < elementNames.Length)
 	{
 		bool found = false;
 		for (ui32 i=0;i<allElements->Count;i++)
 		{
-			TCompositionPrimitive* curElement = allElements->Item[i];
+			TCompositionPrimitive* curElement = allElements->Items[i];
 			if (elementNames.StartsWith(curElement->ShortName,curPos))
 			{
 				newList->Add(curElement);
@@ -130,9 +130,9 @@ TCompositeConverter* TComposition::GetConverter( TBufferFormat* TargetFormat )
 {
 	for(ui32 i=0;i<Converters.Count;i++)
 	{
-		if (Converters.Item[i]->DestinationFormat == TargetFormat)
+		if (Converters.Items[i]->DestinationFormat == TargetFormat)
 		{
-			return Converters.Item[i];
+			return Converters.Items[i];
 		}
 	}
 
@@ -144,7 +144,7 @@ TCompositeBuffer* TComposition::CreateBuffer( int _itemCapacity )
 	return new TCompositeBuffer(this, _itemCapacity );
 }
 
-TString TComposition::ToString()
+String TComposition::ToString()
 {
 	TStringBuilderStack<512> sb;
 	sb.AppendLine("TComposition: %", sfs(Name));

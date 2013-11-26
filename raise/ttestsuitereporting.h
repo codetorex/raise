@@ -22,7 +22,7 @@ private:
 	/**
 	 * This function can be overridden for getting text data to another place.
 	 */
-	inline void Append(const string& value)
+	inline void Append(const String& value)
 	{
 		Output->Write(value);
 	}
@@ -42,7 +42,7 @@ private:
 		AppendNewLine();
 	}
 
-	inline void AppendPadded(const string& value,int pad= 8)
+	inline void AppendPadded(const String& value,int pad= 8)
 	{
 		Append(value);
 		for (int i = value.Length; i < pad ;i++)
@@ -51,7 +51,7 @@ private:
 		}
 	}
 
-	inline void AppendLine(const string& value)
+	inline void AppendLine(const String& value)
 	{
 		Append(value);
 		AppendNewLine();
@@ -64,7 +64,7 @@ public:
 
 	TTextWriter* Output;
 
-	TTestSuiteReport(const string& _testName, TTextWriter* _output): TTestSuite(_testName), Output(_output)
+	TTestSuiteReport(const String& _testName, TTextWriter* _output): TTestSuite(_testName), Output(_output)
 	{
 		PrintOutputs = false;
 		PrintApplicationInfo = false;

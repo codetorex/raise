@@ -10,13 +10,13 @@ class MGenParameters
 {
 public:
 
-	TString ExePath;
+	String ExePath;
 	bool	InfoCommand;
 	bool	InputFileSpecified;
 	bool	DatabaseFileSpecified;
 
-	TString	InputFile;
-	TString DatabaseFile; // this file will hold the all the classes that parsed, so we can import them anywhere we want
+	String	InputFile;
+	String DatabaseFile; // this file will hold the all the classes that parsed, so we can import them anywhere we want
 
 	MGenParameters()
 	{

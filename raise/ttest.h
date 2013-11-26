@@ -31,7 +31,7 @@ class TTestResult
 {
 public:
 	TestResults Result;
-	string ResultComment;
+	String ResultComment;
 };
 
 /**
@@ -40,11 +40,11 @@ public:
 class TTest
 {
 public:
-	string TestName;
+	String TestName;
 	ui32 TestType;
 
 
-	TTest(const string& _testName)
+	TTest(const String& _testName)
 	{
 		TestName = _testName;
 		TestType = TEST_BASE;
@@ -59,10 +59,10 @@ public:
 class UnitTest: public TTest
 {
 private:
-	TString ShouldCondition;
+	String ShouldCondition;
 
 public:
-	TArray< TTestResult* > Results;
+	Array< TTestResult* > Results;
 
 	int CountPass;
 	int CountFail;
@@ -71,7 +71,7 @@ public:
 
 	
 	
-	UnitTest(const string& _testName): TTest(_testName) 
+	UnitTest(const String& _testName): TTest(_testName) 
 	{
 		TestType = TEST_CHECK;
 		CountPass = 0;
@@ -84,7 +84,7 @@ public:
 	/**
 	 * For writing in style of executable specification.
 	 */
-	void Should(const string& condition)
+	void Should(const String& condition)
 	{
 		ShouldCondition = condition;
 	}
@@ -92,11 +92,11 @@ public:
 	void Result(bool passed)
 	{
 		Result(passed, ShouldCondition);
-		ShouldCondition = TString::Empty;
+		ShouldCondition = String::Empty;
 	}
 
-	void Result(bool passed, const string& comment);
-	void Output(const string& comment);
+	void Result(bool passed, const String& comment);
+	void Output(const String& comment);
 
 	virtual void Execute() = 0;
 };
@@ -107,9 +107,9 @@ public:
 	ui32 LoopCount;
 	TProfiler Profiler;
 
-	TTestPerformance(const string& _testName): TTest(_testName) {}
+	TTestPerformance(const String& _testName): TTest(_testName) {}
 
-	TTestPerformance(const string& _testName, ui32 _loopCount):TTest(_testName)
+	TTestPerformance(const String& _testName, ui32 _loopCount):TTest(_testName)
 	{
 		LoopCount = _loopCount;
 		TestType = TEST_PERFORMANCE;
@@ -130,7 +130,7 @@ public:
 	}
 
 	/// Algorithms performances to compare
-	TArray< TTestPerformance* > Algorithms;
+	Array< TTestPerformance* > Algorithms;
 
 	void Test()
 	{
@@ -138,7 +138,7 @@ public:
 
 		while(algCount--)
 		{
-			Algorithms.Item[algCount]->Test();
+			Algorithms.Items[algCount]->Test();
 		}
 	}
 };
@@ -146,12 +146,12 @@ public:
 class TTestSuite: public TTest
 {
 public:
-	TTestSuite(const string& _testName): TTest(_testName)
+	TTestSuite(const String& _testName): TTest(_testName)
 	{
 		TestType = TEST_SUITE;
 	}
 
-	TArray< TTest* > Tests;
+	Array< TTest* > Tests;
 
 	inline void AddTest(TTest* test)
 	{
