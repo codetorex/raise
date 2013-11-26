@@ -15,7 +15,7 @@ public:
 		for (int i=0;i<16;i++)
 		{
 			float diff = refMat.n[i] - ourMat.n[i];
-			if (MathDriver::Absolute(diff) > 0.0001)
+			if (Math.Abs(diff) > 0.0001)
 			{
 				TStringBuilderStack<512> sb;
 

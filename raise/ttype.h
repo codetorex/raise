@@ -1,8 +1,8 @@
 #ifndef TTYPE_H
 #define TTYPE_H
 
-#include "texception.h"
 #include "tarray.h"
+#include "tstring.h"
 
 class TType;
 class TFieldInfo;

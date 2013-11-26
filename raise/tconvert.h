@@ -1,7 +1,6 @@
 #ifndef TCONVERT_H
 #define TCONVERT_H
 
-#include "texceptionlow.h"
 
 #ifdef LINUX
 #define sprintf_s snprintf
@@ -74,7 +73,7 @@ public:
 	
 	static TString ToString(int value, int base)
 	{
-		LowLevelNotImplemented(__FILE__,__LINE__);
+		throw NotImplementedException(__FILE__,__LINE__);
 	}
 
 	static int ToInt32(char* value);

@@ -3,7 +3,6 @@
 
 #include "tstring.h"
 #include "tqueue.h"
-#include "texception.h"
 #include "tconvert.h"
 
 #ifdef WIN32
@@ -43,7 +42,7 @@ public:
 			ui32 errorId = GetLastError();
 			if (errorId != ERROR_ALREADY_EXISTS)
 			{
-				throw OSException("Creating directory failed.", errorId);
+				throw PlatformException("Creating directory failed.", errorId);
 				//throw Exception("Creating directory failed. " + Convert::ToString(errorId));
 				//throw Exception(TString::FormatNew("Creating directory failed. Error: 0x%X",errorId));
 			}

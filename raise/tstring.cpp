@@ -1,7 +1,6 @@
 #include "stdafx.h"
 #include "tstring.h"
 #include "tutf16encoding.h"
-#include "texception.h"
 #include "tarray.h"
 
 #include "tstringformat.h"
@@ -436,7 +435,7 @@ TArray<TString*> TString::SplitInplace( TChar character, bool removeEmpty /*= fa
 	if (ByteLength != Length)
 	{
 		// UNICODE version of this function is not implemented atm
-		LowLevelNotImplemented(__FILE__,__LINE__);
+		throw NotImplementedException(__FILE__,__LINE__);
 	}
 
 	int lastWordStart = 0;

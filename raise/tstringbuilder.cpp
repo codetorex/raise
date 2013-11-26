@@ -1,6 +1,5 @@
 #include "stdafx.h"
 #include "tstring.h"
-#include "texception.h"
 
 
 string TStringBuilder::ToString( int startIndex, int length )

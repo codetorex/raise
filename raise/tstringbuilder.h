@@ -1,8 +1,9 @@
 #ifndef TSTRINGBUILDER_H
 #define TSTRINGBUILDER_H
 
+#include "raisetypes.h"
+#include "tbytearray.h"
 #include "tstringformat.h"
-#include "texceptionlow.h"
 
 
 class TStringBuilder: protected TByteArray
@@ -172,7 +173,7 @@ public:
 			Data[ByteLength] = 0;
 			return;
 		}
-		LowLevelNotImplemented(__FILE__,__LINE__);
+		throw NotImplementedException(__FILE__,__LINE__);
 	}
 
 	inline void Append(int value)
@@ -289,7 +290,7 @@ public:
 		}
 		else
 		{
-			LowLevelNotImplemented(__FILE__,__LINE__);
+			throw NotImplementedException(__FILE__,__LINE__);
 		}
 
 		return count;
@@ -367,7 +368,7 @@ public:
 		if (!IsASCII())
 		{
 			// call ToLowerUnicode
-			LowLevelNotImplemented(__FILE__,__LINE__);
+			throw NotImplementedException(__FILE__,__LINE__);
 			return;
 		}
 
@@ -383,7 +384,7 @@ public:
 		if (!IsASCII())
 		{
 			// call ToLowerUnicode
-			LowLevelNotImplemented(__FILE__,__LINE__);
+			throw NotImplementedException(__FILE__,__LINE__);
 			return;
 		}
 

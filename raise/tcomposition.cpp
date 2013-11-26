@@ -1,6 +1,5 @@
 #include "stdafx.h"
 #include "tcompositebuffer.h"
-#include "texception.h"
 #include "tcompositionmanager.h"
 #include "tcompositeconverter.h"
 #include "tcomposition.h"

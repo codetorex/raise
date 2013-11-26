@@ -23,8 +23,8 @@ public:
 
 	TFileStream* ReadStream;
 
-	TMemberDelegate2<NHTTPSession,void, const SystemError&, ui32> MReceiveCallback;
-	TMemberDelegate1<NHTTPSession,void, const SystemError&> MSendCallback;
+	TMemberDelegate2<NHTTPSession,void, const TIOStatus&, ui32> MReceiveCallback;
+	TMemberDelegate1<NHTTPSession,void, const TIOStatus&> MSendCallback;
 
 	NHTTPSession(NHTTPServer* _Server, TIOService* _Service): 
 				MReceiveCallback(this, &NHTTPSession::HandleReceive),
@@ -43,9 +43,9 @@ public:
 
 	void BeginReceiving();
 
-	void HandleReceive(const SystemError& err, ui32 dataReaded);
+	void HandleReceive(const TIOStatus& err, ui32 dataReaded);
 
-	void HandleSend(const SystemError& err);
+	void HandleSend(const TIOStatus& err);
 };
 
 class NHTTPServer
@@ -59,7 +59,7 @@ public:
 	TString ServerVersion;
 	TString RootFolder;
 
-	TMemberDelegate2<NHTTPServer,void, void*, const SystemError&> MyCallback;
+	TMemberDelegate2<NHTTPServer,void, void*, const TIOStatus&> MyCallback;
 
 	NHTTPServer(TIOService* _Service, ui16 _Port);
 
@@ -75,10 +75,10 @@ public:
 		Listener.BeginAccept(new_client->Socket,new_client,&new_client->ReceivePacket, &MyCallback );
 	}
 
-	void HandleAccept(void* object, const SystemError& err)
+	void HandleAccept(void* object, const TIOStatus& err)
 	{
 		NHTTPSession* sess = (NHTTPSession*)object;
-		if (err.OSErrorID == 0)
+		if (err.NoError)
 		{
 			sess->BeginReceiving();
 		}

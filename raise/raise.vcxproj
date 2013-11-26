@@ -235,7 +235,6 @@
     <ClInclude Include="tenumerator.h" />
     <ClInclude Include="tevent.h" />
     <ClInclude Include="texception.h" />
-    <ClInclude Include="texceptionlow.h" />
     <ClInclude Include="tfile.h" />
     <ClInclude Include="tfileinfo.h" />
     <ClInclude Include="tfilestream.h" />
@@ -380,7 +379,6 @@
     <ClCompile Include="tencoding.cpp" />
     <ClCompile Include="tencodinginfo.cpp" />
     <ClCompile Include="tcompositebuffer.cpp" />
-    <ClCompile Include="texceptionlow.cpp" />
     <ClCompile Include="tfile.cpp" />
     <ClCompile Include="thashcodeprovider.cpp" />
     <ClCompile Include="tiniparser.cpp" />

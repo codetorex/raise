@@ -1,6 +1,5 @@
 #include "stdafx.h"
 #include "tthread.h"
-#include "texception.h"
 
 #ifdef WIN32
 

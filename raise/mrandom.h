@@ -17,10 +17,10 @@ public:
 	inline virtual ui32 Sample()
 	{
 		byte k[4];
-		k[0] = MathDriver::Random() % 256;
-		k[1] = MathDriver::Random() % 256;
-		k[2] = MathDriver::Random() % 256;
-		k[3] = MathDriver::Random() % 256;
+		k[0] = Math.Random() % 256;
+		k[1] = Math.Random() % 256;
+		k[2] = Math.Random() % 256;
+		k[3] = Math.Random() % 256;
 		return *(ui32*)k;
 	}
 

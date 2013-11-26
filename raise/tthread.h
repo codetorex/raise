@@ -70,7 +70,7 @@ public:
 #else
 		//http://www.kernel.org/doc/man-pages/online/pages/man2/gettid.2.html
 		
-		LowLevelNotImplemented(__FILE__,__LINE__);
+		throw NotImplementedException(__FILE__,__LINE__);
 		///return gettid();
 #endif 
 	}

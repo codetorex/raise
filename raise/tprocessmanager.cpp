@@ -1,6 +1,5 @@
 #include "stdafx.h"
 #include "tprocess.h"
-#include "texception.h"
 #include "tplatform.h"
 
 #ifdef WIN32

@@ -1,13 +1,14 @@
 #ifndef TSTRING_H
 #define TSTRING_H
 
+#include "raisetypes.h"
+#include "tarray.h"
 #include "tcharacter.h"
 #include "tbytearray.h"
 #include "tstringdriver.h"
 #include "tenumerator.h"
 #include "tmemorydriver.h"
 #include "mmathdriver.h"
-#include "texceptionlow.h"
 
 class TStringFormatElementBase;
 typedef const TStringFormatElementBase&			sfp; // parameter version
@@ -257,7 +258,7 @@ public:
 
 	void CopyTo(byte* dst, ui32 bytecount) const
 	{
-		MemoryDriver::Copy(dst,Data,MathDriver::Min(bytecount,Capacity));
+		MemoryDriver::Copy(dst,Data,Math.Min(bytecount,Capacity));
 	}
 
 	/**
@@ -400,7 +401,7 @@ public:
 		else
 		{
 			// TODO: find start index byte start if non ASCII
-			LowLevelNotImplemented(__FILE__,__LINE__);
+			throw NotImplementedException(__FILE__,__LINE__);
 		}
 		return -2;
 	}
@@ -416,7 +417,7 @@ public:
 	{
 		if (IsASCII())
 		{
-			int result = InternalIndexOf(value.Data, value.ByteLength,startIndex, MathDriver::Min<int>(count, ByteLength-startIndex)); //
+			int result = InternalIndexOf(value.Data, value.ByteLength,startIndex, Math.Min<int>(count, ByteLength-startIndex)); //
 			if (result != -1)
 			{
 				result += startIndex;
@@ -427,7 +428,7 @@ public:
 		else
 		{
 			// TODO: find start index byte start and end if non ASCII
-			LowLevelNotImplemented(__FILE__,__LINE__);
+			throw NotImplementedException(__FILE__,__LINE__);
 		}
 		
 	}
@@ -571,7 +572,7 @@ public:
 	 */
 	inline TString& operator = (char* value)
 	{
-		LowLevelException("Used string assign with non constant char array");
+		throw Exception("Used string assign with non constant char array");
 
 		DetachToDestroy();
 		Data = (byte*)value;
@@ -720,6 +721,16 @@ public:
 		return Format(format,4,elemarray);
 	}
 
+	char* ConvertToChar() const
+	{
+		if ( Length == ByteLength)
+		{
+			return (char*)( Data );
+		}
+
+		throw Exception("Has unicode data");
+	}
+
 	//void FormatInplace(const TString& format, ... );
 
 	/*inline static TString Format(const TString& format,...)
@@ -798,7 +809,7 @@ public:
 	{
 		if (RealStart == 0)
 		{
-			LowLevelException("charenum used without data!");
+			throw Exception("charenum used without data!");
 		}
 		Current = MXDWORD;
 		StrData = (byte*)RealStart;

@@ -24,7 +24,7 @@ void TProcessMemory2::UpdateMemoryRegions()
 			DWORD lasterror = GetLastError();
 			if (lasterror != ERROR_SUCCESS && lasterror != ERROR_INVALID_PARAMETER)
 			{
-				throw OSException(Platform.GetErrorDescription(lasterror), lasterror);
+				throw PlatformException(lasterror);
 			}
 
 			break;

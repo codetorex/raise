@@ -1,5 +1,4 @@
 #include "stdafx.h"
-#include "texception.h"
 #include "tlog.h"
 
 #ifdef WIN32
@@ -123,7 +122,7 @@ void TIOServiceIOCP::WorkerMain()
 
 	int nRet;
 
-	SystemError tmpError;
+	TIOStatus tmpError;
 
 	while (1)
 	{
@@ -131,7 +130,7 @@ void TIOServiceIOCP::WorkerMain()
 
 		if (!CmpStatus)
 		{
-			tmpError.SetErrorMessage(GetLastError());
+			tmpError.Set(GetLastError());
 			Log.Output(LG_ERR,"GetQueuedCompletionStatus() failed: %",sfs(tmpError.Message));
 		}
 		else
@@ -157,7 +156,7 @@ void TIOServiceIOCP::WorkerMain()
 		{
 		case CIO_Connect:
 			{
-				if (!tmpError)
+				if (tmpError.NoError)
 				{
 					Log.Output(LG_INF,"WorkerThread %: Socket(%) ConnectEx completed (% bytes)",sfu(GetCurrentThreadId()),sfu(CurrentSocket->Socket),sfu(IOSize));
 				}
@@ -172,13 +171,13 @@ void TIOServiceIOCP::WorkerMain()
 
 		case CIO_Accept:
 			{
-				if (!tmpError)
+				if (tmpError.NoError)
 				{
 					nRet = setsockopt(CurrentSocket->IOContextRecv.AcceptSocket->Socket, SOL_SOCKET,SO_UPDATE_ACCEPT_CONTEXT,(char *)&CurrentSocket->Socket,sizeof(CurrentSocket->Socket));
 
 					if( nRet == SOCKET_ERROR ) 
 					{
-						tmpError.SetErrorMessage(WSAGetLastError());
+						tmpError.Set(WSAGetLastError());
 						Log.Output(LG_ERR,"setsockopt(SO_UPDATE_ACCEPT_CONTEXT) failed to update accept socket");
 					}
 					else
@@ -195,7 +194,7 @@ void TIOServiceIOCP::WorkerMain()
 			{
 				if (IOSize == 0)
 				{
-					tmpError.SetErrorMessage(WSAECONNRESET);
+					tmpError.Set(WSAECONNRESET);
 					Log.Output(LG_ERR,"WSARecv() thinks connection is closed %", sfs(tmpError.Message));
 				}
 				Operation->Working = false;
@@ -209,11 +208,11 @@ void TIOServiceIOCP::WorkerMain()
 				Operation->Working = false;
 				Operation->SentBytes += IOSize;
 
-				if (!tmpError)
+				if (tmpError.NoError)
 				{
 					if (IOSize == 0)
 					{
-						tmpError.SetErrorMessage(WSAECONNRESET);
+						tmpError.Set(WSAECONNRESET);
 					}
 					else
 					{
@@ -225,7 +224,7 @@ void TIOServiceIOCP::WorkerMain()
 
 							if( nRet == SOCKET_ERROR && (ERROR_IO_PENDING != WSAGetLastError()) ) 
 							{
-								tmpError.SetErrorMessage(WSAGetLastError());
+								tmpError.Set(WSAGetLastError());
 								Log.Output(LG_ERR,"WSASend() failed: %", sfs(tmpError.Message));
 							}
 						}
@@ -445,8 +444,8 @@ void TIOServiceIOCP::SendAsync( NSocketAsync* sck, NPacket* packet , SendCallbac
 
 	if( nRet == SOCKET_ERROR && (ERROR_IO_PENDING != WSAGetLastError()) ) 
 	{
-		SystemError err;
-		err.SetErrorMessage(WSAGetLastError());
+		TIOStatus err;
+		err.Set(WSAGetLastError());
 		Log.Output(LG_ERR,"WSASend() failed: %",  sfs(err.Message));
 		Callback->call(err);
 	}
@@ -475,8 +474,8 @@ void TIOServiceIOCP::RecvAsync( NSocketAsync* sck, NPacket* packet, ReceiveCallb
 
 	if( nRet == SOCKET_ERROR && (ERROR_IO_PENDING != WSAGetLastError()) ) 
 	{
-		SystemError err;
-		err.SetErrorMessage(WSAGetLastError());
+		TIOStatus err;
+		err.Set(WSAGetLastError());
 		Log.Output(LG_ERR,"WSARecv() failed: %", sfs(err.Message));
 		Callback->call(err,0);
 	}

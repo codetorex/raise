@@ -131,7 +131,7 @@ public:
 			ColorMapData = 0;
 		}
 
-		PixelSize = PixelDepth / 8; //(int)MMathDriver::Ceil((float)PixelDepth / 8.0f);
+		PixelSize = PixelDepth / 8; //(int)MMath.Ceil((float)PixelDepth / 8.0f);
 		AlphaBits = ImageDescriptor & 0xF;
 		ImageOrigin = (TGAOrigin)((ImageDescriptor & 0x30) >> 4);
 

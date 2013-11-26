@@ -1,8 +1,6 @@
 #include "stdafx.h"
 #include "tstring.h"
 #include "tconvert.h"
-#include "texception.h"
-
 
 int TConvert::ToCharArrayInt( int value, char* dst , int dstCap )
 {

@@ -1,6 +1,5 @@
 #include "stdafx.h"
 #include "tlibrary.h"
-#include "texception.h"
 
 TLibrary::~TLibrary()
 {

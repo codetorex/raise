@@ -3,7 +3,6 @@
 
 #include "tencoding.h"
 #include "tstringdriver.h"
-#include "texception.h"
 
 
 /**

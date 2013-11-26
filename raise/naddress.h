@@ -2,7 +2,6 @@
 #define NADDRESS_H
 
 #include "tstring.h"
-#include "texception.h"
 
 #ifdef LINUX
 #include <sys/socket.h>

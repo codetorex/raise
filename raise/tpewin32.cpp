@@ -15,7 +15,7 @@ void TPortableExecutableWin32::LoadFromLibraryName( const TString& libraryName )
 
 	if (mod == 0)
 	{
-		throw OSException(GetLastError());
+		throw PlatformException(GetLastError());
 	}
 
 	MemoryPtr = mod;

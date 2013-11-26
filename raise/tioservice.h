@@ -13,10 +13,29 @@ class NService;
 class TThread;
 class NSocketAsync;
 
-typedef delegate1<void, const SystemError&>			ConnectCallback;
-typedef delegate1<void, const SystemError&>			SendCallback;
-typedef delegate2<void, void*,const SystemError&>	AcceptedCallback;
-typedef delegate2<void, const SystemError&, ui32>	ReceiveCallback;
+class TIOStatus
+{
+public:
+	bool NoError;
+	TString Message;
+
+	void Set(ui32 ErrorCode)
+	{
+		NoError = false;
+		// TODO: get error string from platform 
+	}
+
+	void Unset()
+	{
+		NoError = true;
+		Message = TString::Empty;
+	}
+};
+
+typedef delegate1<void, const TIOStatus&>			ConnectCallback;
+typedef delegate1<void, const TIOStatus&>			SendCallback;
+typedef delegate2<void, void*,const TIOStatus&>	AcceptedCallback;
+typedef delegate2<void, const TIOStatus&, ui32>	ReceiveCallback;
 
 
 

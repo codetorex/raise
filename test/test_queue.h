@@ -74,7 +74,7 @@ public:
 		TArray<byte> bytes(DataSize);
 		for (int i=0;i< DataSize;i++)
 		{
-			byte rnd = MathDriver::Random() % 256;
+			byte rnd = Math.Random() % 256;
 			bytes.UnsafeAdd(rnd);
 		}
 
@@ -92,7 +92,7 @@ public:
 		{
 			if (enindex < DataSize)
 			{
-				ui32 rnden = 128 + (MathDriver::Random() % 128);
+				ui32 rnden = 128 + (Math.Random() % 128);
 				if (enindex + rnden > DataSize)
 				{
 					rnden = DataSize - enindex;
@@ -101,7 +101,7 @@ public:
 				enindex += rnden;
 			}
 			
-			ui32 rndde = 64 + (MathDriver::Random() % 64);
+			ui32 rndde = 64 + (Math.Random() % 64);
 			ui32 readden = bq.Dequeue(tmp,rndde);
 
 			int cmpresult = MemoryDriver::Compare(bytes.Item + deindex,tmp,readden);

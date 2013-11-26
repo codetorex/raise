@@ -30,9 +30,6 @@
     <Filter Include="Source Files\Graphics">
       <UniqueIdentifier>{a16a1769-9084-4b22-bf2d-8fb0f7d0fc2a}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Source Files\Hacking">
-      <UniqueIdentifier>{d848e625-12bb-48a1-a63e-505cfb61153b}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Source Files\Graphics\File Formats">
       <UniqueIdentifier>{be8702b5-8a32-4c00-8060-f53e46449429}</UniqueIdentifier>
     </Filter>
@@ -159,6 +156,9 @@
     <Filter Include="Source Files\System\Text">
       <UniqueIdentifier>{4efbcc9d-0bfd-42bf-aa8f-9a611305d6fc}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Source Files\Platform\Win32\Hacking">
+      <UniqueIdentifier>{d848e625-12bb-48a1-a63e-505cfb61153b}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="tlinkedlist.h">
@@ -234,7 +234,7 @@
       <Filter>Source Files\System</Filter>
     </ClInclude>
     <ClInclude Include="tprocess.h">
-      <Filter>Source Files\Hacking</Filter>
+      <Filter>Source Files\Platform\Win32\Hacking</Filter>
     </ClInclude>
     <ClInclude Include="tqueue.h">
       <Filter>Source Files\Collection</Filter>
@@ -338,9 +338,6 @@
     <ClInclude Include="tcompositeconverter.h">
       <Filter>Source Files\IO\Buffer</Filter>
     </ClInclude>
-    <ClInclude Include="tstring.h">
-      <Filter>Source Files\String</Filter>
-    </ClInclude>
     <ClInclude Include="tproperty.h">
       <Filter>Source Files\System</Filter>
     </ClInclude>
@@ -382,9 +379,6 @@
     </ClInclude>
     <ClInclude Include="mdecimal.h">
       <Filter>Source Files\Mathematics</Filter>
-    </ClInclude>
-    <ClInclude Include="tstringbuilder.h">
-      <Filter>Source Files\String</Filter>
     </ClInclude>
     <ClInclude Include="tcultureinfo.h">
       <Filter>Source Files\System\Globalization</Filter>
@@ -452,9 +446,6 @@
     <ClInclude Include="tcommandline.h">
       <Filter>Source Files\System\Console</Filter>
     </ClInclude>
-    <ClInclude Include="texceptionlow.h">
-      <Filter>Source Files\System</Filter>
-    </ClInclude>
     <ClInclude Include="tlibrary.h">
       <Filter>Source Files\System</Filter>
     </ClInclude>
@@ -505,9 +496,6 @@
     </ClInclude>
     <ClInclude Include="tinputmap.h">
       <Filter>Source Files\System\Input</Filter>
-    </ClInclude>
-    <ClInclude Include="tencodings.h">
-      <Filter>Source Files\String</Filter>
     </ClInclude>
     <ClInclude Include="nsocket.h">
       <Filter>Source Files\Network</Filter>
@@ -645,7 +633,7 @@
       <Filter>Source Files\System\Input</Filter>
     </ClInclude>
     <ClInclude Include="twindowhandle.h">
-      <Filter>Source Files\Hacking</Filter>
+      <Filter>Source Files\Platform\Win32\Hacking</Filter>
     </ClInclude>
     <ClInclude Include="whttprequest.h">
       <Filter>Source Files\Web</Filter>
@@ -753,7 +741,7 @@
       <Filter>Source Files\Coding\Compiling</Filter>
     </ClInclude>
     <ClInclude Include="tprocessmemory.h">
-      <Filter>Source Files\Hacking</Filter>
+      <Filter>Source Files\Platform\Win32\Hacking</Filter>
     </ClInclude>
     <ClInclude Include="ttype.h">
       <Filter>Source Files\System\Reflection</Filter>
@@ -785,6 +773,15 @@
     <ClInclude Include="tcharacter.h">
       <Filter>Source Files\System\Text</Filter>
     </ClInclude>
+    <ClInclude Include="tencodings.h">
+      <Filter>Source Files\System\Text</Filter>
+    </ClInclude>
+    <ClInclude Include="tstring.h">
+      <Filter>Source Files\System</Filter>
+    </ClInclude>
+    <ClInclude Include="tstringbuilder.h">
+      <Filter>Source Files\System</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">
@@ -806,13 +803,13 @@
       <Filter>Source Files\Graphics</Filter>
     </ClCompile>
     <ClCompile Include="tprocess.cpp">
-      <Filter>Source Files\Hacking</Filter>
+      <Filter>Source Files\Platform\Win32\Hacking</Filter>
     </ClCompile>
     <ClCompile Include="tprocessdebug.cpp">
-      <Filter>Source Files\Hacking</Filter>
+      <Filter>Source Files\Platform\Win32\Hacking</Filter>
     </ClCompile>
     <ClCompile Include="tprocessmodule.cpp">
-      <Filter>Source Files\Hacking</Filter>
+      <Filter>Source Files\Platform\Win32\Hacking</Filter>
     </ClCompile>
     <ClCompile Include="tbitmapconverters.cpp">
       <Filter>Source Files\Graphics</Filter>
@@ -847,9 +844,6 @@
     <ClCompile Include="tcomposition.cpp">
       <Filter>Source Files\IO\Buffer</Filter>
     </ClCompile>
-    <ClCompile Include="tstring.cpp">
-      <Filter>Source Files\String</Filter>
-    </ClCompile>
     <ClCompile Include="tbytearray.cpp">
       <Filter>Source Files\System</Filter>
     </ClCompile>
@@ -866,9 +860,6 @@
       <Filter>Source Files\System\DateTime</Filter>
     </ClCompile>
     <ClCompile Include="tstringdriver.cpp">
-      <Filter>Source Files\String</Filter>
-    </ClCompile>
-    <ClCompile Include="tstringbuilder.cpp">
       <Filter>Source Files\String</Filter>
     </ClCompile>
     <ClCompile Include="thashcodeprovider.cpp">
@@ -897,9 +888,6 @@
     </ClCompile>
     <ClCompile Include="tcommandline.cpp">
       <Filter>Source Files\System\Console</Filter>
-    </ClCompile>
-    <ClCompile Include="texceptionlow.cpp">
-      <Filter>Source Files\System</Filter>
     </ClCompile>
     <ClCompile Include="tlibrary.cpp">
       <Filter>Source Files\System</Filter>
@@ -959,10 +947,10 @@
       <Filter>Source Files\Mathematics</Filter>
     </ClCompile>
     <ClCompile Include="tprocessmanager.cpp">
-      <Filter>Source Files\Hacking</Filter>
+      <Filter>Source Files\Platform\Win32\Hacking</Filter>
     </ClCompile>
     <ClCompile Include="twindowhandle.cpp">
-      <Filter>Source Files\Hacking</Filter>
+      <Filter>Source Files\Platform\Win32\Hacking</Filter>
     </ClCompile>
     <ClCompile Include="tplatform.cpp">
       <Filter>Source Files\Platform</Filter>
@@ -995,7 +983,7 @@
       <Filter>Source Files\Web\MVC</Filter>
     </ClCompile>
     <ClCompile Include="tprocessmemory.cpp">
-      <Filter>Source Files\Hacking</Filter>
+      <Filter>Source Files\Platform\Win32\Hacking</Filter>
     </ClCompile>
     <ClCompile Include="ttypemanager.cpp">
       <Filter>Source Files\System\Reflection</Filter>
@@ -1005,6 +993,12 @@
     </ClCompile>
     <ClCompile Include="tencodinginfo.cpp">
       <Filter>Source Files\System\Text</Filter>
+    </ClCompile>
+    <ClCompile Include="tstring.cpp">
+      <Filter>Source Files\System</Filter>
+    </ClCompile>
+    <ClCompile Include="tstringbuilder.cpp">
+      <Filter>Source Files\System</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

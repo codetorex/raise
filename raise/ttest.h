@@ -5,7 +5,6 @@
 
 
 #include "tprofiler.h"
-#include "texception.h"
 #include "tarray.h"
 #include "tstring.h"
 

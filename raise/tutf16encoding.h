@@ -2,7 +2,6 @@
 #define TUTF16ENCODING_H
 
 #include "tencoding.h"
-#include "texception.h"
 #include "tstring.h"
 
 /**

@@ -167,7 +167,7 @@ public:
 
 	inline void PerpectiveFovL(Angle fov, float aspectratio, float znear, float zfar)
 	{
-		float yscale = MathDriver::Cotangent(fov.Radian / 2.0f);
+		float yscale = Math.Cot(fov.Radian / 2.0f);
 		float xscale = yscale / aspectratio;
 		float depth = zfar - znear;
 
@@ -181,7 +181,7 @@ public:
 
 	inline void PerpectiveFovR(Angle fov, float aspectratio, float znear, float zfar)
 	{
-		float yscale = MathDriver::Cotangent(fov.Radian / 2.0f);
+		float yscale = Math.Cot(fov.Radian / 2.0f);
 		float xscale = yscale / aspectratio;
 		float depth = znear - zfar;
 

@@ -1,6 +1,5 @@
 #include "stdafx.h"
 #include "tdatetime.h"
-#include "texception.h"
 #include "ttimedriver.h"
 #include "tplatform.h"
 
@@ -203,7 +202,7 @@ TDateTime& TDateTime::operator=( const TDateTimeUnix& value )
 TDateTime& TDateTime::AddDaysReal( double days )
 {
 	days *= 86400000000.0L;
-	int64 dayticks = MathDriver::RoundToInt64(days);
+	int64 dayticks = Math.RoundToInt64(days);
 	Ticks += dayticks;
 	return *this;
 }

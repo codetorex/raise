@@ -3,7 +3,6 @@
 
 #include "raisetypes.h"
 #include "tenumerator.h"
-#include "texceptionlow.h"
 
 /*template <class T>
 class TSListNode // single linked list
@@ -187,7 +186,7 @@ public:
 	 */
 	void ClearDelete()
 	{
-		LowLevelNotImplemented(__FILE__,__LINE__);
+		throw NotImplementedException(__FILE__,__LINE__);
 	}
 
 	/**
@@ -195,7 +194,7 @@ public:
 	 */
 	void Merge( TList<T>* other )
 	{
-		LowLevelNotImplemented(__FILE__,__LINE__);
+		throw NotImplementedException(__FILE__,__LINE__);
 	}
 
 	/**
@@ -203,7 +202,7 @@ public:
 	 */
 	void MergeDelete(TList<T>* other)
 	{
-		LowLevelNotImplemented(__FILE__,__LINE__);
+		throw NotImplementedException(__FILE__,__LINE__);
 	}
 
 	void InsertAfter(T baseItem , T itm)
@@ -227,7 +226,7 @@ public:
 		{
 			if (baseItem != FirstItem)
 			{
-				LowLevelException("Impposiblru error");
+				throw Exception("Impossible");
 			}
 
 			itm->Parent = this;

@@ -1,7 +1,6 @@
 #ifndef TMEMORYWRITER_H
 #define TMEMORYWRITER_H
 
-#include "texception.h"
 #include "mdecimal.h"
 #include "tqueue.h"
 

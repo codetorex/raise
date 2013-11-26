@@ -87,7 +87,7 @@ public:
 	{
 		T dx = other.X - X;
 		T dy = other.Y - Y;
-		return MathDriver::SquareRoot( ( dx * dx ) + ( dy * dy ) );
+		return Math.Sqrt( ( dx * dx ) + ( dy * dy ) );
 	}
 
 	// TODO: do the rest

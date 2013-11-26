@@ -3,16 +3,15 @@
 #include "tlog.h"
 #include "npacketbuilder.h"
 #include "tfileinfo.h"
-#include "texception.h"
 #include "tapplication.h"
 
 
 
-void NHTTPSession::HandleReceive( const SystemError& err, ui32 dataReaded )
+void NHTTPSession::HandleReceive( const TIOStatus& err, ui32 dataReaded )
 {
 
 
-	if (err.OSErrorID != 0)
+	if (err.NoError)
 	{
 		Log.Output(LG_ERR,"HTTP read error, disconnecting client");
 		delete this;
@@ -155,9 +154,9 @@ void NHTTPSession::HandleReceive( const SystemError& err, ui32 dataReaded )
 	Socket->BeginSend(&SendPacket, &MSendCallback);
 }
 
-void NHTTPSession::HandleSend( const SystemError& err )
+void NHTTPSession::HandleSend( const TIOStatus& err )
 {
-	if (err.OSErrorID != 0)
+	if (err.NoError)
 	{
 		Log.Output(LG_ERR,"HTTP write error, disconnecting client");
 		delete this;

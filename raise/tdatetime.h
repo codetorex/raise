@@ -6,7 +6,6 @@
 #include "tdatetimewindows.h"
 #include "tdatetimeunix.h"
 #include "tdatetimeexpanded.h"
-#include "texception.h"
 #include "mmathdriver.h"
 
 class TDateTimeExpanded;

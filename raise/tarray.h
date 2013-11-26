@@ -4,7 +4,6 @@
 
 #include "raisetypes.h"
 #include "tmemorydriver.h"
-#include "texceptionlow.h"
 #include "tenumerator.h"
 
 #define TARRAYDEFSIZE	4
@@ -154,7 +153,7 @@ public:
 			}
 			if (i == 1024)
 			{
-				LowLevelException(SOURCENAME(0),__LINE__,0,"Impossible"); //Exception("Impossible"); // TODO: if it will be possible someday change this.
+				throw Exception("Impossible"); //Exception("Impossible"); // TODO: if it will be possible someday change this.
 			}
 		}
 	}
@@ -318,7 +317,7 @@ public:
 	{
 		if ( index > Count )
 		{
-			LowLevelException(SOURCENAME(0),__LINE__,1,"Index out of bounds");
+			throw Exception("Index out of bounds");
 		}
 		return Item[index];
 	}
@@ -330,7 +329,7 @@ public:
 			return Item[Count-1];
 		}
 		
-		LowLevelException(SOURCENAME(0),__LINE__,1,"Index out of bounds");
+		throw Exception("Index out of bounds");
 	}
 
 	/**
@@ -374,7 +373,7 @@ public:
 			Item = 0;
 			Count = 0;
 			
-			LowLevelException(SOURCENAME(0),__LINE__,2,"Allocate 0 for array is unnecessary maybe bug?");
+			throw Exception("Allocate 0 for array is unnecessary maybe bug?");
 			//throw Exception(0, __LINE__ ,3);//"Index out of bounds");
 			return;
 		}

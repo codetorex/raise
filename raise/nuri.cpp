@@ -1,6 +1,5 @@
 #include "stdafx.h"
 #include "nuri.h"
-#include "texception.h"
 
 bool NUri::IsUnreserved( ch32 chr )
 {

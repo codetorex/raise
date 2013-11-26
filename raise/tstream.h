@@ -3,7 +3,6 @@
 #define TSTREAM_H
 
 #include "raisetypes.h"
-#include "texception.h"
 
 #define FILESTREAM_CLASSID		0
 

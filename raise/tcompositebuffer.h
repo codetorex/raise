@@ -1,7 +1,6 @@
 #ifndef TCOMPOSITEBUFFER_H
 #define TCOMPOSITEBUFFER_H
 
-#include "texception.h" // includes string too
 #include "tcomposition.h"
 #include "tbuffer.h"
 

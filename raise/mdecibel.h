@@ -10,12 +10,12 @@ private:
 public:
 	static float LinearToDecibel(float lin)
 	{
-		return MathDriver::Log(lin) * LOG2_DB;
+		return Math.Log(lin) * LOG2_DB;
 	}
 
 	static float DecibelToLinear(float db)
 	{
-		return MathDriver::Exp(db * DB_2LOG);
+		return Math.Exp(db * DB_2LOG);
 	}
 };
 

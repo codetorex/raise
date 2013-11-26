@@ -3,7 +3,6 @@
 
 #include "tbytearray.h"
 #include "tmemorydriver.h"
-#include "texception.h"
 #include "tstream.h"
 
 #define NFOUND	0xFFFFFFFF

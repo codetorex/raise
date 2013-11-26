@@ -25,7 +25,7 @@ public:
 		{
 			xw.WriteStartElement( "testnode" );
 			xw.WriteAttributeString("id", Convert::ToString(i));
-			xw.WriteAttributeString("random", Convert::ToString(MathDriver::Random()));
+			xw.WriteAttributeString("random", Convert::ToString(Math.Random()));
 			xw.WriteEndElement();
 		}
 

@@ -5,7 +5,6 @@
 
 #include "tplatforminterface.h"
 #include "tencoding.h"
-#include "texceptionlow.h"
 
 #include <time.h>
 #include <sys/time.h>
@@ -67,27 +66,27 @@ public:
 
 	qword HighPrecisionTime() 
 	{
-		LowLevelNotImplemented(__FILE__,__LINE__);
+		throw NotImplementedException(__FILE__,__LINE__);
 	}
 
 	qword HighPrecisionTimeFrequency() 
 	{
-		LowLevelNotImplemented(__FILE__,__LINE__);
+		throw NotImplementedException(__FILE__,__LINE__);
 	}
 
 	void ShowMessageBox( const TString& message ) 
 	{
-		LowLevelNotImplemented(__FILE__,__LINE__);
+		throw NotImplementedException(__FILE__,__LINE__);
 	}
 
 	TString GetErrorDescription( ui32 systemErrorID ) 
 	{
-		LowLevelNotImplemented(__FILE__,__LINE__);
+		throw NotImplementedException(__FILE__,__LINE__);
 	}
 
 	bool BrowseFolder( const TString& startPath, TString& selectedPath ) 
 	{
-		LowLevelNotImplemented(__FILE__,__LINE__);
+		throw NotImplementedException(__FILE__,__LINE__);
 	}
 
 };

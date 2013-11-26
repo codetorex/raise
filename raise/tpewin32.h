@@ -4,6 +4,8 @@
 #ifdef WIN32
 
 #include "tstream.h"
+#include "tstring.h"
+#include "tarray.h"
 #include <windows.h>
 
 class TPortableExecutableWin32
@@ -38,7 +40,7 @@ public:
 
 	PIMAGE_DATA_DIRECTORY GetDataDirectories();
 
-	TArray<string*>* GetExportedFunctionNames();
+	TArray<TString*>* GetExportedFunctionNames();
 };
 
 #endif // WIN32

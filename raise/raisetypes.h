@@ -15,30 +15,38 @@
 
 // Custom Types And Generic Macros Comes Here
 
-#define _RT(x)				TString( #x )
-#define _RW(x)				TString( L ## x )
 
 #define SOURCENAME(x)		x
 
-#define NIL					((void*)0)
+typedef long long			int64;
+typedef int					int32;
+typedef short				int16;
+typedef char				int8;
 
-typedef unsigned long long	ui64;
-typedef unsigned int		ui32; // It was unsigned long before but in linux longs have 8 bytes. (64 bit stuff?)
-typedef unsigned short		ui16;
-typedef unsigned char		ui8;
-typedef signed long long	i64;
-typedef int					i32;
-typedef short				i16;
-typedef char				i8;
-typedef unsigned char		byte; // technically ui8
+typedef unsigned long long	uint64;
+typedef unsigned int		uint32;
+typedef unsigned short		uint16;
+typedef unsigned char		uint8;
+
+typedef int64				i64;
+typedef int32				i32;
+typedef int16				i16;
+typedef int8				i8;
+
+typedef uint64				ui64;
+typedef uint32				ui32;
+typedef uint16				ui16;
+typedef uint8				ui8;
+
+typedef uint8				byte;
+typedef uint16				word;
+typedef uint32				dword;
+typedef uint64				qword;
+
+typedef float				fp32;
+typedef double				fp64;
 
 #define DWORDSTR(x)			(*(ui32*)x)
-
-#define PI					3.1415926535897f
-#define DOUBLEPI			6.2831853071794f
-#define HALFPI				1.5707963267948f
-
-
 
 #define KB					(1024)
 #define MB					(1048576)
@@ -68,6 +76,8 @@ typedef unsigned char		byte; // technically ui8
 #define MXDWORD				0xFFFFFFFF
 
 #define MAX_UI32			((ui32)~((ui32)0))
+
+#include "texception.h"
 
 //#define NOPNGLIB
 

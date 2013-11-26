@@ -2,7 +2,6 @@
 #define TASCIIEXTENDED_H
 
 #include "tencoding.h"
-#include "texception.h"
 #include "mmathdriver.h"
 
 /**
@@ -108,7 +107,7 @@ public:
 
 	inline int GetChars(byte* bytes, int bytecount, ch32* chars , int charcapacity) const
 	{
-		int toread = MathDriver::Min(bytecount,charcapacity);
+		int toread = Math.Min(bytecount,charcapacity);
 		int remaining = toread;
 		while(remaining--)
 		{

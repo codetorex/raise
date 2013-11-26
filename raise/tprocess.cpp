@@ -3,7 +3,6 @@
 #ifdef WIN32
 
 #include "tprocess.h"
-#include "texception.h"
 #include "tplatform.h"
 
 
@@ -158,7 +157,7 @@ ui32 TProcessMemory::GetPointerOffset( ui32 basePtr, ui32 offset1 )
 	ui32 cur = ReadDWord(basePtr);
 	if (cur == 0)
 	{
-		throw Exception("Base address points to null", 1);
+		throw Exception("Base address points to null");
 	}
 
 	cur += offset1;

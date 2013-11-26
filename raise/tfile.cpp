@@ -8,7 +8,7 @@ ui32 TFile::ReadAllBytes( const TString& path, void* target, ui32 capacity )
 	if (capacity == 0) return 0;
 
 	TFileStream* fs = new TFileStream(path,fm_Read);
-	ui32 readlength = MathDriver::Min(capacity,fs->Length());
+	ui32 readlength = Math.Min(capacity,fs->Length());
 
 	ui32 readed = fs->Read(target,1,readlength);
 

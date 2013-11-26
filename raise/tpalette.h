@@ -3,7 +3,6 @@
 
 #include "tarray.h"
 #include "tcolor.h"
-#include "texceptionlow.h"
 
 class TPalette
 {
@@ -28,7 +27,7 @@ public:
 	{
 		if (index < 0 || index >= Colors.Capacity)
 		{
-			LowLevelException("Palette index out of bounds?");
+			throw Exception("Palette index out of bounds?");
 		}
 		Colors[index] = color;
 	}

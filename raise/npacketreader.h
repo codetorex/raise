@@ -2,7 +2,6 @@
 #define NPACKETREADER_H
 
 #include "npacket.h"
-#include "texception.h"
 #include "mdecimal.h"
 
 #define READX(a) 		a r = *(a*)Data;\

@@ -1,6 +1,5 @@
 #include "stdafx.h"
 #include "ttestsuitereporting.h"
-#include "texception.h"
 #include "tapplication.h"
 
 

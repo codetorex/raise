@@ -1,7 +1,6 @@
 #ifndef NSOCKET_H
 #define NSOCKET_H
 
-#include "texception.h"
 #include "naddress.h"
 #include "npacket.h"
 #include "nsocketdefs.h"
@@ -32,12 +31,13 @@ protected:
 
 	void ThrowError( const TString& operation, int err = -1 )
 	{
+		throw Exception(operation.ConvertToChar());
 #ifdef WIN32
-		if (err == -1)
+		/*if (err == -1)
 		{
 			err = WSAGetLastError();
 		}
-		throw Exception( operation , sfs( Platform.GetErrorDescription(err)) );
+		throw Exception( operation , sfs( Platform.GetErrorDescription(err)) );*/
 #else
 		throw Exception(operation);
 #endif

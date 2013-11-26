@@ -2,7 +2,6 @@
 #define TQUEUE_H
 
 #include "raisetypes.h"
-#include "texceptionlow.h"
 
 
 // TODO: test queue
@@ -151,7 +150,7 @@ public:
 			return result;
 		}
 
-		LowLevelException("Invalid Operation: No data present in queue");
+		throw Exception("Invalid Operation: No data present in queue");
 		return 0;
 	}
 
@@ -190,7 +189,7 @@ protected:
 		{
 			if (Count > newsize)
 			{
-				LowLevelException( "Tried to allocate lesser capacity than existing array" );
+				throw Exception( "Tried to allocate lesser capacity than existing array" );
 			}
 		}
 

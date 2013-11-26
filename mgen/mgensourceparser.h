@@ -2,7 +2,6 @@
 #define MGENSOURCEPARSER_H
 
 #include "mgensource.h"
-#include "texception.h"
 
 class MGenSourceParser
 {

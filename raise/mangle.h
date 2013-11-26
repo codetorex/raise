@@ -29,17 +29,17 @@ public:
 
 	inline T Sine() const
 	{
-		return MathDriver::Sine(Radian);
+		return Math.Sin(Radian);
 	}
 
 	inline T Cosine() const
 	{
-		return MathDriver::Cosine(Radian);
+		return Math.Cos(Radian);
 	}
 
 	inline T Tangent() const
 	{
-		return MathDriver::Tangent(Radian);
+		return Math.Tan(Radian);
 	}
 
 	inline MVector2<T> GetVector (T radius) const

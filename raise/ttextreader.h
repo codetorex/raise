@@ -57,7 +57,7 @@ public:
 	virtual TString ReadUntilString(const TString& matchString) 
 	{
 		// TODO: change readUntil and use this instead and make it work with ch32 array
-		LowLevelNotImplemented(__FILE__,__LINE__);
+		throw NotImplementedException(__FILE__,__LINE__);
 		return TString::Empty;
 	}
 

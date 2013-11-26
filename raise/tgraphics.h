@@ -155,8 +155,8 @@ private:
 
 	inline void ClampCoord(int& x, int& y)
 	{
-		x = MathDriver::Clamp<int>(0, Bitmap->Width-1, x);
-		y = MathDriver::Clamp<int>(0, Bitmap->Height-1,y);
+		x = Math.Clamp<int>(0, Bitmap->Width-1, x);
+		y = Math.Clamp<int>(0, Bitmap->Height-1,y);
 	}
 
 	inline void TranslateClampCoord(int& x , int& y)
