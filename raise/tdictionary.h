@@ -29,7 +29,7 @@ public:
 	 */
 	T Get(const String& key)
 	{
-		int page = MOD32(key.Data[0]);
+		int page = key.Data[0] % 32;
 		for (int i=0;i<Map[page].Values.Count;i++)
 		{
 			TKeyValue<String,T>* curKV = Map[page].Values.Items[i];

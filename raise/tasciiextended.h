@@ -97,7 +97,7 @@ public:
 		{
 			buffer.Grow(bytecount);
 		}
-
+		
 		while (bytecount--)
 		{
 			buffer.AddCharacterUnsafe( Mapping[*bytes++] );
